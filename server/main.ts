@@ -1,6 +1,7 @@
 import './iccserver';
 import '../imports/server/serverinstance';
-import { ServerICCServer } from '../imports/server/servericcserver';
+import "../imports/server/serverconnection";
+import ServerICCServer from '../imports/server/servericcserver';
 
 declare const Meteor;
 declare const ICCServer: ServerICCServer;

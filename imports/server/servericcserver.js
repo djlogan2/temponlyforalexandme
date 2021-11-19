@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServerICCServer = void 0;
 var commoniccserver_1 = require("../commoniccserver");
 var ServerICCServer = /** @class */ (function (_super) {
     __extends(ServerICCServer, _super);
@@ -29,11 +28,21 @@ var ServerICCServer = /** @class */ (function (_super) {
         this.shutdown_functions.push(Meteor.bindEnvironment(function () { return fn(); }));
     };
     ServerICCServer.prototype.runShutdownFunctions = function () {
-        var x = 0;
-        x++;
-        this.shutdown_functions.forEach(function (fn) { return fn(); });
-        process.exit(0);
+        var promises;
+        this.shutdown_functions.forEach(function (fn) {
+            promises.push(new Promise(function (resolve, reject) {
+                try {
+                    fn();
+                    resolve();
+                }
+                catch (e) {
+                    reject(e);
+                }
+            }));
+        });
+        Promise.all(promises)
+            .then(function () { process.exit(0); });
     };
     return ServerICCServer;
-}(commoniccserver_1.CommonICCServer));
-exports.ServerICCServer = ServerICCServer;
+}(commoniccserver_1.default));
+exports.default = ServerICCServer;

@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    meteor: true,
   },
   extends: [
     'plugin:react/recommended',
@@ -20,5 +21,8 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
+    'import/no-unresolved': ['error', { ignore: ['^meteor/', '^/'] }],
+    'max-len': ['error', { code: 256 }],
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
   },
 };

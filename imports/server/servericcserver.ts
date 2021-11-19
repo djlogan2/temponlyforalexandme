@@ -6,7 +6,8 @@ export default class ServerICCServer extends CommonICCServer {
 
   public handles: {
         instanceCheck?: Handle;
-        defunctCheck?: Handle;
+        defunctInstanceCheck?: Handle;
+        defunctConnectionCheck?: Handle;
     };
 
   constructor() {
@@ -20,9 +21,18 @@ export default class ServerICCServer extends CommonICCServer {
   }
 
   public runShutdownFunctions(): void {
-    let x = 0;
-    x++;
-    this.shutdown_functions.forEach((fn) => fn());
-    process.exit(0);
+    const promises: Promise<void>[] = [];
+    this.shutdown_functions.forEach((fn) => {
+      promises.push(new Promise((resolve, reject) => {
+        try {
+          fn();
+          resolve();
+        } catch (e) {
+          reject(e);
+        }
+      }));
+    });
+    Promise.all(promises)
+      .then(() => { process.exit(0); });
   }
 }

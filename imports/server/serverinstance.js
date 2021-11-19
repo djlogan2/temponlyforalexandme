@@ -1,15 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var ip = require("ip");
+var mongo_1 = require("meteor/mongo");
 var instancerecord_1 = require("../models/instancerecord");
 var handle_1 = require("../handle");
-var ip = require("ip");
 Meteor.startup(function () {
-    ICCServer.collections.instances = new Mongo.Collection("instances");
+    ICCServer.collections.instances = new mongo_1.Mongo.Collection('instances');
     // @ts-ignore
     ICCServer.collections.instances.attachSchema(instancerecord_1.InstanceRecordSchema);
-    ICCServer.instance_id = ICCServer.collections.instances.insert({ started: new Date(), lastPing: new Date(), ipAddress: ip.address(), current_release: "x", current_version: "x", pid: process.pid });
+    ICCServer.instance_id = ICCServer.collections.instances.insert({
+        started: new Date(),
+        lastPing: new Date(),
+        ipAddress: ip.address(),
+        current_release: 'x',
+        current_version: 'x',
+        pid: process.pid,
+    });
     ICCServer.handles.instanceCheck = new handle_1.Timer(function () { return ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, { $set: { lastPing: new Date() } }); }, 1000);
-    ICCServer.handles.defunctCheck = new handle_1.Timer(function () {
+    ICCServer.handles.defunctInstanceCheck = new handle_1.Timer(function () {
         var oneminute = new Date();
         oneminute.setTime(oneminute.getTime() - 60000);
         ICCServer.collections.instances.update({
@@ -30,11 +38,16 @@ Meteor.startup(function () {
         });
     }, 1000);
     ICCServer.onShutdown(function () {
-        console.log("Shutdown requested");
+        console.log('Shutdown requested');
         ICCServer.events.emit('shutdown');
         ICCServer.handles.instanceCheck.stop();
-        ICCServer.handles.defunctCheck.stop();
-        ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, { $set: { shuttingDown: true, handlingInstance: ICCServer.instance_id } });
+        ICCServer.handles.defunctInstanceCheck.stop();
+        ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, {
+            $set: {
+                shuttingDown: true,
+                handlingInstance: ICCServer.instance_id,
+            },
+        });
     });
     process.once('exit', function () { return ICCServer.runShutdownFunctions(); });
     process.once('SIGTERM', function () { return ICCServer.runShutdownFunctions(); });
