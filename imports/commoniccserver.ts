@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import { Handle } from './handle';
 import { InstanceRecord } from './models/instancerecord';
 import { ConnectionRecord } from './models/connectionrecord';
+import PingRecord from "./models/pingrecord";
 
 //
 export default abstract class CommonICCServer {
@@ -13,6 +14,7 @@ export default abstract class CommonICCServer {
   public collections: {
         connections?: Mongo.Collection<ConnectionRecord>;
         instances?: Mongo.Collection<InstanceRecord>;
+        pingtable?: Mongo.Collection<PingRecord>;
     };
 
     public abstract handles: { [key: string]: Handle };
