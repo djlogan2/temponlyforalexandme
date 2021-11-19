@@ -1,6 +1,7 @@
 import SimpleSchema from 'simpl-schema';
 
 export interface ConnectionRecord {
+    _id: string;
     connection_id: string;
     instance_id: string;
     create_date: Date;

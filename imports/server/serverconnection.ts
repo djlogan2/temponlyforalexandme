@@ -2,10 +2,13 @@ import { Mongo } from 'meteor/mongo';
 import ServerICCServer from './servericcserver';
 import { ConnectionRecord, ConnectionRecordSchema } from '../models/connectionrecord';
 import { Timer } from '../handle';
+import { RemoteInstance } from '../commoninstance';
 
 declare const ICCServer: ServerICCServer;
 
 export default class ServerConnection implements ConnectionRecord {
+  _id: string;
+
   connection_id: string;
 
   instance_id: string;
@@ -37,6 +40,15 @@ Meteor.startup(() => {
     connection.onClose(onclose);
   });
 
+  ICCServer.events.on('defunctinstance', (inst: RemoteInstance) => {
+    ICCServer.collections.connections.update({ instance_id: inst._id, handlingInstance: { $exists: false } }, { $set: { handlingInstance: ICCServer.instance_id } });
+    ICCServer.collections.connections.find({ handlingInstance: ICCServer.instance_id }).forEach((connection: ConnectionRecord) => {
+      console.log(`Session found for a defunct instance! Removing from our table. connection=${connection.connection_id}`);
+      ICCServer.events.emit('connectionclosed', connection.connection_id);
+      ICCServer.collections.connections.remove({ _id: connection._id });
+    });
+  });
+
   ICCServer.handles.defunctConnectionCheck = new Timer(() => {
     // @ts-ignore
     const meteor: string[] = Array.from(Meteor.server.sessions.keys());
@@ -53,8 +65,8 @@ Meteor.startup(() => {
     });
 
     inOursAndNotMeteor.forEach((connectionid) => {
-      console.log(`Session found in our tablel that Meteor does not have! Removing from our table. connection=${connectionid}`);
+      console.log(`Session found in our table that Meteor does not have! Removing from our table. connection=${connectionid}`);
       ICCServer.events.emit('connectionclosed', connectionid);
     });
-  }, 60000);
+  }, 1000);
 });

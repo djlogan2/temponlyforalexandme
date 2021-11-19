@@ -26,6 +26,14 @@ Meteor.startup(function () {
         });
         connection.onClose(onclose);
     });
+    ICCServer.events.on('defunctinstance', function (inst) {
+        ICCServer.collections.connections.update({ instance_id: inst._id, handlingInstance: { $exists: false } }, { $set: { handlingInstance: ICCServer.instance_id } });
+        ICCServer.collections.connections.find({ handlingInstance: ICCServer.instance_id }).forEach(function (connection) {
+            console.log("Session found for a defunct instance! Removing from our table. connection=".concat(connection.connection_id));
+            ICCServer.events.emit('connectionclosed', connection.connection_id);
+            ICCServer.collections.connections.remove({ _id: connection._id });
+        });
+    });
     ICCServer.handles.defunctConnectionCheck = new handle_1.Timer(function () {
         // @ts-ignore
         var meteor = Array.from(Meteor.server.sessions.keys());
@@ -39,8 +47,8 @@ Meteor.startup(function () {
             console.log("Session found in meteor that we do not have! Added to our table. connection=".concat(connectionid));
         });
         inOursAndNotMeteor.forEach(function (connectionid) {
-            console.log("Session found in our tablel that Meteor does not have! Removing from our table. connection=".concat(connectionid));
+            console.log("Session found in our table that Meteor does not have! Removing from our table. connection=".concat(connectionid));
             ICCServer.events.emit('connectionclosed', connectionid);
         });
-    }, 60000);
+    }, 1000);
 });

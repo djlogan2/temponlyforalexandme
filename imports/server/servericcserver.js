@@ -28,7 +28,7 @@ var ServerICCServer = /** @class */ (function (_super) {
         this.shutdown_functions.push(Meteor.bindEnvironment(function () { return fn(); }));
     };
     ServerICCServer.prototype.runShutdownFunctions = function () {
-        var promises;
+        var promises = [];
         this.shutdown_functions.forEach(function (fn) {
             promises.push(new Promise(function (resolve, reject) {
                 try {
