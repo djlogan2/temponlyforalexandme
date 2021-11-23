@@ -1,25 +1,27 @@
 import { Mongo } from 'meteor/mongo';
 import ServerICCServer from './servericcserver';
 import { ConnectionRecord, ConnectionRecordSchema } from '../models/connectionrecord';
-import { Timer } from '../handle';
+import { Handle, Timer } from '../handle';
 import { RemoteInstance } from '../commoninstance';
+
+let defunctConnectionCheck: Handle;
 
 declare const ICCServer: ServerICCServer;
 
 export default class ServerConnection implements ConnectionRecord {
-  _id: string;
+  public _id: string;
 
-  connection_id: string;
+  public connection_id: string;
 
-  instance_id: string;
+  public instance_id: string;
 
-  create_date: Date;
+  public create_date: Date;
 
-  clientAddress: string;
+  public clientAddress: string;
 
-  user_id?: string;
+  public user_id?: string;
 
-  username?: string;
+  public username?: string;
 }
 
 Meteor.startup(() => {
@@ -29,7 +31,7 @@ Meteor.startup(() => {
 
   ICCServer.onShutdown(() => {
     ICCServer.collections.connections.remove({ instance_id: ICCServer.instance_id });
-    ICCServer.handles.defunctConnectionCheck.stop();
+    defunctConnectionCheck.stop();
   });
 
   Meteor.onConnection((connection) => {
@@ -53,7 +55,7 @@ Meteor.startup(() => {
     });
   });
 
-  ICCServer.handles.defunctConnectionCheck = new Timer(() => {
+  defunctConnectionCheck = new Timer(() => {
     // @ts-ignore
     const meteor: string[] = Array.from(Meteor.server.sessions.keys());
 

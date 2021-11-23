@@ -1,19 +1,15 @@
-import { Handle } from '../handle';
 import CommonICCServer from '../commoniccserver';
+import ServerTimestamp from './servertimestamp';
 
 export default class ServerICCServer extends CommonICCServer {
   private shutdown_functions: (() => void)[];
 
-  public handles: {
-        instanceCheck?: Handle;
-        defunctInstanceCheck?: Handle;
-        defunctConnectionCheck?: Handle;
-    };
+  public timestamp: {[key: string]: ServerTimestamp};
 
   constructor() {
     super();
-    this.handles = {};
     this.shutdown_functions = [];
+    this.timestamp = {};
   }
 
   public onShutdown(fn: () => void): void {

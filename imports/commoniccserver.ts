@@ -3,7 +3,9 @@ import { Mongo } from 'meteor/mongo';
 import { Handle } from './handle';
 import { InstanceRecord } from './models/instancerecord';
 import { ConnectionRecord } from './models/connectionrecord';
-import PingRecord from "./models/pingrecord";
+import PingRecord from './models/pingrecord';
+import {LogConfigRecord, LogRecord} from "./models/loggerrecord";
+import CommonLogger from "./commonlogger";
 
 //
 export default abstract class CommonICCServer {
@@ -11,21 +13,22 @@ export default abstract class CommonICCServer {
 
   public instance_id?: string;
 
+  public createLogger: (identifer: string) => CommonLogger;
+
   public collections: {
         connections?: Mongo.Collection<ConnectionRecord>;
         instances?: Mongo.Collection<InstanceRecord>;
         pingtable?: Mongo.Collection<PingRecord>;
+        logs?: Mongo.Collection<LogRecord>;
+        loggerconfig?: Mongo.Collection<LogConfigRecord>;
     };
 
-    public abstract handles: { [key: string]: Handle };
+  constructor() {
+    this.eventEmitter = new EventEmitter();
+    this.collections = {};
+  }
 
-    constructor() {
-      this.eventEmitter = new EventEmitter();
-      this.collections = {};
-      // this.handles = {};
-    }
-
-    public get events() {
-      return this.eventEmitter;
-    }
+  public get events() {
+    return this.eventEmitter;
+  }
 }

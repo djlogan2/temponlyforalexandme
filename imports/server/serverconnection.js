@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongo_1 = require("meteor/mongo");
 var connectionrecord_1 = require("../models/connectionrecord");
 var handle_1 = require("../handle");
+var defunctConnectionCheck;
 var ServerConnection = /** @class */ (function () {
     function ServerConnection() {
     }
@@ -15,7 +16,7 @@ Meteor.startup(function () {
     ICCServer.collections.connections.attachSchema(connectionrecord_1.ConnectionRecordSchema);
     ICCServer.onShutdown(function () {
         ICCServer.collections.connections.remove({ instance_id: ICCServer.instance_id });
-        ICCServer.handles.defunctConnectionCheck.stop();
+        defunctConnectionCheck.stop();
     });
     Meteor.onConnection(function (connection) {
         ICCServer.collections.connections.insert({
@@ -36,7 +37,7 @@ Meteor.startup(function () {
             ICCServer.collections.connections.remove({ _id: connection._id });
         });
     });
-    ICCServer.handles.defunctConnectionCheck = new handle_1.Timer(function () {
+    defunctConnectionCheck = new handle_1.Timer(function () {
         // @ts-ignore
         var meteor = Array.from(Meteor.server.sessions.keys());
         var ourtable = ICCServer.collections.connections.find({ instance_id: ICCServer.instance_id }, { fields: { connection_id: 1 } }).fetch().map(function (rec) { return rec.connection_id; });

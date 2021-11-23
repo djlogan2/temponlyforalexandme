@@ -1,58 +1,59 @@
-import CommonTimestamp from '../commontimestamp';
 import ServerICCServer from './servericcserver';
-import { PingMessage, PongMessage, PongResponse } from '../models/timestamp';
-import ServerDirectMessage from './serverdirectmessage';
+import { PongMessage, PongResponse } from '../models/timestamp';
 import PingRecord from '../models/pingrecord';
+import CommonDirectTimestamp from '../commondirecttimetamp';
+import ServerDirectMessage from './serverdirectmessage';
+import ServerLogger from './serverlogger';
 
 declare const ICCServer: ServerICCServer;
 
-export default class ServerTimestamp extends CommonTimestamp {
+export default class ServerTimestamp extends CommonDirectTimestamp {
+  private logger: ServerLogger = new ServerLogger('server/ServerTimestamp');
+
   private connectionid: string;
 
-  private directMessage: ServerDirectMessage<PingMessage | PongMessage | PongResponse, PingMessage | PongMessage | PongResponse>;
-
-  constructor(connectionid: string) {
-    super(60);
+  constructor(pingcount: number, connectionid: string) {
+    super(pingcount);
     this.connectionid = connectionid;
   }
 
-  private PongResponse(msg: PongResponse) {
-    const record = ICCServer.collections.pingtable.findOne({ connection_id: this.connectionid });
-    record.pings = record.pings.slice(0, this.pingcount - 1);
-    record.pings.push(msg.delay);
-    ICCServer.collections.pingtable.update({ connection_id: this.connectionid }, { $set: { pings: record.pings } });
+  protected PongReceived(pong: PongMessage) {
+    super.PongReceived(pong);
+    this.logger.debug(() => `ServerTimestamp.PongReceived: ${JSON.stringify(pong)}`);
+    ICCServer.collections.pingtable.upsert({ connection_id: this.connectionid }, {
+      connection_id: this.connectionid,
+      lastPing: new Date(),
+      pendingrequests: this.pendingrequests,
+      localvalues: this.localvalues,
+      remotevalues: this.remotevalues,
+      pingcount: this.pingcount,
+      pingtimes: this.pingtimes,
+    });
   }
 
-  private received(msg: PingMessage | PongMessage | PongResponse) {
-    switch (msg.type) {
-      case 'ping':
-        this.PingReceived(msg as PingMessage);
-        break;
-      case 'pong':
-        this.PongReceived(msg as PongMessage);
-        break;
-      case 'rslt':
-        break;
-      default:
-        throw new Meteor.Error('UNKNOWN_TIMESTAMP_MESSAGE');
-    }
-  }
-
-  protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
-    if (this.directMessage) this.directMessage.send(msg);
+  protected PongResponseReceived(msg: PongResponse) {
+    super.PongResponseReceived(msg);
+    this.logger.debug(() => `ServerTimestamp.PongResponseReceived: ${JSON.stringify(msg)}`);
   }
 
   protected startReceiveWatcher(): void {
+    this.logger.debug(() => 'ServerTimestamp.startReceiveWatcher');
     if (this.directMessage) return;
-    this.directMessage = new ServerDirectMessage('timestamp', this.connectionid, this.received);
-  }
-
-  protected stopReceiveWatcher(): void {
-    this.directMessage.stop();
-    delete this.directMessage;
+    this.directMessage = new ServerDirectMessage('timestamp', this.connectionid, (msg) => this.processIncomingMessage(msg));
   }
 }
 
 Meteor.startup(() => {
   ICCServer.collections.pingtable = new Mongo.Collection<PingRecord>('pingtable');
+  ICCServer.events.on('connectionestablished', (connection) => {
+    const timestamp = new ServerTimestamp(60, connection.id);
+    ICCServer.timestamp[connection.id] = timestamp;
+    timestamp.start();
+  });
+
+  ICCServer.events.on('connectionclosed', (connectionid) => {
+    const timestamp = ICCServer.timestamp[connectionid];
+    timestamp.stop();
+    delete ICCServer.timestamp[connectionid];
+  });
 });

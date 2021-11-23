@@ -1,26 +1,40 @@
 import { Random } from 'meteor/random';
 import { PingMessage, PongMessage, PongResponse } from './models/timestamp';
+import CommonLogger from './commonlogger';
+import CommonICCServer from './commoniccserver';
+
+declare const ICCServer: CommonICCServer;
 
 export default abstract class CommonTimestamp {
+  private logger: CommonLogger;
+
   private intervalHandle?: number;
 
   private cleanupHandle?: number;
 
-  private pendingrequests: { [key: string]: PingMessage };
+  protected pendingrequests: { [key: string]: PingMessage };
 
-  private current_clock_offset: number;
+  protected localvalues: {
+    current_clock_offset: number;
+    delay?: number;
+    clock_offset?: number;
+  };
 
-  private delay: number;
-
-  private clock_offset: number;
+  protected remotevalues: {
+    current_clock_offset: number;
+    delay?: number;
+    clock_offset?: number;
+  };
 
   protected pingcount: number;
 
-  private pingtimes: number[];
+  protected pingtimes: number[];
 
   constructor(pingcount: number) {
+    this.logger = ICCServer.createLogger('common/CommonTimestamp');
     this.pingcount = pingcount;
-    this.current_clock_offset = 0;
+    this.localvalues = { current_clock_offset: 0 };
+    this.remotevalues = { current_clock_offset: 0 };
     this.pendingrequests = {};
   }
 
@@ -43,36 +57,40 @@ export default abstract class CommonTimestamp {
 
   protected PongReceived(pong: PongMessage): void {
     const arrival = this.getMilliseconds();
-    this.delay = Math.abs(arrival - pong.originate - (pong.transmit - pong.receive));
-    this.clock_offset = (pong.receive - pong.originate + pong.transmit - arrival) / 2;
+    this.localvalues.delay = Math.abs(arrival - pong.originate - (pong.transmit - pong.receive));
+    this.localvalues.clock_offset = (pong.receive - pong.originate + pong.transmit - arrival) / 2;
 
     //
     // For safety, limit clock offsets to 1/4 of a second, and force timestamp to adjust
     // over time if it's really off.
     //
-    if (this.clock_offset > 250) this.clock_offset = 250;
-    else if (this.clock_offset < -250) this.clock_offset = -250;
+    if (this.localvalues.clock_offset > 250) this.localvalues.clock_offset = 250;
+    else if (this.localvalues.clock_offset < -250) this.localvalues.clock_offset = -250;
 
-    this.current_clock_offset += this.clock_offset;
+    this.localvalues.current_clock_offset += this.localvalues.clock_offset;
 
     if (this.pingtimes.length >= this.pingcount) this.pingtimes.shift();
-    this.pingtimes.push(this.delay);
+    this.pingtimes.push(this.localvalues.delay);
     const pongresponse: PongResponse = {
       type: 'rslt',
       id: pong.id,
-      delay: this.delay,
-      clock_offset: this.clock_offset,
+      delay: this.localvalues.delay,
+      clock_offset: this.localvalues.clock_offset,
     };
     this.sendFunction(pongresponse);
     delete this.pendingrequests[pong.id];
+    this.logger.debug(() => `pong received: ${JSON.stringify(pong)}`);
   }
 
-  protected shouldSendPing(): boolean {
-    return true;
+  protected PongResponseReceived(msg: PongResponse) {
+    this.remotevalues.delay = msg.delay;
+    this.remotevalues.clock_offset = msg.clock_offset;
   }
+
+  public shouldSendPing: boolean = true;
 
   private ping(): void {
-    if (!this.shouldSendPing()) return;
+    if (!this.shouldSendPing) return;
     const request: string = Random.id();
     const ping: PingMessage = {
       type: 'ping',
@@ -81,6 +99,22 @@ export default abstract class CommonTimestamp {
     };
     this.pendingrequests[request] = ping;
     this.sendFunction(ping);
+  }
+
+  protected processIncomingMessage(msg: PingMessage | PongMessage | PongResponse): void {
+    switch (msg.type) {
+      case 'ping':
+        this.PingReceived(msg as PingMessage);
+        break;
+      case 'pong':
+        this.PongReceived(msg as PongMessage);
+        break;
+      case 'rslt':
+        this.PongResponseReceived(msg as PongResponse);
+        break;
+      default:
+        throw new Meteor.Error('UNKNOWN_TIMESTAMP_MESSAGE');
+    }
   }
 
   private cleanupOldPings(): void {
@@ -93,7 +127,7 @@ export default abstract class CommonTimestamp {
   }
 
   public getMilliseconds(): number {
-    return new Date().getTime() + this.current_clock_offset;
+    return new Date().getTime() + this.localvalues.current_clock_offset;
   }
 
   public start(): void {

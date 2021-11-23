@@ -4,6 +4,8 @@ var ip = require("ip");
 var mongo_1 = require("meteor/mongo");
 var instancerecord_1 = require("../models/instancerecord");
 var handle_1 = require("../handle");
+var instanceCheck;
+var defunctInstanceCheck;
 Meteor.startup(function () {
     ICCServer.collections.instances = new mongo_1.Mongo.Collection('instances');
     // @ts-ignore
@@ -16,8 +18,8 @@ Meteor.startup(function () {
         current_version: 'x',
         pid: process.pid,
     });
-    ICCServer.handles.instanceCheck = new handle_1.Timer(function () { return ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, { $set: { lastPing: new Date() } }); }, 1000);
-    ICCServer.handles.defunctInstanceCheck = new handle_1.Timer(function () {
+    instanceCheck = new handle_1.Timer(function () { return ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, { $set: { lastPing: new Date() } }); }, 1000);
+    defunctInstanceCheck = new handle_1.Timer(function () {
         var oneminute = new Date();
         oneminute.setTime(oneminute.getTime() - 60000);
         ICCServer.collections.instances.update({
@@ -40,8 +42,8 @@ Meteor.startup(function () {
     ICCServer.onShutdown(function () {
         console.log('Shutdown requested');
         ICCServer.events.emit('shutdown');
-        ICCServer.handles.instanceCheck.stop();
-        ICCServer.handles.defunctInstanceCheck.stop();
+        instanceCheck.stop();
+        defunctInstanceCheck.stop();
         ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, {
             $set: {
                 shuttingDown: true,

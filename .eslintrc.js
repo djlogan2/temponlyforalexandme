@@ -23,6 +23,6 @@ module.exports = {
   rules: {
     'import/no-unresolved': ['error', { ignore: ['^meteor/', '^/'] }],
     'max-len': ['error', { code: 256 }],
-    'no-underscore-dangle': ['error', { allow: ['_id'] }],
+    'no-underscore-dangle': ['error', { allow: ['_id', '_lastSessionId'] }],
   },
 };

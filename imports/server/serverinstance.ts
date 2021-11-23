@@ -1,9 +1,12 @@
 import * as ip from 'ip';
 import { Mongo } from 'meteor/mongo';
 import { InstanceRecord, InstanceRecordSchema } from '../models/instancerecord';
-import { Timer } from '../handle';
+import { Handle, Timer } from '../handle';
 import ServerICCServer from './servericcserver';
 import { RemoteInstance } from '../commoninstance';
+
+let instanceCheck: Handle;
+let defunctInstanceCheck: Handle;
 
 declare const ICCServer: ServerICCServer;
 
@@ -19,8 +22,8 @@ Meteor.startup(() => {
     current_version: 'x',
     pid: process.pid,
   });
-  ICCServer.handles.instanceCheck = new Timer(() => ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, { $set: { lastPing: new Date() } }), 1000);
-  ICCServer.handles.defunctInstanceCheck = new Timer(() => {
+  instanceCheck = new Timer(() => ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, { $set: { lastPing: new Date() } }), 1000);
+  defunctInstanceCheck = new Timer(() => {
     const oneminute = new Date();
     oneminute.setTime(oneminute.getTime() - 60000);
     ICCServer.collections.instances.update(
@@ -49,8 +52,8 @@ Meteor.startup(() => {
   ICCServer.onShutdown(() => {
     console.log('Shutdown requested');
     ICCServer.events.emit('shutdown');
-    ICCServer.handles.instanceCheck.stop();
-    ICCServer.handles.defunctInstanceCheck.stop();
+    instanceCheck.stop();
+    defunctInstanceCheck.stop();
     ICCServer.collections.instances.update({ _id: ICCServer.instance_id }, {
       $set: {
         shuttingDown: true,

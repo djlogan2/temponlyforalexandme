@@ -20,8 +20,8 @@ var ServerICCServer = /** @class */ (function (_super) {
     __extends(ServerICCServer, _super);
     function ServerICCServer() {
         var _this = _super.call(this) || this;
-        _this.handles = {};
         _this.shutdown_functions = [];
+        _this.timestamp = {};
         return _this;
     }
     ServerICCServer.prototype.onShutdown = function (fn) {

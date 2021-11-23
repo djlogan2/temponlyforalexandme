@@ -8,6 +8,7 @@ export interface ConnectionRecord {
     clientAddress: string;
     user_id?: string;
     username?: string;
+    handlingInstance?: string;
 }
 
 export const ConnectionRecordSchema = new SimpleSchema({
@@ -17,4 +18,5 @@ export const ConnectionRecordSchema = new SimpleSchema({
   clientAddress: String,
   user_id: { type: String, optional: true },
   username: { type: String, optional: true },
+  handlingInstance: { type: String, optional: true },
 });

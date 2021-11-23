@@ -1,6 +1,10 @@
-import App from "../imports/ui/app";
-import {render} from "react-dom";
-import * as React from "react";
+import './iccserver';
+import '../imports/client/clientlogger';
+import '../imports/client/clientdirectmessage';
+import '../imports/client/clienttimetamp';
+import { render } from 'react-dom';
+import * as React from 'react';
+import App from '../imports/ui/app';
 
 // window.onerror = function myErrorHandler(
 //     message: Event | string,
@@ -14,6 +18,5 @@ import * as React from "react";
 // };
 
 Meteor.startup(() => {
-    debugger;
-    render(<App />, document.getElementById("target"));
+  render(<App />, document.getElementById('target'));
 });

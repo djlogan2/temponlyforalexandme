@@ -1,8 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var app_1 = require("../imports/ui/app");
+require("./iccserver");
+require("../imports/client/clientlogger");
+require("../imports/client/clientdirectmessage");
+require("../imports/client/clienttimetamp");
 var react_dom_1 = require("react-dom");
 var React = require("react");
+var app_1 = require("../imports/ui/app");
 // window.onerror = function myErrorHandler(
 //     message: Event | string,
 //     source: string | undefined,
@@ -14,6 +18,5 @@ var React = require("react");
 //     return false;
 // };
 Meteor.startup(function () {
-    debugger;
-    (0, react_dom_1.render)(<app_1.default />, document.getElementById("target"));
+    (0, react_dom_1.render)(<app_1.default />, document.getElementById('target'));
 });
