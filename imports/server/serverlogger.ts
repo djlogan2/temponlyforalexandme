@@ -50,62 +50,64 @@ function formatDate(date: Date): string {
 //   }
 // }
 
-function internalWriteTolog(
-  identifier: string,
-  type: LoggerType,
-  level: LogLevelEnum,
-  message: string,
-  data?: unknown,
-  userid?: string,
-): void {
-  Meteor.defer(() => {
-    const cache: any = [];
-    const duplicateChecker = (key: string, value: any) => {
-      if (typeof value === 'object' && value !== null) {
-        if (cache.indexOf(value) !== -1) {
-          try {
-            return JSON.parse(JSON.stringify(value));
-          } catch (error) {
-            return;
+const internalWriteTolog = Meteor.bindEnvironment(
+  (
+    identifier: string,
+    type: LoggerType,
+    level: LogLevelEnum,
+    message: string,
+    data?: unknown,
+    userid?: string,
+  ): void => {
+    Meteor.defer(() => {
+      const cache: any = [];
+      const duplicateChecker = (key: string, value: any) => {
+        if (typeof value === 'object' && value !== null) {
+          if (cache.indexOf(value) !== -1) {
+            try {
+              return JSON.parse(JSON.stringify(value));
+            } catch (error) {
+              return;
+            }
           }
+          cache.push(value);
         }
-        cache.push(value);
+        return value;
+      };
+
+      const now = new Date();
+      let msg = `[${type}]${now.toString()} [${loglevelStrings[level]}] ${identifier}`;
+
+      if (userid) msg += ` [${userid}]`;
+
+      msg += ` ${message}`;
+
+      if (data) {
+        try {
+          msg += `: data=${JSON.stringify(data, duplicateChecker)}`;
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e);
+        }
       }
-      return value;
-    };
 
-    const now = new Date();
-    let msg = `[${type}]${now.toString()} [${loglevelStrings[level]}] ${identifier}`;
+      // if (level <= 1) {
+      //   sendLog(msg, now);
+      // }
 
-    if (userid) msg += ` [${userid}]`;
+      ICCServer.collections.logs.insert({ date: now, msg });
 
-    msg += ` ${message}`;
-
-    if (data) {
-      try {
-        msg += `: data=${JSON.stringify(data, duplicateChecker)}`;
-      } catch (e) {
-      // eslint-disable-next-line no-console
-        console.log(e);
+      if (Meteor.absoluteUrl() === 'http://localhost:3000/' && !Meteor.isTest && !Meteor.isAppTest) {
+        console.log(msg);
       }
-    }
 
-    // if (level <= 1) {
-    //   sendLog(msg, now);
-    // }
-
-    ICCServer.collections.logs.insert({ date: now, msg });
-
-    if (Meteor.absoluteUrl() === 'http://localhost:3000/' && !Meteor.isTest && !Meteor.isAppTest) {
-      console.log(msg);
-    }
-
-    msg += '\n';
-    fs.appendFile(`${formatDate(now)}`, msg, () => {
+      msg += '\n';
+      fs.appendFile(`${formatDate(now)}`, msg, () => {
       /* nop */
+      });
     });
-  });
-}
+  },
+);
 
 export default class ServerLogger extends CommonLogger {
   constructor(identifier: string) {

@@ -2,19 +2,16 @@ import { PongMessage, PongResponse } from '../models/timestamp';
 import CommonDirectTimestamp from '../commondirecttimetamp';
 import ClientICCServer from './clienticcserver';
 import ClientDirectMessage from './clientdirectmessage';
-import ClientLogger from './clientlogger';
 
 declare const ICCServer: ClientICCServer;
 
 export default class ClientTimestamp extends CommonDirectTimestamp {
   protected PongReceived(pong: PongMessage) {
     super.PongReceived(pong);
-    console.log(`ClientTimestamp.PongReceived: ${JSON.stringify(pong)}`);
   }
 
   protected PongResponseReceived(msg: PongResponse) {
     super.PongResponseReceived(msg);
-    console.log(`ClientTimestamp.PongResponseReceived: ${JSON.stringify(msg)}`);
   }
 
   public startReceiveWatcher(): void {

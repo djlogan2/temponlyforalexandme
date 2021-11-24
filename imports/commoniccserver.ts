@@ -1,19 +1,19 @@
 import { EventEmitter } from 'events';
 import { Mongo } from 'meteor/mongo';
-import { Handle } from './handle';
 import { InstanceRecord } from './models/instancerecord';
 import { ConnectionRecord } from './models/connectionrecord';
 import PingRecord from './models/pingrecord';
-import {LogConfigRecord, LogRecord} from "./models/loggerrecord";
-import CommonLogger from "./commonlogger";
+import { LogConfigRecord, LogRecord } from './models/loggerrecord';
+import CommonLogger from './commonlogger';
 
 //
 export default abstract class CommonICCServer {
-  private eventEmitter: EventEmitter;
+  private readonly eventEmitter: EventEmitter;
 
   public instance_id?: string;
 
-  public createLogger: (identifer: string) => CommonLogger;
+  // eslint-disable-next-line no-unused-vars
+  public createLogger: (identifier: string) => CommonLogger;
 
   public collections: {
         connections?: Mongo.Collection<ConnectionRecord>;
@@ -23,7 +23,7 @@ export default abstract class CommonICCServer {
         loggerconfig?: Mongo.Collection<LogConfigRecord>;
     };
 
-  constructor() {
+  protected constructor() {
     this.eventEmitter = new EventEmitter();
     this.collections = {};
   }

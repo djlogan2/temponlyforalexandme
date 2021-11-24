@@ -1,24 +1,16 @@
-import CommonLogger from './commonlogger';
-import CommonICCServer from './commoniccserver';
-
-declare const ICCServer: CommonICCServer;
-
 export default abstract class CommonDirectMessage<S, R> {
+  // eslint-disable-next-line no-unused-vars
   private receivedHandler: (msg: R) => void;
-
-  private commonlogger: CommonLogger;
 
   protected name: string;
 
+  // eslint-disable-next-line no-unused-vars
   constructor(name: string, handler?: (msg: R) => void) {
-    this.commonlogger = ICCServer.createLogger('common/CommonDirectMessage');
-    this.commonlogger.debug(() => `CommonDirectMessage constructor, name=${name}`);
     this.name = name;
-    if (handler) this.receivedHandler = handler;
+    if (handler) this.receivedHandler = Meteor.bindEnvironment((msg2) => handler(msg2));
   }
 
   public received(msg: R) {
-    this.commonlogger.debug(() => `CommonDirectMessage.received, name=${this.name}, msg=${JSON.stringify(msg)}`);
     if (this.receivedHandler) this.receivedHandler(msg);
     else throw new Meteor.Error('UNHANDLED_MESSAGE');
   }

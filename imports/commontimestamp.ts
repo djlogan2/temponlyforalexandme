@@ -1,13 +1,7 @@
 import { Random } from 'meteor/random';
 import { PingMessage, PongMessage, PongResponse } from './models/timestamp';
-import CommonLogger from './commonlogger';
-import CommonICCServer from './commoniccserver';
-
-declare const ICCServer: CommonICCServer;
 
 export default abstract class CommonTimestamp {
-  private commonlogger: CommonLogger;
-
   private intervalHandle?: number;
 
   private cleanupHandle?: number;
@@ -30,14 +24,14 @@ export default abstract class CommonTimestamp {
 
   protected pingtimes: number[] = [];
 
-  constructor(pingcount: number) {
-    this.commonlogger = ICCServer.createLogger('common/CommonTimestamp');
+  protected constructor(pingcount: number) {
     this.pingcount = pingcount;
     this.localvalues = { current_clock_offset: 0 };
     this.remotevalues = { current_clock_offset: 0 };
     this.pendingrequests = {};
   }
 
+  // eslint-disable-next-line no-unused-vars
   protected abstract sendFunction(msg: PingMessage | PongMessage | PongResponse): void;
 
   protected abstract startReceiveWatcher(): void;
@@ -79,7 +73,6 @@ export default abstract class CommonTimestamp {
     };
     this.sendFunction(pongresponse);
     delete this.pendingrequests[pong.id];
-    this.commonlogger.debug(() => `pong received: ${JSON.stringify(pong)}`);
   }
 
   protected PongResponseReceived(msg: PongResponse) {
