@@ -2,25 +2,22 @@ import { PongMessage, PongResponse } from '../models/timestamp';
 import CommonDirectTimestamp from '../commondirecttimetamp';
 import ClientICCServer from './clienticcserver';
 import ClientDirectMessage from './clientdirectmessage';
-import ServerLogger from '../server/serverlogger';
+import ClientLogger from './clientlogger';
 
 declare const ICCServer: ClientICCServer;
 
 export default class ClientTimestamp extends CommonDirectTimestamp {
-  private logger: ServerLogger = new ServerLogger('CommonDirectTimestamp');
-
   protected PongReceived(pong: PongMessage) {
     super.PongReceived(pong);
-    this.logger.debug(() => `ClientTimestamp.PongReceived: ${JSON.stringify(pong)}`);
+    console.log(`ClientTimestamp.PongReceived: ${JSON.stringify(pong)}`);
   }
 
   protected PongResponseReceived(msg: PongResponse) {
     super.PongResponseReceived(msg);
-    this.logger.debug(() => `ClientTimestamp.PongResponseReceived: ${JSON.stringify(msg)}`);
+    console.log(`ClientTimestamp.PongResponseReceived: ${JSON.stringify(msg)}`);
   }
 
   public startReceiveWatcher(): void {
-    this.logger.debug(() => 'ClientTimestamp.startReceiveWatcher');
     if (this.directMessage) return;
     this.directMessage = new ClientDirectMessage('timestamp', (msg) => this.processIncomingMessage(msg));
   }
@@ -29,7 +26,7 @@ export default class ClientTimestamp extends CommonDirectTimestamp {
 function startTimestamp() {
   if (ICCServer.timestamp) return;
   ICCServer.timestamp = new ClientTimestamp(60);
-  ICCServer.timestamp.startReceiveWatcher();
+  ICCServer.timestamp.start();
 }
 
 Meteor.startup(() => {

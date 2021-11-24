@@ -7,12 +7,12 @@ import CommonICCServer from './commoniccserver';
 declare const ICCServer: CommonICCServer;
 
 export default abstract class CommonDirectTimestamp extends CommonTimestamp {
-  private commonlogger: CommonLogger;
+  private commonlogger2: CommonLogger;
 
   constructor(pingcount: number) {
     super(pingcount);
-    this.commonlogger = ICCServer.createLogger('common/CommonDirectTimestamp');
-    this.commonlogger.debug(() => 'CommonDirectTimestamp.constructor');
+    this.commonlogger2 = ICCServer.createLogger('common/CommonDirectTimestamp');
+    this.commonlogger2.debug(() => 'CommonDirectTimestamp.constructor');
   }
 
   protected directMessage: CommonDirectMessage<PingMessage | PongMessage | PongResponse, PingMessage | PongMessage | PongResponse>;
@@ -20,13 +20,13 @@ export default abstract class CommonDirectTimestamp extends CommonTimestamp {
   protected abstract startReceiveWatcher(): void;
 
   protected stopReceiveWatcher(): void {
-    this.commonlogger.debug(() => 'CommonDirectTimestamp.stopReceiveWatcher');
+    this.commonlogger2.debug(() => 'CommonDirectTimestamp.stopReceiveWatcher');
     this.directMessage.stop();
     delete this.directMessage;
   }
 
   protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
-    this.commonlogger.debug(() => `CommonDirectTimestamp.sendFunction msg=${JSON.stringify(msg)}`);
+    this.commonlogger2.debug(() => `CommonDirectTimestamp.sendFunction msg=${JSON.stringify(msg)}`);
     if (this.directMessage) this.directMessage.send(msg);
   }
 }

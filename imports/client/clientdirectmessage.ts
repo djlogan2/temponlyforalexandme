@@ -26,7 +26,7 @@ export default class ClientDirectMessage<S, R> extends CommonDirectMessage<S, R>
 
   public send(msg: S): void {
     // @ts-ignore
-    this.logger.debug(`ClientDirectMessage.send, name=${this.name}, msg=${JSON.stringify(msg)}`);
+    ClientDirectMessage.logger.debug(() => `ClientDirectMessage.send, name=${this.name}, msg=${JSON.stringify(msg)}`);
     // @ts-ignore
     Meteor.directStream.send(JSON.stringify({ iccdm: this.name, iccmsg: msg }));
   }
@@ -34,7 +34,7 @@ export default class ClientDirectMessage<S, R> extends CommonDirectMessage<S, R>
 
 Meteor.startup(() => {
   // @ts-ignore
-  Meteor.directStream.onMessage(Meteor.bindEnvironment((message) => {
+  Meteor.directStream.onMessage((message) => {
     try {
       const msg = JSON.parse(message);
       if (typeof msg !== 'object' || !('iccdm' in msg)) return;
@@ -42,12 +42,12 @@ Meteor.startup(() => {
         ClientDirectMessage.logger.debug(() => `ClientDirectMessage received=${message}`);
         ClientDirectMessage.globalreceive(msg.iccdm, msg.iccmsg);
       } catch (e) {
-        ClientDirectMessage.logger.debug(() => `Error on ClientDirectMessage.globalReceive: ${e.message}`);
+        ClientDirectMessage.logger.debug(() => `Error on ClientDirectMessage.globalReceive: ${e}`);
       }
       // @ts-ignore
-      //this.preventCallingMeteorHandler();
+      this.preventCallingMeteorHandler();
     } catch (e) {
       // If we cannot parse the string into an object, it's not for us.
     }
-  }));
+  });
 });

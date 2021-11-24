@@ -6,7 +6,7 @@ import CommonICCServer from './commoniccserver';
 declare const ICCServer: CommonICCServer;
 
 export default abstract class CommonTimestamp {
-  private logger: CommonLogger;
+  private commonlogger: CommonLogger;
 
   private intervalHandle?: number;
 
@@ -28,10 +28,10 @@ export default abstract class CommonTimestamp {
 
   protected pingcount: number;
 
-  protected pingtimes: number[];
+  protected pingtimes: number[] = [];
 
   constructor(pingcount: number) {
-    this.logger = ICCServer.createLogger('common/CommonTimestamp');
+    this.commonlogger = ICCServer.createLogger('common/CommonTimestamp');
     this.pingcount = pingcount;
     this.localvalues = { current_clock_offset: 0 };
     this.remotevalues = { current_clock_offset: 0 };
@@ -79,7 +79,7 @@ export default abstract class CommonTimestamp {
     };
     this.sendFunction(pongresponse);
     delete this.pendingrequests[pong.id];
-    this.logger.debug(() => `pong received: ${JSON.stringify(pong)}`);
+    this.commonlogger.debug(() => `pong received: ${JSON.stringify(pong)}`);
   }
 
   protected PongResponseReceived(msg: PongResponse) {

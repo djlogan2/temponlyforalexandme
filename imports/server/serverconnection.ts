@@ -3,6 +3,7 @@ import ServerICCServer from './servericcserver';
 import { ConnectionRecord, ConnectionRecordSchema } from '../models/connectionrecord';
 import { Handle, Timer } from '../handle';
 import { RemoteInstance } from '../commoninstance';
+import ServerLogger from './serverlogger';
 
 let defunctConnectionCheck: Handle;
 
@@ -10,6 +11,8 @@ declare const ICCServer: ServerICCServer;
 
 export default class ServerConnection implements ConnectionRecord {
   public _id: string;
+
+  public static logger: ServerLogger = new ServerLogger('server/ServerConnection');
 
   public connection_id: string;
 
@@ -49,7 +52,7 @@ Meteor.startup(() => {
   ICCServer.events.on('defunctinstance', (inst: RemoteInstance) => {
     ICCServer.collections.connections.update({ instance_id: inst._id, handlingInstance: { $exists: false } }, { $set: { handlingInstance: ICCServer.instance_id } });
     ICCServer.collections.connections.find({ handlingInstance: ICCServer.instance_id }).forEach((connection: ConnectionRecord) => {
-      console.log(`Session found for a defunct instance! Removing from our table. connection=${connection.connection_id}`);
+      ServerConnection.logger.error(() => `Session found for a defunct instance! Removing from our table. connection=${connection.connection_id}`);
       ICCServer.events.emit('defunctconnection', connection.connection_id);
       ICCServer.collections.connections.remove({ _id: connection._id });
     });
@@ -71,11 +74,11 @@ Meteor.startup(() => {
       });
       // @ts-ignore
       ICCServer.events.emit('connectionestablished', Meteor.server.session.get(connectionid));
-      console.log(`Session found in meteor that we do not have! Added to our table. connection=${connectionid}`);
+      ServerConnection.logger.error(() => `Session found in meteor that we do not have! Added to our table. connection=${connectionid}`);
     });
 
     inOursAndNotMeteor.forEach((connectionid) => {
-      console.log(`Session found in our table that Meteor does not have! Removing from our table. connection=${connectionid}`);
+      ServerConnection.logger.error(() => `Session found in our table that Meteor does not have! Removing from our table. connection=${connectionid}`);
       ICCServer.events.emit('defunctconnection', connectionid);
     });
   }, 1000);

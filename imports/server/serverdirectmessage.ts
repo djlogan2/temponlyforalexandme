@@ -60,14 +60,13 @@ Meteor.startup(() => {
   Meteor.startup(() => {
     // @ts-ignore
     Meteor.directStream.onMessage(Meteor.bindEnvironment((message, sessionId) => {
-      console.log(`ServerDirectMessage received=${message}`);
       try {
         const msg = JSON.parse(message);
         if (typeof msg !== 'object' || !('iccdm' in msg)) return;
         try {
           ServerDirectMessage.globalreceive(sessionId, msg.iccdm, msg.iccmsg);
         } catch (e) {
-          //ServerDirectMessage.logger.debug(() => `Error on ServerDirectMessage.globalReceive: ${e.message}`);
+          ServerDirectMessage.logger.debug(() => `Error on ServerDirectMessage.globalReceive: ${e}`);
         }
         // @ts-ignore
         this.preventCallingMeteorHandler();
