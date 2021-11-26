@@ -24,5 +24,6 @@ module.exports = {
     'import/no-unresolved': ['error', { ignore: ['^meteor/', '^/'] }],
     'max-len': ['error', { code: 256 }],
     'no-underscore-dangle': ['error', { allow: ['_id', '_lastSessionId'] }],
+    'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
   },
 };

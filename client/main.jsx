@@ -4,9 +4,10 @@ require("./iccserver");
 require("../imports/client/clientlogger");
 require("../imports/client/clientdirectmessage");
 require("../imports/client/clienttimetamp");
+require("../imports/routes");
 var react_dom_1 = require("react-dom");
 var React = require("react");
-var app_1 = require("../imports/ui/app");
+var App_1 = require("../imports/ui/app/App");
 // window.onerror = function myErrorHandler(
 //     message: Event | string,
 //     source: string | undefined,
@@ -18,5 +19,5 @@ var app_1 = require("../imports/ui/app");
 //     return false;
 // };
 Meteor.startup(function () {
-    (0, react_dom_1.render)(<app_1.default />, document.getElementById('target'));
+    (0, react_dom_1.render)(<App_1.default />, document.getElementById('root'));
 });
