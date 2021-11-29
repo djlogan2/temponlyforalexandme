@@ -32,5 +32,13 @@ module.exports = {
         unnamedComponents: 'arrow-function',
       },
     ],
+    '@typescript-eslint/quotes': [
+      'error',
+      'double',
+      {
+        allowTemplateLiterals: true,
+      },
+    ],
+    'linebreak-style': ['warning', 'unix'],
   },
 };
