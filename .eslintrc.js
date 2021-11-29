@@ -25,5 +25,12 @@ module.exports = {
     'max-len': ['error', { code: 256 }],
     'no-underscore-dangle': ['error', { allow: ['_id', '_lastSessionId'] }],
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/function-component-definition': [
+      2,
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
   },
 };

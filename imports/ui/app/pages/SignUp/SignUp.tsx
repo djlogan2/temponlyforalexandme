@@ -1,9 +1,25 @@
-import * as React from 'react';
+import React, { FC } from "react";
+import { inputs } from "./constants";
 
-const SignUp = function () {
-  return (
-    <div>Sign Up page</div>
-  );
-};
+const SignUp: FC = () => (
+  <div>
+    <h1>Signup page</h1>
+    <form>
+      {inputs.map((input) => (
+        <div>
+          <label htmlFor={input.id}>
+            {input.label}
+            <input
+              type={input.type}
+              placeholder={input.placeholder}
+              id={input.id}
+            />
+          </label>
+        </div>
+      ))}
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+);
 
 export default SignUp;
