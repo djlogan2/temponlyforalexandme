@@ -39,6 +39,5 @@ module.exports = {
         allowTemplateLiterals: true,
       },
     ],
-    'linebreak-style': ['warning', 'unix'],
   },
 };
