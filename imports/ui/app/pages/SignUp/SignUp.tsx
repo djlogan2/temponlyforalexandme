@@ -7,7 +7,7 @@ const SignUp: FC = () => (
     <h1>Signup page</h1>
     <form>
       {inputs.map((input) => (
-        <div>
+        <div key={input.id}>
           <label htmlFor={input.id}>
             {input.label}
             <input

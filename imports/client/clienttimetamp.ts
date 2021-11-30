@@ -1,9 +1,7 @@
 import { PongMessage, PongResponse } from '../models/timestamp';
 import CommonDirectTimestamp from '../commondirecttimetamp';
-import ClientICCServer from './clienticcserver';
+import ICCServer from './clienticcserver';
 import ClientDirectMessage from './clientdirectmessage';
-
-declare const ICCServer: ClientICCServer;
 
 export default class ClientTimestamp extends CommonDirectTimestamp {
   protected PongReceived(pong: PongMessage) {
