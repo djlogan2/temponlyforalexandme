@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import ClientICCServer from '../../../../imports/client/clienticcserver';
 const Home = () => (
   <div
     style={{
@@ -9,6 +9,7 @@ const Home = () => (
       margin: "0",
     }}
   >
+    <button onClick={() => ClientICCServer.logout()}>logout</button>
     <img
       src="https://v2a.chessclub.com/images/home-page/home-top.jpg"
       alt="chess club"

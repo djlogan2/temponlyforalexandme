@@ -1,23 +1,23 @@
-import './iccserver';
-import '../imports/client/clientlogger';
-import '../imports/client/clientdirectmessage';
-import '../imports/client/clienttimetamp';
-import '../imports/routes';
-import { render } from 'react-dom';
-import * as React from 'react';
-import App from '../imports/ui/app/App';
+import { Meteor } from "meteor/meteor";
+import * as React from "react";
+import { Provider } from "react-redux";
+import { render } from "react-dom";
 
-// window.onerror = function myErrorHandler(
-//     message: Event | string,
-//     source: string | undefined,
-//     lineno: number | undefined,
-//     colno: number | undefined,
-//     error: Error | undefined
-// ): boolean {
-//     console.log("DO ME");
-//     return false;
-// };
+import { store } from "./data/redux/store";
+import "./iccserver";
+import "../imports/client/clientlogger";
+import "../imports/client/clientdirectmessage";
+import "../imports/client/clienttimetamp";
+import "./app/routes";
+import App from "./app/App";
 
 Meteor.startup(() => {
-  render(<App />, document.getElementById('root'));
+  render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById("root"),
+  );
 });

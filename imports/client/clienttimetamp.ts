@@ -1,7 +1,8 @@
-import { PongMessage, PongResponse } from '../models/timestamp';
-import CommonDirectTimestamp from '../commondirecttimetamp';
-import ICCServer from './clienticcserver';
-import ClientDirectMessage from './clientdirectmessage';
+import { Tracker } from "meteor/tracker";
+import { PongMessage, PongResponse } from "../models/timestamp";
+import CommonDirectTimestamp from "../commondirecttimetamp";
+import ICCServer from "./clienticcserver";
+import ClientDirectMessage from "./clientdirectmessage";
 
 export default class ClientTimestamp extends CommonDirectTimestamp {
   protected PongReceived(pong: PongMessage) {
@@ -14,7 +15,7 @@ export default class ClientTimestamp extends CommonDirectTimestamp {
 
   public startReceiveWatcher(): void {
     if (this.directMessage) return;
-    this.directMessage = new ClientDirectMessage('timestamp', (msg) => this.processIncomingMessage(msg));
+    this.directMessage = new ClientDirectMessage("timestamp", (msg) => this.processIncomingMessage(msg));
   }
 }
 
