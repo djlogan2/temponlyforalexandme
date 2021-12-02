@@ -44,9 +44,9 @@ Meteor.startup(() => {
     return;
   }
 
-  const data = mongoClientInternationalization.find({ locale: "en-us" });
+  const data = mongoClientInternationalization.findOne({ locale: "en-us" });
 
-  if (!data.count() || !isEqual(data.fetch()[0]["i18n"], english)) {
+  if (!data || !isEqual(data["i18n"], english)) {
     mongoClientInternationalization.update(
       { locale: "en-us" },
       { $set: { i18n: english } },

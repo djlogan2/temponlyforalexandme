@@ -14,6 +14,7 @@
   "dependencies": {
     "@babel/runtime": "^7.15.4",
     "@types/lodash": "^4.14.177",
+    "@types/meteor-universe-i18n": "^1.14.6",
     "events": "^3.3.0",
     "ip": "^1.1.5",
     "lodash": "^4.17.21",
