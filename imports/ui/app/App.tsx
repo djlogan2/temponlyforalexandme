@@ -29,6 +29,9 @@ const App = ({ content, i18nTranslate, isReady }) => {
   return isReady && !isLoading && content;
 };
 
+// TODO. Okay so this is a temporarily soulution since our team haven't come up with the approach
+// how server and client are going to communicate.
+
 export default withTracker(() => {
   const lang = getLang();
 
