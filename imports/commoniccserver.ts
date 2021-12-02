@@ -1,10 +1,11 @@
-import { EventEmitter } from 'events';
-import { Mongo } from 'meteor/mongo';
-import { InstanceRecord } from './models/instancerecord';
-import { ConnectionRecord } from './models/connectionrecord';
-import PingRecord from './models/pingrecord';
-import { LogConfigRecord, LogRecord } from './models/loggerrecord';
-import CommonLogger from './commonlogger';
+import { EventEmitter } from "events";
+import { Mongo } from "meteor/mongo";
+import { InstanceRecord } from "./models/instancerecord";
+import { ConnectionRecord } from "./models/connectionrecord";
+import { I18nRecord } from "./models/clienti18nrecord";
+import PingRecord from "./models/pingrecord";
+import { LogConfigRecord, LogRecord } from "./models/loggerrecord";
+import CommonLogger from "./commonlogger";
 
 //
 export default abstract class CommonICCServer {
@@ -21,6 +22,7 @@ export default abstract class CommonICCServer {
         pingtable?: Mongo.Collection<PingRecord>;
         logs?: Mongo.Collection<LogRecord>;
         loggerconfig?: Mongo.Collection<LogConfigRecord>;
+        i18n: Mongo.Collection<I18nRecord>;
     };
 
   protected constructor() {

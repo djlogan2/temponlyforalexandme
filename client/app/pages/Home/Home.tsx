@@ -1,5 +1,6 @@
 import * as React from "react";
-import ClientICCServer from '../../../../imports/client/clienticcserver';
+import ClientICCServer from "../../../../imports/client/clienticcserver";
+
 const Home = () => (
   <div
     style={{

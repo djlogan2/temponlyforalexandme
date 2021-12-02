@@ -1,24 +1,8 @@
 import * as React from "react";
 import { FC } from "react";
-import { useFormik, Field } from "formik";
+import { useFormik } from "formik";
 import { useAppDispatch } from "../../../data/redux/hooks";
 import { loginAsync } from "../../../data/redux/reducers/authReducer";
-import ClientICCServer from "../../../../imports/client/clienticcserver";
-
- interface FormValues {
-   email: string;
-   password: string;
- }
-
- interface OtherProps {
-   message: string;
- }
-
- interface SignInFormProps {
-   initialEmail?: string;
-   message: string;
-   onLogin: Function;
- }
 
 const SignIn: FC = () => {
   const dispatch = useAppDispatch();
