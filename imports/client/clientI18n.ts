@@ -1,5 +1,3 @@
-import { Mongo } from "meteor/mongo";
+import CommonClientI18N from "../commonClientI18n";
 
-export const clientI18nCollection = new Mongo.Collection(
-  "clientInternationalization",
-);
+export default class I18N extends CommonClientI18N {}

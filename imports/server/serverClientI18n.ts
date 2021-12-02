@@ -1,13 +1,12 @@
 import { isEqual } from "lodash";
 import { check, Match } from "meteor/check";
 import { Meteor } from "meteor/meteor";
-import { Mongo } from "meteor/mongo";
+import ServerICCServer from "./servericcserver";
+
 import CommonClientI18N from "../commonClientI18n";
 import { english } from "../i18n/english";
 
-const mongoClientInternationalization = new Mongo.Collection(
-  "clientInternationalization",
-);
+declare const ICCServer: ServerICCServer;
 
 export default class ServerClientI18N extends CommonClientI18N {}
 
@@ -30,13 +29,13 @@ Meteor.publish("clientInternationalization", (locale) => {
     options.locale = userIntance.locale;
   }
 
-  const localeInstance = mongoClientInternationalization.findOne(options);
+  const localeInstance = ICCServer.collections.i18n.findOne(options);
 
   if (localeInstance) {
-    return mongoClientInternationalization.find(options);
+    return ICCServer.collections.i18n.find(options);
   }
 
-  return mongoClientInternationalization.find({ locale: "en-us" });
+  return ICCServer.collections.i18n.find({ locale: "en-us" });
 });
 
 Meteor.startup(() => {
@@ -44,10 +43,10 @@ Meteor.startup(() => {
     return;
   }
 
-  const data = mongoClientInternationalization.findOne({ locale: "en-us" });
+  const data = ICCServer.collections.i18n.findOne({ locale: "en-us" });
 
   if (!data || !isEqual(data["i18n"], english)) {
-    mongoClientInternationalization.update(
+    ICCServer.collections.i18n.update(
       { locale: "en-us" },
       { $set: { i18n: english } },
       { upsert: true },

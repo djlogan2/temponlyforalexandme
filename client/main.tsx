@@ -1,4 +1,5 @@
 import './iccserver';
+import "../imports/client/clientI18n";
 import '../imports/client/clientlogger';
 import '../imports/client/clientdirectmessage';
 import '../imports/client/clienttimetamp';

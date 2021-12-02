@@ -1,14 +1,12 @@
 export const inputs = [
   {
-    label: "Username",
+    label: "username",
     id: "username",
-    placeholder: "username",
     type: "text",
   },
   {
-    label: "Password",
+    label: "password",
     id: "password",
-    placeholder: "password",
     type: "password",
   },
 ];

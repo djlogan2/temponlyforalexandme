@@ -1,31 +1,27 @@
-import { i18n } from "meteor/universe:i18n";
 import * as React from "react";
 import { FC } from "react";
+import useTranslate from "../../data/hooks/useTranslate";
 import { inputs } from "./constants";
 
-const T = i18n.createComponent();
+const SignUp: FC = () => {
+  const translate = useTranslate("signup");
 
-i18n.setLocale("en-us");
-
-const SignUp: FC = () => (
-  <div>
-    <h1><T>Signup.title</T></h1>
-    <form>
-      {inputs.map((input) => (
-        <div key={input.id}>
-          <label htmlFor={input.id}>
-            {input.label}
-            <input
-              type={input.type}
-              placeholder={input.placeholder}
-              id={input.id}
-            />
-          </label>
-        </div>
-      ))}
-      <button type="submit">Submit</button>
-    </form>
-  </div>
-);
+  return (
+    <div>
+      <h1>{translate("title")}</h1>
+      <form>
+        {inputs.map((input) => (
+          <div key={input.id}>
+            <label htmlFor={input.id}>
+              {translate(input.label)}
+              <input type={input.type} id={input.id} />
+            </label>
+          </div>
+        ))}
+        <button type="submit">{translate("submit")}</button>
+      </form>
+    </div>
+  );
+};
 
 export default SignUp;

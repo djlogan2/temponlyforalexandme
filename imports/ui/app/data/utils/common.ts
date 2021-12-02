@@ -8,14 +8,12 @@ export const isReadySubscriptions = (subscriptions) => {
   return true;
 };
 
-export const getLang = () =>
+export const getLang = (): string =>
   (navigator.languages && navigator.languages[0]) ||
   navigator.language ||
-  navigator.browserLanguage ||
-  navigator.userLanguage ||
-  "en-US";
+  "en-us";
 
-export const updateLocale = (locale) => {
+export const updateLocale = (locale: string): string => {
   const localeArray = locale.split("-");
 
   if (localeArray && localeArray.length === 2) {

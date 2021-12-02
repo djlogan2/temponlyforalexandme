@@ -1,26 +1,22 @@
 export const inputs = [
   {
-    label: "Username",
+    label: "username",
     id: "username",
-    placeholder: "username",
     type: "text",
   },
   {
-    label: "Email",
+    label: "email",
     id: "email",
-    placeholder: "email",
     type: "email",
   },
   {
-    label: "Password",
+    label: "password",
     id: "password",
-    placeholder: "password",
     type: "password",
   },
   {
-    label: "Repeat password",
+    label: "repeat_password",
     id: "repeat-password",
-    placeholder: "repeat password",
     type: "password",
   },
 ];
