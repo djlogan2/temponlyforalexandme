@@ -1,5 +1,5 @@
 {
-  "name": "iccsesrver",
+  "name": "iccserver",
   "version": "0.2.3",
   "private": true,
   "scripts": {
@@ -16,9 +16,9 @@
     "events": "^3.3.0",
     "ip": "^1.1.5",
     "meteor-node-stubs": "^1.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-mounter": "^1.2.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-mounter": "latest",
     "simpl-schema": "^1.12.0",
     "slack-notify": "^0.1.7"
   },
@@ -31,8 +31,10 @@
   },
   "devDependencies": {
     "@meteorjs/eslint-config-meteor": "^1.0.5",
+    "@types/ip": "^1.1.0",
     "@types/meteor": "^1.4.84",
-    "@types/react": "^17.0.35",
+    "@types/mocha": "^9.0.0",
+    "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "@types/simpl-schema": "^1.12.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",

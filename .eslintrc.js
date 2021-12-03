@@ -3,6 +3,8 @@ module.exports = {
     browser: true,
     es2021: true,
     meteor: true,
+    mocha: true,
+    node: true,
   },
   extends: [
     'plugin:react/recommended',

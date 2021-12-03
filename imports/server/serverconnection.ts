@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import ServerICCServer from './servericcserver';
 import { ConnectionRecord, ConnectionRecordSchema } from '../models/connectionrecord';

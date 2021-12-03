@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 export default abstract class CommonDirectMessage<S, R> {
   // eslint-disable-next-line no-unused-vars
   private receivedHandler: (msg: R) => void;
