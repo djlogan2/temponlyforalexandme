@@ -4,7 +4,18 @@ module.exports = {
     es2021: true,
     meteor: true,
   },
-  extends: ["plugin:react/recommended", "airbnb"],
+  plugins: ["react", "@typescript-eslint"],
+  extends: [
+    "eslint:recommended",
+    "@meteorjs/eslint-config-meteor",
+    "plugin:react/recommended",
+    "google",
+    "prettier",
+    "prettier/prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
@@ -13,7 +24,6 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint"],
   rules: {
     "import/no-unresolved": ["error", { ignore: ["^meteor/", "^/"] }],
     "max-len": ["error", { code: 256 }],
@@ -37,5 +47,15 @@ module.exports = {
       },
     ],
     quotes: [2, "double", { avoidEscape: true }],
+    "require-jsdoc": 0,
+    semi: ["error", "always"],
+    indent: ["error", "tab"],
+  },
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
   },
 };
