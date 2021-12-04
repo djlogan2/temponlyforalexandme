@@ -8,9 +8,6 @@
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
-  "eslintConfig": {
-    "extends": "@meteorjs/eslint-config-meteor"
-  },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
     "events": "^3.3.0",
@@ -37,16 +34,17 @@
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "@types/simpl-schema": "^1.12.0",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^8.2.0",
-    "eslint-config-airbnb": "^19.0.0",
+    "eslint": "^8.3.0",
+    "eslint-config-google": "^0.14.0",
     "eslint-import-resolver-meteor": "^0.4.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-meteor": "^7.3.0",
-    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "typescript": "^4.5.2"
   }

@@ -4,6 +4,7 @@ import { mount } from 'react-mounter';
 
 import App from './ui/app/App';
 import Home from './ui/app/pages/Home/Home';
+import SignIn from './ui/app/pages/SignIn/SignIn';
 import SignUp from './ui/app/pages/SignUp/SignUp';
 
 FlowRouter.route('/', {
@@ -20,6 +21,15 @@ FlowRouter.route('/sign-up', {
   action() {
     mount(App, {
       content: <SignUp />,
+    });
+  },
+});
+
+FlowRouter.route('/sign-in', {
+  name: 'Sign In',
+  action() {
+    mount(App, {
+      content: <SignIn />,
     });
   },
 });

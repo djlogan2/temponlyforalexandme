@@ -1,8 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import CommonLogger, { LoggerType, LogLevelEnum } from '../commonlogger';
-import ClientICCServer from './clienticcserver';
-
-declare const ICCServer: ClientICCServer;
+import ICCServer from './clienticcserver';
 
 export default class ClientLogger extends CommonLogger {
   constructor(identifier: string) {
