@@ -40,3 +40,5 @@ export default ClientICCServer.getInstance();
 //    when some of it requires Meteor.startup(), and some of it requires other types of method calls, like for example
 //    Accounts.onCreateUser()
 //    The changes from my architecture to this architecture does not address this issue.
+//    Another lastly ... :)
+//       Do not just change the eslint config from airbnb to google. That is a group decision, which includes me.
