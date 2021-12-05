@@ -1,5 +1,5 @@
-import * as React from 'react';
+import * as React from "react";
 
-const App = (props) => props.content;
+const App: React.FC<{ content: React.ReactElement }> = ({ content }) => content;
 
 export default App;
