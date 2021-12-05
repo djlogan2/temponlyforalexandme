@@ -1,5 +1,5 @@
 {
-  "name": "iccsesrver",
+  "name": "iccserver",
   "version": "0.2.3",
   "private": true,
   "scripts": {
@@ -14,9 +14,9 @@
     "events": "^3.3.0",
     "ip": "^1.1.5",
     "meteor-node-stubs": "^1.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-mounter": "^1.2.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-mounter": "latest",
     "simpl-schema": "^1.12.0",
     "slack-notify": "^0.1.7"
   },
@@ -31,15 +31,18 @@
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "@meteorjs/eslint-config-meteor": "^1.0.5",
+    "@types/ip": "^1.1.0",
     "@types/meteor": "^1.4.84",
-    "@types/react": "^17.0.35",
+    "@types/mocha": "^9.0.0",
+    "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "@types/simpl-schema": "^1.12.0",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.3.0",
-    "eslint-config-google": "^0.14.0",
+    "eslint-config-airbnb": "^19.0.2",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-meteor": "^0.4.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
@@ -47,6 +50,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^2.5.1",
     "typescript": "^4.5.2"
   },
   "babel": {

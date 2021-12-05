@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import './iccserver';
 import '../imports/client/clientlogger';
 import '../imports/client/clientdirectmessage';

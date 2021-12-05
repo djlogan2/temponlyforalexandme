@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import CommonLogger, { LoggerType, LogLevelEnum } from '../commonlogger';
 import ICCServer from './clienticcserver';
 
