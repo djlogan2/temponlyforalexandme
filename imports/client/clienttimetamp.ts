@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { PongMessage, PongResponse } from '../models/timestamp';
 import CommonDirectTimestamp from '../commondirecttimetamp';
 import ICCServer from './clienticcserver';

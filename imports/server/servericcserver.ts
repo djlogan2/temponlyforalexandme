@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import CommonICCServer from '../commoniccserver';
 import ServerTimestamp from './servertimestamp';
 

@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import CommonDirectMessage from '../commondirectmessage';
 
 export default class ClientDirectMessage<S, R> extends CommonDirectMessage<S, R> {
@@ -28,11 +27,10 @@ export default class ClientDirectMessage<S, R> extends CommonDirectMessage<S, R>
 }
 
 Meteor.startup(() => {
-  function processDirectStreamMessage(message: string) {
+  function processDirectStreamMessage(message) {
     try {
       const msg = JSON.parse(message);
       if (typeof msg !== 'object' || !('iccdm' in msg)) return;
-      // @ts-ignore
       this.preventCallingMeteorHandler();
       ClientDirectMessage.globalreceive(msg.iccdm, msg.iccmsg);
     } catch (e) {

@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import ServerICCServer from './servericcserver';
 import { PongMessage, PongResponse } from '../models/timestamp';
 import PingRecord from '../models/pingrecord';

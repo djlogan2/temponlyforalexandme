@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import CommonDirectMessage from '../commondirectmessage';
 import ServerICCServer from './servericcserver';
 

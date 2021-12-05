@@ -1,6 +1,4 @@
-import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
-import CommonICCServer from './commoniccserver';
+import CommonICCServer from "./commoniccserver";
 
 export enum LogLevelEnum {
   FATAL = 1,
