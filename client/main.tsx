@@ -1,12 +1,13 @@
-import './iccserver';
+import "./iccserver";
 import "../imports/client/clientI18n";
-import '../imports/client/clientlogger';
-import '../imports/client/clientdirectmessage';
-import '../imports/client/clienttimetamp';
-import '../imports/routes';
-import { render } from 'react-dom';
-import * as React from 'react';
-import App from '../imports/ui/app/App';
+import "../imports/client/clientlogger";
+import "../imports/client/clientdirectmessage";
+import "../imports/client/clienttimetamp";
+import { Provider } from "react-redux";
+import { render } from "react-dom";
+import * as React from "react";
+import { store } from "../imports/ui/app/redux/store";
+import App from "../imports/ui/app/App";
 
 // window.onerror = function myErrorHandler(
 //     message: Event | string,
@@ -20,5 +21,10 @@ import App from '../imports/ui/app/App';
 // };
 
 Meteor.startup(() => {
-  render(<App />, document.getElementById('root'));
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.getElementById("root"),
+  );
 });

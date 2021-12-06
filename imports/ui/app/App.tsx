@@ -1,20 +1,31 @@
-import { withTracker } from "meteor/react-meteor-data";
 import { i18n } from "meteor/universe:i18n";
-import { useEffect, useState } from "react";
-import ICCServer from "../../client/clienticcserver";
-import {
-  getLang,
-  isReadySubscriptions,
-  updateLocale,
-} from "./data/utils/common";
+import React, { FC, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { I18nRecord } from "../../models/i18nrecord";
+import { updateLocale } from "./data/utils/common";
+import SignUp from "./pages/SignUp/SignUp";
+import { subscribeToI18n } from "./redux/reducers/i18n";
+import { RootState } from "./redux/store";
 
-const App = ({ content, i18nTranslate, isReady }) => {
+const App: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+
+  const i18nTranslate = useSelector<RootState, I18nRecord>(
+    (state) => state.i18n.translations,
+  );
+  const isI18nReady = useSelector<RootState, boolean>(
+    (state) => state.i18n.isReady,
+  );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     i18n.onChangeLocale(() => {
       setIsLoading(false);
     });
+
+    dispatch(subscribeToI18n());
   }, []);
 
   useEffect(() => {
@@ -26,24 +37,16 @@ const App = ({ content, i18nTranslate, isReady }) => {
     }
   }, [i18nTranslate]);
 
-  return isReady && !isLoading && content;
+  return (
+    !isLoading &&
+    isI18nReady && (
+      <BrowserRouter>
+        <Routes>
+          <Route path="sign-up" element={<SignUp />} />
+        </Routes>
+      </BrowserRouter>
+    )
+  );
 };
 
-// TODO. Okay so this is a temporarily soulution since our team haven't come up with the approach
-// how server and client are going to communicate.
-
-export default withTracker(() => {
-  const lang = getLang();
-
-  const subscriptions = {
-    clientInternationalization: Meteor.subscribe(
-      "clientInternationalization",
-      lang,
-    ),
-  };
-
-  return {
-    isReady: isReadySubscriptions(subscriptions),
-    i18nTranslate: ICCServer.collections.i18n.findOne(),
-  };
-})(App);
+export default App;
