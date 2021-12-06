@@ -1,11 +1,10 @@
 import * as React from "react";
-import { FC } from "react";
-import {
-  withFormik, FormikProps, FormikErrors, Form, Field,
-} from "formik";
-import ClientICCServer from "../../../../imports/client/clienticcserver";
+import {FC} from "react";
+import {Field, Form, FormikErrors, FormikProps, withFormik,} from "formik";
+import {useAppDispatch} from "../../../data/redux/hooks";
+import {registerAsync} from "../../../data/redux/reducers/authReducer";
 
- interface FormValues {
+interface FormValues {
    email: string;
    username: string;
    password: string;
@@ -76,23 +75,19 @@ const SignUpForm = withFormik<SignUpFormProps, FormValues>({
     return errors;
   },
 
-  handleSubmit: (values) => {
-    ClientICCServer.createUser({
-      email: values.email,
-      username: values.username,
-      password: values.password,
-      callback: (err) => {
-        console.log("HEYYYYYY: ", err);
-      },
-    });
+  handleSubmit: (values, {props}) => {
+      props.dispatch(registerAsync(values));
   },
 })(InnerForm);
 
-const SignUp: FC = () => (
-  <div>
-    <h1>Signup page</h1>
-    <SignUpForm message="ICC registration form" />
-  </div>
-);
+const SignUp: FC = () => {
+    const dispatch = useAppDispatch();
+    return (
+        <div>
+            <h1>Signup page</h1>
+            <SignUpForm message="ICC registration form" dispatch={dispatch} />
+        </div>
+    );
+}
 
 export default SignUp;

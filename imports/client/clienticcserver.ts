@@ -30,14 +30,17 @@ class ClientICCServer extends CommonICCServer {
   public createUser({
     email, username, password, callback,
   }) {
-    Accounts.createUser({ email, username, password }, (err) => {
-      if (callback) {
-        callback(err);
-      }
-    });
+    return new Promise<void>((resolve) => {
+      Accounts.createUser({email, username, password}, (err) => {
+        if (callback) {
+          callback(err);
+        }
+        resolve();
+      });
+    })
   }
 
-  public logout(callback) {
+  public logout(callback?: boolean) {
     Meteor.logout((err) => {
       if (callback) {
         callback(err);

@@ -4,15 +4,24 @@ import { RootState } from '../store';
 
 export interface AuthState {
   userId?: string;
+  loggingIn?: boolean;
+  loggingIn2?: string;
 }
 
 const initialState: AuthState = {
   userId: localStorage.getItem("Meteor.userId"),
+  loggingIn: false,
 };
 
 interface loginAsyncProps {
   email: string,
   password: string,
+}
+
+interface registerAsyncProps {
+  email: string,
+  password: string,
+  username: string,
 }
 
 export const loginAsync = createAsyncThunk(
@@ -30,6 +39,23 @@ export const loginAsync = createAsyncThunk(
   },
 );
 
+export const registerAsync = createAsyncThunk(
+    "auth/register",
+    async ({ email, username, password }: registerAsyncProps) => {
+      await ClientICCServer.createUser({
+        email,
+        username,
+        password,
+        callback: (err) => {
+          console.log("HEYYYYYY: ", err);
+        },
+      });
+
+      return localStorage.getItem("Meteor.userId");
+    },
+);
+
+
 export const authSlice = createSlice({
   name: "counter",
   initialState,
@@ -39,21 +65,44 @@ export const authSlice = createSlice({
     //   // eslint-disable-next-line no-param-reassign
     //   state.userId = localStorage.getItem("Meteor.userId");
     // },
+    loginSync: (state, action) => {
+      ClientICCServer.loginWithPassword({
+        ...action.payload,
+        callback: (err) => {
+          console.log("redux error login", err);
+        },
+      });
+    },
+    loggingIn: (state, action) => {
+      state.loggingIn = action.payload.data;
+    },
+    loggingIn2: (state, action) => {
+      state.loggingIn2 = action.payload.data;
+    },
+    loggedIn: (state, action) => {
+      console.log("loggedIn");
+      state.userId = action.payload.data?._id ? action.payload.data._id : null;
+      state.loggingIn2 = "";
+    },
+
     logout: (state) => {
-      console.log("logout reducer", state);
-      // eslint-disable-next-line no-param-reassign
+      Meteor.logout();
       state.userId = null;
+      console.log("logout reducer", state);
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(loginAsync.fulfilled, (state, action) => {
+    // builder.addCase(loginAsync.fulfilled, (state, action) => {
+    //   state.userId = action.payload;
+    // });
+    builder.addCase(registerAsync.fulfilled, (state, action) => {
       state.userId = action.payload;
     });
   },
 });
 
 export const {
-  logout,
+  logout, loggingIn, loggingIn2, loggedIn, loginSync
 } = authSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
