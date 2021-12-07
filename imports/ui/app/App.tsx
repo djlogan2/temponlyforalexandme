@@ -1,20 +1,44 @@
-import { withTracker } from "meteor/react-meteor-data";
 import { i18n } from "meteor/universe:i18n";
 import { useEffect, useState } from "react";
-import ICCServer from "../../client/clienticcserver";
-import {
-  getLang,
-  isReadySubscriptions,
-  updateLocale,
-} from "./data/utils/common";
 
-const App = ({ content, i18nTranslate, isReady }) => {
+import Emitter from "../../Emitter";
+
+import I18N from "../../client/clientI18n";
+import { I18nRecord } from "../../models/i18nrecord";
+import { updateLocale } from "./data/utils/common";
+
+const App = ({ content }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [i18nTranslate, setI18nTranslate] = useState<I18nRecord>(null);
+
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     i18n.onChangeLocale(() => {
       setIsLoading(false);
     });
+
+    // start Tracker.autorun method
+    const sub = I18N.subscribe();
+
+    // Listen for changes
+    Emitter.on<{ isReady: boolean; i18nTranslate: I18nRecord }>(
+      "I18N_CHANGE",
+      (data) => {
+        if (data.isReady) {
+          setIsReady(true);
+          setIsLoading(true);
+          setI18nTranslate(data.i18nTranslate);
+        }
+      },
+    );
+
+    return () => {
+      // No need to call emit.off("I18N_CHANGE") here since it's the only subscriber
+      // unsubscribing from Tracker.auto run will destroy the subscription
+      // Also it's not required to unsubscribe here since it's the top level component that always exists
+      sub.stop();
+    };
   }, []);
 
   useEffect(() => {
@@ -29,21 +53,4 @@ const App = ({ content, i18nTranslate, isReady }) => {
   return isReady && !isLoading && content;
 };
 
-// TODO. Okay so this is a temporarily soulution since our team haven't come up with the approach
-// how server and client are going to communicate.
-
-export default withTracker(() => {
-  const lang = getLang();
-
-  const subscriptions = {
-    clientInternationalization: Meteor.subscribe(
-      "clientInternationalization",
-      lang,
-    ),
-  };
-
-  return {
-    isReady: isReadySubscriptions(subscriptions),
-    i18nTranslate: ICCServer.collections.i18n.findOne(),
-  };
-})(App);
+export default App;
