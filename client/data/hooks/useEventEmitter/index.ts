@@ -1,9 +1,10 @@
 import { Tracker } from "meteor/tracker";
 import { useEffect, useState } from "react";
 import Emitter from "../../../../imports/emitter";
+import { EEmitterEvents } from "./events";
 
 interface IUseEmitterProps {
-  event: string;
+  event: EEmitterEvents;
   tracker?: () => Tracker.Computation;
   shouldTrackerUnmount?: boolean;
   shouldUseOnce?: boolean;

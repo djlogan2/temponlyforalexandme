@@ -1,5 +1,6 @@
 import * as React from "react";
 import { FC } from "react";
+import { useHistory } from "react-router-dom";
 import ClientICCServer from "../../../../imports/client/clienticcserver";
 import { useFormik } from "formik";
 import useTranslate from "../../../data/hooks/useTranslate/index";
@@ -7,13 +8,18 @@ import useTranslate from "../../../data/hooks/useTranslate/index";
 const SignIn: FC = () => {
   const t = useTranslate("login");
   
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     onSubmit: (values) => {
-      ClientICCServer.loginWithPassword(values);
+      ClientICCServer.loginWithPassword({ ...values, callback: (err) => {
+          if (!err) {
+          history.push("/");
+          }
+        }});
     },
   });
 
@@ -38,6 +44,7 @@ const SignIn: FC = () => {
           value={formik.values.password}
         />
         <button type="submit">Submit</button>
+        <button onClick={() => history.push("/register")}>Dont have account? Register here</button>
       </form>
     </div>
   );
