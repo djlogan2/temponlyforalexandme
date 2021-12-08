@@ -50,6 +50,17 @@ module.exports = {
     "require-jsdoc": 0,
     semi: ["error", "always"],
     indent: ["error", "tab"],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        js: "never",
+        jsx: "never",
+        ts: "never",
+        tsx: "never",
+      },
+    ],
+    "no-use-before-define": 0,
   },
   settings: {
     "import/resolver": {

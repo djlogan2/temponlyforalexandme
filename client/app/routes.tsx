@@ -12,12 +12,12 @@ export const authRoutes = [
 ];
 
 export const noAuthRoutes = [
-  {
-    name: "Register",
-    path: "/register",
-    exact: true,
-    component: SignUp,
-  },
+  // {
+  //   name: "Register",
+  //   path: "/register",
+  //   exact: true,
+  //   component: SignUp,
+  // },
   {
     name: "Login",
     path: "/login",

@@ -3,6 +3,8 @@ import '../imports/server/serverlogger';
 import '../imports/server/serverinstance';
 import '../imports/server/serverconnection';
 import '../imports/server/servertimestamp';
+import "../imports/server/serverI18n";
+
 
 import ServerICCServer from '../imports/server/servericcserver';
 

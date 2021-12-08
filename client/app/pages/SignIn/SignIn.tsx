@@ -2,8 +2,11 @@ import * as React from "react";
 import { FC } from "react";
 import ClientICCServer from "../../../../imports/client/clienticcserver";
 import { useFormik } from "formik";
+import useTranslate from "../../../data/hooks/useTranslate/index";
 
 const SignIn: FC = () => {
+  const t = useTranslate("login");
+  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -16,7 +19,7 @@ const SignIn: FC = () => {
 
   return (
     <div>
-      <h1>Signin page</h1>
+      <h1>{t("title")}</h1>
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="email">Email Address</label>
         <input
