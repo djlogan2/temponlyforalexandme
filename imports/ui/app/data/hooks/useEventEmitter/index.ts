@@ -1,3 +1,4 @@
+import { Tracker } from "meteor/tracker";
 import { useEffect, useState } from "react";
 import Emitter from "../../../../../emitter";
 
@@ -14,7 +15,7 @@ const useEventEmitter = <T>({
   shouldTrackerUnmount,
   shouldUseOnce = false,
 }: IUseEmitterProps) => {
-  const [data, setData] = useState<T>(null);
+  const [data, setData] = useState<T | null>(null);
 
   useEffect(() => {
     let sub: Tracker.Computation;
