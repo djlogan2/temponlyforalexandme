@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 import { Tracker } from "meteor/tracker";
-import useEventEmitter from "..";
-import Emitter from "../../../../../../emitter";
+import useEventEmitter from "../index";
+import Emitter from "../../../../../imports/emitter";
 
 describe("useEventEmitter hook", () => {
   test("Should return a null on first run", () => {
