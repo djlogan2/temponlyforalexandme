@@ -1,3 +1,4 @@
+import { ChatRecord } from '/imports/models/chatrecord';
 import { EventEmitter } from "events";
 import { Mongo } from "meteor/mongo";
 import { InstanceRecord } from "./models/instancerecord";
@@ -23,6 +24,7 @@ export default abstract class CommonICCServer {
     logs?: Mongo.Collection<LogRecord>;
     loggerconfig?: Mongo.Collection<LogConfigRecord>;
     i18n?: Mongo.Collection<I18nRecord>;
+    chats?: Mongo.Collection<ChatRecord>;
   };
 
   protected constructor() {

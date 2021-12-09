@@ -18,6 +18,10 @@ class ClientICCServer extends CommonICCServer {
     return ClientICCServer.instance;
   }
 
+  public getUserId() {
+    return Meteor.userId();
+  }
+
   public loginWithPassword({
     email,
     password,
@@ -26,7 +30,7 @@ class ClientICCServer extends CommonICCServer {
     email: string;
     password: string;
     callback?: (err: TError) => void;
-  }) {
+  }): void {
     Meteor.loginWithPassword(email, password, (err) => {
       callback && callback(err);
     });
@@ -42,7 +46,7 @@ class ClientICCServer extends CommonICCServer {
     username: string;
     password: string;
     callback?: (err: TError) => void;
-  }) {
+  }): void {
     Accounts.createUser({ email, username, password }, (err) => {
       if (callback) {
         callback(err);
@@ -50,16 +54,12 @@ class ClientICCServer extends CommonICCServer {
     });
   }
 
-  public logout(callback: (err: TError) => void) {
+  public logout(callback: (err: TError) => void): void {
     Meteor.logout((err) => {
       if (callback) {
         callback(err);
       }
     });
-  }
-
-  public getUserId() {
-    return Meteor.userId();
   }
 }
 

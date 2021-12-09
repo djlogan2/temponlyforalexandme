@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { Tracker } from "meteor/tracker";
 import { i18n } from "meteor/universe:i18n";
 
-import { getLang, updateLocale } from "../../client/data/utils/common";
+import { getLang, updateLocale } from '/client/data/utils/common';
 import CommonClientI18N from "../commonI18n";
 import Emitter from "../emitter";
 import ClientICCServer from "./clienticcserver";

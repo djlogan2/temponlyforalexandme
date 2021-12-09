@@ -5,7 +5,7 @@ import ClientICCServer from "../../../imports/client/clienticcserver";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("../../../imports/client/clienticcserver", () => ({
-  getUserId: jest.fn(),
+  userId: jest.fn(),
 }));
 
 jest.mock("../../../imports/client/clientI18n", () => ({
@@ -14,7 +14,7 @@ jest.mock("../../../imports/client/clientI18n", () => ({
 
 describe("Home Component", () => {
   it("Should render home page ", () => {
-    (ClientICCServer.getUserId as unknown as jest.Mock).mockImplementation(
+    (ClientICCServer.userId as unknown as jest.Mock).mockImplementation(
       () => "exists",
     );
     const { getByText } = render(<App />);
@@ -25,7 +25,7 @@ describe("Home Component", () => {
   });
 
   it("Should render login page", () => {
-    (ClientICCServer.getUserId as unknown as jest.Mock).mockImplementation(
+    (ClientICCServer.userId as unknown as jest.Mock).mockImplementation(
       () => "",
     );
     const { getByText } = render(<App />);
@@ -34,7 +34,7 @@ describe("Home Component", () => {
   });
 
   it("Navigates to register page", () => {
-    (ClientICCServer.getUserId as unknown as jest.Mock).mockImplementation(
+    (ClientICCServer.userId as unknown as jest.Mock).mockImplementation(
       () => "",
     );
     const { getByText } = render(<App />);

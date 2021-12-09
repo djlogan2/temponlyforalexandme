@@ -25,7 +25,8 @@ const App = () => {
     });
   }, []);
 
-  const userId = ClientICCServer.getUserId();
+  console.log(ClientICCServer);
+  const userId = ClientICCServer?.getUserId();
 
   return (
     <>
