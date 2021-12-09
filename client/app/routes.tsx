@@ -1,6 +1,7 @@
-import Home from './pages/Home/Home';
-import SignIn from './pages/SignIn/SignIn';
-import SignUp from './pages/SignUp/SignUp';
+import Chat from "./pages/Chat";
+import Home from "./pages/Home/Home";
+import SignIn from "./pages/SignIn/SignIn";
+import SignUp from "./pages/SignUp/SignUp";
 
 export const authRoutes = [
   {
@@ -8,6 +9,12 @@ export const authRoutes = [
     path: "/",
     exact: true,
     component: Home,
+  },
+  {
+    name: "Chat",
+    path: "/chat/:id",
+    exact: true,
+    component: Chat,
   },
 ];
 

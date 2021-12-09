@@ -6,7 +6,6 @@ import ClientTimestamp from "./clienttimetamp";
 type TError = Error | Meteor.Error | Meteor.TypedError | undefined;
 
 class ClientICCServer extends CommonICCServer {
-  // eslint-disable-next-line no-use-before-define
   private static instance: ClientICCServer;
 
   public timestamp: ClientTimestamp | null = null;
@@ -19,7 +18,7 @@ class ClientICCServer extends CommonICCServer {
     return ClientICCServer.instance;
   }
 
-  public async loginWithPassword({
+  public loginWithPassword({
     email,
     password,
     callback,
