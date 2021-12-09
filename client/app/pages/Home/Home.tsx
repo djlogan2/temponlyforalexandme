@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, RouteComponentProps } from "react-router-dom";
 import ClientICCServer from "../../../../imports/client/clienticcserver";
 
-const Home = () => {
+const Home: React.FC<RouteComponentProps> = () => {
   const history = useHistory();
   return (
     <div

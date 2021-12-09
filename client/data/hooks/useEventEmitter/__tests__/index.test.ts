@@ -2,12 +2,13 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import { Tracker } from "meteor/tracker";
 import useEventEmitter from "../index";
 import Emitter from "../../../../../imports/emitter";
+import { EEmitterEvents } from "../events";
 
 describe("useEventEmitter hook", () => {
   test("Should return a null on first run", () => {
     const { result } = renderHook(() =>
       useEventEmitter({
-        event: "TEST",
+        event: EEmitterEvents.I18N_CHANGE,
       }),
     );
 
@@ -17,18 +18,18 @@ describe("useEventEmitter hook", () => {
   test("Should listen to changes", () => {
     const { result } = renderHook(() =>
       useEventEmitter<string>({
-        event: "TEST",
+        event: EEmitterEvents.I18N_CHANGE,
       }),
     );
 
     act(() => {
-      Emitter.emit("TEST", "test");
+      Emitter.emit(EEmitterEvents.I18N_CHANGE, "test");
     });
 
     expect(result.current.data).toBe("test");
 
     act(() => {
-      Emitter.emit("TEST", "test again");
+      Emitter.emit(EEmitterEvents.I18N_CHANGE, "test again");
     });
 
     expect(result.current.data).toBe("test again");
@@ -37,19 +38,19 @@ describe("useEventEmitter hook", () => {
   test("Should listen to changes just once", () => {
     const { result } = renderHook(() =>
       useEventEmitter<string>({
-        event: "TEST",
+        event: EEmitterEvents.I18N_CHANGE,
         shouldUseOnce: true,
       }),
     );
 
     act(() => {
-      Emitter.emit("TEST", "test");
+      Emitter.emit(EEmitterEvents.I18N_CHANGE, "test");
     });
 
     expect(result.current.data).toBe("test");
 
     act(() => {
-      Emitter.emit("TEST", "test again");
+      Emitter.emit(EEmitterEvents.I18N_CHANGE, "test again");
     });
 
     expect(result.current.data).toBe("test");
@@ -60,7 +61,7 @@ describe("useEventEmitter hook", () => {
 
     const {} = renderHook(() =>
       useEventEmitter<string>({
-        event: "TEST",
+        event: EEmitterEvents.I18N_CHANGE,
         shouldUseOnce: true,
         tracker: () => {
           return tracker() as unknown as Tracker.Computation;
@@ -79,7 +80,7 @@ describe("useEventEmitter hook", () => {
 
     const { unmount } = renderHook(() =>
       useEventEmitter<string>({
-        event: "TEST",
+        event: EEmitterEvents.I18N_CHANGE,
         shouldUseOnce: true,
         tracker: () => {
           return tracker() as unknown as Tracker.Computation;

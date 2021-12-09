@@ -1,14 +1,18 @@
-export const inputs = [
+interface IInput {
+  label: string;
+  id: "email" | "password";
+  type: string;
+}
+
+export const inputs: IInput[] = [
   {
-    label: "Username",
-    id: "username",
-    placeholder: "username",
-    type: "text",
+    label: "Email Address",
+    id: "email",
+    type: "email",
   },
   {
     label: "Password",
     id: "password",
-    placeholder: "password",
     type: "password",
   },
 ];

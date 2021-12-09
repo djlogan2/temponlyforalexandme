@@ -1,12 +1,12 @@
 import * as React from "react";
 import { FC } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, RouteComponentProps } from "react-router-dom";
 import ClientICCServer from "../../../../imports/client/clienticcserver";
 import { useFormik } from "formik";
-import useTranslate from "/client/data/hooks/useTranslate";
+import useTranslate from "../../../data/hooks/useTranslate";
+import { inputs } from "./constants";
 
-
-const SignUp: FC = () => {
+const SignUp: FC<RouteComponentProps> = () => {
   const history = useHistory();
   const t = useTranslate("signup");
 
@@ -15,14 +15,17 @@ const SignUp: FC = () => {
       email: "",
       username: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     },
     onSubmit: (values) => {
-      ClientICCServer.createUser({ ...values, callback: (err) => {
-        if (!err) {
-          history.push("/");
-        }
-        } });
+      ClientICCServer.createUser({
+        ...values,
+        callback: (err: unknown) => {
+          if (!err) {
+            history.push("/");
+          }
+        },
+      });
     },
   });
 
@@ -30,42 +33,26 @@ const SignUp: FC = () => {
     <div>
       <h1>{t("title")}</h1>
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="email">Email Address</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          name="username"
-          onChange={formik.handleChange}
-          value={formik.values.username}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        <label htmlFor="confirmPassword">Confirm password</label>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.confirmPassword}
-        />
+        {inputs.map((input) => (
+          <React.Fragment key={input.id}>
+            <label htmlFor={input.id}>{input.label}</label>
+            <input
+              id={input.id}
+              name={input.id}
+              type={input.type}
+              onChange={formik.handleChange}
+              value={formik.values[input.id]}
+            />
+          </React.Fragment>
+        ))}
+
         <button type="submit">Submit</button>
-        <button onClick={() => history.push("/login")}>Have account? Login here</button>
+        <button onClick={() => history.push("/login")} type="button">
+          Have account? Login here
+        </button>
       </form>
     </div>
   );
-}
+};
 
 export default SignUp;

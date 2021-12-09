@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, RouteComponentProps } from "react-router-dom";
 
 interface NonAuthGuardRoutes {
-  component: React.FunctionComponent;
+  component: React.FunctionComponent<RouteComponentProps>;
   auth: boolean;
 }
 
@@ -13,7 +13,9 @@ const NonAuthGuard = ({
 }: NonAuthGuardRoutes) => (
   <Route
     {...rest}
-    render={(props) => (!auth ? <Component {...props} /> : <Redirect to="/" />)}
+    render={(props) => {
+      return !auth ? <Component {...props} /> : <Redirect to="/" />;
+    }}
   />
 );
 

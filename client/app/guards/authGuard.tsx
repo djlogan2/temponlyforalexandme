@@ -1,12 +1,11 @@
 import * as React from "react";
-// @ts-ignore
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, RouteComponentProps } from "react-router-dom";
 
 interface AuthGuardProps {
-  component: React.FunctionComponent,
-  auth: boolean,
-  roles: string[],
-  currentRoles: string[],
+  component: React.FunctionComponent<RouteComponentProps>;
+  auth: boolean;
+  roles: string[];
+  currentRoles: string[];
 }
 
 const AuthGuard = ({
@@ -33,7 +32,6 @@ const AuthGuard = ({
   return (
     <Route
       {...rest}
-      // @ts-ignore
       render={(props) => {
         if (canViewPage) {
           return <Component {...props} />;

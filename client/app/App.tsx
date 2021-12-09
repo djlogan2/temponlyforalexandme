@@ -1,4 +1,3 @@
-import { Meteor } from "meteor/meteor";
 import { i18n } from "meteor/universe:i18n";
 import * as React from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
@@ -9,6 +8,7 @@ import { EEmitterEvents } from "../data/hooks/useEventEmitter/events";
 import AuthGuard from "./guards/authGuard";
 import NonAuthGuard from "./guards/nonAuthGuard";
 import { authRoutes, noAuthRoutes } from "./routes";
+import ClientICCServer from "../../imports/client/clienticcserver";
 
 const App = () => {
   const [isLocaleSetup, setIsLocaleSetup] = React.useState(false);
@@ -25,27 +25,29 @@ const App = () => {
     });
   }, []);
 
-  const userId = Meteor.userId();
+  const userId = ClientICCServer.getUserId();
 
   return (
-    isLocaleSetup && (
-      <Router>
-        <Switch>
-          {noAuthRoutes.map((route) => (
-            <NonAuthGuard key={route.path} auth={!!userId} {...route} />
-          ))}
-          {authRoutes.map((route) => (
-            <AuthGuard
-              roles={[]}
-              key={route.path}
-              auth={!!userId}
-              {...route}
-              currentRoles={[]}
-            />
-          ))}
-        </Switch>
-      </Router>
-    )
+    <>
+      {isLocaleSetup ? (
+        <Router>
+          <Switch>
+            {noAuthRoutes.map((route) => (
+              <NonAuthGuard key={route.path} auth={!!userId} {...route} />
+            ))}
+            {authRoutes.map((route) => (
+              <AuthGuard
+                roles={[]}
+                key={route.path}
+                auth={!!userId}
+                {...route}
+                currentRoles={[]}
+              />
+            ))}
+          </Switch>
+        </Router>
+      ) : null}
+    </>
   );
 };
 

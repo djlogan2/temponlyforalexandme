@@ -1,26 +1,29 @@
-export const inputs = [
+interface IInput {
+  label: string;
+  id: "email" | "username" | "password" | "confirmPassword";
+  type: string;
+}
+
+export const inputs: IInput[] = [
+  {
+    label: "Email Address",
+    id: "email",
+    type: "email",
+  },
   {
     label: "Username",
     id: "username",
-    placeholder: "username",
     type: "text",
-  },
-  {
-    label: "Email",
-    id: "email",
-    placeholder: "email",
-    type: "email",
   },
   {
     label: "Password",
     id: "password",
-    placeholder: "password",
     type: "password",
   },
   {
-    label: "Repeat password",
-    id: "repeat-password",
-    placeholder: "repeat password",
+    label: "Confirm password",
+    id: "confirmPassword",
+
     type: "password",
   },
 ];
