@@ -1,55 +1,43 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback } from "react";
 import { RouteComponentProps, useParams } from "react-router-dom";
+import ClientMessages from "../../../../imports/client/clientMessages";
 import Chat from "./components/Chat";
+import ChatForm from "./components/ChatForm";
 import ChatsList from "./components/ChatsList";
-import useEventEmitter from "/client/data/hooks/useEventEmitter";
-import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
-import ClientChat from "../../../../imports/client/clientchat";
-import { ChatRecord } from "/imports/models/chatrecord";
-
-const chats = new Array(10).fill(0).map((_, i) => ({
-  id: `${i}`,
-  name: `Chat-${i}`,
-}));
-
-const messages = new Array(10).fill(0).map((_, i) => ({
-  id: `${i}`,
-  message: `Msg ${i}`,
-  from: `${i % 2}`,
-  createdAt: new Date().toISOString(),
-}));
+import ClientICCServer from "/imports/client/clienticcserver";
+import { MessageRecord } from "/imports/models/messagerecord";
 
 const Chats: FC<RouteComponentProps> = ({ history }) => {
   const { id } = useParams<{ id: string }>();
-  const { data } = useEventEmitter<{ isReady: boolean; chats: ChatRecord[] }>({
-    event: EEmitterEvents.CHAT_CHANGE,
-    tracker: () => ClientChat.subscribe(id),
-    shouldTrackerUnmount: true,
-  });
 
-  const [selectedChat, setSelectedChat] =
-    useState<{ id: string; name: string }>();
+  const sendMessage = useCallback((content: string) => {
+    const msg: MessageRecord = {
+      content,
+      creatorId: ClientICCServer.getUserId()!,
+      chatId: id,
+    };
 
-  useEffect(() => {
-    // make a call to fetch chat
-    const chat = chats.find((chat) => chat.id === id);
-    setSelectedChat(chat);
-  }, [data]);
+    ClientMessages.create(msg);
+  }, []);
 
-  const onChooseChat = (id: string) => {
-    history.push(`/chats/${id}`);
-  };
 
   return (
     <div style={{ display: "flex" }}>
-      {data?.chats.length && (
-        <ChatsList
-          currentChatId={id}
-          onChooseChat={onChooseChat}
-          chats={data.chats}
-        />
+      <ChatsList currentChatId={id} history={history} />
+
+      {id && (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Chat chatId={id} />
+          <ChatForm sendMessage={sendMessage} />
+        </div>
       )}
-      {selectedChat && <Chat messages={messages} />}
     </div>
   );
 };

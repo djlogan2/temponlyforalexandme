@@ -1,15 +1,8 @@
-import React, { FC } from "react";
 import { useFormik } from "formik";
-
-export interface IMessage {
-  id: string;
-  message: string;
-  from: string;
-  createdAt: string;
-}
+import React, { FC } from "react";
 
 interface IChatFormProps {
-  sendMessage: (msg: IMessage) => void;
+  sendMessage: (content: string) => void;
 }
 
 const ChatForm: FC<IChatFormProps> = ({ sendMessage }) => {
@@ -22,20 +15,13 @@ const ChatForm: FC<IChatFormProps> = ({ sendMessage }) => {
         return;
       }
 
-      const msg: IMessage = {
-        id: `${Math.random()}`,
-        message: values.message,
-        from: "12",
-        createdAt: new Date().toISOString(),
-      };
-
-      sendMessage(msg);
+      sendMessage(values.message);
       resetForm();
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{ display: "flex" }}>
+    <form onSubmit={formik.handleSubmit} style={{ display: "flex", width: "100%" }}>
       <input
         style={{ display: "block", padding: "5px", width: "100%" }}
         id="message"

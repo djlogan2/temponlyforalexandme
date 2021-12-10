@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import ClientICCServer from "/imports/client/clienticcserver";
 
 interface IMessageProps {
   message: string;
@@ -6,7 +7,7 @@ interface IMessageProps {
 }
 
 const Message: FC<IMessageProps> = ({ message, from }) => {
-  const isMyMessage = from === "12";
+  const isMyMessage = from === ClientICCServer.getUserId()!;
   return (
     <div
       style={{

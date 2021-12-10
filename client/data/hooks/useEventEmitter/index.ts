@@ -32,9 +32,10 @@ const useEventEmitter = <T>({
       Emitter.off(event);
       if (sub && shouldTrackerUnmount) {
         sub.stop();
+        setData(null);
       }
     };
-  }, []);
+  }, [tracker]);
 
   return { data };
 };

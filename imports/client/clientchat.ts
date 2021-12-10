@@ -7,9 +7,9 @@ import { Tracker } from "meteor/tracker";
 import { ChatRecord } from "../models/chatrecord";
 
 export default class ClientChat extends CommonChat {
-  static subscribe = (chatId: string): Tracker.Computation =>
+  static subscribe = (): Tracker.Computation =>
     Tracker.autorun(() => {
-      const sub = Meteor.subscribe("chat", chatId);
+      const sub = Meteor.subscribe("chat");
       const isReady = sub.ready();
       if (isReady) {
         const chats = ClientICCServer.collections.chat?.find().fetch();

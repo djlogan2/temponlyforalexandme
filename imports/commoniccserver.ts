@@ -7,6 +7,7 @@ import PingRecord from "./models/pingrecord";
 import { LogConfigRecord, LogRecord } from "./models/loggerrecord";
 import CommonLogger from "./commonlogger";
 import { I18nRecord } from "./models/i18nrecord";
+import { MessageRecord } from './models/messagerecord';
 
 //
 export default abstract class CommonICCServer {
@@ -25,6 +26,7 @@ export default abstract class CommonICCServer {
     loggerconfig?: Mongo.Collection<LogConfigRecord>;
     i18n?: Mongo.Collection<I18nRecord>;
     chat?: Mongo.Collection<ChatRecord>;
+    messages?: Mongo.Collection<MessageRecord>;
   };
 
   protected constructor() {

@@ -1,27 +1,45 @@
-import React, { FC, useState } from "react";
-import ChatForm, { IMessage } from "./components/ChatForm";
+import React, { FC, useEffect, useMemo } from "react";
 import Message from "./components/Message";
+import useEventEmitter from "/client/data/hooks/useEventEmitter";
+import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
+import ClientMessages from "/imports/client/clientMessages";
+import { MessageRecord } from "/imports/models/messagerecord";
 
 interface IChatProps {
-  messages: IMessage[];
+  chatId: string;
 }
 
-const Chat: FC<IChatProps> = ({ messages }) => {
-  const [msgs, setMsgs] = useState(messages);
+const Chat: FC<IChatProps> = ({ chatId }) => {
+  const useEventEmitterProps = useMemo(() => {
+    return {
+      event: EEmitterEvents.MESSAGES_FETCH,
+      tracker: () => ClientMessages.subscribe(chatId),
+      shouldTrackerUnmount: true,
+    };
+  }, [chatId]);
 
-  const sendMessage = (msg: IMessage) => {
-    const newMessages = [...msgs, msg];
-    setMsgs(newMessages);
-  };
+  const { data } = useEventEmitter<{
+    isReady: Boolean;
+    messages: MessageRecord[];
+  }>(useEventEmitterProps);
+
+  useEffect(() => {
+    const msgs = ClientMessages.getMessages(chatId);
+    console.log(msgs);
+  }, [chatId]);
 
   return (
-    <div style={{ width: "100%", marginLeft: "5px" }}>
-      <div style={{ height: "90vh", backgroundColor: "#000", padding: "10px" }}>
-        {msgs.map((msg) => (
-          <Message key={msg.id} message={msg.message} from={msg.from} />
-        ))}
-      </div>
-      <ChatForm sendMessage={sendMessage} />
+    <div
+      style={{
+        height: "90vh",
+        padding: "10px",
+        marginLeft: "5px",
+        width: "100%",
+      }}
+    >
+      {data?.messages.map((msg) => (
+        <Message key={msg._id} message={msg.content} from={msg.creatorId} />
+      ))}
     </div>
   );
 };
