@@ -11,7 +11,6 @@ interface IChatProps {
 
 const Chat: FC<IChatProps> = ({ chatId }) => {
   const useEventEmitterProps = useMemo(() => {
-
     return {
       event: EEmitterEvents.MESSAGES_FETCH,
       tracker: () => ClientMessages.subscribe(chatId),
@@ -29,8 +28,7 @@ const Chat: FC<IChatProps> = ({ chatId }) => {
       style={{
         height: "90vh",
         padding: "10px",
-        marginLeft: "5px",
-        width: "100%",
+        overflowY: "auto",
       }}
     >
       {data?.messages.map((msg) => (

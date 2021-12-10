@@ -27,10 +27,11 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
       {id && (
         <div
           style={{
-            width: "100%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-end",
+            marginLeft: "5px",
+            flex: "7",
           }}
         >
           <Chat chatId={id} />

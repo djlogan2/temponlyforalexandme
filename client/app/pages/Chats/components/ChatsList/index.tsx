@@ -24,7 +24,13 @@ const ChatsList: FC<IChatsListProps> = ({ currentChatId, history }) => {
   }>(useEventEmitterProps);
 
   return (
-    <div>
+    <div
+      style={{
+        flex: "1",
+        height: "100vh",
+        overflowY: "scroll",
+      }}
+    >
       <button
         onClick={() => {
           ClientChat.create({
