@@ -23,6 +23,6 @@ export default class ClientChat extends CommonChat {
     });
 
   static create = (chat: ChatRecord): void => {
-    ClientICCServer.collections.chat?.insert(chat);
+    Meteor.call("createChat", chat);
   };
 }

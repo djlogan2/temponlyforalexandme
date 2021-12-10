@@ -23,7 +23,7 @@ export default class ClientMessages extends CommonMessages {
     });
 
   static create = (message: MessageRecord): void => {
-    ClientICCServer.collections.messages?.insert(message);
+    Meteor.call("sendMessage", message);
   };
 
   static getMessages = (chatId: string) => {
