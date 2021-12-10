@@ -4,6 +4,7 @@ import '../imports/server/serverinstance';
 import '../imports/server/serverconnection';
 import '../imports/server/servertimestamp';
 import "../imports/server/serverI18n";
+import "../imports/server/serverchat";
 
 
 import ServerICCServer from '../imports/server/servericcserver';

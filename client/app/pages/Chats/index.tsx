@@ -25,6 +25,8 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
     shouldTrackerUnmount: true,
   });
 
+  console.log(data);
+
   const { id } = useParams<{ id: string }>();
   const [selectedChat, setSelectedChat] =
     useState<{ id: string; name: string }>();
