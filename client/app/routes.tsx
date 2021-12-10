@@ -1,4 +1,4 @@
-import Chat from "./pages/Chat";
+import Chats from "./pages/Chats";
 import Home from "./pages/Home/Home";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
@@ -11,10 +11,16 @@ export const authRoutes = [
     component: Home,
   },
   {
-    name: "Chat",
-    path: "/chat/:id",
+    name: "Chats",
+    path: "/chats",
     exact: true,
-    component: Chat,
+    component: Chats,
+  },
+  {
+    name: "Chats",
+    path: "/chats/:id",
+    exact: true,
+    component: Chats,
   },
 ];
 

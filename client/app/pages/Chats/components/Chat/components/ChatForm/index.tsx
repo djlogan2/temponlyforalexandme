@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useFormik } from "formik";
 
 export interface IMessage {
-  id: number;
+  id: string;
   message: string;
   from: string;
   createdAt: string;
@@ -23,7 +23,7 @@ const ChatForm: FC<IChatFormProps> = ({ sendMessage }) => {
       }
 
       const msg: IMessage = {
-        id: Math.random(),
+        id: `${Math.random()}`,
         message: values.message,
         from: "12",
         createdAt: new Date().toISOString(),
