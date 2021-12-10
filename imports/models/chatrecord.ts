@@ -1,7 +1,6 @@
 export interface ChatRecord {
+    _id?: string;
     isolation_group: string;
-    issuer: object;
-    type: string;
-    what: string;
-    username: string;
+    name: string;
+    creatorId: string;
 }

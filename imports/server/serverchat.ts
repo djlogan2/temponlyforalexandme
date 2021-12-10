@@ -10,27 +10,5 @@ export default class ServerChat extends CommonChat {}
 Meteor.publish("chat", (chatId) => {
   check(chatId, String);
 
-  if (!this.userId) return;
-
-  return ICCServer?.collections?.chat?.findOne();
-});
-
-Meteor.startup(() => {
-  if (Meteor.isTest || Meteor.isAppTest) {
-    return;
-  }
-
-  const data = ICCServer.collections.chat?.findOne({ username: "test" });
-
-  if (!data) {
-    ICCServer.collections.chat?.insert({
-      isolation_group: "isolation_group",
-      issuer: {
-        id: "string",
-      },
-      type: "chat",
-      what: "yes",
-      username: "test",
-    });
-  }
+  return ICCServer.collections.chat?.find();
 });

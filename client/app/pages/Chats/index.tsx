@@ -4,7 +4,8 @@ import Chat from "./components/Chat";
 import ChatsList from "./components/ChatsList";
 import useEventEmitter from "/client/data/hooks/useEventEmitter";
 import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
-import ClientChat from "/imports/clientchat";
+import ClientChat from "../../../../imports/client/clientchat";
+import { ChatRecord } from "/imports/models/chatrecord";
 
 const chats = new Array(10).fill(0).map((_, i) => ({
   id: `${i}`,
@@ -19,15 +20,13 @@ const messages = new Array(10).fill(0).map((_, i) => ({
 }));
 
 const Chats: FC<RouteComponentProps> = ({ history }) => {
-  const { data } = useEventEmitter({
+  const { id } = useParams<{ id: string }>();
+  const { data } = useEventEmitter<{ isReady: boolean; chats: ChatRecord[] }>({
     event: EEmitterEvents.CHAT_CHANGE,
-    tracker: () => ClientChat.subscribe("fake_chat_id"),
+    tracker: () => ClientChat.subscribe(id),
     shouldTrackerUnmount: true,
   });
 
-  console.log(data);
-
-  const { id } = useParams<{ id: string }>();
   const [selectedChat, setSelectedChat] =
     useState<{ id: string; name: string }>();
 
@@ -35,7 +34,7 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
     // make a call to fetch chat
     const chat = chats.find((chat) => chat.id === id);
     setSelectedChat(chat);
-  }, [id]);
+  }, [data]);
 
   const onChooseChat = (id: string) => {
     history.push(`/chats/${id}`);
@@ -43,7 +42,13 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <ChatsList currentChatId={id} onChooseChat={onChooseChat} chats={chats} />
+      {data?.chats.length && (
+        <ChatsList
+          currentChatId={id}
+          onChooseChat={onChooseChat}
+          chats={data.chats}
+        />
+      )}
       {selectedChat && <Chat messages={messages} />}
     </div>
   );

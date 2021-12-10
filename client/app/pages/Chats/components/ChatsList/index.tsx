@@ -1,9 +1,12 @@
 import React, { FC } from "react";
+import ClientChat from "/imports/client/clientchat";
+import ClientICCServer from "/imports/client/clienticcserver";
+import { ChatRecord } from "/imports/models/chatrecord";
 
 interface IChatsListProps {
   currentChatId: string;
   onChooseChat: (id: string) => void;
-  chats: { id: string; name: string }[];
+  chats: ChatRecord[];
 }
 
 const ChatsList: FC<IChatsListProps> = ({
@@ -13,10 +16,21 @@ const ChatsList: FC<IChatsListProps> = ({
 }) => {
   return (
     <div>
+      <button
+        onClick={() => {
+          ClientChat.create({
+            creatorId: ClientICCServer.getUserId()!,
+            isolation_group: "test",
+            name: `Chat${Math.random()}`,
+          });
+        }}
+      >
+        Create chat
+      </button>
       {chats.map((chat) => (
         <div
-          key={chat.id}
-          onClick={() => onChooseChat(chat.id)}
+          key={chat._id}
+          onClick={() => onChooseChat(chat._id!)}
           style={{
             width: "300px",
             height: "50px",
@@ -24,7 +38,7 @@ const ChatsList: FC<IChatsListProps> = ({
             padding: "5px",
             marginBottom: "5px",
             cursor: "pointer",
-            background: currentChatId === chat.id ? "#eee" : "",
+            background: currentChatId === chat._id ? "#eee" : "",
           }}
         >
           <h3>{chat.name}</h3>
