@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 import { RouteComponentProps, useParams } from "react-router-dom";
 import ClientMessages from "../../../../imports/client/clientMessages";
 import Chat from "./components/Chat";
@@ -10,7 +10,7 @@ import { MessageRecord } from "/imports/models/messagerecord";
 const Chats: FC<RouteComponentProps> = ({ history }) => {
   const { id } = useParams<{ id: string }>();
 
-  const sendMessage = useCallback((content: string) => {
+  const sendMessage = (content: string) => {
     const msg: MessageRecord = {
       content,
       creatorId: ClientICCServer.getUserId()!,
@@ -18,8 +18,7 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
     };
 
     ClientMessages.create(msg);
-  }, []);
-
+  };
 
   return (
     <div style={{ display: "flex" }}>

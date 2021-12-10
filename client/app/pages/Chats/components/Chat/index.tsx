@@ -11,6 +11,7 @@ interface IChatProps {
 
 const Chat: FC<IChatProps> = ({ chatId }) => {
   const useEventEmitterProps = useMemo(() => {
+
     return {
       event: EEmitterEvents.MESSAGES_FETCH,
       tracker: () => ClientMessages.subscribe(chatId),
@@ -22,11 +23,6 @@ const Chat: FC<IChatProps> = ({ chatId }) => {
     isReady: Boolean;
     messages: MessageRecord[];
   }>(useEventEmitterProps);
-
-  useEffect(() => {
-    const msgs = ClientMessages.getMessages(chatId);
-    console.log(msgs);
-  }, [chatId]);
 
   return (
     <div
