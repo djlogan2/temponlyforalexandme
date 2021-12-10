@@ -9,7 +9,7 @@ Meteor.publish("chat", (chatId) => {
 
   if (!this.userId) return;
 
-  return ICCServer?.collections?.chats?.findOne();
+  return ICCServer?.collections?.chat?.findOne();
 });
 
 Meteor.startup(() => {
@@ -17,10 +17,10 @@ Meteor.startup(() => {
     return;
   }
 
-  const data = ICCServer.collections.chats?.findOne({ username: "test" });
+  const data = ICCServer.collections.chat?.findOne({ username: "test" });
 
   if (!data) {
-    ICCServer.collections.chats?.insert({
+    ICCServer.collections.chat?.insert({
       isolation_group: "isolation_group",
       issuer: {
         id: "string",

@@ -24,7 +24,7 @@ export default abstract class CommonICCServer {
     logs?: Mongo.Collection<LogRecord>;
     loggerconfig?: Mongo.Collection<LogConfigRecord>;
     i18n?: Mongo.Collection<I18nRecord>;
-    chats?: Mongo.Collection<ChatRecord>;
+    chat?: Mongo.Collection<ChatRecord>;
   };
 
   protected constructor() {
