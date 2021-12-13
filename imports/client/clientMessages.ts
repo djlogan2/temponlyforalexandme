@@ -18,7 +18,26 @@ export default class ClientMessages extends CommonMessages {
           return;
         }
 
-        Emitter.emit(EEmitterEvents.MESSAGES_FETCH, { isReady, messages });
+        const messagesHash: { [key: string]: MessageRecord[] } = {};
+        const unreadMessagesHashCounter: { [key: string]: number } = {};
+        const userId = ClientICCServer.getUserId();
+
+        messages.forEach((msg) => {
+          if (!msg.read && msg.creatorId !== userId) {
+            unreadMessagesHashCounter[msg.chatId] =
+              (unreadMessagesHashCounter[msg.chatId] || 0) + 1;
+          }
+
+          const msgs = messagesHash[msg.chatId] || [];
+          msgs.push(msg);
+          messagesHash[msg.chatId] = [...msgs];
+        });
+
+        Emitter.emit(EEmitterEvents.MESSAGES_FETCH, {
+          isReady,
+          messagesHash,
+          unreadMessagesHashCounter,
+        });
       }
     });
 

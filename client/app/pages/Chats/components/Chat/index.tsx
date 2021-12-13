@@ -1,100 +1,118 @@
+import _ from "lodash";
 import React, { FC, useEffect, useRef, useState } from "react";
 import Message from "./components/Message";
-import { MessageRecord } from "/imports/models/messagerecord";
-import ClientICCServer from "/imports/client/clienticcserver";
-import VisibilitySensor from "react-visibility-sensor";
-import _ from "lodash";
-import ClientMessages from "/imports/client/clientMessages";
+import NoMessages from "./components/NoMessages";
 import usePrev from "/client/data/hooks/usePrev";
+import ClientICCServer from "/imports/client/clienticcserver";
+import ClientMessages from "/imports/client/clientMessages";
+import { MessageRecord } from "/imports/models/messagerecord";
 
 interface IChatProps {
   messages: MessageRecord[];
   currentChatId: string;
+  unreadMessagesCount: number;
+  chatRef: React.RefObject<HTMLDivElement>;
 }
 
 const DEBOUNCE_DELAY = 500;
+const ALLOW_TO_SCROLL_MESSAGES_COUNT = 5;
 
-const Chat: FC<IChatProps> = ({ messages, currentChatId }) => {
+const Chat: FC<IChatProps> = ({
+  messages,
+  currentChatId,
+  unreadMessagesCount,
+  chatRef = { current: null },
+}) => {
   const prevId = usePrev(currentChatId);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [startWithMessage, setStartWithMessage] = useState<number | null>(null);
+  const [startWithMessage, setStartWithMessage] = useState<string>("");
   const seenMessages = useRef<string[]>([]);
 
   const userId = ClientICCServer.getUserId();
 
   useEffect(() => {
-    if (!messages.length) {
+    const firstUnread = messages.find((msg) => !msg.read);
+
+    const isMyMessage = firstUnread?.creatorId === userId;
+    const isNewChat = prevId !== currentChatId;
+
+    if (firstUnread && !isMyMessage && isNewChat) {
+      setStartWithMessage(firstUnread._id!);
+    }
+  }, [messages, currentChatId, prevId]);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      if (
+        !unreadMessagesCount ||
+        unreadMessagesCount < ALLOW_TO_SCROLL_MESSAGES_COUNT
+      ) {
+        scrollDown();
+      }
+    }
+  }, [unreadMessagesCount, chatRef.current, currentChatId]);
+
+  useEffect(() => {
+    if (!chatRef.current || !messages.length) {
       return;
     }
 
-    let firstUnreadIndex = -1;
-    const firstUnread = messages.find((msg, i) => {
-      firstUnreadIndex = i;
-      return !msg.read;
-    });
+    const hasVerticalScrollbar =
+      chatRef.current.scrollHeight > chatRef.current.clientHeight;
 
-    const isMyMessage = firstUnread?.creatorId === userId;
-    const isNewChat = prevId && prevId !== currentChatId;
-
-    if (firstUnread && !isMyMessage && isNewChat) {
-      setStartWithMessage(firstUnreadIndex);
-    } else if (isMyMessage || !firstUnread) {
-      const container = containerRef.current;
-      if (container) {
-        container.scrollTop = container.scrollHeight - container.clientHeight;
-      }
+    if (!hasVerticalScrollbar) {
+      onScroll();
     }
-  }, [messages, currentChatId, prevId]);
+    const lastMessage = messages.at(-1);
+    if (lastMessage?.creatorId === userId) {
+      scrollDown();
+    }
+  }, [messages, chatRef]);
 
   const onScroll = _.debounce(() => {
     if (seenMessages.current.length) {
       const ids = [...new Set(seenMessages.current)];
       ClientMessages.setMessagesRead(ids);
+      seenMessages.current = [];
     }
   }, DEBOUNCE_DELAY);
 
   const onChange = (id: string, creatorId: string) => {
     if (creatorId !== userId) {
-      seenMessages.current = [...seenMessages.current, id];
+      seenMessages.current.push(id);
+    }
+  };
+
+  const scrollDown = () => {
+    const container = chatRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight - container.clientHeight;
     }
   };
 
   return (
     <div
-      ref={containerRef}
+      ref={chatRef}
       style={{
         height: "95vh",
         padding: "10px",
         overflowY: "auto",
         position: "relative",
+        scrollBehavior: "smooth",
       }}
       onScroll={onScroll}
     >
-      {!messages.length && (
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            fontSize: "30px",
-          }}
-        >
-          No messages yet...
-        </div>
-      )}
-      {messages.map((msg, i) => (
-        <VisibilitySensor
-          onChange={(visible) => visible && onChange(msg._id!, msg.creatorId)}
+      {messages.length < 1 && <NoMessages />}
+      {messages.map((msg) => (
+        <Message
           key={msg._id}
-          active={!msg.read}
-        >
-          <Message
-            message={msg.content}
-            from={msg.creatorId}
-            scrollToMe={startWithMessage === i}
-          />
-        </VisibilitySensor>
+          onChange={onChange}
+          creatorId={msg.creatorId}
+          id={msg._id!}
+          message={msg.content}
+          from={msg.creatorId}
+          scrollToMe={startWithMessage === msg._id}
+          read={msg.read}
+        />
       ))}
     </div>
   );
