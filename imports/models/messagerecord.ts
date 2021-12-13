@@ -3,4 +3,5 @@ export interface MessageRecord {
   chatId: string;
   content: string;
   creatorId: string;
+  read: boolean;
 }

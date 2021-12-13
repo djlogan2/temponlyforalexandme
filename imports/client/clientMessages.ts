@@ -7,9 +7,9 @@ import CommonMessages from "../commonmessages";
 import { MessageRecord } from "../models/messagerecord";
 
 export default class ClientMessages extends CommonMessages {
-  static subscribe = (chatId: string): Tracker.Computation =>
+  static subscribe = (): Tracker.Computation =>
     Tracker.autorun(() => {
-      const sub = Meteor.subscribe("messages", chatId);
+      const sub = Meteor.subscribe("messages");
       const isReady = sub.ready();
       if (isReady) {
         const messages = ClientICCServer.collections.messages?.find().fetch();
@@ -26,7 +26,7 @@ export default class ClientMessages extends CommonMessages {
     Meteor.call("sendMessage", message);
   };
 
-  static getMessages = (chatId: string) => {
-    return ClientICCServer.collections.messages?.find({ chatId }).fetch();
+  static setMessagesRead = (ids: string[]): void => {
+    Meteor.call("setMessagedRead", ids);
   };
 }

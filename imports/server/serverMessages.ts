@@ -1,23 +1,31 @@
-import { MessageRecord } from '/imports/models/messagerecord';
 import { Meteor } from "meteor/meteor";
-import { check } from "meteor/check";
-import ServerICCServer from "./servericcserver";
 import CommonMessages from "../commonmessages";
+import ServerICCServer from "./servericcserver";
+import { MessageRecord } from "/imports/models/messagerecord";
 
 declare const ICCServer: ServerICCServer;
 
 export default class ServerMessages extends CommonMessages {
-  public static sendMessage (message: MessageRecord): void {
+  public static sendMessage(message: MessageRecord): void {
     ICCServer.collections.messages?.insert(message);
-  };
+  }
+
+  public static setMessagedRead(messagesIds: string[]) {
+    messagesIds.forEach((id) => {
+      ICCServer?.collections?.messages?.update(
+        { _id: id },
+        { $set: { read: true } },
+        { upsert: true },
+      );
+    });
+  }
 }
 
 Meteor.methods({
   sendMessage: ServerMessages.sendMessage,
+  setMessagedRead: ServerMessages.setMessagedRead,
 });
 
-Meteor.publish("messages", (chatId) => {
-  check(chatId, String);
-
-  return ICCServer.collections.messages?.find({ chatId });
+Meteor.publish("messages", () => {
+  return ICCServer.collections.messages?.find();
 });
