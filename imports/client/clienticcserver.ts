@@ -2,6 +2,9 @@ import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
 import CommonICCServer from "../commoniccserver";
 import ClientTimestamp from "./clienttimetamp";
+import { Tracker } from "meteor/tracker";
+import Emitter from "../emitter";
+import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
 
 type TError = Error | Meteor.Error | Meteor.TypedError | undefined;
 
@@ -16,6 +19,14 @@ class ClientICCServer extends CommonICCServer {
     }
 
     return ClientICCServer.instance;
+  }
+
+  public userIdSubscribe() {
+    return Tracker.autorun(() => {
+      const userId = Meteor.userId();
+
+      Emitter.emit(EEmitterEvents.USER_ID_CHANGE, userId);
+    });
   }
 
   public getUserId() {

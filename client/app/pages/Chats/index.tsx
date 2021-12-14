@@ -4,16 +4,10 @@ import ClientMessages from "../../../../imports/client/clientMessages";
 import Chat from "./components/Chat";
 import ChatForm from "./components/ChatForm";
 import ChatsList from "./components/ChatsList";
+import { useEventEmitterProps } from "./contants";
 import useEventEmitter from "/client/data/hooks/useEventEmitter";
-import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
 import ClientICCServer from "/imports/client/clienticcserver";
 import { MessageRecord } from "/imports/models/messagerecord";
-
-const useEventEmitterProps = {
-  event: EEmitterEvents.MESSAGES_FETCH,
-  tracker: () => ClientMessages.subscribe(),
-  shouldTrackerUnmount: true,
-};
 
 const Chats: FC<RouteComponentProps> = ({ history }) => {
   const { id: currentChatId } = useParams<{ id: string }>();
@@ -55,7 +49,7 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
               justifyContent: "flex-end",
               marginLeft: "5px",
               width: "100%",
-              height: "100vh"
+              height: "100vh",
             }}
           >
             <Chat

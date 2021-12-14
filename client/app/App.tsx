@@ -10,14 +10,24 @@ import NonAuthGuard from "./guards/nonAuthGuard";
 import { authRoutes, noAuthRoutes } from "./routes";
 import ClientICCServer from "../../imports/client/clienticcserver";
 
+const userIdEventEmitterProps = {
+  event: EEmitterEvents.USER_ID_CHANGE,
+  tracker: ClientICCServer.userIdSubscribe,
+  defaultValue: "",
+};
+
+const i18nEventEmitterProps = {
+  event: EEmitterEvents.I18N_CHANGE,
+  tracker: I18N.subscribe,
+  shouldTrackerUnmount: true,
+};
+
 const App = () => {
   const [isLocaleSetup, setIsLocaleSetup] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  useEventEmitter({
-    event: EEmitterEvents.I18N_CHANGE,
-    tracker: I18N.subscribe,
-    shouldTrackerUnmount: true,
-  });
+  const { data: userId } = useEventEmitter<string>(userIdEventEmitterProps);
+  useEventEmitter(i18nEventEmitterProps);
 
   React.useEffect(() => {
     i18n.onceChangeLocale(() => {
@@ -25,11 +35,15 @@ const App = () => {
     });
   }, []);
 
-  const userId = ClientICCServer.getUserId();
+  React.useEffect(() => {
+    if (userId !== "") {
+      setIsLoading(true);
+    }
+  }, [userId]);
 
   return (
     <>
-      {isLocaleSetup ? (
+      {isLocaleSetup && isLoading ? (
         <Router>
           <Switch>
             {noAuthRoutes.map((route) => (
