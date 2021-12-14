@@ -93,7 +93,7 @@ const Chat: FC<IChatProps> = ({
     <div
       ref={chatRef}
       style={{
-        height: "95vh",
+        flex: "1",
         padding: "10px",
         overflowY: "auto",
         position: "relative",

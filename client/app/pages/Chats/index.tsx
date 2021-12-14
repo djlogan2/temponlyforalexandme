@@ -55,6 +55,7 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
               justifyContent: "flex-end",
               marginLeft: "5px",
               width: "100%",
+              height: "100vh"
             }}
           >
             <Chat

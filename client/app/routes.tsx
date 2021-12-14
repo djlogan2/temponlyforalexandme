@@ -12,13 +12,7 @@ export const authRoutes = [
   },
   {
     name: "Chats",
-    path: "/chats",
-    exact: true,
-    component: Chats,
-  },
-  {
-    name: "Chats",
-    path: "/chats/:id",
+    path: "/chats/:id?",
     exact: true,
     component: Chats,
   },

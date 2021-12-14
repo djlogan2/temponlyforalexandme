@@ -11,13 +11,11 @@ export default class ServerMessages extends CommonMessages {
   }
 
   public static setMessagedRead(messagesIds: string[]) {
-    messagesIds.forEach((id) => {
-      ICCServer?.collections?.messages?.update(
-        { _id: id },
-        { $set: { read: true } },
-        { upsert: true },
-      );
-    });
+    ICCServer?.collections?.messages?.update(
+      { _id: { $in: messagesIds } },
+      { $set: { read: true } },
+      { multi: true },
+    );
   }
 }
 
