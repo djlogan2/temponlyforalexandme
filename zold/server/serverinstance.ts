@@ -1,8 +1,8 @@
 import * as ip from 'ip';
 import { Mongo } from 'meteor/mongo';
-import { InstanceRecord, InstanceRecordSchema } from '../models/instancerecord';
+import { InstanceRecord, InstanceRecordSchema } from '../../imports/models/instancerecord';
 import { Handle, Timer } from '../handle';
-import ServerICCServer from './servericcserver';
+import ServerICCServer from '../../imports/server/servericcserver';
 import { RemoteInstance } from '../commoninstance';
 
 let instanceCheck: Handle;

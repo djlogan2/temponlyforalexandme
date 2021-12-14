@@ -2,7 +2,7 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 // import slackNotifiy from 'slack-notify';
 import * as fs from 'fs';
-import ServerICCServer from './servericcserver';
+import ServerICCServer from '../../imports/server/servericcserver';
 import CommonLogger, { LoggerType, LogLevelEnum, loglevelStrings } from '../commonlogger';
 // @ts-ignore
 

@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import { LogLevelEnum } from '../commonlogger';
+import { LogLevelEnum } from '../../zold/commonlogger';
 
 export interface LogRecord {
     _id: string;

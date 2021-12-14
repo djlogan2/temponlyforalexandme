@@ -1,9 +1,9 @@
 import { Meteor } from "meteor/meteor";
 import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
 import ClientICCServer from "/imports/client/clienticcserver";
-import Emitter from "/imports/emitter";
+import Emitter from "/zold/emitter";
 import { Tracker } from "meteor/tracker";
-import CommonMessages from "../commonmessages";
+import CommonMessages from "../../zold/commonmessages";
 import { MessageRecord } from "../models/messagerecord";
 
 export default class ClientMessages extends CommonMessages {

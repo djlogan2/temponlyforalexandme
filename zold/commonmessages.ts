@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
-import CommonICCServer from "./commoniccserver";
+import CommonICCServer from "../imports/commoniccserver";
 
 declare const ICCServer: CommonICCServer;
 

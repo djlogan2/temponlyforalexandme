@@ -1,10 +1,10 @@
 import { isEqual } from "lodash";
 import { check, Match } from "meteor/check";
 import { Meteor } from "meteor/meteor";
-import ServerICCServer from "./servericcserver";
+import ServerICCServer from "../../imports/server/servericcserver";
 
 import CommonI18N from "../commonI18n";
-import { english } from "../i18n/english";
+import { english } from "../../imports/i18n/english";
 
 declare const ICCServer: ServerICCServer;
 

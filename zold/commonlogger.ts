@@ -1,4 +1,4 @@
-import CommonICCServer from "./commoniccserver";
+import CommonICCServer from "../imports/commoniccserver";
 
 export enum LogLevelEnum {
   FATAL = 1,

@@ -1,5 +1,5 @@
 import { Random } from 'meteor/random';
-import { PingMessage, PongMessage, PongResponse } from './models/timestamp';
+import { PingMessage, PongMessage, PongResponse } from '../imports/models/timestamp';
 
 export default abstract class CommonTimestamp {
   private intervalHandle?: number;

@@ -1,4 +1,4 @@
-import CommonLogger, { LoggerType, LogLevelEnum } from '../commonlogger';
+import CommonLogger, { LoggerType, LogLevelEnum } from '../../zold/commonlogger';
 import ICCServer from './clienticcserver';
 
 export default class ClientLogger extends CommonLogger {

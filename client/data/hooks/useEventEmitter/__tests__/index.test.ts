@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 import { Tracker } from "meteor/tracker";
 import useEventEmitter from "../index";
-import Emitter from "../../../../../imports/emitter";
+import Emitter from "../../../../../zold/emitter";
 import { EEmitterEvents } from "../events";
 
 describe("useEventEmitter hook", () => {

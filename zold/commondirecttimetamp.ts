@@ -1,5 +1,5 @@
 import CommonTimestamp from './commontimestamp';
-import { PingMessage, PongMessage, PongResponse } from './models/timestamp';
+import { PingMessage, PongMessage, PongResponse } from '../imports/models/timestamp';
 import CommonDirectMessage from './commondirectmessage';
 
 export default abstract class CommonDirectTimestamp extends CommonTimestamp {

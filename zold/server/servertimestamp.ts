@@ -1,6 +1,6 @@
-import ServerICCServer from './servericcserver';
-import { PongMessage, PongResponse } from '../models/timestamp';
-import PingRecord from '../models/pingrecord';
+import ServerICCServer from '../../imports/server/servericcserver';
+import { PongMessage, PongResponse } from '../../imports/models/timestamp';
+import PingRecord from '../../imports/models/pingrecord';
 import CommonDirectTimestamp from '../commondirecttimetamp';
 import ServerDirectMessage from './serverdirectmessage';
 

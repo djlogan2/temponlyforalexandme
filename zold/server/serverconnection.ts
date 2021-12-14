@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
-import ServerICCServer from './servericcserver';
-import { ConnectionRecord, ConnectionRecordSchema } from '../models/connectionrecord';
+import ServerICCServer from '../../imports/server/servericcserver';
+import { ConnectionRecord, ConnectionRecordSchema } from '../../imports/models/connectionrecord';
 import { Handle, Timer } from '../handle';
 import { RemoteInstance } from '../commoninstance';
 import ServerLogger from './serverlogger';

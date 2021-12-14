@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import CommonMessages from "../commonmessages";
-import ServerICCServer from "./servericcserver";
+import ServerICCServer from "../../imports/server/servericcserver";
 import { MessageRecord } from "/imports/models/messagerecord";
 
 declare const ICCServer: ServerICCServer;

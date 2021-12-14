@@ -1,5 +1,5 @@
 import CommonDirectMessage from '../commondirectmessage';
-import ServerICCServer from './servericcserver';
+import ServerICCServer from '../../imports/server/servericcserver';
 
 declare const ICCServer: ServerICCServer;
 

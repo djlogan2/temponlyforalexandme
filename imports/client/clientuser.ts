@@ -1,6 +1,6 @@
 import { UserRecord } from '/imports/models/userecord';
 import { Meteor } from "meteor/meteor";
-import CommonUser from '/imports/commonuser';
+import CommonUser from '/zold/commonuser';
 
 export default class ClientUser extends CommonUser {
   private _user: UserRecord;

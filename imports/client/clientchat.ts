@@ -1,8 +1,8 @@
 import { Meteor } from "meteor/meteor";
 import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
 import ClientICCServer from "/imports/client/clienticcserver";
-import CommonChat from "/imports/commonchat";
-import Emitter from "/imports/emitter";
+import CommonChat from "/zold/commonchat";
+import Emitter from "/zold/emitter";
 import { Tracker } from "meteor/tracker";
 import { ChatRecord } from "../models/chatrecord";
 

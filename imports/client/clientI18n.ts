@@ -3,8 +3,8 @@ import { Tracker } from "meteor/tracker";
 import { i18n } from "meteor/universe:i18n";
 
 import { getLang, updateLocale } from '/client/data/utils/common';
-import CommonClientI18N from "../commonI18n";
-import Emitter from "../emitter";
+import CommonClientI18N from "../../zold/commonI18n";
+import Emitter from "../../zold/emitter";
 import ClientICCServer from "./clienticcserver";
 import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
 

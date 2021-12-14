@@ -1,6 +1,6 @@
 import { Tracker } from "meteor/tracker";
 import { useEffect, useState } from "react";
-import Emitter from "../../../../imports/emitter";
+import Emitter from "../../../../zold/emitter";
 import { EEmitterEvents } from "./events";
 
 interface IUseEmitterProps {
