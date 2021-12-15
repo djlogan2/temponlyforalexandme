@@ -5,7 +5,9 @@ import userEvent from "@testing-library/user-event";
 
 describe("<Chat /> component", () => {
   test("Should create message", async () => {
-    const { getByPlaceholderText, getByText } = render(<Chat />);
+    const { getByPlaceholderText, getByText } = render(
+      <Chat unreadMessagesCount={2} messages={[]} currentChatId="123" />,
+    );
 
     const input = getByPlaceholderText("Message...");
     const button = getByText("Send");

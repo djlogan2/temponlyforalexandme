@@ -4,7 +4,17 @@ import Message from "..";
 
 describe("<Message /> component", () => {
   test("Should display message", () => {
-    const { getByText } = render(<Message message="Test" from="123" />);
+    const { getByText } = render(
+      <Message
+        message="Test"
+        from="123"
+        id="123"
+        creatorId="12345"
+        scrollToMe={false}
+        read={false}
+        onChange={() => {}}
+      />,
+    );
 
     expect(getByText("Test")).toBeInTheDocument();
   });

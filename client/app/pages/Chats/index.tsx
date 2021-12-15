@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC } from "react";
 import { RouteComponentProps, useParams } from "react-router-dom";
 import ClientMessages from "../../../../imports/client/clientMessages";
 import Chat from "./components/Chat";
@@ -11,7 +11,6 @@ import { MessageRecord } from "/imports/models/messagerecord";
 
 const Chats: FC<RouteComponentProps> = ({ history }) => {
   const { id: currentChatId } = useParams<{ id: string }>();
-  const chatRef = useRef<HTMLDivElement>(null);
 
   const { data } = useEventEmitter<{
     isReady: boolean;
@@ -53,7 +52,6 @@ const Chats: FC<RouteComponentProps> = ({ history }) => {
             }}
           >
             <Chat
-              chatRef={chatRef}
               messages={data?.messagesHash[currentChatId] || []}
               currentChatId={currentChatId}
               unreadMessagesCount={

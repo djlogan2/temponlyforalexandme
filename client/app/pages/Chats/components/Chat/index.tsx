@@ -11,7 +11,6 @@ interface IChatProps {
   messages: MessageRecord[];
   currentChatId: string;
   unreadMessagesCount: number;
-  chatRef: React.RefObject<HTMLDivElement>;
 }
 
 const DEBOUNCE_DELAY = 500;
@@ -21,11 +20,11 @@ const Chat: FC<IChatProps> = ({
   messages,
   currentChatId,
   unreadMessagesCount,
-  chatRef = { current: null },
 }) => {
   const prevId = usePrev(currentChatId);
   const [startWithMessage, setStartWithMessage] = useState<string>("");
   const seenMessages = useRef<string[]>([]);
+  const chatRef = useRef<HTMLInputElement>(null);
 
   const userId = ClientICCServer.getUserId();
 

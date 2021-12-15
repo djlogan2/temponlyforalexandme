@@ -79,7 +79,8 @@
       "<rootDir>/client/app/setupTests.ts"
     ],
     "moduleNameMapper": {
-      "^meteor/universe:i18n$": "<rootDir>/client/app/stubs/meteor/universe:i18n.ts"
+      "^meteor/universe:i18n$": "<rootDir>/client/app/stubs/meteor/universe:i18n.ts",
+      "^/(.*)$": "<rootDir>/$1"
     }
   }
 }

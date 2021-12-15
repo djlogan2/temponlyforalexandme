@@ -14,7 +14,7 @@ jest.mock("../../../imports/client/clientI18n", () => ({
 
 describe("Home Component", () => {
   it("Should render home page ", () => {
-    (ClientICCServer.userId as unknown as jest.Mock).mockImplementation(
+    (ClientICCServer.getUserId as unknown as jest.Mock).mockImplementation(
       () => "exists",
     );
     const { getByText } = render(<App />);
@@ -25,7 +25,7 @@ describe("Home Component", () => {
   });
 
   it("Should render login page", () => {
-    (ClientICCServer.userId as unknown as jest.Mock).mockImplementation(
+    (ClientICCServer.getUserId as unknown as jest.Mock).mockImplementation(
       () => "",
     );
     const { getByText } = render(<App />);
@@ -34,7 +34,7 @@ describe("Home Component", () => {
   });
 
   it("Navigates to register page", () => {
-    (ClientICCServer.userId as unknown as jest.Mock).mockImplementation(
+    (ClientICCServer.getUserId as unknown as jest.Mock).mockImplementation(
       () => "",
     );
     const { getByText } = render(<App />);
