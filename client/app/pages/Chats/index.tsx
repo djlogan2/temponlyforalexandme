@@ -7,7 +7,7 @@ import ChatsList from "./components/ChatsList";
 import useEventEmitter from "/client/data/hooks/useEventEmitter";
 import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
 import ClientICCServer from "/imports/client/clienticcserver";
-import { MessageRecord } from "/imports/models/messagerecord";
+import { MessageRecord } from "/zold/models/messagerecord";
 
 const useEventEmitterProps = {
   event: EEmitterEvents.MESSAGES_FETCH,

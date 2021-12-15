@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import CommonMessages from "../commonmessages";
 import ServerICCServer from "../../imports/server/servericcserver";
-import { MessageRecord } from "/imports/models/messagerecord";
+import { MessageRecord } from "/zold/models/messagerecord";
 
 declare const ICCServer: ServerICCServer;
 

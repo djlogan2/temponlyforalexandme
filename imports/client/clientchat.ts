@@ -4,7 +4,7 @@ import ClientICCServer from "/imports/client/clienticcserver";
 import CommonChat from "/zold/commonchat";
 import Emitter from "/zold/emitter";
 import { Tracker } from "meteor/tracker";
-import { ChatRecord } from "../models/chatrecord";
+import { ChatRecord } from "../../zold/models/chatrecord";
 
 export default class ClientChat extends CommonChat {
   static subscribe = (): Tracker.Computation =>

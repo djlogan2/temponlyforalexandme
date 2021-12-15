@@ -1,4 +1,4 @@
-import { UserRecord } from '/imports/models/userecord';
+import { UserRecord } from '/zold/models/userecord';
 import { Meteor } from "meteor/meteor";
 import CommonUser from '/zold/commonuser';
 

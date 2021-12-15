@@ -1,59 +1,53 @@
-import { Meteor } from "meteor/meteor";
-import CollectionManager from "/imports/dao/CollectionManager";
+import WritableReactiveDao from "/lib/server/WritableReactiveDao";
+import Stoppable from "/lib/Stoppable";
+import { DEBUGLEVEL, LoggerConfigurationRecord, STRINGDEBUGLEVELS } from "/lib/records/LoggerConfigurationRecord";
 
-export const enum LoggerType {
-    FATAL,
-    ERROR,
-    WARN,
-    INF0,
-    DEBUG
-}
+export default class CommonLoggerConfigurationDao extends WritableReactiveDao<LoggerConfigurationRecord> {
+    private debugLevels: {[key: string]: DEBUGLEVEL} = {};
 
-export interface LoggerConfigurationRecord {
-    _id: string;
-    module: string;
-    debuglevel: LoggerType
-}
+    private moduleConversion: {[key: string]: string} = {};
 
-export default class CommonLoggerConfigurationDao {
-    private static observeHandle: Meteor.LiveQueryHandle;
-
-    private static moduleLevels: {[module: string]: LoggerType} = {};
-
-    private static ids: {[id: string]: string} = {};
-
-    private static loggerconfiguration = CollectionManager.getCollection<LoggerConfigurationRecord>("loggerconfig");
-
-    public static observeChanges() {
-        if (CommonLoggerConfigurationDao.observeHandle) return;
-        CommonLoggerConfigurationDao.observeHandle = this.loggerconfiguration.find().observeChanges({
-            added(id, doc) {
-                if (doc.module && doc.debuglevel) {
-                    CommonLoggerConfigurationDao.ids[id] = doc.module;
-                    CommonLoggerConfigurationDao.moduleLevels[doc.module] = doc.debuglevel;
-                }
-            },
-            changed(id, fields) {
-                if (fields.debuglevel) {
-                    const module = CommonLoggerConfigurationDao.ids[id];
-                    if (!module) return;
-                    CommonLoggerConfigurationDao.moduleLevels[module] = fields.debuglevel;
-                }
-            },
-            removed(id) {
-                const module = CommonLoggerConfigurationDao.ids[id];
-                if (!module) return;
-                delete CommonLoggerConfigurationDao.moduleLevels[module];
-                delete CommonLoggerConfigurationDao.ids[id];
-            },
-        });
+    private constructor(parent: Stoppable) {
+        super(parent, "logger_configuration");
+        this.debugLevels.root = "debug";
     }
 
-    public static getModuleLevel(module: string): LoggerType {
-        if (CommonLoggerConfigurationDao.moduleLevels[module]) return CommonLoggerConfigurationDao.moduleLevels[module];
-        if (CommonLoggerConfigurationDao.moduleLevels.root) return CommonLoggerConfigurationDao.moduleLevels.root;
-        return LoggerType.DEBUG;
+    protected onRecordAdded(id: string, record: Partial<LoggerConfigurationRecord>): void {
+        if (record.module && record.debuglevel) {
+            this.debugLevels[record.module] = record.debuglevel;
+            this.moduleConversion[id] = record.module;
+        }
+    }
+
+    protected onFieldsChanged(id: string, record: Partial<LoggerConfigurationRecord>): void {
+        if (record.debuglevel) {
+            const modulename = this.moduleConversion[id];
+            if (modulename) this.debugLevels[modulename] = record.debuglevel;
+        }
+    }
+
+    protected onRecordRemoved(id: string): void {
+        const module = this.moduleConversion[id];
+        if (module) delete this.debugLevels[module];
+        delete this.moduleConversion[id];
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    protected onStop(): void {
+        // Nothing to do
+    }
+
+    private static level(loglevel: DEBUGLEVEL): number {
+        return STRINGDEBUGLEVELS.indexOf(loglevel);
+    }
+
+    private moduleLevel(module: string): number {
+        const lvl = this.moduleConversion[module] || this.moduleConversion.root || "debug";
+        return CommonLoggerConfigurationDao.level(lvl);
+    }
+
+    public writable(module: string, loglevel: DEBUGLEVEL): boolean {
+        return (CommonLoggerConfigurationDao.level(loglevel) <= this.moduleLevel(module));
     }
 }
 
-CommonLoggerConfigurationDao.observeChanges();

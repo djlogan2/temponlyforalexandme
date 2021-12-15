@@ -1,4 +1,4 @@
-import { english } from "../i18n/english";
+import { english } from "../../imports/i18n/english";
 
 export interface I18nRecord {
   _id: string;

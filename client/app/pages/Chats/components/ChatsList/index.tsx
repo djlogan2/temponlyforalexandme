@@ -3,7 +3,7 @@ import useEventEmitter from "/client/data/hooks/useEventEmitter";
 import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
 import ClientChat from "/imports/client/clientchat";
 import ClientICCServer from "/imports/client/clienticcserver";
-import { ChatRecord } from "/imports/models/chatrecord";
+import { ChatRecord } from "/zold/models/chatrecord";
 import { History } from "history";
 
 interface IChatsListProps {

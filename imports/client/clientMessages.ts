@@ -4,7 +4,7 @@ import ClientICCServer from "/imports/client/clienticcserver";
 import Emitter from "/zold/emitter";
 import { Tracker } from "meteor/tracker";
 import CommonMessages from "../../zold/commonmessages";
-import { MessageRecord } from "../models/messagerecord";
+import { MessageRecord } from "../../zold/models/messagerecord";
 
 export default class ClientMessages extends CommonMessages {
   static subscribe = (): Tracker.Computation =>

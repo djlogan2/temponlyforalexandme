@@ -1,4 +1,4 @@
-import { ChatRecord } from '/imports/models/chatrecord';
+import { ChatRecord } from '/zold/models/chatrecord';
 import { Meteor } from "meteor/meteor";
 import ServerICCServer from "../../imports/server/servericcserver";
 import CommonChat from "../commonchat";

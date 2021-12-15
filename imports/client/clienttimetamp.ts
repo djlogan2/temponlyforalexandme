@@ -1,4 +1,4 @@
-import { PongMessage, PongResponse } from '../models/timestamp';
+import { PongMessage, PongResponse } from '../../zold/models/timestamp';
 import CommonDirectTimestamp from '../../zold/commondirecttimetamp';
 import ICCServer from './clienticcserver';
 import ClientDirectMessage from './clientdirectmessage';

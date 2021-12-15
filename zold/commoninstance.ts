@@ -1,4 +1,4 @@
-import { InstanceRecord } from '../imports/models/instancerecord';
+import { InstanceRecord } from './models/instancerecord';
 
 export abstract class CommonInstance {
 }

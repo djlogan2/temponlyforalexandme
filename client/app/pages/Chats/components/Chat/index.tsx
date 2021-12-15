@@ -5,7 +5,7 @@ import NoMessages from "./components/NoMessages";
 import usePrev from "/client/data/hooks/usePrev";
 import ClientICCServer from "/imports/client/clienticcserver";
 import ClientMessages from "/imports/client/clientMessages";
-import { MessageRecord } from "/imports/models/messagerecord";
+import { MessageRecord } from "/zold/models/messagerecord";
 
 interface IChatProps {
   messages: MessageRecord[];
