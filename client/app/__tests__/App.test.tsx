@@ -12,6 +12,7 @@ jest.mock("../../../imports/client/clientI18n", () => ({
   subscribe: () => {},
 }));
 
+
 describe("Home Component", () => {
   it("Should render home page ", () => {
     (ClientICCServer.getUserId as unknown as jest.Mock).mockImplementation(

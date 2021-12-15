@@ -61,7 +61,7 @@ const Chat: FC<IChatProps> = ({
     if (!hasVerticalScrollbar) {
       onScroll();
     }
-    const lastMessage = messages.at(-1);
+    const lastMessage = messages[messages.length - 1];
     if (lastMessage?.creatorId === userId) {
       scrollDown();
     }
