@@ -1,5 +1,5 @@
 import { Mongo } from "meteor/mongo";
-import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/lib/server/ReactiveReadOnlyDao";
 
 export default abstract class WritableReactiveDao<T> extends ReactiveReadOnlyDao<T> {
     public insert(record: Mongo.OptionalId<T>): string {
@@ -8,6 +8,10 @@ export default abstract class WritableReactiveDao<T> extends ReactiveReadOnlyDao
 
     public remove(id: string): number {
         return this.mongocollection.remove({ _id: id } as Mongo.Selector<T>);
+    }
+
+    public removeMany(selector: Mongo.Selector<T>): number {
+        return this.mongocollection.remove(selector);
     }
 
     public update(selector: Mongo.Selector<T>, modifier: Mongo.Modifier<T>) {

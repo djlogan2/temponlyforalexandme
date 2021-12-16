@@ -1,14 +1,14 @@
 import WritableReactiveDao from "/lib/server/WritableReactiveDao";
-import Stoppable from "/lib/Stoppable";
+import Stoppable from "/lib/server/Stoppable";
 import { DEBUGLEVEL, LoggerConfigurationRecord, STRINGDEBUGLEVELS } from "/lib/records/LoggerConfigurationRecord";
 
-export default class CommonLoggerConfigurationDao extends WritableReactiveDao<LoggerConfigurationRecord> {
+export default class LoggerConfigurationDao extends WritableReactiveDao<LoggerConfigurationRecord> {
     private debugLevels: {[key: string]: DEBUGLEVEL} = {};
 
     private moduleConversion: {[key: string]: string} = {};
 
     private constructor(parent: Stoppable) {
-        super(parent, "logger_configuration");
+        super("logger_configuration_dao", parent, "logger_configuration");
         this.debugLevels.root = "debug";
     }
 
@@ -43,11 +43,11 @@ export default class CommonLoggerConfigurationDao extends WritableReactiveDao<Lo
 
     private moduleLevel(module: string): number {
         const lvl = this.moduleConversion[module] || this.moduleConversion.root || "debug";
-        return CommonLoggerConfigurationDao.level(lvl);
+        return LoggerConfigurationDao.level(lvl);
     }
 
     public writable(module: string, loglevel: DEBUGLEVEL): boolean {
-        return (CommonLoggerConfigurationDao.level(loglevel) <= this.moduleLevel(module));
+        return (LoggerConfigurationDao.level(loglevel) <= this.moduleLevel(module));
     }
 }
 

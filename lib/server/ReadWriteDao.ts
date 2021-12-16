@@ -1,5 +1,5 @@
 import { Mongo } from "meteor/mongo";
-import { ReadOnlyDao } from "/lib/ReadOnlyDao";
+import ReadOnlyDao from "/lib/server/ReadOnlyDao";
 
 export class ReadWriteDao<T> extends ReadOnlyDao<T> {
     public insert(record: Mongo.OptionalId<T>): string {

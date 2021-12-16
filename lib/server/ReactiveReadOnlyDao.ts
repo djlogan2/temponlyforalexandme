@@ -1,22 +1,13 @@
-import MongoCollection from "/lib/MongoCollection";
 import { Meteor } from "meteor/meteor";
-import Stoppable from "/lib/Stoppable";
+import Stoppable from "/lib/server/Stoppable";
 import { Mongo } from "meteor/mongo";
-import { MongoFieldObject } from "./MongoFieldObject";
+import ReadOnlyDao from "/lib/server/ReadOnlyDao";
 
-export default abstract class ReactiveReadOnlyDao<T> extends MongoCollection<T> {
+export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
     private observehandle?: Meteor.LiveQueryHandle;
 
-    constructor(parent: Stoppable, collection: string) {
-        super(collection, parent);
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    private fields(includeOrExclude: "include" | "exclude" | undefined, fields: [keyof T] | undefined): MongoFieldObject<T> | undefined {
-        if (!fields) return;
-        const fld: MongoFieldObject<T> = { fields: {} };
-        fields.forEach((f) => {fld.fields[f] = includeOrExclude === "include";});
-        return fld;
+    constructor(identifier: string, parent: Stoppable | null, collection: string) {
+        super(identifier, collection, parent);
     }
 
     protected start(selector: Mongo.Selector<T>, includeOrExclude: "include" | "exclude" | undefined, fields: [keyof T] | undefined): void {

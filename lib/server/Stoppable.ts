@@ -1,10 +1,13 @@
-export default abstract class Stoppable {
+import Singleton from "/lib/server/Singleton";
+
+export default abstract class Stoppable extends Singleton {
     private children: Stoppable[] = [];
 
     protected abstract stopping(): void;
 
-    constructor(parent: Stoppable) {
-        parent.registerChild(this);
+    constructor(identifier: string, parent: Stoppable | null) {
+        super(identifier);
+        if (parent) parent.registerChild(this);
     }
 
     private registerChild(child: Stoppable): void {

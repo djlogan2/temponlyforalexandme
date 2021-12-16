@@ -1,32 +1,14 @@
-import ServerICCServer from "/imports/server/servericcserver";
-import InstanceService from "/imports/server/service/instanceservice";
+import InstanceService from "/imports/server/service/InstanceService";
+import InstanceDao from "/imports/server/dao/InstanceDao";
+import ConnectionService from "/imports/server/service/ConnectionService";
+import TimestampService from "/imports/server/service/TimestampService";
+import ConnectionDao from "/imports/server/dao/ConnectionDao";
 
-declare const global: any;
+const parent = null;
 
-global.ICCServer = {
-    services: {},
-};
+const instancedao = new InstanceDao(parent);
+const connectiondao = new ConnectionDao(parent);
 
-global.ICCServer.services.instance = new InstanceService();
-
-global.ICCServer.services.server = new ServerICCServer(global.ICCServer.services.instance);
-
-// import './servericcserver';
-// import '../imports/server/serverlogger';
-// import '../imports/server/serverinstance';
-// import '../imports/server/serverconnection';
-// import '../imports/server/servertimestamp';
-// import "../imports/server/serverI18n";
-// import "../imports/server/serverchat";
-// import "../imports/server/serverMessages";
-//
-//
-// import ServerICCServer from '../imports/server/servericcserver';
-//
-// declare const Meteor;
-// declare const ICCServer: ServerICCServer;
-//
-// Meteor.startup(() => {
-//   console.log('Running');
-//   console.log(`Instance id=${ICCServer.instance_id}`);
-// });
+const instanceservice = new InstanceService(parent, instancedao);
+const timestampservice = new TimestampService();
+const connectionservice = new ConnectionService(instanceservice, timestampservice, connectiondao);
