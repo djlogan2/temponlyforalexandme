@@ -1,12 +1,12 @@
 import React, { FC, useRef } from "react";
 import { RouteComponentProps, useParams } from "react-router-dom";
-import ClientMessages from "../../../../imports/client/clientMessages";
+import ClientMessages from "../../../../zold/client/clientMessages";
 import Chat from "./components/Chat";
 import ChatForm from "./components/ChatForm";
 import ChatsList from "./components/ChatsList";
 import useEventEmitter from "/client/data/hooks/useEventEmitter";
 import { EEmitterEvents } from "/client/data/hooks/useEventEmitter/events";
-import ClientICCServer from "/imports/client/clienticcserver";
+import ClientICCServer from "/zold/client/clienticcserver";
 import { MessageRecord } from "/zold/models/messagerecord";
 
 const useEventEmitterProps = {

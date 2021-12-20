@@ -3,8 +3,8 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import Message from "./components/Message";
 import NoMessages from "./components/NoMessages";
 import usePrev from "/client/data/hooks/usePrev";
-import ClientICCServer from "/imports/client/clienticcserver";
-import ClientMessages from "/imports/client/clientMessages";
+import ClientICCServer from "/zold/client/clienticcserver";
+import ClientMessages from "/zold/client/clientMessages";
 import { MessageRecord } from "/zold/models/messagerecord";
 
 interface IChatProps {

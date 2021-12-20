@@ -1,5 +1,5 @@
 import { Mongo } from "meteor/mongo";
-import Singleton from "/lib/server/Singleton";
+import Singleton from "../Singleton";
 
 declare global {
     // eslint-disable-next-line vars-on-top, no-var

@@ -1,4 +1,4 @@
-import Singleton from "/lib/server/Singleton";
+import Singleton from "../Singleton";
 
 export default abstract class Stoppable extends Singleton {
     private children: Stoppable[] = [];

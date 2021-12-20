@@ -1,4 +1,4 @@
-import CommonDirectMessage from '../../zold/commondirectmessage';
+import CommonDirectMessage from '../commondirectmessage';
 
 export default class ClientDirectMessage<S, R> extends CommonDirectMessage<S, R> {
   private static registered: {[key: string]: any} = {};

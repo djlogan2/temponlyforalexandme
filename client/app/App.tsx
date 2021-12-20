@@ -2,13 +2,13 @@ import { i18n } from "meteor/universe:i18n";
 import * as React from "react";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 
-import I18N from "../../imports/client/clientI18n";
+import I18N from "../../zold/client/clientI18n";
 import useEventEmitter from "../data/hooks/useEventEmitter";
 import { EEmitterEvents } from "../data/hooks/useEventEmitter/events";
 import AuthGuard from "./guards/authGuard";
 import NonAuthGuard from "./guards/nonAuthGuard";
 import { authRoutes, noAuthRoutes } from "./routes";
-import ClientICCServer from "../../imports/client/clienticcserver";
+import ClientICCServer from "../../zold/client/clienticcserver";
 
 const App = () => {
   const [isLocaleSetup, setIsLocaleSetup] = React.useState(false);

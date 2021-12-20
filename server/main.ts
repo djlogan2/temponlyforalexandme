@@ -11,4 +11,6 @@ const connectiondao = new ConnectionDao(parent);
 
 const instanceservice = new InstanceService(parent, instancedao);
 const directmessageservice = new DirectMessageService();
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const connectionservice = new ConnectionService(parent, instanceservice, directmessageservice, connectiondao);

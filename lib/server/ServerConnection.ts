@@ -2,7 +2,7 @@ import ConnectionRecord from "/lib/records/ConnectionRecord";
 import Stoppable from "/lib/server/Stoppable";
 import AbstractDirectMessageHandler from "/lib/AbstractDirectMessageHandler";
 
-export default class ICCConnection extends Stoppable {
+export default class ServerConnection extends Stoppable {
     private connectionrecord: ConnectionRecord;
 
     private registerdDirectMessages: {[key: string]: AbstractDirectMessageHandler<any>} = {};

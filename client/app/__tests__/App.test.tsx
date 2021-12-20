@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import App from "../App";
-import ClientICCServer from "../../../imports/client/clienticcserver";
+import ClientICCServer from "../../../zold/client/clienticcserver";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("../../../imports/client/clienticcserver", () => ({

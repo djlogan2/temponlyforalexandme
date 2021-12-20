@@ -3,7 +3,7 @@ import ConnectionRecord from "/lib/records/ConnectionRecord";
 import InstanceService from "/imports/server/service/InstanceService";
 import ConnectionDao from "/imports/server/dao/ConnectionDao";
 import { Mongo } from "meteor/mongo";
-import ICCConnection from "/lib/server/ICCConnection";
+import ServerConnection from "/lib/server/ServerConnection";
 import Stoppable from "/lib/server/Stoppable";
 import DirectMessageService from "/imports/server/service/DirectMessageService";
 import { AbstractDirectMessageProcessor } from "/lib/AbstractDirectMessageProcessor";
@@ -15,7 +15,7 @@ export default class ConnectionService extends Stoppable implements AbstractDire
 
     private directmessageservice: DirectMessageService;
 
-    private connections: { [key: string]: ICCConnection } = {};
+    private connections: { [key: string]: ServerConnection } = {};
 
     // @ts-ignore
     constructor(parent: Stoppable | null, instanceservice: InstanceService, directmessageservice: DirectMessageService, connectiondao: ConnectionDao) {
@@ -38,7 +38,7 @@ export default class ConnectionService extends Stoppable implements AbstractDire
         connection.handleDirectMessage(messagetype, msgobject);
     }
 
-    private onClose(ourconnection: ICCConnection): void {
+    private onClose(ourconnection: ServerConnection): void {
         ourconnection.closing();
         delete this.connections[ourconnection.connectionid];
         this.connectiondao.remove(ourconnection._id);
@@ -51,7 +51,7 @@ export default class ConnectionService extends Stoppable implements AbstractDire
             startTime: new Date(),
         };
         connrecord._id = this.connectiondao.insert(connrecord);
-        const ourconnection = new ICCConnection(this, connrecord as ConnectionRecord);
+        const ourconnection = new ServerConnection(this, connrecord as ConnectionRecord);
         this.connections[connection.id] = ourconnection;
         connection.onClose(() => this.onClose(ourconnection));
     }

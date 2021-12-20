@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
-import ClientICCServer from "/imports/client/clienticcserver";
+import ClientICCServer from "/zold/client/clienticcserver";
 import VisibilitySensor from "react-visibility-sensor";
 
 interface IMessageProps {

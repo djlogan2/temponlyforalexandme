@@ -1,12 +1,8 @@
 import { Meteor } from "meteor/meteor";
-import './iccserver';
-import "../imports/client/clientI18n";
-import '../imports/client/clientlogger';
-import '../imports/client/clientdirectmessage';
-import '../imports/client/clienttimetamp';
-import { render } from 'react-dom';
-import * as React from 'react';
-import App from './app/App';
+import { render } from "react-dom";
+import * as React from "react";
+import App from "./app/App";
+import "../lib/client/global";
 
 // window.onerror = function myErrorHandler(
 //     message: Event | string,
@@ -20,5 +16,5 @@ import App from './app/App';
 // };
 
 Meteor.startup(() => {
-  render(<App />, document.getElementById('root'));
+    render(<App />, document.getElementById("root"));
 });

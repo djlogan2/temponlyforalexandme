@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FC } from "react";
 import { useHistory, RouteComponentProps } from "react-router-dom";
-import ClientICCServer from "../../../../imports/client/clienticcserver";
+import ClientICCServer from "../../../../zold/client/clienticcserver";
 import { useFormik } from "formik";
 import useTranslate from "../../../data/hooks/useTranslate";
 import { inputs } from "./constants";
