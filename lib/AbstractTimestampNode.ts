@@ -1,6 +1,6 @@
 import { Random } from "meteor/random";
 import { Meteor } from "meteor/meteor";
-import Stoppable from "/lib/server/Stoppable";
+import Stoppable from "/lib/Stoppable";
 import { PingMessage } from "/lib/records/PingMessage";
 import { PongMessage } from "/lib/records/PongMessage";
 import { PongResponse } from "/lib/records/PongResponse";
@@ -28,8 +28,8 @@ export default abstract class AbstractTimestampNode extends Stoppable {
 
     protected pingtimes: number[] = [];
 
-    protected constructor(parent: Stoppable, pingcount: number) {
-        super("timestampnode", parent);
+    protected constructor(parent: Stoppable | null, pingcount: number) {
+        super(parent);
         this.pingcount = pingcount;
         this.localvalues = { current_clock_offset: 0 };
         this.remotevalues = { current_clock_offset: 0 };

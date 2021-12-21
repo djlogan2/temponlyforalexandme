@@ -1,5 +1,5 @@
 import WritableReactiveDao from "/lib/server/WritableReactiveDao";
-import Stoppable from "/lib/server/Stoppable";
+import Stoppable from "/lib/Stoppable";
 import { DEBUGLEVEL, LoggerConfigurationRecord, STRINGDEBUGLEVELS } from "/lib/records/LoggerConfigurationRecord";
 
 export default class LoggerConfigurationDao extends WritableReactiveDao<LoggerConfigurationRecord> {
@@ -8,7 +8,7 @@ export default class LoggerConfigurationDao extends WritableReactiveDao<LoggerCo
     private moduleConversion: {[key: string]: string} = {};
 
     private constructor(parent: Stoppable) {
-        super("logger_configuration_dao", parent, "logger_configuration");
+        super(parent, "logger_configuration");
         this.debugLevels.root = "debug";
     }
 

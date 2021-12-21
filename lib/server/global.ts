@@ -9,5 +9,3 @@ declare global {
         singletons: {[key: string]: Singleton}
     };
 }
-
-if (!global.ICCServer) global.ICCServer = { collections: {}, dao: {}, singletons: {} };

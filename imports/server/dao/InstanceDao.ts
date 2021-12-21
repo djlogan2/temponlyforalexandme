@@ -1,6 +1,6 @@
 import WritableReactiveDao from "/lib/server/WritableReactiveDao";
 import { InstanceRecord } from "/lib/records/InstanceRecord";
-import Stoppable from "/lib/server/Stoppable";
+import Stoppable from "/lib/Stoppable";
 
 export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
     private newcallbacks: ((instancerecord: InstanceRecord) => void)[] = [];
@@ -10,7 +10,7 @@ export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
     private stopcallbacks: (() => void)[] = [];
 
     constructor(parent: Stoppable | null) {
-        super("logrecordsdao", parent, "instances");
+        super(parent, "instances");
     }
 
     public onNewInstance(func: (instancerecord: InstanceRecord) => void): void {

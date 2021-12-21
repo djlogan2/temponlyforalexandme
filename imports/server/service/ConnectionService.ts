@@ -4,32 +4,44 @@ import InstanceService from "/imports/server/service/InstanceService";
 import ConnectionDao from "/imports/server/dao/ConnectionDao";
 import { Mongo } from "meteor/mongo";
 import ServerConnection from "/lib/server/ServerConnection";
-import Stoppable from "/lib/server/Stoppable";
-import DirectMessageService from "/imports/server/service/DirectMessageService";
-import { AbstractDirectMessageProcessor } from "/lib/AbstractDirectMessageProcessor";
+import Stoppable from "/lib/Stoppable";
 
-export default class ConnectionService extends Stoppable implements AbstractDirectMessageProcessor {
+export default class ConnectionService extends Stoppable {
     private connectiondao: ConnectionDao;
 
     private instanceservice: InstanceService;
 
-    private directmessageservice: DirectMessageService;
-
     private connections: { [key: string]: ServerConnection } = {};
 
     // @ts-ignore
-    constructor(parent: Stoppable | null, instanceservice: InstanceService, directmessageservice: DirectMessageService, connectiondao: ConnectionDao) {
-        super("connectionservice", parent);
+    constructor(parent: Stoppable | null, instanceservice: InstanceService, connectiondao: ConnectionDao) {
+        super(parent);
         this.connectiondao = connectiondao;
         this.instanceservice = instanceservice;
-        this.directmessageservice = directmessageservice;
-
-        this.directmessageservice.onDirectMessage(this);
 
         Meteor.onConnection((connection) => this.onConnection(connection));
+
+        const self = this;
+
+        function processDirectStreamMessage(message: any, sessionId: string) {
+            try {
+                const msg = JSON.parse(message);
+                if (typeof msg !== "object" || !("iccdm" in msg)) return;
+                // @ts-ignore
+                // eslint-disable-next-line no-invalid-this
+                this.preventCallingMeteorHandler();
+                self.onDirectMessage(sessionId, msg.iccdm, msg.iccmsg);
+                // @ts-ignore
+            } catch (e) {
+                // If we cannot parse the string into an object, it's not for us.
+            }
+        }
+
+        // @ts-ignore
+        Meteor.directStream.onMessage(processDirectStreamMessage);
     }
 
-    public onDirectMessage(session: string, messagetype: string, msgobject: any): void {
+    private onDirectMessage(session: string, messagetype: string, msgobject: any): void {
         const connection = this.connections[session];
         if (!connection) {
             // TODO: Handle this error

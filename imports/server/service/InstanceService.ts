@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import InstanceDao from "/imports/server/dao/InstanceDao";
-import Stoppable from "/lib/server/Stoppable";
+import Stoppable from "/lib/Stoppable";
 import { InstanceRecord } from "/lib/records/InstanceRecord";
 
 export default class InstanceService extends Stoppable {
@@ -54,7 +54,7 @@ export default class InstanceService extends Stoppable {
     }
 
     constructor(parent: Stoppable | null, instancedao: InstanceDao) {
-        super("instanceservice", parent);
+        super(parent);
         this.instancedao = instancedao;
         this.sInstanceid = this.instancedao.insert({
             ipaddress: "",

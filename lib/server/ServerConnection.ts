@@ -1,11 +1,13 @@
 import ConnectionRecord from "/lib/records/ConnectionRecord";
-import Stoppable from "/lib/server/Stoppable";
-import AbstractDirectMessageHandler from "/lib/AbstractDirectMessageHandler";
+import Stoppable from "/lib/Stoppable";
+import AbstractTimestampNode from "../AbstractTimestampNode";
+import { PingMessage } from "../records/PingMessage";
+import { PongMessage } from "../records/PongMessage";
+import { PongResponse } from "../records/PongResponse";
+import { Meteor } from "meteor/meteor";
 
-export default class ServerConnection extends Stoppable {
+export default class ServerConnection extends AbstractTimestampNode {
     private connectionrecord: ConnectionRecord;
-
-    private registerdDirectMessages: {[key: string]: AbstractDirectMessageHandler<any>} = {};
 
     private closefunctions: (() => void)[] = [];
 
@@ -22,21 +24,19 @@ export default class ServerConnection extends Stoppable {
     }
 
     public handleDirectMessage(messagetype: string, message: any) {
-        const handler = this.registerdDirectMessages[messagetype];
-        if (!handler) {
-            // TODO: Handle this error
-            return;
+        switch (messagetype) {
+        case "ping":
+        case "pong":
+        case "rslt":
+            this.processIncomingMessage(message);
+            break;
+        default:
+            throw new Meteor.Error("UNKNOWN_DIRECT_MESSAGE", messagetype);
         }
-        handler.onReceived(message);
     }
 
-    protected registerDirectMessage<T>(name: string, node: AbstractDirectMessageHandler<T>) {
-        // TODO: Check for an already registered message
-        this.registerdDirectMessages[name] = node;
-    }
-
-    constructor(parent: Stoppable, connectionrecord: ConnectionRecord) {
-        super(`connection:${connectionrecord._id}`, parent);
+    constructor(parent: Stoppable | null, connectionrecord: ConnectionRecord) {
+        super(parent, 60);
         this.connectionrecord = connectionrecord;
     }
 
@@ -46,5 +46,18 @@ export default class ServerConnection extends Stoppable {
 
     public onClose(func: () => void): void {
         this.closefunctions.push(func);
+    }
+
+    protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
+        // @ts-ignore
+        Meteor.directStream.send(JSON.stringify({ iccdm: this.name, iccmsg: msg }), this.connectionid);
+    }
+
+    protected startReceiveWatcher(): void {
+        // Not necessary
+    }
+
+    protected stopReceiveWatcher(): void {
+        // Not necessary
     }
 }

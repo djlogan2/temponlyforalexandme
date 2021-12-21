@@ -1,15 +1,13 @@
 import { Mongo } from "meteor/mongo";
-import Stoppable from "/lib/server/Stoppable";
+import Stoppable from "/lib/Stoppable";
 
-// eslint-disable-next-line prefer-destructuring
-const ICCServer = global.ICCServer;
 
 export default abstract class MongoCollection<T> extends Stoppable {
     protected mongocollection: Mongo.Collection<T>;
 
-    constructor(identifier: string, collection: string, parent: Stoppable | null) {
-        super(identifier, parent);
-        if (!ICCServer.collections[collection]) {ICCServer.collections[collection] = new Mongo.Collection<T>(collection);}
-        this.mongocollection = ICCServer.collections[collection];
+    constructor(collection: string, parent: Stoppable | null) {
+        super(parent);
+        if (!global.ICCServer.collections[collection]) {global.ICCServer.collections[collection] = new Mongo.Collection<T>(collection);}
+        this.mongocollection = global.ICCServer.collections[collection];
     }
 }

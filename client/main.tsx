@@ -2,7 +2,6 @@ import { Meteor } from "meteor/meteor";
 import { render } from "react-dom";
 import * as React from "react";
 import App from "./app/App";
-import "../lib/client/global";
 
 // window.onerror = function myErrorHandler(
 //     message: Event | string,

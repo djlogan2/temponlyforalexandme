@@ -1,54 +1,16 @@
-import { i18n } from "meteor/universe:i18n";
-import * as React from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import ClientConnection from "/lib/client/ClientConnection";
+import Stoppable from "/lib/Stoppable";
 
-import I18N from "../../zold/client/clientI18n";
-import useEventEmitter from "../data/hooks/useEventEmitter";
-import { EEmitterEvents } from "../data/hooks/useEventEmitter/events";
-import AuthGuard from "./guards/authGuard";
-import NonAuthGuard from "./guards/nonAuthGuard";
-import { authRoutes, noAuthRoutes } from "./routes";
-import ClientICCServer from "../../zold/client/clienticcserver";
+class ClientServer extends Stoppable {
+    private connection: ClientConnection;
+    constructor() {
+        super(null);
+        this.connection = new ClientConnection(this);
+    }
 
-const App = () => {
-  const [isLocaleSetup, setIsLocaleSetup] = React.useState(false);
-
-  useEventEmitter({
-    event: EEmitterEvents.I18N_CHANGE,
-    tracker: I18N.subscribe,
-    shouldTrackerUnmount: true,
-  });
-
-  React.useEffect(() => {
-    i18n.onceChangeLocale(() => {
-      setIsLocaleSetup(true);
-    });
-  }, []);
-
-  const userId = ClientICCServer.getUserId();
-
-  return (
-    <>
-      {isLocaleSetup ? (
-        <Router>
-          <Switch>
-            {noAuthRoutes.map((route) => (
-              <NonAuthGuard key={route.path} auth={!!userId} {...route} />
-            ))}
-            {authRoutes.map((route) => (
-              <AuthGuard
-                roles={[]}
-                key={route.path}
-                auth={!!userId}
-                {...route}
-                currentRoles={[]}
-              />
-            ))}
-          </Switch>
-        </Router>
-      ) : null}
-    </>
-  );
+    protected stopping(): void {
+        throw new Error("Method not implemented.");
+    }
 };
 
-export default App;
+window.ClientServer = new ClientServer();
