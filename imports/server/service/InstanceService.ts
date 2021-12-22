@@ -2,8 +2,10 @@ import { Meteor } from "meteor/meteor";
 import InstanceDao from "/imports/server/dao/InstanceDao";
 import Stoppable from "/lib/Stoppable";
 import { InstanceRecord } from "/lib/records/InstanceRecord";
+import ServerLogger from "/lib/server/ServerLogger";
 
 export default class InstanceService extends Stoppable {
+    private logger = new ServerLogger("server/InstanceService");
     protected stopping(): void {
         Meteor.clearInterval(this.ourpinghandle);
         Meteor.clearInterval(this.ourdefuncthandle);

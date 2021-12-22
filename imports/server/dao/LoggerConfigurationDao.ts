@@ -1,53 +1,52 @@
 import WritableReactiveDao from "/lib/server/WritableReactiveDao";
 import Stoppable from "/lib/Stoppable";
-import { DEBUGLEVEL, LoggerConfigurationRecord, STRINGDEBUGLEVELS } from "/lib/records/LoggerConfigurationRecord";
+import { LoggerConfigurationRecord, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
+import EventEmitter from "eventemitter3";
 
 export default class LoggerConfigurationDao extends WritableReactiveDao<LoggerConfigurationRecord> {
-    private debugLevels: {[key: string]: DEBUGLEVEL} = {};
+    private emitter = new EventEmitter();
 
-    private moduleConversion: {[key: string]: string} = {};
+    private debugLevels: {[key: string]: LOGLEVEL} = { root: "debug" };
+
+    private idconversions: {[key: string]: string} = {};
+
+    public get events() {return this.emitter;}
 
     private constructor(parent: Stoppable) {
         super(parent, "logger_configuration");
-        this.debugLevels.root = "debug";
     }
 
     protected onRecordAdded(id: string, record: Partial<LoggerConfigurationRecord>): void {
-        if (record.module && record.debuglevel) {
-            this.debugLevels[record.module] = record.debuglevel;
-            this.moduleConversion[id] = record.module;
+        if (record?.module && record?.debuglevel) {
+            if (!this.debugLevels[record.module] || this.debugLevels[record.module] !== record.debuglevel) {
+                this.debugLevels[record.module] = record.debuglevel;
+                this.idconversions[id] = record.module;
+                this.emitter.emit(record.module, record.debuglevel);
+            }
         }
     }
 
     protected onFieldsChanged(id: string, record: Partial<LoggerConfigurationRecord>): void {
-        if (record.debuglevel) {
-            const modulename = this.moduleConversion[id];
-            if (modulename) this.debugLevels[modulename] = record.debuglevel;
+        if (record?.module && record?.debuglevel) {
+            if (!this.debugLevels[record.module] || this.debugLevels[record.module] !== record.debuglevel) {
+                this.debugLevels[record.module] = record.debuglevel;
+                this.idconversions[id] = record.module;
+                this.emitter.emit(record.module, record.debuglevel);
+            }
         }
     }
 
     protected onRecordRemoved(id: string): void {
-        const module = this.moduleConversion[id];
-        if (module) delete this.debugLevels[module];
-        delete this.moduleConversion[id];
+        const module = this.idconversions[id];
+        delete this.idconversions[id];
+        if (module) {
+            delete this.debugLevels[module];
+        }
+        this.emitter.emit(module, this.debugLevels.root);
     }
 
     // eslint-disable-next-line class-methods-use-this
     protected onStop(): void {
         // Nothing to do
     }
-
-    private static level(loglevel: DEBUGLEVEL): number {
-        return STRINGDEBUGLEVELS.indexOf(loglevel);
-    }
-
-    private moduleLevel(module: string): number {
-        const lvl = this.moduleConversion[module] || this.moduleConversion.root || "debug";
-        return LoggerConfigurationDao.level(lvl);
-    }
-
-    public writable(module: string, loglevel: DEBUGLEVEL): boolean {
-        return (LoggerConfigurationDao.level(loglevel) <= this.moduleLevel(module));
-    }
 }
-
