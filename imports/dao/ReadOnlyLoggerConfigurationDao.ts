@@ -1,9 +1,9 @@
-import WritableReactiveDao from "/lib/server/WritableReactiveDao";
 import Stoppable from "/lib/Stoppable";
 import { LoggerConfigurationRecord, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import EventEmitter from "eventemitter3";
+import ReactiveReadOnlyDao from "/lib/server/ReactiveReadOnlyDao";
 
-export default class LoggerConfigurationDao extends WritableReactiveDao<LoggerConfigurationRecord> {
+export default class ReadOnlyLoggerConfigurationDao extends ReactiveReadOnlyDao<LoggerConfigurationRecord> {
     private emitter = new EventEmitter();
 
     private debugLevels: {[key: string]: LOGLEVEL} = { root: "debug" };

@@ -1,19 +1,23 @@
 import { check } from "meteor/check";
-import LoggerConfigurationDao from "/imports/server/dao/LoggerConfigurationDao";
 import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
 import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { LOGGERTYPE, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
+import ReadOnlyLoggerConfigurationDao from "/imports/dao/ReadOnlyLoggerConfigurationDao";
+import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 
 export default class LoggerService {
-    private loggerconfigurationdao: LoggerConfigurationDao;
+    private readableconfigdao: ReadOnlyLoggerConfigurationDao;
+
+    private writeableconfigdao: WritableLoggerConfigurationDao;
 
     private loggerdao: LogRecordsDao;
 
-    public get events() {return this.loggerconfigurationdao.events;}
+    public get events() {return this.readableconfigdao.events;}
 
-    constructor(loggerconfigdao: LoggerConfigurationDao, loggerdao: LogRecordsDao) {
-        this.loggerconfigurationdao = loggerconfigdao;
+    constructor(loggerconfigdao: ReadOnlyLoggerConfigurationDao, writableconfigdao: WritableLoggerConfigurationDao, loggerdao: LogRecordsDao) {
+        this.readableconfigdao = loggerconfigdao;
+        this.writeableconfigdao = writableconfigdao;
         this.loggerdao = loggerdao;
         ServerLogger.setLoggerService(this);
 
@@ -40,5 +44,9 @@ export default class LoggerService {
         });
         const logstring = `${new Date().toDateString()} [${type.toUpperCase()}] [${userid || "NO-USERID"}] [${connection || "NO-CONNECTION"}] ${func()}`;
         console.log(logstring);
+    }
+
+    public changeDebugLevel(module: string, newlevel: LOGLEVEL): void {
+        this.writeableconfigdao.upsert({ module }, { $set: { debuglevel: newlevel } });
     }
 }

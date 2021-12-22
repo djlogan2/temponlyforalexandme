@@ -4,13 +4,14 @@ import { PongMessage } from "../records/PongMessage";
 import { PongResponse } from "../records/PongResponse";
 import AbstractTimestampNode from "/lib/AbstractTimestampNode";
 import Stoppable from "/lib/Stoppable";
+import ClientLogger from "/lib/client/ClientLogger";
 
 export default class ClientConnection extends AbstractTimestampNode {
     private connectionid: string = "none";
+    private logger = new ClientLogger("client/ClientConnection");
 
     constructor(parent: Stoppable | null) {
         super(parent, 60);
-        debugger;
         Meteor.startup(() => {
             // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
