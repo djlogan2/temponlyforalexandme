@@ -14,7 +14,7 @@ export default class ClientLogger extends CommonLogger {
         ClientLogger.loggerconfigdao = configdao;
     }
 
-    protected writeTolog(level: "fatal" | "error" | "warn" | "info" | "debug" | "trace", message: () => string, data?: unknown, userid?: string): void {
-        Meteor.call("writeToLog", this.identifier, level, message, data, userid);
+    protected writeTolog(level: "fatal" | "error" | "warn" | "info" | "debug" | "trace", message: () => string, data?: unknown): void {
+        Meteor.call("writeToLog", level, this.identifier, message(), data, Meteor.userId);
     }
 }
