@@ -22,7 +22,7 @@ export default abstract class CommonLogger {
     private get ourloglevel(): number {return CommonLogger.loglevelValue(this.identlevel);}
 
     private writable(requestedloglevel: LOGLEVEL): boolean {
-        return (this.ourloglevel < CommonLogger.loglevelValue(requestedloglevel));
+        return (this.ourloglevel >= CommonLogger.loglevelValue(requestedloglevel));
     }
 
     private log(level: LOGLEVEL, message: () => string, data?: unknown, userid?: string) {

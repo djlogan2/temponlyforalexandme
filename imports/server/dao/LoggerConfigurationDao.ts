@@ -12,7 +12,7 @@ export default class LoggerConfigurationDao extends WritableReactiveDao<LoggerCo
 
     public get events() {return this.emitter;}
 
-    private constructor(parent: Stoppable) {
+    constructor(parent: Stoppable | null) {
         super(parent, "logger_configuration");
     }
 

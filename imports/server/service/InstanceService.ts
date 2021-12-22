@@ -6,6 +6,7 @@ import ServerLogger from "/lib/server/ServerLogger";
 
 export default class InstanceService extends Stoppable {
     private logger = new ServerLogger("server/InstanceService");
+
     protected stopping(): void {
         Meteor.clearInterval(this.ourpinghandle);
         Meteor.clearInterval(this.ourdefuncthandle);
@@ -64,6 +65,8 @@ export default class InstanceService extends Stoppable {
             startupdate: new Date(),
         });
 
+        // dum-de-dum
+        this.logger.error(() => "Hello world!");
         this.ourpinghandle = this.startOurPing();
         this.ourdefuncthandle = this.watchForDefunctInstances();
     }
