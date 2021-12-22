@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import Stoppable from "/lib/Stoppable";
 import { Mongo } from "meteor/mongo";
-import ReadOnlyDao from "/lib/server/ReadOnlyDao";
+import ReadOnlyDao from "/lib/ReadOnlyDao";
 
 export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
     private observehandle?: Meteor.LiveQueryHandle;

@@ -57,6 +57,7 @@ export default class InstanceService extends Stoppable {
     }
 
     constructor(parent: Stoppable | null, instancedao: InstanceDao) {
+        // dum-de-dum
         super(parent);
         this.instancedao = instancedao;
         this.sInstanceid = this.instancedao.insert({

@@ -1,7 +1,7 @@
 import Stoppable from "/lib/Stoppable";
 import { LoggerConfigurationRecord, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import EventEmitter from "eventemitter3";
-import ReactiveReadOnlyDao from "/lib/server/ReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
 
 export default class ReadOnlyLoggerConfigurationDao extends ReactiveReadOnlyDao<LoggerConfigurationRecord> {
     private emitter = new EventEmitter();

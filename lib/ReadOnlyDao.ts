@@ -1,5 +1,5 @@
 import { Mongo } from "meteor/mongo";
-import MongoCollection from "/lib/server/MongoCollection";
+import MongoCollection from "/lib/MongoCollection";
 import { MongoFieldObject } from "/lib/server/MongoFieldObject";
 import Selector = Mongo.Selector;
 
