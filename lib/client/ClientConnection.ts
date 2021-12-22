@@ -15,13 +15,13 @@ export default class ClientConnection extends AbstractTimestampNode {
         Meteor.startup(() => {
             // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
+            this.logger.error(() => "Hey mr client!");
         });
 
         const self = this;
 
         function processDirectStreamMessage(message: any): void {
             try {
-                debugger;
                 const msg = JSON.parse(message);
                 if (typeof msg !== "object" || !("iccdm" in msg)) return;
                 // @ts-ignore

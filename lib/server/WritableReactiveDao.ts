@@ -1,5 +1,5 @@
 import { Mongo } from "meteor/mongo";
-import ReactiveReadOnlyDao from "/lib/server/ReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
 
 export default abstract class WritableReactiveDao<T> extends ReactiveReadOnlyDao<T> {
     public insert(record: Mongo.OptionalId<T>): string {
