@@ -85,6 +85,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         this.logger.debug(() => `PongResponseReceived: ${JSON.stringify(msg)}`);
         this.remotevalues.delay = msg.delay;
         this.remotevalues.clock_offset = msg.clock_offset;
+        this.logger.debug(() => `PRR localvalues=${JSON.stringify(this.localvalues)} remotevalues=${JSON.stringify(this.remotevalues)}`);
     }
 
     private ping(): void {

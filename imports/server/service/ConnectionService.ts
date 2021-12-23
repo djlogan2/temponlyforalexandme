@@ -26,7 +26,7 @@ export default class ConnectionService extends Stoppable {
 
         const self = this;
 
-        const processDirectStreamMessage = Meteor.bindEnvironment((message: string, sessionId: string) => {
+        function processDirectStreamMessage(message: string, sessionId: string) {
             try {
                 self.logger.debug(() => `processDirectMessage/1: ${message}`);
                 const msg = JSON.parse(message);
@@ -40,14 +40,16 @@ export default class ConnectionService extends Stoppable {
             } catch (e) {
                 // If we cannot parse the string into an object, it's not for us.
             }
-        });
+        };
 
         // @ts-ignore
         Meteor.directStream.onMessage(processDirectStreamMessage);
     }
 
     private onDirectMessage(session: string, messagetype: string, msgobject: any): void {
+        this.logger.debug(() => `onDirectMessage session=${session} messagetype=${messagetype} message=${JSON.stringify(msgobject)}`);
         const connection = this.connections[session];
+        this.logger.debug(() => `onDirectMessage connection=${connection}`);
         if (!connection) {
             // TODO: Handle this error
             return;
