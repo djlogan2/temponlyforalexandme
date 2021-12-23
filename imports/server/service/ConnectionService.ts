@@ -40,7 +40,7 @@ export default class ConnectionService extends Stoppable {
             } catch (e) {
                 // If we cannot parse the string into an object, it's not for us.
             }
-        };
+        }
 
         // @ts-ignore
         Meteor.directStream.onMessage(processDirectStreamMessage);

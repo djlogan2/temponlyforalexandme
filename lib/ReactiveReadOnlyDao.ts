@@ -16,13 +16,19 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
 
         let cursor;
 
-        if (fld) cursor = this.mongocollection.find(selector, fields);
+        if (fld) cursor = this.mongocollection.find(selector, fld);
         else cursor = this.mongocollection.find(selector);
 
         this.observehandle = cursor.observeChanges({
-            added(id, doc) {self.onRecordAdded(id, doc);},
-            changed(id, doc) {self.onFieldsChanged(id, doc);},
-            removed(id) {self.onRecordRemoved(id);},
+            added(id, doc) {
+                self.onRecordAdded(id, doc);
+            },
+            changed(id, doc) {
+                self.onFieldsChanged(id, doc);
+            },
+            removed(id) {
+                self.onRecordRemoved(id);
+            },
         });
     }
 

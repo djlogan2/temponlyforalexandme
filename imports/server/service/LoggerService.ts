@@ -23,6 +23,7 @@ export default class LoggerService {
         this.loggerdao = loggerdao;
         ServerLogger.setLoggerService(this);
         CommonLogger.getLogger = (identifier: string) => new ServerLogger(identifier);
+        this.readLoggerConfiguration();
 
         const self = this;
         Meteor.methods({
@@ -36,9 +37,22 @@ export default class LoggerService {
         });
     }
 
+    private readLoggerConfiguration(): void {
+        // @ts-ignore
+        const json = Assets.getText("logger_configuration.json");
+        if (json) {
+            const parsed = JSON.parse(json);
+            Object.entries(parsed).forEach(([module, level]) => {
+                const llLevel = (level as string).toLowerCase() as LOGLEVEL;
+                this.changeDebugLevel(module, llLevel);
+            });
+        }
+    }
+
     public writeToLog(level: LOGLEVEL, module: string, message: string, type: LOGGERTYPE, userid?: string | null, connection?: string): void {
         const date = new Date();
         const text = message;
+        // @ts-ignore
         const record: LogRecord = {
             level,
             module,

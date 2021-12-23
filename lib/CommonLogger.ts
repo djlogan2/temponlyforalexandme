@@ -33,6 +33,7 @@ export default abstract class CommonLogger {
     }
 
     private log(level: LOGLEVEL, message: () => string, data?: unknown, userid?: string) {
+        console.log(`TESTING our loglevel=${this.identlevel}, numerical=${this.ourloglevel}`);
         if (!this.writable(level)) return;
         this.writeTolog(level, message(), data, userid);
     }

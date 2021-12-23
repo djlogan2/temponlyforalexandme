@@ -14,6 +14,7 @@ export default class ReadOnlyLoggerConfigurationDao extends ReactiveReadOnlyDao<
 
     constructor(parent: Stoppable | null) {
         super(parent, "logger_configuration");
+        this.start({}, undefined, undefined);
     }
 
     protected onRecordAdded(id: string, record: Partial<LoggerConfigurationRecord>): void {
@@ -27,11 +28,12 @@ export default class ReadOnlyLoggerConfigurationDao extends ReactiveReadOnlyDao<
     }
 
     protected onFieldsChanged(id: string, record: Partial<LoggerConfigurationRecord>): void {
-        if (record?.module && record?.debuglevel) {
-            if (!this.debugLevels[record.module] || this.debugLevels[record.module] !== record.debuglevel) {
-                this.debugLevels[record.module] = record.debuglevel;
-                this.idconversions[id] = record.module;
-                this.emitter.emit(record.module, record.debuglevel);
+        if (record?.debuglevel) {
+            const module = record.module || this.idconversions[id];
+            if (!this.debugLevels[module] || this.debugLevels[module] !== record.debuglevel) {
+                this.debugLevels[module] = record.debuglevel;
+                if (record.module) this.idconversions[id] = record.module;
+                this.emitter.emit(module, record.debuglevel);
             }
         }
     }

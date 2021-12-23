@@ -4,6 +4,6 @@ import Stoppable from "/lib/Stoppable";
 
 export default class WritableLoggerConfigurationDao extends ReadWriteDao<LoggerConfigurationRecord> {
     constructor(parent: Stoppable | null) {
-        super("logger_config", parent);
+        super("logger_configuration", parent);
     }
 }

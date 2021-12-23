@@ -7,7 +7,7 @@ export default class ServerLogger extends CommonLogger {
 
     constructor(module: string) {
         super(module, "server");
-        ServerLogger.loggerservice.events.on(module, this.logLevelChanged);
+        ServerLogger.loggerservice.events.on(module, (newlevel: LOGLEVEL) => this.logLevelChanged(newlevel));
     }
 
     public static setLoggerService(loggerservice: LoggerService) {
