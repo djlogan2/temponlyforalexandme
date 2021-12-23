@@ -1,3 +1,4 @@
+import { Meteor } from "meteor/meteor";
 import { LOGGERTYPE, LOGLEVEL, logLevelStrings } from "/lib/records/LoggerConfigurationRecord";
 
 export default abstract class CommonLogger {
@@ -7,12 +8,18 @@ export default abstract class CommonLogger {
 
     protected identifier: string;
 
-    public get module() { return this.identifier;}
+    public get module() {return this.identifier;}
 
     constructor(identifier: string, clientServer: LOGGERTYPE) {
         this.identifier = identifier;
         this.type = clientServer;
         this.identlevel = "debug";
+    }
+
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public static getLogger(identifier: string): CommonLogger {
+        throw new Meteor.Error("getLogger needs to be replaced");
     }
 
     private static loglevelValue(loglevel: LOGLEVEL): number {

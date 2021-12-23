@@ -8,14 +8,16 @@ import ClientLogger from "/lib/client/ClientLogger";
 
 export default class ClientConnection extends AbstractTimestampNode {
     private connectionid: string = "none";
-    private logger = new ClientLogger("client/ClientConnection");
+
+    private logger2 = new ClientLogger("client/ClientConnection");
 
     constructor(parent: Stoppable | null) {
         super(parent, 60);
+        this.logger2.debug(() => "constructor");
         Meteor.startup(() => {
             // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
-            this.logger.error(() => "Hey mr client!");
+            this.logger2.debug(() => `connection id=${this.connectionid}`);
         });
 
         const self = this;
@@ -24,6 +26,7 @@ export default class ClientConnection extends AbstractTimestampNode {
             try {
                 const msg = JSON.parse(message);
                 if (typeof msg !== "object" || !("iccdm" in msg)) return;
+                self.logger2.debug(() => `processDirectStreamMessage: ${message}`);
                 // @ts-ignore
                 // eslint-disable-next-line no-invalid-this
                 this.preventCallingMeteorHandler();
@@ -36,9 +39,11 @@ export default class ClientConnection extends AbstractTimestampNode {
 
         // @ts-ignore
         Meteor.directStream.onMessage(processDirectStreamMessage);
+        this.start();
     }
 
     private onDirectMessage(messagetype: string, message: any) {
+        this.logger2.debug(() => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`);
         switch (messagetype) {
         case "ping":
         case "pong":
@@ -52,19 +57,8 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     // eslint-disable-next-line class-methods-use-this
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
+        this.logger2.debug(() => `sendFunction msg=${JSON.stringify(msg)}`);
         // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
-    }
-
-    // @ts-ignore
-    // eslint-disable-next-line class-methods-use-this
-    protected startReceiveWatcher(): void {
-        // handled via directstream
-    }
-
-    // @ts-ignore
-    // eslint-disable-next-line class-methods-use-this
-    protected stopReceiveWatcher(): void {
-        // handled via directstream, so no need
     }
 }

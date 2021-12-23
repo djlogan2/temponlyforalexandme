@@ -5,6 +5,7 @@ import ConnectionDao from "/imports/server/dao/ConnectionDao";
 import { Mongo } from "meteor/mongo";
 import ServerConnection from "/lib/server/ServerConnection";
 import Stoppable from "/lib/Stoppable";
+import ServerLogger from "/lib/server/ServerLogger";
 
 export default class ConnectionService extends Stoppable {
     private connectiondao: ConnectionDao;
@@ -12,6 +13,8 @@ export default class ConnectionService extends Stoppable {
     private instanceservice: InstanceService;
 
     private connections: { [key: string]: ServerConnection } = {};
+
+    private logger = new ServerLogger("server/ConnectionService_ts");
 
     // @ts-ignore
     constructor(parent: Stoppable | null, instanceservice: InstanceService, connectiondao: ConnectionDao) {
@@ -25,8 +28,10 @@ export default class ConnectionService extends Stoppable {
 
         function processDirectStreamMessage(message: any, sessionId: string) {
             try {
+                self.logger.debug(() => `processDirectMessage/1: ${message}`);
                 const msg = JSON.parse(message);
                 if (typeof msg !== "object" || !("iccdm" in msg)) return;
+                self.logger.debug(() => `processDirectMessage: ${message}`);
                 // @ts-ignore
                 // eslint-disable-next-line no-invalid-this
                 this.preventCallingMeteorHandler();
@@ -57,6 +62,7 @@ export default class ConnectionService extends Stoppable {
     }
 
     private onConnection(connection: Meteor.Connection): void {
+        this.logger.debug(() => `onConnection connection=${connection.id}`);
         const connrecord: Mongo.OptionalId<ConnectionRecord> = {
             connectionid: connection.id,
             instanceid: this.instanceservice.instanceid,

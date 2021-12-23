@@ -5,6 +5,7 @@ import ServerLogger from "/lib/server/ServerLogger";
 import { LOGGERTYPE, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import ReadOnlyLoggerConfigurationDao from "/imports/dao/ReadOnlyLoggerConfigurationDao";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
+import CommonLogger from "/lib/CommonLogger";
 
 export default class LoggerService {
     private readableconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -20,10 +21,12 @@ export default class LoggerService {
         this.writeableconfigdao = writableconfigdao;
         this.loggerdao = loggerdao;
         ServerLogger.setLoggerService(this);
+        CommonLogger.getLogger = (identifier: string) => new ServerLogger(identifier);
 
         const self = this;
         Meteor.methods({
-            writeToLog(level: LOGLEVEL, module: string, message: string) {
+            writeToLog(module: string, level: LOGLEVEL, message: string) {
+                check(module, String);
                 check(level, String);
                 check(module, String);
                 check(message, String);
@@ -32,17 +35,19 @@ export default class LoggerService {
         });
     }
 
-    public writeToLog(level: LOGLEVEL, module: string, func: () => string, type: LOGGERTYPE, userid?: string | null, connection?: string): void {
+    public writeToLog(level: LOGLEVEL, module: string, message: () => string, type: LOGGERTYPE, userid?: string | null, connection?: string): void {
         const date = new Date();
-        const text = func();
+        const text = message();
         this.loggerdao.insert({
+            level,
+            module,
             type,
             date,
             userid,
             connection,
             text,
         });
-        const logstring = `${new Date().toDateString()} [${type.toUpperCase()}] [${userid || "NO-USERID"}] [${connection || "NO-CONNECTION"}] ${func()}`;
+        const logstring = `${new Date().toDateString()} ${type.toUpperCase()} ${userid || "-"} ${connection || "-"} ${module} ${level} ${text}`;
         console.log(logstring);
     }
 
