@@ -6,6 +6,7 @@ import { LOGGERTYPE, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import ReadOnlyLoggerConfigurationDao from "/imports/dao/ReadOnlyLoggerConfigurationDao";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 import CommonLogger from "/lib/CommonLogger";
+import { LogRecord } from "/lib/records/LogRecord";
 
 export default class LoggerService {
     private readableconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -30,23 +31,24 @@ export default class LoggerService {
                 check(level, String);
                 check(module, String);
                 check(message, String);
-                self.writeToLog(level, module, () => message, "client", this.userId, this.connection?.id);
+                self.writeToLog(level, module, message, "client", this.userId, this.connection?.id);
             },
         });
     }
 
-    public writeToLog(level: LOGLEVEL, module: string, message: () => string, type: LOGGERTYPE, userid?: string | null, connection?: string): void {
+    public writeToLog(level: LOGLEVEL, module: string, message: string, type: LOGGERTYPE, userid?: string | null, connection?: string): void {
         const date = new Date();
-        const text = message();
-        this.loggerdao.insert({
+        const text = message;
+        const record: LogRecord = {
             level,
             module,
             type,
             date,
-            userid,
-            connection,
             text,
-        });
+        };
+        if (userid) record.userid = userid;
+        if (connection) record.connection = connection;
+        this.loggerdao.insert(record);
         const logstring = `${new Date().toDateString()} ${type.toUpperCase()} ${userid || "-"} ${connection || "-"} ${module} ${level} ${text}`;
         console.log(logstring);
     }

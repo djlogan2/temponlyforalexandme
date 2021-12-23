@@ -26,7 +26,7 @@ export default class ConnectionService extends Stoppable {
 
         const self = this;
 
-        function processDirectStreamMessage(message: any, sessionId: string) {
+        const processDirectStreamMessage = Meteor.bindEnvironment((message: string, sessionId: string) => {
             try {
                 self.logger.debug(() => `processDirectMessage/1: ${message}`);
                 const msg = JSON.parse(message);
@@ -40,7 +40,7 @@ export default class ConnectionService extends Stoppable {
             } catch (e) {
                 // If we cannot parse the string into an object, it's not for us.
             }
-        }
+        });
 
         // @ts-ignore
         Meteor.directStream.onMessage(processDirectStreamMessage);

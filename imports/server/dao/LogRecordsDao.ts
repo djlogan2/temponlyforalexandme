@@ -1,4 +1,4 @@
-import { ReadWriteDao } from "/lib/server/ReadWriteDao";
+import ReadWriteDao from "/lib/server/ReadWriteDao";
 import { LogRecord } from "/lib/records/LogRecord";
 import Stoppable from "/lib/Stoppable";
 

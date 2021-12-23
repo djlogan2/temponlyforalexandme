@@ -14,7 +14,7 @@ export default class ServerLogger extends CommonLogger {
         ServerLogger.loggerservice = loggerservice;
     }
 
-    protected writeTolog(level: LOGLEVEL, message: () => string /* , data?: unknown, userid?: string*/): void {
+    protected writeTolog(level: LOGLEVEL, message: string /* , data?: unknown, userid?: string*/): void {
         ServerLogger.loggerservice.writeToLog(level, this.identifier, message, "server");
     }
 }

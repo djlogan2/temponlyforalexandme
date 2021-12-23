@@ -42,6 +42,7 @@ export default class ServerConnection extends AbstractTimestampNode {
 
     constructor(parent: Stoppable | null, connectionrecord: ConnectionRecord) {
         super(parent, 60);
+        this.logger2.debug(() => `constructor: ${JSON.stringify(connectionrecord)}`);
         this.connectionrecord = connectionrecord;
         this.start();
     }

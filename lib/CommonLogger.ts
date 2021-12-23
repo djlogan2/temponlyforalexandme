@@ -34,12 +34,12 @@ export default abstract class CommonLogger {
 
     private log(level: LOGLEVEL, message: () => string, data?: unknown, userid?: string) {
         if (!this.writable(level)) return;
-        this.writeTolog(level, message, data, userid);
+        this.writeTolog(level, message(), data, userid);
     }
 
     protected abstract writeTolog(
         level: LOGLEVEL,
-        message: () => string,
+        message: string,
         data?: unknown,
         userid?: string
     ): void;

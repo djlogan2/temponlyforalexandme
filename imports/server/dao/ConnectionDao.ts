@@ -1,4 +1,4 @@
-import {ReadWriteDao} from "/lib/server/ReadWriteDao";
+import ReadWriteDao from "/lib/server/ReadWriteDao";
 import ConnectionRecord from "/lib/records/ConnectionRecord";
 import Stoppable from "../../../lib/Stoppable";
 

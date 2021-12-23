@@ -1,7 +1,7 @@
 import { Mongo } from "meteor/mongo";
 import ReadOnlyDao from "/lib/ReadOnlyDao";
 
-export class ReadWriteDao<T> extends ReadOnlyDao<T> {
+export default class ReadWriteDao<T> extends ReadOnlyDao<T> {
     public insert(record: Mongo.OptionalId<T>): string {
         return this.mongocollection.insert(record);
     }
