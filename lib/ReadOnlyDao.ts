@@ -1,19 +1,17 @@
 import { Mongo } from "meteor/mongo";
 import MongoCollection from "/lib/MongoCollection";
-import { MongoFieldObject } from "/lib/server/MongoFieldObject";
 import Selector = Mongo.Selector;
 
 export default class ReadOnlyDao<T> extends MongoCollection<T> {
     // eslint-disable-next-line class-methods-use-this
-    protected stopping(): void {
-        // Nothing to do
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    protected fields(includeOrExclude: "include" | "exclude" | undefined, fields: [keyof T] | undefined): MongoFieldObject<T> | undefined {
-        if (!fields) return;
-        const fld: MongoFieldObject<T> = { fields: {} };
-        fields.forEach((f) => {fld.fields[f] = includeOrExclude === "include";});
+    protected fields(includeOrExclude: "include" | "exclude" | undefined, fields?: (keyof T)[]): null | Mongo.Options<T> {
+        if (!fields) return null;
+        const fld: Mongo.Options<T> = { fields: {} };
+        fields.forEach((f) => {
+            // TODO: Why does typescript say fld.fields might be undefined????
+            // @ts-ignore
+            fld.fields[(f as string)] = includeOrExclude === "include" ? 1 : 0;
+        });
         return fld;
     }
 
@@ -21,15 +19,15 @@ export default class ReadOnlyDao<T> extends MongoCollection<T> {
         return this.readOne({ _id: id } as Selector<T>, undefined, undefined);
     }
 
-    public readOne(selector: Mongo.Selector<T>, includeOrExclude: "include" | "exclude" | undefined, fields: [keyof T] | undefined): T | undefined {
+    public readOne(selector: Mongo.Selector<T>, includeOrExclude?: "include" | "exclude", fields?: (keyof T)[]): T | undefined {
         const fld = this.fields(includeOrExclude, fields);
-        if (fld) return this.mongocollection.findOne(selector, fields);
+        if (fld) return this.mongocollection.findOne(selector, fld);
         return this.mongocollection.findOne(selector);
     }
 
-    public readMany(selector: Mongo.Selector<T>, includeOrExclude: "include" | "exclude" | undefined, fields: [keyof T] | undefined): T[] | undefined {
+    public readMany(selector: Mongo.Selector<T>, includeOrExclude?: "include" | "exclude", fields?: (keyof T)[]): T[] | undefined {
         const fld = this.fields(includeOrExclude, fields);
-        if (fld) return this.mongocollection.find(selector, fields).fetch();
+        if (fld) return this.mongocollection.find(selector, fld).fetch();
         return this.mongocollection.find(selector).fetch();
     }
 }

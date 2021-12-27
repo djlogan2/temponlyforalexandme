@@ -28,7 +28,7 @@ export default class ServerConnection extends AbstractTimestampNode {
     }
 
     public handleDirectMessage(messagetype: string, message: any) {
-        this.logger2.debug(() => `${this.connectionid} handleDirectMessage: ${messagetype}: ${JSON.stringify(message)}`);
+        this.logger2.trace(() => `${this.connectionid} handleDirectMessage: ${messagetype}: ${JSON.stringify(message)}`);
         switch (messagetype) {
         case "ping":
         case "pong":
@@ -42,12 +42,12 @@ export default class ServerConnection extends AbstractTimestampNode {
 
     constructor(parent: Stoppable | null, connectionrecord: ConnectionRecord) {
         super(parent, 60);
-        this.logger2.debug(() => `constructor: ${JSON.stringify(connectionrecord)}`);
+        this.logger2.trace(() => `constructor: ${JSON.stringify(connectionrecord)}`);
         this.connectionrecord = connectionrecord;
         this.start();
     }
 
-    public closing(): void {
+    private closing(): void {
         this.logger2.debug(() => `${this.connectionid} closing`);
         this.closefunctions.forEach((func) => func());
     }
@@ -58,7 +58,7 @@ export default class ServerConnection extends AbstractTimestampNode {
     }
 
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
-        this.logger2.debug(() => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`);
+        this.logger2.trace(() => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`);
         // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }), this.connectionid);
     }

@@ -16,7 +16,6 @@ export default class ConnectionService extends Stoppable {
 
     private logger = new ServerLogger("server/ConnectionService_ts");
 
-    // @ts-ignore
     constructor(parent: Stoppable | null, instanceservice: InstanceService, connectiondao: ConnectionDao) {
         super(parent);
         this.connectiondao = connectiondao;
@@ -28,15 +27,14 @@ export default class ConnectionService extends Stoppable {
 
         function processDirectStreamMessage(message: string, sessionId: string) {
             try {
-                self.logger.debug(() => `processDirectMessage/1: ${message}`);
+                self.logger.trace(() => `processDirectMessage/1: ${message}`);
                 const msg = JSON.parse(message);
                 if (typeof msg !== "object" || !("iccdm" in msg)) return;
-                self.logger.debug(() => `processDirectMessage: ${message}`);
+                self.logger.trace(() => `processDirectMessage: ${message}`);
                 // @ts-ignore
                 // eslint-disable-next-line no-invalid-this
                 this.preventCallingMeteorHandler();
                 self.onDirectMessage(sessionId, msg.iccdm, msg.iccmsg);
-                // @ts-ignore
             } catch (e) {
                 // If we cannot parse the string into an object, it's not for us.
             }
@@ -47,9 +45,9 @@ export default class ConnectionService extends Stoppable {
     }
 
     private onDirectMessage(session: string, messagetype: string, msgobject: any): void {
-        this.logger.debug(() => `onDirectMessage session=${session} messagetype=${messagetype} message=${JSON.stringify(msgobject)}`);
+        this.logger.trace(() => `onDirectMessage session=${session} messagetype=${messagetype} message=${JSON.stringify(msgobject)}`);
         const connection = this.connections[session];
-        this.logger.debug(() => `onDirectMessage connection=${connection}`);
+        this.logger.trace(() => `onDirectMessage connection=${connection}`);
         if (!connection) {
             // TODO: Handle this error
             return;
@@ -58,13 +56,14 @@ export default class ConnectionService extends Stoppable {
     }
 
     private onClose(ourconnection: ServerConnection): void {
-        ourconnection.closing();
+        this.logger.debug(() => `${ourconnection.connectionid} onClose`);
+        ourconnection.stop();
         delete this.connections[ourconnection.connectionid];
         this.connectiondao.remove(ourconnection._id);
     }
 
     private onConnection(connection: Meteor.Connection): void {
-        this.logger.debug(() => `onConnection connection=${connection.id}`);
+        this.logger.trace(() => `onConnection connection=${connection.id}`);
         const connrecord: Mongo.OptionalId<ConnectionRecord> = {
             connectionid: connection.id,
             instanceid: this.instanceservice.instanceid,

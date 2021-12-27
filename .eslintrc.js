@@ -3,14 +3,16 @@ module.exports = {
         browser: true,
         es2021: true,
         meteor: true,
+        mocha: true,
     },
-    plugins: ["react", "@typescript-eslint"],
+    plugins: ["react", "@typescript-eslint", "chai-friendly"],
     extends: [
         "eslint:recommended",
         "@meteorjs/eslint-config-meteor",
         "plugin:react/recommended",
         "google",
         "plugin:react/recommended",
+        "plugin:chai-friendly/recommended",
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
@@ -26,7 +28,7 @@ module.exports = {
         // "consistent-return": "off",
         // "@typescript-eslint/consistent-return": ["error"],
         "import/no-unresolved": ["error", { ignore: ["^meteor/", "^/"] }],
-        "max-len": ["error", { code: 256 }],
+        "max-len": ["error", { code: 2048 }],
         "no-underscore-dangle": ["error", { allow: ["_id", "_lastSessionId"] }],
         "react/jsx-filename-extension": [
             2,

@@ -13,11 +13,11 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     constructor(parent: Stoppable | null) {
         super(parent, 60);
-        this.logger2.debug(() => "constructor");
+        this.logger2.trace(() => "constructor");
         Meteor.startup(() => {
             // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
-            this.logger2.debug(() => `connection id=${this.connectionid}`);
+            this.logger2.trace(() => `connection id=${this.connectionid}`);
         });
 
         const self = this;
@@ -26,7 +26,7 @@ export default class ClientConnection extends AbstractTimestampNode {
             try {
                 const msg = JSON.parse(message);
                 if (typeof msg !== "object" || !("iccdm" in msg)) return;
-                self.logger2.debug(() => `processDirectStreamMessage: ${message}`);
+                self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
                 // @ts-ignore
                 // eslint-disable-next-line no-invalid-this
                 this.preventCallingMeteorHandler();
@@ -43,7 +43,7 @@ export default class ClientConnection extends AbstractTimestampNode {
     }
 
     private onDirectMessage(messagetype: string, message: any) {
-        this.logger2.debug(() => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`);
+        this.logger2.trace(() => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`);
         switch (messagetype) {
         case "ping":
         case "pong":
@@ -57,7 +57,7 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     // eslint-disable-next-line class-methods-use-this
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
-        this.logger2.debug(() => `sendFunction msg=${JSON.stringify(msg)}`);
+        this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
         // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
     }

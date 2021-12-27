@@ -23,7 +23,7 @@
     },
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "types": ["node"],
+    "types": ["node", "mocha"],
     "esModuleInterop": true,
     "preserveSymlinks": true
   },

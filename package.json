@@ -6,14 +6,14 @@
     "start": "meteor run",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "client-tests": "jest"
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
     "eventemitter3": "^4.0.7",
     "formik": "^2.2.9",
     "ip": "^1.1.5",
+    "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.1.0",
     "react": "^17.0.2",
@@ -27,41 +27,42 @@
     "mainModule": {
       "client": "client/main.tsx",
       "server": "server/main.ts"
-    },
-    "testModule": "tests/main.ts"
+    }
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "@meteorjs/eslint-config-meteor": "^1.0.5",
     "@testing-library/dom": "^8.11.1",
-    "@testing-library/jest-dom": "^5.16.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.0.3",
+    "@types/chai": "^4.3.0",
     "@types/lodash": "^4.14.177",
     "@types/meteor": "^1.4.84",
     "@types/meteor-universe-i18n": "^1.14.6",
+    "@types/mocha": "^9.0.0",
     "@types/react": "^17.0.35",
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.2",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "babel-eslint": "^10.1.0",
+    "chai": "^4.3.4",
+    "chromedriver": "^96.0.0",
     "eslint": "^8.3.0",
     "eslint-config-airbnb": "^19.0.2",
     "eslint-config-google": "^0.14.0",
     "eslint-import-resolver-meteor": "^0.4.0",
+    "eslint-plugin-chai-friendly": "^0.7.2",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-meteor": "^7.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "jest": "^27.4.3",
     "prettier": "^2.5.1",
-    "ts-jest": "^27.0.7",
+    "selenium-webdriver": "^3.0.0-beta-2",
     "typescript": "^4.5.2"
   },
   "babel": {
@@ -70,15 +71,5 @@
       "@babel/preset-react"
     ],
     "plugins": []
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/client/app/setupTests.ts"
-    ],
-    "moduleNameMapper": {
-      "^meteor/universe:i18n$": "<rootDir>/client/app/stubs/meteor/universe:i18n.ts"
-    }
   }
 }
