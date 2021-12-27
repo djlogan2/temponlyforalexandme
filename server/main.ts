@@ -9,8 +9,7 @@ import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerCo
 
 const parent = null;
 
-
-if (!global.ICCServer) global.ICCServer = { collections: {}, dao: {}, singletons: {} };
+if (!global.ICCServer) global.ICCServer = { collections: {}, singletons: {} };
 const readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
 const writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
 const logrecordsdao = new LogRecordsDao(null);
