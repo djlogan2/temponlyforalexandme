@@ -12,7 +12,7 @@ interface TestRecord {
     data3: string;
 }
 
-if (!global.ICCServer) global.ICCServer = { collections: {}, singletons: {} };
+if (!global.ICCServer) global.ICCServer = { collections: {} };
 if (!global.ICCServer.collections.readonlydaotest) global.ICCServer.collections.readonlydaotest = new Mongo.Collection<TestRecord>("readonlydaotest");
 
 function insert(): Promise<void[]> {

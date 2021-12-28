@@ -12,7 +12,7 @@ interface TestRecord {
     data3: string;
 }
 
-if (!global.ICCServer) global.ICCServer = { collections: {}, singletons: {} };
+if (!global.ICCServer) global.ICCServer = { collections: {} };
 Meteor.subscribe("readonlydaotest");
 
 describe("ReadOnlyDao", function() {

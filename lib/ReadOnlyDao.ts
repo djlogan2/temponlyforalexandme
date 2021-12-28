@@ -1,4 +1,4 @@
-import { Mongo } from "meteor/mongo";
+import {Mongo} from "meteor/mongo";
 import MongoCollection from "/lib/MongoCollection";
 import Selector = Mongo.Selector;
 
@@ -47,7 +47,6 @@ export default class ReadOnlyDao<T> extends MongoCollection<T> {
     public readMany(selector: Mongo.Selector<T>, includeOrExclude?: "include" | "exclude", fields?: (keyof T)[]): T[] | undefined {
         const fld = this.fields(includeOrExclude, fields);
         if (fld) return this.mongocollection.find(selector, fld).fetch();
-        const test = this.mongocollection.find(selector).fetch();
-        return test;
+        return this.mongocollection.find(selector).fetch();
     }
 }

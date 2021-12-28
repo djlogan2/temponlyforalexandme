@@ -23,6 +23,7 @@ export default class ServerConnection extends AbstractTimestampNode {
     }
 
     protected stopping(): void {
+        super.stopping();
         this.logger2.debug(() => `${this.connectionid} stopping`);
         this.closing();
     }
