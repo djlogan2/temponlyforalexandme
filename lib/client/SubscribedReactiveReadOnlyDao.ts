@@ -1,17 +1,17 @@
-import ReadOnlyDao from "/lib/ReadOnlyDao";
-import EventEmitter from "eventemitter3";
 import Stoppable from "/lib/Stoppable";
 import SubscriptionEventEmitter from "/lib/client/SubscriptionEventEmitter";
+import ICCEventEmitter from "/lib/ICCEventEmitter";
+import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
 
-export default class SubscribedReadOnlyDao<T> extends ReadOnlyDao<T> {
-    private events: EventEmitter;
+export default abstract class SubscribedReactiveReadOnlyDao<T> extends ReactiveReadOnlyDao<T> {
+    private events: ICCEventEmitter;
 
     constructor(publicationname: string, collection: string, parent: Stoppable | null) {
-        super(collection, parent);
+        super(parent, collection);
         this.events = SubscriptionEventEmitter.getSubscriptionEventEmitter(publicationname);
     }
 
     protected stopping(): void {
-        throw new Error("Method not implemented.");
+        this.events.removeAllListeners();
     }
 }

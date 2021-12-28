@@ -108,23 +108,14 @@ describe("PooledEventEmitter", function() {
         });
     });
 
-    describe("onFirstEvent", function() {});
-    describe("onLastEvent", function() {});
-    //    public newEmitter(): ICCEventEmitter {
-    //         return ICCEventEmitter.getNew(this);
-    //     }
-    //
-    //     public addActiveEmitter(): void {
-    //         if (!this.count) this.onFirstEvent();
-    //         this.count += 1;
-    //     }
-    //
-    //     public removeActiveEmitter(): void {
-    //         this.count -= 1;
-    //         if (!this.count) this.onLastEvent();
-    //     }
-    //
-    //     protected abstract onFirstEvent(): void;
-    //
-    //     protected abstract onLastEvent(): void;
+    describe("ICCEventEmitter", function(){
+        it("should work correctly when an event is emitted", function(done) {
+            const pool = new TestPooledEventEmitter();
+            const emitter = pool.newEmitter();
+            expect(emitter).to.be.an.instanceof(ICCEventEmitter);
+            expect(pool.onFrstEventCalled).to.equal(0);
+            emitter.on("testevent", () => {emitter.removeAllListeners(); done();});
+            emitter.emit("testevent");
+        });
+    });
 });
