@@ -49,4 +49,10 @@ export default class ReadOnlyDao<T> extends MongoCollection<T> {
         if (fld) return this.mongocollection.find(selector, fld).fetch();
         return this.mongocollection.find(selector).fetch();
     }
+
+    // @ts-ignore
+    // eslint-disable-next-line class-methods-use-this
+    protected stopping(): void {
+        // Nothing for us to stop here
+    }
 }

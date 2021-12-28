@@ -42,6 +42,7 @@ describe("ReactiveReadOnlyDao", function() {
     });
 
     it("should call onRecordAdded when a record is added", function(done) {
+        this.timeout(10000);
         const dao = new TestReactiveReadOnlyDao();
         const fn = function(id: string, record: Partial<TestRecord>) {
             expect(id).to.equal("found1");
@@ -51,11 +52,14 @@ describe("ReactiveReadOnlyDao", function() {
             done();
         };
         dao.events.on("added", fn);
-        Meteor.call("reactivereadonlydaotest");
+        Meteor.call("reactivereadonlydaotest", "add");
     });
 
     it("should call onRecordAdded when a record is changed", function(done) {
         const dao = new TestReactiveReadOnlyDao();
+        const added = function(id: string, record: Partial<TestRecord>) {
+            Meteor.call("reactivereadonlydaotest", "change");
+        }
         const fn = function(id: string, record: Partial<TestRecord>) {
             expect(id).to.equal("found1");
             expect(record).to.deep.equal({ data: "data3" });
@@ -63,19 +67,28 @@ describe("ReactiveReadOnlyDao", function() {
             dao.stop();
             done();
         };
+        dao.events.on("added", added);
         dao.events.on("changed", fn);
-        Meteor.call("reactivereadonlydaotest");
+        Meteor.call("reactivereadonlydaotest", "add");
     });
 
     it("should call onRecordAdded when a record is removed", function(done) {
         const dao = new TestReactiveReadOnlyDao();
+        const added = function(id: string, record: Partial<TestRecord>) {
+            Meteor.call("reactivereadonlydaotest", "change");
+        }
+        const change = function(id: string, record: Partial<TestRecord>) {
+            Meteor.call("reactivereadonlydaotest", "remove");
+        }
         const fn = function(id: string) {
             expect(id).to.equal("found1");
             dao.events.off("removed", fn);
             dao.stop();
             done();
         };
+        dao.events.on("added", added);
+        dao.events.on("changed", change);
         dao.events.on("removed", fn);
-        Meteor.call("reactivereadonlydaotest");
+        Meteor.call("reactivereadonlydaotest", "add");
     });
 });
