@@ -14,7 +14,7 @@ export default class ICCEventEmitter {
         return new ICCEventEmitter(pool);
     }
 
-    public on(event: string, fn: () => void): void {
+    public on(event: string, fn: (...args: any[]) => void): void {
         if (!this.emitter.eventNames().length) this.pool.addActiveEmitter();
         this.emitter.on(event, fn);
     }
@@ -30,7 +30,7 @@ export default class ICCEventEmitter {
         if (!this.emitter.eventNames().length) this.pool.removeActiveEmitter();
     }
 
-    public emit(event: string): void {
-        this.emitter.emit(event);
+    public emit(event: string, ...args: any[]): void {
+        this.emitter.emit(event, args);
     }
 }

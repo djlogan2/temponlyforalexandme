@@ -19,6 +19,10 @@ export default abstract class CommonLogger {
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public static getLogger(identifier: string): CommonLogger {
+        //
+        // This method is designed to be overridden on the client and the server,
+        // so that we can create client/server specific loggers without having to
+        // know if we are on the client or the server
         throw new Meteor.Error("getLogger needs to be replaced");
     }
 

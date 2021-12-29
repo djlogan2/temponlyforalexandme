@@ -1,6 +1,6 @@
 import CommonLogger from "/lib/CommonLogger";
-import ReadOnlyLoggerConfigurationDao from "/imports/dao/ReadOnlyLoggerConfigurationDao";
 import { Meteor } from "meteor/meteor";
+import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 
 export default class ClientLogger extends CommonLogger {
     private static loggerconfigdao: ReadOnlyLoggerConfigurationDao;

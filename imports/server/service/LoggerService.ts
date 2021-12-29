@@ -3,10 +3,10 @@ import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
 import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { LOGGERTYPE, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
-import ReadOnlyLoggerConfigurationDao from "/imports/dao/ReadOnlyLoggerConfigurationDao";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 import CommonLogger from "/lib/CommonLogger";
 import { LogRecord } from "/lib/records/LogRecord";
+import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 
 export default class LoggerService {
     private readableconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -26,6 +26,8 @@ export default class LoggerService {
         this.readLoggerConfiguration();
 
         const self = this;
+        // TODO: Maybe fix this? Maybe not? Not sure, since we already have a Meteor.methods in here anyway
+        Meteor.publish("logger_configuration", () => global.ICCServer.collections.logger_configuration.find());
         Meteor.methods({
             writeToLog(module: string, level: LOGLEVEL, message: string) {
                 check(module, String);

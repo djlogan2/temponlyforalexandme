@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
 import EventEmitter from "eventemitter3";
 import { expect } from "chai";

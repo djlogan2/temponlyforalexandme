@@ -4,8 +4,8 @@ import ConnectionService from "/imports/server/service/ConnectionService";
 import ConnectionDao from "/imports/server/dao/ConnectionDao";
 import LoggerService from "/imports/server/service/LoggerService";
 import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
-import ReadOnlyLoggerConfigurationDao from "/imports/dao/ReadOnlyLoggerConfigurationDao";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
+import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 
 const parent = null;
 
