@@ -9,7 +9,7 @@ interface TestRecord {
     upsertkey?: string;
 }
 
-describe.only("ReadWriteDao", function() {
+describe("ReadWriteDao", function() {
     beforeEach(function(done) {
         resetDatabase(null, () => done());
     });

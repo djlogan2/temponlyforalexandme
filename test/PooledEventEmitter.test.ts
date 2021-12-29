@@ -4,7 +4,9 @@ import { expect } from "chai";
 
 class TestPooledEventEmitter extends PooledEventEmitter {
     public onFrstEventCalled: number = 0;
+
     public onLastEventCalled: number = 0;
+
     constructor() {
         super("testpooledeventemitter");
     }
@@ -108,7 +110,21 @@ describe("PooledEventEmitter", function() {
         });
     });
 
-    describe("ICCEventEmitter", function(){
+    describe("ICCEventEmitter", function() {
+        it("should properly emit varargs", function(done) {
+            const pool = new TestPooledEventEmitter();
+            const emitter = pool.newEmitter();
+            expect(emitter).to.be.an.instanceof(ICCEventEmitter);
+            expect(pool.onFrstEventCalled).to.equal(0);
+            emitter.on("testevent", (a1: number, a2: {do: string}, a3: string[]) => {
+                expect(a1).to.equal(1);
+                expect(a2).to.deep.equal({ do: "me" });
+                expect(a3).to.deep.equal(["a", "favor"]);
+                emitter.removeAllListeners(); done();
+            });
+            emitter.emit("testevent", 1, { do: "me" }, ["a", "favor"]);
+        });
+
         it("should work correctly when an event is emitted", function(done) {
             const pool = new TestPooledEventEmitter();
             const emitter = pool.newEmitter();

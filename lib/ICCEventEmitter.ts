@@ -31,6 +31,7 @@ export default class ICCEventEmitter {
     }
 
     public emit(event: string, ...args: any[]): void {
-        this.emitter.emit(event, args);
+        //const callargs = [event, ...args];
+        this.emitter.emit(event, ...args);
     }
 }
