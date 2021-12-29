@@ -18,7 +18,7 @@ export default class SubscriptionEventEmitter extends PooledEventEmitter {
     }
 
     protected onFirstEvent(): void {
-        Meteor.subscribe(this.publication);
+        this.subscription = Meteor.subscribe(this.publication);
     }
 
     protected onLastEvent(): void {

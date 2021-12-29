@@ -10,28 +10,51 @@ export default class ICCEventEmitter {
         this.pool = pool;
     }
 
+    /**
+     * Returns an event emitter tied to a pool (so the pool can do something when the first event is listened to, and do something when the last listened event is removed).
+     * This method is not designed to be called by you. The pool instance ({PooledEventEmitter}) will call this.
+     * @param{PooledEventEmitter} pool - The {PooledEventEmitter} this event emitter belongs to.
+     */
     public static getNew(pool: PooledEventEmitter): ICCEventEmitter {
         return new ICCEventEmitter(pool);
     }
 
+    /**
+     * Standard eventemitter "on"
+     * @param{string} event
+     * @param{function} fn The callback
+     */
     public on(event: string, fn: (...args: any[]) => void): void {
         if (!this.emitter.eventNames().length) this.pool.addActiveEmitter();
         this.emitter.on(event, fn);
     }
 
+    /**
+     * Standard eventemitter "off"
+     * @param{string} event
+     */
     public off(event: string): void {
         this.emitter.off(event);
-        if (!this.emitter.eventNames().length) this.pool.removeActiveEmitter();
+        if (!this.emitter.eventNames().length) {
+            this.pool.removeActiveEmitter();
+        }
     }
 
+    /**
+     * Standard event emitter removeAllListeners
+     */
     public removeAllListeners(): void {
         this.emitter.removeAllListeners();
         // Obviously this should always be true
         if (!this.emitter.eventNames().length) this.pool.removeActiveEmitter();
     }
 
+    /**
+     * Standard 'emit'
+     * @param{string} event
+     * @param{any|undefined} args
+     */
     public emit(event: string, ...args: any[]): void {
-        //const callargs = [event, ...args];
         this.emitter.emit(event, ...args);
     }
 }
