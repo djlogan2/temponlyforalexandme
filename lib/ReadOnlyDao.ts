@@ -1,4 +1,4 @@
-import {Mongo} from "meteor/mongo";
+import { Mongo } from "meteor/mongo";
 import MongoCollection from "/lib/MongoCollection";
 import Selector = Mongo.Selector;
 

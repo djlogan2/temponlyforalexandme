@@ -7,13 +7,28 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
 
     private idconversions: {[key: string]: string} = {};
 
+    /**
+     * Standard constructor with a stoppable parent
+     * @param{Stoppable|null} parent
+     */
     constructor(parent: Stoppable | null) {
         super(parent, "logger_configuration");
         this.start({}, undefined, undefined);
     }
 
+    /**
+     * You have to provide a way to emit events. On the server, it is usually just a standard {EventEmitter}.
+     * However, on the client, due to subscriptions, it is usually an {ICCEventEmitter}
+     * @param{string} module The module who's loglevel is changing
+     * @param{LOGLEVEL} loglevel The new loglevel
+     * @protected
+     */
     protected abstract emit(module: string, loglevel: LOGLEVEL): void;
 
+    // eslint-disable-next-line valid-jsdoc
+    /**
+     * This isn't for general use.
+     */
     protected onRecordAdded(id: string, record: Partial<LoggerConfigurationRecord>): void {
         if (record?.module && record?.debuglevel) {
             if (!this.debugLevels[record.module] || this.debugLevels[record.module] !== record.debuglevel) {
@@ -24,6 +39,10 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
         }
     }
 
+    // eslint-disable-next-line valid-jsdoc
+    /**
+     * This isn't for general use.
+     */
     protected onFieldsChanged(id: string, record: Partial<LoggerConfigurationRecord>): void {
         if (record?.debuglevel) {
             const module = record.module || this.idconversions[id];
@@ -35,6 +54,10 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
         }
     }
 
+    // eslint-disable-next-line valid-jsdoc
+    /**
+     * This isn't for general use.
+     */
     protected onRecordRemoved(id: string): void {
         const module = this.idconversions[id];
         delete this.idconversions[id];
