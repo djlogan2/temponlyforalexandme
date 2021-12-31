@@ -3,15 +3,13 @@ import { Meteor } from "meteor/meteor";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 
 export default class ClientLogger extends CommonLogger {
-    private static loggerconfigdao: ReadOnlyLoggerConfigurationDao;
+    private loggerconfigdao: ReadOnlyLoggerConfigurationDao;
 
     constructor(module: string) {
         super(module, "client");
-        ClientLogger.loggerconfigdao.events.on(module, this.logLevelChanged);
-    }
-
-    public static setLoggerConfigDao(configdao: ReadOnlyLoggerConfigurationDao) {
-        ClientLogger.loggerconfigdao = configdao;
+        if (!global.ICCServer.client || !global.ICCServer.client.dao.loggerconfigdao) throw new Meteor.Error("loggerconfigdao is not defined");
+        this.loggerconfigdao = global.ICCServer.client.dao.loggerconfigdao as ReadOnlyLoggerConfigurationDao;
+        this.loggerconfigdao.events.on(module, this.logLevelChanged);
     }
 
     protected writeTolog(level: "fatal" | "error" | "warn" | "info" | "debug" | "trace", message: string): void {

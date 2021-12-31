@@ -1,4 +1,3 @@
-import * as assert from "assert";
 import { Meteor } from "meteor/meteor";
 import CommonLogger from "/lib/CommonLogger";
 import { LOGLEVEL, logLevelStrings } from "/lib/records/LoggerConfigurationRecord";
@@ -20,7 +19,6 @@ class TestCommonLogger extends CommonLogger {
 }
 
 describe("CommonLogger", function() {
-    describe("logLevelChanged", function() {it("needs to be tested", function() {assert.fail("do me");});});
     describe("various log calls", function() {
         logLevelStrings.forEach((loggerlevel) => {
             logLevelStrings.forEach((requestedlevel) => {

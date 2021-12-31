@@ -70,7 +70,7 @@ function setdb(): Promise<void> {
     });
 }
 
-if (!global.ICCServer) global.ICCServer = { collections: {}, subscriptions: {} };
+if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} } };
 if (!global.ICCServer.collections.readonlydaotest) global.ICCServer.collections.reactivereadonlydaotest = new Mongo.Collection<TestRecord>("reactivereadonlydaotest");
 
 Meteor.publish("reactivereadonlydaotest", () => global.ICCServer.collections.reactivereadonlydaotest.find());

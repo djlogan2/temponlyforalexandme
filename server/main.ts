@@ -9,7 +9,7 @@ import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerCo
 
 const parent = null;
 
-if (!global.ICCServer) global.ICCServer = { collections: {}, subscriptions: {} };
+if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} } };
 const readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
 const writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
 const logrecordsdao = new LogRecordsDao(null);

@@ -31,7 +31,7 @@ class TestCommonReadOnlyLoggerConfigurationDao extends CommonReadOnlyLoggerConfi
 
 describe("CommonReadOnlyLoggerConfigurationDao", function() {
     beforeEach(function() {
-        if (!global.ICCServer) global.ICCServer = { collections: {}, subscriptions: {} };
+        if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} } };
     });
 
     it("should emit a new loglevel when a record is added to the database", function(done) {

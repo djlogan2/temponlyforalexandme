@@ -1,25 +1,15 @@
 import { Meteor } from "meteor/meteor";
 import PooledEventEmitter from "/lib/PooledEventEmitter";
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import Stoppable from "/lib/Stoppable";
 
 export default class SubscriptionEventEmitter extends PooledEventEmitter {
     private publication: string;
 
     private subscription?: Meteor.SubscriptionHandle;
 
-    private constructor(publication: string) {
-        super(publication);
+    constructor(publication: string, parent: Stoppable | null) {
+        super(publication, parent);
         this.publication = publication;
-    }
-
-    /**
-     * Get an event emitter that automatically subscribes and subscribes when events are listened to
-     * @param{string} publication
-     * @return{ICCEventEmitter} Basically an event emitter (on/off/removeAllListeners)
-     */
-    public static getSubscriptionEventEmitter(publication: string): ICCEventEmitter {
-        if (!global.ICCServer.subscriptions[publication]) global.ICCServer.subscriptions[publication] = new SubscriptionEventEmitter(publication);
-        return global.ICCServer.subscriptions[publication].newEmitter();
     }
 
     protected onFirstEvent(): void {
@@ -31,5 +21,9 @@ export default class SubscriptionEventEmitter extends PooledEventEmitter {
             this.subscription.stop();
             delete this.subscription;
         }
+    }
+
+    protected stopping(): void {
+        this.onLastEvent();
     }
 }

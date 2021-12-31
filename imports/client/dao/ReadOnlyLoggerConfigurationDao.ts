@@ -1,17 +1,17 @@
 import CommonReadOnlyLoggerConfigurationDao from "/imports/dao/CommonReadOnlyLoggerConfigurationDao";
-import SubscriptionEventEmitter from "/lib/client/SubscriptionEventEmitter";
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import Stoppable from "/lib/Stoppable";
 import { LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
+import SubscriptionService from "/imports/client/service/SubscriptionService";
 
 export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLoggerConfigurationDao {
     private pEvents: ICCEventEmitter;
 
     public get events() {return this.pEvents;}
 
-    constructor(parent: Stoppable | null) {
+    constructor(parent: Stoppable | null, subscriptionservice: SubscriptionService) {
         super(parent);
-        this.pEvents = SubscriptionEventEmitter.getSubscriptionEventEmitter("logger_configuration");
+        this.pEvents = subscriptionservice.getSubscriptionEventEmitter("logger_configuration");
     }
 
     protected emit(module: string, loglevel: LOGLEVEL): void {
