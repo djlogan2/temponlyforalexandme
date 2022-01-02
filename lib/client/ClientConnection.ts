@@ -9,7 +9,7 @@ import ClientLogger from "/lib/client/ClientLogger";
 export default class ClientConnection extends AbstractTimestampNode {
     private connectionid: string = "none";
 
-    private logger2 = new ClientLogger("client/ClientConnection");
+    private logger2 = new ClientLogger(this, "client/ClientConnection");
 
     constructor(parent: Stoppable | null) {
         super(parent, 60);

@@ -7,6 +7,7 @@ import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerCo
 import CommonLogger from "/lib/CommonLogger";
 import { LogRecord } from "/lib/records/LogRecord";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
+import Stoppable from "/lib/Stoppable";
 
 export default class LoggerService {
     private readableconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -21,8 +22,11 @@ export default class LoggerService {
         this.readableconfigdao = loggerconfigdao;
         this.writeableconfigdao = writableconfigdao;
         this.loggerdao = loggerdao;
-        ServerLogger.setLoggerService(this);
-        CommonLogger.getLogger = (identifier: string) => new ServerLogger(identifier);
+
+        if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} } };
+        // @ts-ignore
+        global.ICCServer.server.services.loggerservice = this;
+        CommonLogger.getLogger = (parent: Stoppable, identifier: string) => new ServerLogger(parent, identifier);
         this.readLoggerConfiguration();
 
         const self = this;

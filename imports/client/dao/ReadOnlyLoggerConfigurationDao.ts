@@ -14,6 +14,12 @@ export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLogger
         this.pEvents = subscriptionservice.getSubscriptionEventEmitter("logger_configuration");
     }
 
+    /**
+     * This class exists ONLY to provide an emitter (it's a different emitter on the server.)
+     * @param{string} module
+     * @param{LOGLEVEL} loglevel
+     * @protected
+     */
     protected emit(module: string, loglevel: LOGLEVEL): void {
         this.pEvents.emit(module, loglevel);
     }

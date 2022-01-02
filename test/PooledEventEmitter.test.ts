@@ -1,6 +1,16 @@
 import PooledEventEmitter from "/lib/PooledEventEmitter";
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import { expect } from "chai";
+import Stoppable from "/lib/Stoppable";
+
+class TestStoppable extends Stoppable {
+    constructor() {
+        super(null);
+    }
+
+    protected stopping(): void {
+    }
+}
 
 class TestPooledEventEmitter extends PooledEventEmitter {
     public onFrstEventCalled: number = 0;
@@ -8,7 +18,7 @@ class TestPooledEventEmitter extends PooledEventEmitter {
     public onLastEventCalled: number = 0;
 
     constructor() {
-        super("testpooledeventemitter");
+        super("testpooledeventemitter", new TestStoppable());
     }
 
     protected onFirstEvent(): void {
@@ -17,6 +27,9 @@ class TestPooledEventEmitter extends PooledEventEmitter {
 
     protected onLastEvent(): void {
         this.onLastEventCalled += 1;
+    }
+
+    protected stopping(): void {
     }
 }
 

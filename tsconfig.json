@@ -25,7 +25,10 @@
     "resolveJsonModule": true,
     "types": ["node", "mocha"],
     "esModuleInterop": true,
-    "preserveSymlinks": true
+    "preserveSymlinks": true,
+    "inlineSourceMap": true,
+//    "sourceMap": true,
+//    "sourceRoot": "http://localhost:3000/debug/source"
   },
   "exclude": [
     "./.meteor/**",

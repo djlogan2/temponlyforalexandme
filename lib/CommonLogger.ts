@@ -1,7 +1,8 @@
 import { Meteor } from "meteor/meteor";
 import { LOGGERTYPE, LOGLEVEL, logLevelStrings } from "/lib/records/LoggerConfigurationRecord";
+import Stoppable from "/lib/Stoppable";
 
-export default abstract class CommonLogger {
+export default abstract class CommonLogger extends Stoppable {
     private identlevel: LOGLEVEL;
 
     protected type: LOGGERTYPE;
@@ -12,10 +13,12 @@ export default abstract class CommonLogger {
 
     /**
      *
+     * @param{Stoppable} parent The parent of this logger
      * @param{string} identifier The name of the module (should be unique to each logger instance)
      * @param{"client"|"server"} clientServer Whether this is a client logger or a server logger
      */
-    constructor(identifier: string, clientServer: LOGGERTYPE) {
+    constructor(parent: Stoppable, identifier: string, clientServer: LOGGERTYPE) {
+        super(parent);
         this.identifier = identifier;
         this.type = clientServer;
         this.identlevel = "debug";
@@ -25,11 +28,12 @@ export default abstract class CommonLogger {
      * This is specifically for Commmon*.ts classes that are shared between both clients and servers.
      * Calling this static method will return either a client logger or a server logger, depending on where you are.
      * Non-common modules can just instantiate specific ones, but common classes cannot and must use this.
+     * @param{Stoppable} parent The parent of this logger
      * @param{string} identifier The unique identifer (module name)
      */
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public static getLogger(identifier: string): CommonLogger {
+    public static getLogger(parent: Stoppable, identifier: string): CommonLogger {
         //
         // This method is designed to be overridden on the client and the server,
         // so that we can create client/server specific loggers without having to

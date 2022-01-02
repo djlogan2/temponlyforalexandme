@@ -2,12 +2,21 @@ import { Meteor } from "meteor/meteor";
 import CommonLogger from "/lib/CommonLogger";
 import { LOGLEVEL, logLevelStrings } from "/lib/records/LoggerConfigurationRecord";
 import { expect } from "chai";
+import Stoppable from "/lib/Stoppable";
+
+class TestStoppable extends Stoppable {
+    constructor() {
+        super(null);
+    }
+    protected stopping(): void {
+    }
+}
 
 class TestCommonLogger extends CommonLogger {
     public writeToLogCalled: boolean = false;
 
     constructor(l: LOGLEVEL) {
-        super("testcommonlogger", Meteor.isClient ? "client" : "server");
+        super(new TestStoppable(), "testcommonlogger", Meteor.isClient ? "client" : "server");
         this.logLevelChanged(l);
     }
 
@@ -15,6 +24,12 @@ class TestCommonLogger extends CommonLogger {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected writeTolog(level: LOGLEVEL, message: string, data?: unknown, userid?: string): void {
         this.writeToLogCalled = true;
+    }
+
+    // @ts-ignore
+    // eslint-disable-next-line class-methods-use-this
+    protected stopping(): void {
+        throw new Error("Method not implemented.");
     }
 }
 

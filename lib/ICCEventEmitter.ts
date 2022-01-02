@@ -32,9 +32,10 @@ export default class ICCEventEmitter {
     /**
      * Standard eventemitter "off"
      * @param{string} event
+     * @param{function} fn An optional function for which to remove
      */
-    public off(event: string): void {
-        this.emitter.off(event);
+    public off(event: string, fn?: (...args: any[]) => void): void {
+        this.emitter.off(event, fn);
         if (!this.emitter.eventNames().length) {
             this.pool.removeActiveEmitter();
         }

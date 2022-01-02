@@ -12,7 +12,7 @@ export default class ServerConnection extends AbstractTimestampNode {
 
     private closefunctions: (() => void)[] = [];
 
-    private logger2 = new ServerLogger("server/ServerConnection");
+    private logger2 = new ServerLogger(this, "server/ServerConnection");
 
     public get _id(): string {
         return this.connectionrecord._id;

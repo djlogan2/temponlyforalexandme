@@ -14,7 +14,7 @@ export default class ConnectionService extends Stoppable {
 
     private connections: { [key: string]: ServerConnection } = {};
 
-    private logger = new ServerLogger("server/ConnectionService_ts");
+    private logger = new ServerLogger(this, "server/ConnectionService_ts");
 
     constructor(parent: Stoppable | null, instanceservice: InstanceService, connectiondao: ConnectionDao) {
         super(parent);

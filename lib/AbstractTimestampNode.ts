@@ -29,7 +29,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
 
     protected pingtimes: number[] = [];
 
-    private logger = CommonLogger.getLogger("AbstractTimestampNode");
+    private logger = CommonLogger.getLogger(this, "AbstractTimestampNode");
 
     protected constructor(parent: Stoppable | null, pingcount: number) {
         super(parent);

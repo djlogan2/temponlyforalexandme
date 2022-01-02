@@ -5,7 +5,7 @@ import { InstanceRecord } from "/lib/records/InstanceRecord";
 import ServerLogger from "/lib/server/ServerLogger";
 
 export default class InstanceService extends Stoppable {
-    private logger = new ServerLogger("server/InstanceService");
+    private logger = new ServerLogger(this, "server/InstanceService");
 
     protected stopping(): void {
         Meteor.clearInterval(this.ourpinghandle);
