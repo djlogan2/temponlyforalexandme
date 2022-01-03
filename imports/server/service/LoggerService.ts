@@ -4,10 +4,10 @@ import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { LOGGERTYPE, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
-import CommonLogger from "/lib/CommonLogger";
 import { LogRecord } from "/lib/records/LogRecord";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 import Stoppable from "/lib/Stoppable";
+import { consoleLogger } from "/lib/ConsoleLogger";
 
 export default class LoggerService {
     private readableconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -23,10 +23,13 @@ export default class LoggerService {
         this.writeableconfigdao = writableconfigdao;
         this.loggerdao = loggerdao;
 
-        if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} } };
+        if (!global.ICCServer) {
+            global.ICCServer = {
+                collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
+            };
+        }
         // @ts-ignore
         global.ICCServer.server.services.loggerservice = this;
-        CommonLogger.getLogger = (parent: Stoppable, identifier: string) => new ServerLogger(parent, identifier);
         this.readLoggerConfiguration();
 
         const self = this;
@@ -76,4 +79,10 @@ export default class LoggerService {
     public changeDebugLevel(module: string, newlevel: LOGLEVEL): void {
         this.writeableconfigdao.upsert({ module }, { $set: { debuglevel: newlevel } });
     }
+}
+
+if (!global.ICCServer) {
+    global.ICCServer = {
+        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: (parent: Stoppable, identifier: string) => new ServerLogger(parent, identifier) },
+    };
 }

@@ -14,7 +14,13 @@ export default class ClientLogger extends CommonLogger {
     }
 
     protected writeTolog(level: "fatal" | "error" | "warn" | "info" | "debug" | "trace", message: string): void {
-        Meteor.call("writeToLog", this.module, level, message);
+        Meteor.call("writeToLog", this.module, level, message, (err: any) => {
+            if (err) {
+                const logstring = `${new Date().toDateString()} ${this.type.toUpperCase()} ${module} ${level} ${message}`;
+                if (err.reason !== "Method 'writeToLog' not found") console.log(err);
+                console.log(logstring);
+            }
+        });
     }
 
     protected stopping(): void {
@@ -26,4 +32,4 @@ export default class ClientLogger extends CommonLogger {
     }
 }
 
-CommonLogger.getLogger = (parent: Stoppable, identifier: string) => new ClientLogger(parent, identifier);
+if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} }, utilities: { getLogger: (parent: Stoppable, identifier: string) => new ClientLogger(parent, identifier) } };

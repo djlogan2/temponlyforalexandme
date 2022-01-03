@@ -1,6 +1,7 @@
 import CommonReadOnlyLoggerConfigurationDao from "/imports/dao/CommonReadOnlyLoggerConfigurationDao";
 import { LoggerConfigurationRecord, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import { expect } from "chai";
+import { consoleLogger } from "/lib/ConsoleLogger";
 
 class TestCommonReadOnlyLoggerConfigurationDao extends CommonReadOnlyLoggerConfigurationDao {
     public fn: (module: string, loglevel: LOGLEVEL) => void;
@@ -31,7 +32,11 @@ class TestCommonReadOnlyLoggerConfigurationDao extends CommonReadOnlyLoggerConfi
 
 describe("CommonReadOnlyLoggerConfigurationDao", function() {
     beforeEach(function() {
-        if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} } };
+        if (!global.ICCServer) {
+            global.ICCServer = {
+                collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
+            };
+        }
     });
 
     it("should emit a new loglevel when a record is added to the database", function(done) {

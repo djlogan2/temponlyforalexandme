@@ -5,6 +5,7 @@ import { expect } from "chai";
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
+import {consoleLogger} from "/lib/ConsoleLogger";
 
 interface TestRecord {
     _id: string;
@@ -70,7 +71,11 @@ function setdb(): Promise<void> {
     });
 }
 
-if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} } };
+if (!global.ICCServer) {
+    global.ICCServer = {
+        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
+    };
+}
 if (!global.ICCServer.collections.readonlydaotest) global.ICCServer.collections.reactivereadonlydaotest = new Mongo.Collection<TestRecord>("reactivereadonlydaotest");
 
 Meteor.publish("reactivereadonlydaotest", () => global.ICCServer.collections.reactivereadonlydaotest.find());

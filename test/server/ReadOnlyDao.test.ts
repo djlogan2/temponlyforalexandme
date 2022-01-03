@@ -4,6 +4,7 @@ import ReadOnlyDao from "/lib/ReadOnlyDao";
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { expect } from "chai";
 import { Mongo } from "meteor/mongo";
+import {consoleLogger} from "/lib/ConsoleLogger";
 
 interface TestRecord {
     _id: string;
@@ -12,7 +13,11 @@ interface TestRecord {
     data3: string;
 }
 
-if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} } };
+if (!global.ICCServer) {
+    global.ICCServer = {
+        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
+    };
+}
 if (!global.ICCServer.collections.readonlydaotest) global.ICCServer.collections.readonlydaotest = new Mongo.Collection<TestRecord>("readonlydaotest");
 
 function insert(): Promise<void[]> {
