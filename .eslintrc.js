@@ -13,6 +13,7 @@ module.exports = {
         "google",
         "plugin:react/recommended",
         "plugin:chai-friendly/recommended",
+        "eslint-config-prettier",
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
@@ -63,6 +64,8 @@ module.exports = {
             },
         ],
         "no-use-before-define": 0,
+        "react/jsx-props-no-spreading": 0,
+        "react/prefer-stateless-function": 0,
     },
     settings: {
         "import/resolver": {

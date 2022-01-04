@@ -6,5 +6,6 @@
   "endOfLine": "lf",
   "quoteProps": "as-needed",
   "arrowParens": "always",
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "tabWidth": 4
 }
