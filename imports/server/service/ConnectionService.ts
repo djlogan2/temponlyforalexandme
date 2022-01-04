@@ -56,7 +56,7 @@ export default class ConnectionService extends Stoppable {
     }
 
     private onClose(ourconnection: ServerConnection): void {
-        this.logger.debug(() => `${ourconnection.connectionid} onClose`);
+        this.logger.trace(() => `${ourconnection.connectionid} onClose`);
         ourconnection.stop();
         delete this.connections[ourconnection.connectionid];
         this.connectiondao.remove(ourconnection._id);

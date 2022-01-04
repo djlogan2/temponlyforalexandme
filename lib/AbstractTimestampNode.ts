@@ -43,7 +43,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     protected abstract sendFunction(msg: PingMessage | PongMessage | PongResponse): void;
 
     protected PingReceived(ping: PingMessage): void {
-        // this.logger.trace(() => `PingReceived: ${JSON.stringify(ping)}`);
+        this.logger.trace(() => `PingReceived: ${JSON.stringify(ping)}`);
         const pong: PongMessage = {
             type: "pong",
             id: ping.id,
@@ -55,7 +55,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     }
 
     protected PongReceived(pong: PongMessage): void {
-        // this.logger.trace(() => `PongReceived: ${JSON.stringify(pong)}`);
+        this.logger.trace(() => `PongReceived: ${JSON.stringify(pong)}`);
         const arrival = this.getMilliseconds();
         this.localvalues.delay = Math.abs(arrival - pong.originate - (pong.transmit - pong.receive));
         this.localvalues.clock_offset = (pong.receive - pong.originate + pong.transmit - arrival) / 2;
@@ -82,14 +82,14 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     }
 
     protected PongResponseReceived(msg: PongResponse) {
-        // this.logger.trace(() => `PongResponseReceived: ${JSON.stringify(msg)}`);
+        this.logger.trace(() => `PongResponseReceived: ${JSON.stringify(msg)}`);
         this.remotevalues.delay = msg.delay;
         this.remotevalues.clock_offset = msg.clock_offset;
-        // this.logger.trace(() => `PRR localvalues=${JSON.stringify(this.localvalues)} remotevalues=${JSON.stringify(this.remotevalues)}`);
+        this.logger.trace(() => `PRR localvalues=${JSON.stringify(this.localvalues)} remotevalues=${JSON.stringify(this.remotevalues)}`);
     }
 
     private ping(): void {
-        // this.logger.trace(() => "ping");
+        this.logger.trace(() => "ping");
         const request: string = Random.id();
         const ping: PingMessage = {
             type: "ping",
@@ -101,7 +101,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     }
 
     protected processIncomingMessage(msg: PingMessage | PongMessage | PongResponse): void {
-        // this.logger.trace(() => `processIncomingMessage: ${JSON.stringify(msg)}`);
+        this.logger.trace(() => `processIncomingMessage: ${JSON.stringify(msg)}`);
         switch (msg.type) {
         case "ping":
             this.PingReceived(msg as PingMessage);
@@ -131,7 +131,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     }
 
     public start(): void {
-        // this.logger.debug(() => "start");
+        this.logger.trace(() => "start");
         this.cleanupHandle = Meteor.setInterval(() => this.cleanupOldPings(), 30000); // Every 30s
         this.intervalHandle = Meteor.setInterval(() => {
             this.ping();
@@ -139,14 +139,10 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     }
 
     protected stopping(): void {
-        // this.logger.debug(() => "stopping");
+        this.logger.trace(() => "stopping");
         if (this.intervalHandle) Meteor.clearInterval(this.intervalHandle);
         if (this.cleanupHandle) Meteor.clearInterval(this.cleanupHandle);
         delete this.intervalHandle;
         delete this.cleanupHandle;
-    }
-
-    public getRemotePingValues(): void {
-        return this.localvalues;
     }
 }

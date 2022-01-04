@@ -8,9 +8,10 @@ import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 
 //
-//The idle monitor
+// The idle monitor
 //       this listeners below...should technically already be working! We just need to make sure
 //       and fix any bugs if we have any
+//       ALEX: So as of now, the focused/not focused works, but none of the other events are being fired. I do not yet know why.
 //
 // "hash token"
 //   When a connection is established, we obviously already get the "connection id" for the websocket
@@ -33,10 +34,16 @@ import { IdleMessage } from "/lib/records/IdleMessage";
 //
 //   In order to display my current lag, what I would display is localvalues.delay (or remotevalues.delay) <-- 56ms
 //
+
+const resetEvents = {
+    window: ["onload", "onmousemove", "onmousedown", "ontouchstart", "ontouchmove", "onclick", "onkeydown"],
+    document: ["pause", "resume"],
+};
+
 export default class ClientConnection extends AbstractTimestampNode {
     private connectionid: string = "none";
 
-    private focused: boolean = false;
+    private focused: boolean = true;
 
     private idle: number = 0;
 
@@ -46,19 +53,18 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     constructor(parent: Stoppable | null) {
         super(parent, 60);
-        // this.logger2.trace(() => "constructor");
+        this.logger2.trace(() => "constructor");
         Meteor.startup(() => {
             // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
-            // this.logger2.trace(() => `connection id=${this.connectionid}`);
-            window.addEventListener("click", this.isActive);
-            window.addEventListener("keydown", this.isActive);
+            this.logger2.trace(() => `connection id=${this.connectionid}`);
+
             window.addEventListener("blur", () => this.isFocused(false));
             window.addEventListener("focus", () => this.isFocused(true));
-            if (Meteor.isCordova) {
-                document.addEventListener("pause", () => this.isFocused(false));
-                document.addEventListener("resume", () => this.isFocused(true));
-            }
+            window.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
+            resetEvents.window.forEach((event) => window.addEventListener(event, () => this.isActive()));
+            resetEvents.document.forEach((event) => document.addEventListener(event, () => this.isActive()));
+
             this.idlehandle = Meteor.setInterval(() => {
                 const idle: IdleMessage = {
                     type: "idle",
@@ -67,6 +73,7 @@ export default class ClientConnection extends AbstractTimestampNode {
                     focused: this.focused,
                 };
                 this.sendFunction(idle);
+                this.idle += 1;
             }, 1000);
         });
 
@@ -93,6 +100,7 @@ export default class ClientConnection extends AbstractTimestampNode {
     }
 
     private isActive(): void {
+        console.log("isActive called");
         if (this.focused) this.idle = 0;
     }
 
@@ -101,7 +109,7 @@ export default class ClientConnection extends AbstractTimestampNode {
     }
 
     private onDirectMessage(messagetype: string, message: any) {
-        // this.logger2.trace(() => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`);
+        this.logger2.trace(() => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`);
         switch (messagetype) {
         case "ping":
         case "pong":
@@ -115,7 +123,7 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     // eslint-disable-next-line class-methods-use-this
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse | IdleMessage): void {
-        // this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
+        this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
         // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
     }

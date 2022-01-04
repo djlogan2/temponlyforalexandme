@@ -41,23 +41,21 @@ export default abstract class CommonLogger extends Stoppable {
         return (this.ourloglevel >= CommonLogger.loglevelValue(requestedloglevel));
     }
 
-    private log(level: LOGLEVEL, message: () => string, data?: unknown, userid?: string) {
+    private log(level: LOGLEVEL, message: () => string, userid?: string) {
         if (!this.writable(level)) return;
-        this.writeTolog(level, message(), data, userid);
+        this.writeTolog(level, message(), userid);
     }
 
     /**
      * This method must be overwritten, as the client must call the server to write the data
      * @param level
      * @param message
-     * @param data
      * @param userid
      * @protected
      */
     protected abstract writeTolog(
         level: LOGLEVEL,
         message: string,
-        data?: unknown,
         userid?: string
     ): void;
 
@@ -73,60 +71,54 @@ export default abstract class CommonLogger extends Stoppable {
     /**
      * A fatal error
      * @param{string} message A function that results in a message if the log record is written
-     * @param{unknown} data? Optional data (I don't think it works...)
      * @param{string} userid? Optional userid
      */
-    public fatal(message: () => string, data?: unknown, userid?: string): void {
-        this.log("fatal", message, data, userid);
+    public fatal(message: () => string, userid?: string): void {
+        this.log("fatal", message, userid);
     }
 
     /**
      * A normal error
      * @param{string} message A function that results in a message if the log record is written
-     * @param{unknown} data? Optional data (I don't think it works...)
      * @param{string} userid? Optional userid
      */
-    public error(message: () => string, data?: unknown, userid?: string): void {
-        this.log("error", message, data, userid);
+    public error(message: () => string, userid?: string): void {
+        this.log("error", message, userid);
     }
 
     /**
      * A warning
      * @param{string} message A function that results in a message if the log record is written
-     * @param{unknown} data? Optional data (I don't think it works...)
      * @param{string} userid? Optional userid
      */
-    public warn(message: () => string, data?: unknown, userid?: string): void {
-        this.log("warn", message, data, userid);
+    public warn(message: () => string, userid?: string): void {
+        this.log("warn", message, userid);
     }
 
     /**
      * An informational message
      * @param{string} message A function that results in a message if the log record is written
-     * @param{unknown} data? Optional data (I don't think it works...)
      * @param{string} userid? Optional userid
      */
-    public info(message: () => string, data?: unknown, userid?: string): void {
-        this.log("info", message, data, userid);
+    public info(message: () => string, userid?: string): void {
+        this.log("info", message, userid);
     }
 
     /**
      * A debug
      * @param{string} message A function that results in a message if the log record is written
-     * @param{unknown} data? Optional data (I don't think it works...)
      * @param{string} userid? Optional userid
      */
-    public debug(message: () => string, data?: unknown, userid?: string): void {
-        this.log("debug", message, data, userid);
+    public debug(message: () => string, userid?: string): void {
+        this.log("debug", message, userid);
     }
 
     /**
      * A trace
      * @param{string} message A function that results in a message if the log record is written
-     * @param{unknown} data? Optional data (I don't think it works...)
      * @param{string} userid? Optional userid
      */
-    public trace(message: () => string, data?: unknown, userid?: string): void {
-        this.log("trace", message, data, userid);
+    public trace(message: () => string, userid?: string): void {
+        this.log("trace", message, userid);
     }
 }

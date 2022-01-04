@@ -30,11 +30,11 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
      * This isn't for general use.
      */
     protected onRecordAdded(id: string, record: Partial<LoggerConfigurationRecord>): void {
-        if (record?.module && record?.debuglevel) {
-            if (!this.debugLevels[record.module] || this.debugLevels[record.module] !== record.debuglevel) {
-                this.debugLevels[record.module] = record.debuglevel;
+        if (record?.module && record?.tracelevel) {
+            if (!this.traceLevels[record.module] || this.traceLevels[record.module] !== record.tracelevel) {
+                this.traceLevels[record.module] = record.tracelevel;
                 this.idconversions[id] = record.module;
-                this.emit(record.module, record.debuglevel);
+                this.emit(record.module, record.tracelevel);
             }
         }
     }
@@ -44,12 +44,12 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
      * This isn't for general use.
      */
     protected onFieldsChanged(id: string, record: Partial<LoggerConfigurationRecord>): void {
-        if (record?.debuglevel) {
+        if (record?.tracelevel) {
             const module = record.module || this.idconversions[id];
-            if (!this.debugLevels[module] || this.debugLevels[module] !== record.debuglevel) {
-                this.debugLevels[module] = record.debuglevel;
+            if (!this.traceLevels[module] || this.traceLevels[module] !== record.tracelevel) {
+                this.traceLevels[module] = record.tracelevel;
                 if (record.module) this.idconversions[id] = record.module;
-                this.emit(module, record.debuglevel);
+                this.emit(module, record.tracelevel);
             }
         }
     }
@@ -62,9 +62,9 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
         const module = this.idconversions[id];
         delete this.idconversions[id];
         if (module) {
-            delete this.debugLevels[module];
+            delete this.traceLevels[module];
         }
-        this.emit(module, this.debugLevels.root);
+        this.emit(module, this.traceLevels.root);
     }
 
     // eslint-disable-next-line class-methods-use-this

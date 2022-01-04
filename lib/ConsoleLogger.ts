@@ -24,7 +24,7 @@ export default class ConsoleLogger extends CommonLogger {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    protected writeTolog(level: LOGLEVEL, message: string, data?: unknown, userid?: string): void {
+    protected writeTolog(level: LOGLEVEL, message: string, userid?: string): void {
         const logstring = `${new Date().toDateString()} ${this.type.toUpperCase()} ${userid || "-"} ${module} ${level} ${message}`;
         console.log(logstring);
     }

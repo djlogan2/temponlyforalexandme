@@ -25,7 +25,7 @@ export default class ServerConnection extends AbstractTimestampNode {
 
     protected stopping(): void {
         super.stopping();
-        this.logger2.debug(() => `${this.connectionid} stopping`);
+        this.logger2.trace(() => `${this.connectionid} stopping`);
         this.closing();
     }
 
@@ -57,12 +57,12 @@ export default class ServerConnection extends AbstractTimestampNode {
     }
 
     private closing(): void {
-        this.logger2.debug(() => `${this.connectionid} closing`);
+        this.logger2.trace(() => `${this.connectionid} closing`);
         this.closefunctions.forEach((func) => func());
     }
 
     public onClose(func: () => void): void {
-        this.logger2.debug(() => `${this.connectionid} onClose`);
+        this.logger2.trace(() => `${this.connectionid} onClose`);
         this.closefunctions.push(func);
     }
 
