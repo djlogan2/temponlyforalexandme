@@ -145,4 +145,8 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         delete this.intervalHandle;
         delete this.cleanupHandle;
     }
+
+    public getRemotePingValues(): void {
+        return this.localvalues;
+    }
 }

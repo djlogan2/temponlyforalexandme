@@ -7,6 +7,32 @@ import Stoppable from "/lib/Stoppable";
 import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 
+//
+//The idle monitor
+//       this listeners below...should technically already be working! We just need to make sure
+//       and fix any bugs if we have any
+//
+// "hash token"
+//   When a connection is established, we obviously already get the "connection id" for the websocket
+//       I need some type of "hash token" that gets generated when a user connects for the first time,
+//          and then resuse this when they come back (i.e. from a cookie or localstorage or whatever)
+//     Even though this guy is anonymous, I want the server to know him as the "same" anonymous guy forever.
+//        (We will use this later to implement auto-login or remember me services)
+// The "tab" id
+//     The client to be able to create some type of random string, key, random set bytes, hash, something for each tab,
+//     so that we can differentiate between tabs
+//
+//    hashtoken           "tab token"
+//     2psdvkwp0459tw     roguse0-rg9wreg
+//     2psdvkwp0459tw     3456934856
+//     2psdvkwp0459tw     450974
+//
+// "Architecture"
+//     Get an instance of "ClientConnection" saved somewhere
+//     Decide how to extenalize data and methods for the components
+//
+//   In order to display my current lag, what I would display is localvalues.delay (or remotevalues.delay) <-- 56ms
+//
 export default class ClientConnection extends AbstractTimestampNode {
     private connectionid: string = "none";
 
