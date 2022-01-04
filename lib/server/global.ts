@@ -16,6 +16,6 @@ declare global {
             dao: {[key: string]: ReactiveReadOnlyDao<any>}
         }
         collections: {[key: string]: Mongo.Collection<any>},
-        utilities: {getLogger: (parent: Stoppable, identifier: string) => CommonLogger}
+        utilities?: {getLogger: (parent: Stoppable, identifier: string) => CommonLogger}
     };
 }

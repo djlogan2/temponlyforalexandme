@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import "./app/logger";
+import "../lib/client/ClientServer";
 import { render } from "react-dom";
 import * as React from "react";
 import App from "./app/App";

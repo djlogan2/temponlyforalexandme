@@ -30,6 +30,11 @@ export default class ClientLogger extends CommonLogger {
             loggerconfigdao.events.off(this.module, this.logLevelChanged);
         }
     }
+
+    static setLoggerConfigDao(readonlyconfigurationdao: ReadOnlyLoggerConfigurationDao) {
+        console.log(readonlyconfigurationdao);
+        readonlyconfigurationdao.stop();
+    }
 }
 
 if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} }, utilities: { getLogger: (parent: Stoppable, identifier: string) => new ClientLogger(parent, identifier) } };

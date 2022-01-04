@@ -1,16 +1,5 @@
-import ClientConnection from "/lib/client/ClientConnection";
-import Stoppable from "/lib/Stoppable";
+import React from "react";
 
-class ClientServer extends Stoppable {
-    private connection: ClientConnection;
-    constructor() {
-        super(null);
-        this.connection = new ClientConnection(this);
-    }
+const App = () => <div>12345</div>;
 
-    protected stopping(): void {
-        throw new Error("Method not implemented.");
-    }
-};
-
-window.ClientServer = new ClientServer();
+export default App;

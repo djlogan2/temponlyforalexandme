@@ -1,7 +1,8 @@
-import CommonReadOnlyLoggerConfigurationDao from "/imports/dao/ReadOnlyLoggerConfigurationDao";
+import CommonReadOnlyLoggerConfigurationDao from "../../imports/client/dao/ReadOnlyLoggerConfigurationDao";
+import SubscriptionService from "/imports/client/service/SubscriptionService";
 import ClientLogger from "/lib/client/ClientLogger";
 
-if (!global.ICCServer) global.ICCServer = { collections: {}, subscriptions: {} };
+const sub = new SubscriptionService(null);
 
-const readonlyconfigurationdao = new CommonReadOnlyLoggerConfigurationDao(null);
+const readonlyconfigurationdao = new CommonReadOnlyLoggerConfigurationDao(null, sub);
 ClientLogger.setLoggerConfigDao(readonlyconfigurationdao);
