@@ -1,68 +1,97 @@
-import { i18n } from "meteor/universe:i18n";
-import * as React from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import _ from "lodash";
+import React from "react";
+import RGL, { WidthProvider } from "react-grid-layout";
+import Widget from "./components/Widget";
 
-import I18N from "../../imports/client/clientI18n";
-import useEventEmitter from "../data/hooks/useEventEmitter";
-import { EEmitterEvents } from "../data/hooks/useEventEmitter/events";
-import AuthGuard from "./guards/authGuard";
-import NonAuthGuard from "./guards/nonAuthGuard";
-import { authRoutes, noAuthRoutes } from "./routes";
-import ClientICCServer from "../../imports/client/clienticcserver";
+const ReactGridLayout = WidthProvider(RGL);
 
-const userIdEventEmitterProps = {
-  event: EEmitterEvents.USER_ID_CHANGE,
-  tracker: ClientICCServer.userIdSubscribe,
-  defaultValue: "",
+const sizes = {
+  small: {
+    w: 2,
+    h: 2,
+  },
+  medium: {
+    w: 4,
+    h: 4,
+  },
+  large: {
+    w: 6,
+    h: 6,
+  },
 };
 
-const i18nEventEmitterProps = {
-  event: EEmitterEvents.I18N_CHANGE,
-  tracker: I18N.subscribe,
-  shouldTrackerUnmount: true,
-};
+interface IDefaultProps {
+  className: string;
+  items: number;
+  rowHeight: number;
+  onLayoutChange: (layout: RGL.Layout[]) => void;
+  cols: number;
+}
 
-const App = () => {
-  const [isLocaleSetup, setIsLocaleSetup] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(true);
+interface IState {
+  layout: RGL.Layout[];
+}
 
-  const { data: userId } = useEventEmitter<string>(userIdEventEmitterProps);
-  useEventEmitter(i18nEventEmitterProps);
+export default class App extends React.PureComponent<IDefaultProps, IState> {
+  static defaultProps = {
+    className: "layout",
+    items: 30,
+    rowHeight: 30,
+    onLayoutChange: function () {},
+    cols: 12,
+  };
 
-  React.useEffect(() => {
-    i18n.onceChangeLocale(() => {
-      setIsLocaleSetup(true);
+  constructor(props: IDefaultProps) {
+    super(props);
+
+    const layout = this.generateLayout();
+    this.state = { layout };
+  }
+
+  generateLayout() {
+    const p = this.props;
+    return _.map(new Array(p.items), function (item, i) {
+      const y: any = _.result(p, "y") || Math.ceil(Math.random() * 4) + 1;
+      return {
+        x: (i * 2) % 12,
+        y: Math.floor(i / 6) * y,
+        w: 2,
+        h: y,
+        i: i.toString(),
+      };
     });
-  }, []);
+  }
 
-  React.useEffect(() => {
-    if (userId !== "") {
-      setIsLoading(true);
-    }
-  }, [userId]);
+  onLayoutChange = (layout: RGL.Layout[]) => {
+    this.props.onLayoutChange(layout);
+  };
 
-  return (
-    <>
-      {isLocaleSetup && isLoading ? (
-        <Router>
-          <Switch>
-            {noAuthRoutes.map((route) => (
-              <NonAuthGuard key={route.path} auth={!!userId} {...route} />
-            ))}
-            {authRoutes.map((route) => (
-              <AuthGuard
-                roles={[]}
-                key={route.path}
-                auth={!!userId}
-                {...route}
-                currentRoles={[]}
-              />
-            ))}
-          </Switch>
-        </Router>
-      ) : null}
-    </>
-  );
-};
-
-export default App;
+  render() {
+    return (
+      <ReactGridLayout
+        {...this.props}
+        layout={this.state.layout}
+        onLayoutChange={this.onLayoutChange}
+        useCSSTransforms={true}
+        allowOverlap={true}
+        preventCollision
+      >
+        {this.state.layout.map((_, i) => (
+          <div
+            key={i}
+            style={{
+              background: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
+                Math.random() * 255,
+              )}, ${Math.floor(Math.random() * 255)})`,
+            }}
+          >
+            <span className="text">
+              {i}
+              {/* <Widget sizes={sizes} {...layout} /> */}
+            </span>
+          </div>
+        ))}
+      </ReactGridLayout>
+    );
+  }
+}
