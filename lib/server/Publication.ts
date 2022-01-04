@@ -1,4 +1,4 @@
-import ReadOnlyDao from "/lib/ReadOnlyDao";
+import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
 import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
 import EventEmitter from "eventemitter3";

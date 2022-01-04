@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
-import ReadOnlyDao from "/lib/ReadOnlyDao";
+import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
 import Stoppable from "/lib/Stoppable";
 
 export default class ReadWriteDao<T> extends ReadOnlyDao<T> {

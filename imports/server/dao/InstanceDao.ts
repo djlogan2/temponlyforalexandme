@@ -1,4 +1,4 @@
-import WritableReactiveDao from "/lib/server/WritableReactiveDao";
+import WritableReactiveDao from "/imports/server/dao/WritableReactiveDao";
 import { InstanceRecord } from "/lib/records/InstanceRecord";
 import Stoppable from "/lib/Stoppable";
 

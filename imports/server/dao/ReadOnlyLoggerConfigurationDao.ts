@@ -3,16 +3,19 @@ import { LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import EventEmitter from "eventemitter3";
 
 export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLoggerConfigurationDao {
-    private pEvents = new EventEmitter();
+    private pEvents?: EventEmitter;
 
-    public get events() {return this.pEvents;}
+    public get events() {
+        if (!this.pEvents) this.pEvents = new EventEmitter();
+        return this.pEvents;
+    }
 
     protected emit(module: string, loglevel: LOGLEVEL): void {
-        this.pEvents.emit(module, loglevel);
+        this.events.emit(module, loglevel);
     }
 
     protected stopping() {
         super.stopping();
-        this.pEvents.removeAllListeners();
+        this.events.removeAllListeners();
     }
 }

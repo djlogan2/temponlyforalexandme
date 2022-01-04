@@ -1,6 +1,6 @@
 export interface PongMessage {
     id: string;
-    type: string;
+    type: "pong";
     originate: number;
     receive: number;
     transmit: number;

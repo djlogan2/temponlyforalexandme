@@ -1,7 +1,7 @@
 import { expect } from "chai";
 // @ts-ignore
 import { resetDatabase } from "meteor/xolvio:cleaner";
-import ReadWriteDao from "/lib/server/ReadWriteDao";
+import ReadWriteDao from "/imports/server/dao/ReadWriteDao";
 
 interface TestRecord {
     _id: string;

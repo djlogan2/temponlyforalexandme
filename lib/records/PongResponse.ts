@@ -1,6 +1,6 @@
 export interface PongResponse {
     id: string;
-    type: string;
+    type: "rslt";
     delay: number;
     clock_offset: number;
 }

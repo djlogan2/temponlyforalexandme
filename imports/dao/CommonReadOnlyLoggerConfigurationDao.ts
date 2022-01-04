@@ -1,6 +1,6 @@
 import Stoppable from "/lib/Stoppable";
 import { LoggerConfigurationRecord, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
-import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 
 export default abstract class CommonReadOnlyLoggerConfigurationDao extends ReactiveReadOnlyDao<LoggerConfigurationRecord> {
     private debugLevels: {[key: string]: LOGLEVEL} = { root: "debug" };

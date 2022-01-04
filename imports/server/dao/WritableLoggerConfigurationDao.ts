@@ -1,4 +1,4 @@
-import ReadWriteDao from "/lib/server/ReadWriteDao";
+import ReadWriteDao from "/imports/server/dao/ReadWriteDao";
 import { LoggerConfigurationRecord } from "/lib/records/LoggerConfigurationRecord";
 import Stoppable from "/lib/Stoppable";
 

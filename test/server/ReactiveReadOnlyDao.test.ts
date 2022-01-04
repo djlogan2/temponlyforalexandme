@@ -1,4 +1,4 @@
-import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import EventEmitter from "eventemitter3";
 import { expect } from "chai";
 // @ts-ignore

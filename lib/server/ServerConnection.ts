@@ -6,6 +6,7 @@ import { PongMessage } from "../records/PongMessage";
 import { PongResponse } from "../records/PongResponse";
 import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
+import { IdleMessage } from "/lib/records/IdleMessage";
 
 export default class ServerConnection extends AbstractTimestampNode {
     private connectionrecord: ConnectionRecord;
@@ -28,9 +29,16 @@ export default class ServerConnection extends AbstractTimestampNode {
         this.closing();
     }
 
+    private idleMessage(idle: IdleMessage): void {
+        this.logger2.debug(() => `idle=${JSON.stringify(idle)}`);
+    }
+
     public handleDirectMessage(messagetype: string, message: any) {
         this.logger2.trace(() => `${this.connectionid} handleDirectMessage: ${messagetype}: ${JSON.stringify(message)}`);
         switch (messagetype) {
+        case "idle":
+            this.idleMessage(message);
+            break;
         case "ping":
         case "pong":
         case "rslt":

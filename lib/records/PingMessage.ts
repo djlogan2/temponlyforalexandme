@@ -1,5 +1,5 @@
 export interface PingMessage {
     id: string;
-    type: string;
+    type: "ping";
     originate: number;
 }

@@ -1,5 +1,5 @@
 import { Meteor } from "meteor/meteor";
-import ReadOnlyDao from "/lib/ReadOnlyDao";
+import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
 // @ts-ignore
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { expect } from "chai";

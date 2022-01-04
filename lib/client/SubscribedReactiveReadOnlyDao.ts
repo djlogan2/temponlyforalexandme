@@ -1,6 +1,6 @@
 import Stoppable from "/lib/Stoppable";
 import ICCEventEmitter from "/lib/ICCEventEmitter";
-import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 
 export default abstract class SubscribedReactiveReadOnlyDao<T> extends ReactiveReadOnlyDao<T> {

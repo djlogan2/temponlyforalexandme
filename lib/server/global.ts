@@ -1,6 +1,6 @@
 import { Mongo } from "meteor/mongo";
 import PooledEventEmitter from "/lib/PooledEventEmitter";
-import ReactiveReadOnlyDao from "/lib/ReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import LoggerService from "/imports/server/service/LoggerService";
 import Stoppable from "/lib/Stoppable";
 import CommonLogger from "/lib/CommonLogger";
