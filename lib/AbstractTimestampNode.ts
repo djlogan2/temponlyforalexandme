@@ -4,11 +4,13 @@ import Stoppable from "/lib/Stoppable";
 import { PingMessage } from "/lib/records/PingMessage";
 import { PongMessage } from "/lib/records/PongMessage";
 import { PongResponse } from "/lib/records/PongResponse";
+import EventEmitter from "eventemitter3";
 
 export default abstract class AbstractTimestampNode extends Stoppable {
     private intervalHandle?: number;
 
     private cleanupHandle?: number;
+    private eventEmitter?: EventEmitter;
 
     protected pendingrequests: { [key: string]: PingMessage };
 
@@ -37,6 +39,8 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         this.localvalues = { current_clock_offset: 0 };
         this.remotevalues = { current_clock_offset: 0 };
         this.pendingrequests = {};
+
+        this.eventEmitter = new EventEmitter();
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -58,6 +62,8 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         this.logger.trace(() => `PongReceived: ${JSON.stringify(pong)}`);
         const arrival = this.getMilliseconds();
         this.localvalues.delay = Math.abs(arrival - pong.originate - (pong.transmit - pong.receive));
+        // @ts-ignore
+        this.eventEmitter.emit("lagChanged", this.localvalues.delay);
         this.localvalues.clock_offset = (pong.receive - pong.originate + pong.transmit - arrival) / 2;
 
         //
@@ -128,6 +134,14 @@ export default abstract class AbstractTimestampNode extends Stoppable {
 
     public getMilliseconds(): number {
         return new Date().getTime() + this.localvalues.current_clock_offset;
+    }
+
+    public getLag(): number | undefined {
+        return this.localvalues.delay;
+    }
+
+    protected getEmitter(): EventEmitter | undefined {
+        return this.eventEmitter;
     }
 
     public start(): void {
