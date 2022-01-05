@@ -1,4 +1,3 @@
-import EventEmitter from "eventemitter3";
 import React from "react";
 import ClientConnection from "/lib/client/ClientConnection";
 import Stoppable from "/lib/Stoppable";

@@ -10,9 +10,9 @@ module.exports = {
         "eslint:recommended",
         "@meteorjs/eslint-config-meteor",
         "plugin:react/recommended",
-        "google",
-        "plugin:react/recommended",
         "plugin:chai-friendly/recommended",
+        "airbnb",
+        "prettier",
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
@@ -48,10 +48,7 @@ module.exports = {
                 allowTemplateLiterals: true,
             },
         ],
-        "quotes": [2, "double", { avoidEscape: true }],
         "require-jsdoc": 0,
-        "semi": ["error", "always"],
-        "indent": ["error", 4],
         "import/extensions": [
             0,
             "ignorePackages",
