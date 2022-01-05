@@ -62,6 +62,12 @@ export default class ClientConnection extends AbstractTimestampNode {
         Meteor.startup(() => {
             // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
+
+            const hashToken = this.getConnectionFromCookie();
+            if (!hashToken || hashToken === "null") {
+                this.setConnectionToCookie(this.connectionid);
+            }
+
             this.logger2.trace(() => `connection id=${this.connectionid}`);
 
             window.addEventListener("blur", () => this.isFocused(false));
@@ -133,8 +139,24 @@ export default class ClientConnection extends AbstractTimestampNode {
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
     }
 
-    public get getTabIdentifier(): number | undefined {
+    public get getTabIdentifier(): string | undefined {
         return this.tabIdentifier;
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    private setConnectionToCookie(value: string): void {
+        document.cookie = `connectionId=${value}; path=/`;
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    public getConnectionFromCookie(): string | undefined {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; connectionId=`);
+        if (parts.length === 2) {
+            return parts?.pop()?.split(';').shift();
+        }
+
+        return undefined;
     }
 
     protected stopping() {

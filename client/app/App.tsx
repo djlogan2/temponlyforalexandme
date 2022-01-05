@@ -15,7 +15,7 @@ class ClientServer extends Stoppable {
     }
 }
 
-window.cServer = new ClientServer();
+window.ClientServer = new ClientServer();
 
 const App = () => {
     const eventEmitter = window.ClientServer.connection.getEmitter;
@@ -27,6 +27,7 @@ const App = () => {
 
     useEffect(() => {
         console.log("Tab identifier: ", window.ClientServer.connection.getTabIdentifier);
+        console.log("Hash token: ", window.ClientServer.connection.getConnectionFromCookie());
     }, []);
 
     return <div>Here!</div>;
