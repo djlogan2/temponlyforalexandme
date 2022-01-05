@@ -1,4 +1,3 @@
-import EventEmitter from 'eventemitter3';
 import { Meteor } from "meteor/meteor";
 import { PingMessage } from "../records/PingMessage";
 import { PongMessage } from "../records/PongMessage";
@@ -46,6 +45,8 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     private focused: boolean = true;
 
+    private tabIdentifier?: string;
+
     private idle: number = 0;
 
     private logger2 = new ClientLogger(this, "client/ClientConnection");
@@ -54,6 +55,9 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     constructor(parent: Stoppable | null) {
         super(parent, 60);
+
+        this.tabIdentifier = Date.now().toString();
+
         this.logger2.trace(() => "constructor");
         Meteor.startup(() => {
             // @ts-ignore
@@ -69,7 +73,7 @@ export default class ClientConnection extends AbstractTimestampNode {
             this.idlehandle = Meteor.setInterval(() => {
                 const idle: IdleMessage = {
                     type: "idle",
-                    tab: "x",
+                    tab: this.tabIdentifier,
                     idleseconds: this.idle,
                     focused: this.focused,
                 };
@@ -127,6 +131,10 @@ export default class ClientConnection extends AbstractTimestampNode {
         this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
         // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
+    }
+
+    public get getTabIdentifier(): number | undefined {
+        return this.tabIdentifier;
     }
 
     protected stopping() {
