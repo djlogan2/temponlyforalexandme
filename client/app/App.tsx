@@ -15,13 +15,13 @@ class ClientServer extends Stoppable {
     }
 }
 
-window.ClientServer = new ClientServer();
+window.cServer = new ClientServer();
 
-const App = (props, context) => {
-    const eventEmitter = window.ClientServer.connection.getEmitter;
+const App = () => {
+    const eventEmitter = ClientServer.connection.getEmitter;
 
     eventEmitter.on("lagChanged", () => {
-       const lag = window.ClientServer.connection.getLag();
+       const lag = ClientServer.connection.getLag();
        console.log("current lag: ", lag);
     });
 

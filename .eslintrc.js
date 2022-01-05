@@ -8,10 +8,10 @@ module.exports = {
     plugins: ["react", "@typescript-eslint", "chai-friendly"],
     extends: [
         "eslint:recommended",
+        "airbnb",
         "@meteorjs/eslint-config-meteor",
         "plugin:react/recommended",
         "plugin:chai-friendly/recommended",
-        "airbnb",
         "prettier",
     ],
     parser: "@typescript-eslint/parser",
@@ -39,24 +39,6 @@ module.exports = {
             {
                 namedComponents: "arrow-function",
                 unnamedComponents: "arrow-function",
-            },
-        ],
-        "@typescript-eslint/quotes": [
-            "error",
-            "double",
-            {
-                allowTemplateLiterals: true,
-            },
-        ],
-        "require-jsdoc": 0,
-        "import/extensions": [
-            0,
-            "ignorePackages",
-            {
-                js: "never",
-                jsx: "never",
-                ts: "never",
-                tsx: "never",
             },
         ],
         "no-use-before-define": 0,

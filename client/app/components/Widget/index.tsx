@@ -17,8 +17,15 @@ export interface IWidgetProps {
 }
 
 export class Widget extends Component<IWidgetProps> {
+  constructor(props: IWidgetProps) {
+    super(props);
+    this.state = {};
+  }
+
   render() {
-    return <div>{this.props.i}</div>;
+    const { i } = this.props;
+
+    return <div>{i}</div>;
   }
 }
 
