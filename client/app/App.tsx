@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3";
-import React from "react";
+import React, { useEffect } from "react";
 import ClientConnection from "/lib/client/ClientConnection";
 import Stoppable from "/lib/Stoppable";
 
@@ -18,13 +18,17 @@ class ClientServer extends Stoppable {
 
 window.ClientServer = new ClientServer();
 
-const App = (props, context) => {
+const App = () => {
     const eventEmitter = window.ClientServer.connection.getEmitter;
 
     eventEmitter.on("lagChanged", () => {
-       const lag = window.ClientServer.connection.getLag();
-       console.log("current lag: ", lag);
+        const lag = window.ClientServer.connection.getLag();
+        console.log("current lag: ", lag);
     });
+
+    useEffect(() => {
+        console.log("Tab identifier: ", window.ClientServer.connection.getTabIdentifier);
+    }, []);
 
     return <div>Here!</div>;
 };
