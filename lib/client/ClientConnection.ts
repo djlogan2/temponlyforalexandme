@@ -1,3 +1,4 @@
+import EventEmitter from 'eventemitter3';
 import { Meteor } from "meteor/meteor";
 import { PingMessage } from "../records/PingMessage";
 import { PongMessage } from "../records/PongMessage";

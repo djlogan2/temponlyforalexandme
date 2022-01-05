@@ -63,7 +63,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         const arrival = this.getMilliseconds();
         this.localvalues.delay = Math.abs(arrival - pong.originate - (pong.transmit - pong.receive));
         // @ts-ignore
-        this.eventEmitter.emit("lagChanged", this.localvalues.delay);
+        this.eventEmitter.emit("lagChanged");
         this.localvalues.clock_offset = (pong.receive - pong.originate + pong.transmit - arrival) / 2;
 
         //
@@ -140,7 +140,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         return this.localvalues.delay;
     }
 
-    protected getEmitter(): EventEmitter | undefined {
+    public get getEmitter(): EventEmitter | undefined {
         return this.eventEmitter;
     }
 
