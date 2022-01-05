@@ -6,6 +6,7 @@ import AbstractTimestampNode from "/lib/AbstractTimestampNode";
 import Stoppable from "/lib/Stoppable";
 import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
+import { Random } from "meteor/random";
 
 //
 // The idle monitor
@@ -45,8 +46,6 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     private focused: boolean = true;
 
-    private tabIdentifier?: string;
-
     private idle: number = 0;
 
     private logger2 = new ClientLogger(this, "client/ClientConnection");
@@ -56,17 +55,12 @@ export default class ClientConnection extends AbstractTimestampNode {
     constructor(parent: Stoppable | null) {
         super(parent, 60);
 
-        this.tabIdentifier = Date.now().toString();
-
         this.logger2.trace(() => "constructor");
         Meteor.startup(() => {
             // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
 
-            const hashToken = this.getConnectionFromCookie();
-            if (!hashToken || hashToken === "null") {
-                this.setConnectionToCookie(this.connectionid);
-            }
+            const hashToken = this.getHashToken();
 
             this.logger2.trace(() => `connection id=${this.connectionid}`);
 
@@ -79,13 +73,13 @@ export default class ClientConnection extends AbstractTimestampNode {
             this.idlehandle = Meteor.setInterval(() => {
                 const idle: IdleMessage = {
                     type: "idle",
-                    tab: this.tabIdentifier,
                     idleseconds: this.idle,
                     focused: this.focused,
                 };
-                this.sendFunction(idle);
+                Meteor.call("idleFunction", idle);
                 this.idle += 1;
             }, 1000);
+            Meteor.call("logonHashToken", hashToken);
         });
 
         const self = this;
@@ -139,24 +133,14 @@ export default class ClientConnection extends AbstractTimestampNode {
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
     }
 
-    public get getTabIdentifier(): string | undefined {
-        return this.tabIdentifier;
-    }
-
     // eslint-disable-next-line class-methods-use-this
-    private setConnectionToCookie(value: string): void {
-        document.cookie = `connectionId=${value}; path=/`;
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    public getConnectionFromCookie(): string | undefined {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; connectionId=`);
-        if (parts.length === 2) {
-            return parts?.pop()?.split(';').shift();
+    public getHashToken(): string | undefined {
+        let hashToken = window.localStorage.getItem("ICCUser.hashToken");
+        if(!hashToken) {
+            hashToken = Random.secret();
+            window.localStorage.setItem("ICCUser.hashToken", hashToken);
         }
-
-        return undefined;
+        return hashToken;
     }
 
     protected stopping() {

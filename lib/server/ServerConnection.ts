@@ -7,6 +7,7 @@ import { PongResponse } from "../records/PongResponse";
 import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
+import User from "/lib/User";
 
 export default class ServerConnection extends AbstractTimestampNode {
     private connectionrecord: ConnectionRecord;
@@ -14,6 +15,8 @@ export default class ServerConnection extends AbstractTimestampNode {
     private closefunctions: (() => void)[] = [];
 
     private logger2 = new ServerLogger(this, "server/ServerConnection");
+
+    private user?: User;
 
     public get _id(): string {
         return this.connectionrecord._id;
@@ -29,16 +32,13 @@ export default class ServerConnection extends AbstractTimestampNode {
         this.closing();
     }
 
-    private idleMessage(idle: IdleMessage): void {
+    public idleMessage(idle: IdleMessage): void {
         this.logger2.debug(() => `idle=${JSON.stringify(idle)}`);
     }
 
     public handleDirectMessage(messagetype: string, message: any) {
         this.logger2.trace(() => `${this.connectionid} handleDirectMessage: ${messagetype}: ${JSON.stringify(message)}`);
         switch (messagetype) {
-        case "idle":
-            this.idleMessage(message);
-            break;
         case "ping":
         case "pong":
         case "rslt":
@@ -57,12 +57,14 @@ export default class ServerConnection extends AbstractTimestampNode {
     }
 
     private closing(): void {
-        this.logger2.trace(() => `${this.connectionid} closing`);
+        this.logger2.debug(() => `${this.connectionid} closing`);
         this.closefunctions.forEach((func) => func());
     }
 
     public onClose(func: () => void): void {
-        this.logger2.trace(() => `${this.connectionid} onClose`);
+        this.logger2.debug(() => `${this.connectionid} onClose`);
+        if(this.user)
+            this.user.logoff();
         this.closefunctions.push(func);
     }
 
@@ -70,5 +72,9 @@ export default class ServerConnection extends AbstractTimestampNode {
         this.logger2.trace(() => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`);
         // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }), this.connectionid);
+    }
+
+    public logonUser(user: User): void {
+        this.user = user;
     }
 }

@@ -6,20 +6,25 @@ import { Mongo } from "meteor/mongo";
 import ServerConnection from "/lib/server/ServerConnection";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
+import {IdleMessage} from "/lib/records/IdleMessage";
+import { check } from "meteor/check";
+import UserService from "/imports/server/service/UserService";
 
 export default class ConnectionService extends Stoppable {
     private connectiondao: ConnectionDao;
 
     private instanceservice: InstanceService;
+    private userservice: UserService;
 
     private connections: { [key: string]: ServerConnection } = {};
 
     private logger = new ServerLogger(this, "server/ConnectionService_ts");
 
-    constructor(parent: Stoppable | null, instanceservice: InstanceService, connectiondao: ConnectionDao) {
+    constructor(parent: Stoppable | null, instanceservice: InstanceService, connectiondao: ConnectionDao, userservice: UserService) {
         super(parent);
         this.connectiondao = connectiondao;
         this.instanceservice = instanceservice;
+        this.userservice = userservice;
 
         Meteor.onConnection((connection) => this.onConnection(connection));
 
@@ -30,7 +35,7 @@ export default class ConnectionService extends Stoppable {
                 self.logger.trace(() => `processDirectMessage/1: ${message}`);
                 const msg = JSON.parse(message);
                 if (typeof msg !== "object" || !("iccdm" in msg)) return;
-                self.logger.trace(() => `processDirectMessage: ${message}`);
+                self.logger.debug(() => `processDirectMessage: ${message}`);
                 // @ts-ignore
                 // eslint-disable-next-line no-invalid-this
                 this.preventCallingMeteorHandler();
@@ -42,6 +47,40 @@ export default class ConnectionService extends Stoppable {
 
         // @ts-ignore
         Meteor.directStream.onMessage(processDirectStreamMessage);
+
+        Meteor.methods({
+            idleFunction (msg) {
+                check(msg, Object);
+                if(this.connection?.id)
+                self.idleMessage(this.connection.id, msg as IdleMessage)
+            },
+            logonHashToken (token) {
+                check(token, String);
+                if(this.connection?.id)
+                self.logonHashToken(this.connection.id, token)
+            }
+        });
+    }
+
+    private idleMessage(connectionid: string, idle: IdleMessage): void {
+        const connection = this.connections[connectionid];
+        this.logger.debug(() => `idleMessage connection=${connection}`);
+        if (!connection) {
+            // TODO: Handle this error
+            return;
+        }
+        connection.idleMessage(idle);
+    }
+
+    private logonHashToken(connectionid: string, hashToken: string): void {
+        const connection = this.connections[connectionid];
+        this.logger.debug(() => `logonHashToken hashToken=${hashToken}`);
+        if (!connection) {
+            // TODO: Handle this error
+            return;
+        }
+        const user = this.userservice.getUserFromHashToken(hashToken);
+        connection.logonUser(user);
     }
 
     private onDirectMessage(session: string, messagetype: string, msgobject: any): void {
@@ -56,14 +95,14 @@ export default class ConnectionService extends Stoppable {
     }
 
     private onClose(ourconnection: ServerConnection): void {
-        this.logger.trace(() => `${ourconnection.connectionid} onClose`);
+        this.logger.debug(() => `${ourconnection.connectionid} onClose`);
         ourconnection.stop();
         delete this.connections[ourconnection.connectionid];
         this.connectiondao.remove(ourconnection._id);
     }
 
     private onConnection(connection: Meteor.Connection): void {
-        this.logger.trace(() => `onConnection connection=${connection.id}`);
+        this.logger.debug(() => `onConnection connection=${connection.id}`);
         const connrecord: Mongo.OptionalId<ConnectionRecord> = {
             connectionid: connection.id,
             instanceid: this.instanceservice.instanceid,

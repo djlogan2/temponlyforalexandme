@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import _ from "lodash";
 import RGL, { WidthProvider } from "react-grid-layout";
 import ClientConnection from "/lib/client/ClientConnection";
