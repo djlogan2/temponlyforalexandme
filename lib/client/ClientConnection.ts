@@ -45,7 +45,7 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     private focused: boolean = true;
 
-    private tabIdentifier?: number;
+    private tabIdentifier?: string;
 
     private idle: number = 0;
 
@@ -56,7 +56,7 @@ export default class ClientConnection extends AbstractTimestampNode {
     constructor(parent: Stoppable | null) {
         super(parent, 60);
 
-        this.tabIdentifier = Date.now();
+        this.tabIdentifier = Date.now().toString();
 
         this.logger2.trace(() => "constructor");
         Meteor.startup(() => {
@@ -73,7 +73,7 @@ export default class ClientConnection extends AbstractTimestampNode {
             this.idlehandle = Meteor.setInterval(() => {
                 const idle: IdleMessage = {
                     type: "idle",
-                    tab: "x",
+                    tab: this.tabIdentifier,
                     idleseconds: this.idle,
                     focused: this.focused,
                 };
