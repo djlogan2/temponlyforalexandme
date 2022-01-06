@@ -28,8 +28,11 @@ export default class LoggerService {
                 collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
             };
         }
-        // @ts-ignore
-        global.ICCServer.server.services.loggerservice = this;
+
+        if (global.ICCServer.server) {
+          global.ICCServer.server.services.loggerservice = this;
+        }
+
         this.readLoggerConfiguration();
 
         const self = this;
@@ -47,8 +50,8 @@ export default class LoggerService {
     }
 
     private readLoggerConfiguration(): void {
-        // @ts-ignore
         const json = Assets.getText("logger_configuration.json");
+
         if (json) {
             const parsed = JSON.parse(json);
             Object.entries(parsed).forEach(([module, level]) => {
@@ -61,8 +64,8 @@ export default class LoggerService {
     public writeToLog(level: LOGLEVEL, module: string, message: string, type: LOGGERTYPE, userid?: string | null, connection?: string): void {
         const date = new Date();
         const text = message;
-        // @ts-ignore
-        const record: LogRecord = {
+
+        const record: Partial<LogRecord> = {
             level,
             module,
             type,

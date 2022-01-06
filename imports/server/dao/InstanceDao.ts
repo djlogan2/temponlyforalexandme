@@ -25,12 +25,9 @@ export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
         this.removedcallbacks.push(func);
     }
 
-    // @ts-ignore
-    // eslint-disable-next-line
     protected onFieldsChanged(id: string, record: Partial<InstanceRecord>): void {
     }
 
-    // @ts-ignore
     protected onRecordAdded(id: string, record: Partial<InstanceRecord>): void {
         this.newcallbacks.forEach((callback) => callback(record as InstanceRecord));
     }

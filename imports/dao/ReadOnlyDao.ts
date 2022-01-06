@@ -7,9 +7,9 @@ export default class ReadOnlyDao<T> extends MongoCollection<T> {
         if (!fields) return null;
         const fld: Mongo.Options<T> = { fields: {} };
         fields.forEach((f) => {
-            // TODO: Why does typescript say fld.fields might be undefined????
-            // @ts-ignore
-            fld.fields[(f as string)] = includeOrExclude === "include" ? 1 : 0;
+          if (fld.fields) {
+            fld.fields[f as string] = includeOrExclude === "include" ? 1 : 0;
+          }
         });
         return fld;
     }

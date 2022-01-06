@@ -30,23 +30,19 @@ export default class ConnectionService extends Stoppable {
 
         const self = this;
 
-        function processDirectStreamMessage(message: string, sessionId: string) {
-            try {
-                self.logger.trace(() => `processDirectMessage/1: ${message}`);
-                const msg = JSON.parse(message);
-                if (typeof msg !== "object" || !("iccdm" in msg)) return;
-                self.logger.debug(() => `processDirectMessage: ${message}`);
-                // @ts-ignore
-                // eslint-disable-next-line no-invalid-this
-                this.preventCallingMeteorHandler();
-                self.onDirectMessage(sessionId, msg.iccdm, msg.iccmsg);
-            } catch (e) {
-                // If we cannot parse the string into an object, it's not for us.
-            }
-        }
-
-        // @ts-ignore
-        Meteor.directStream.onMessage(processDirectStreamMessage);
+        Meteor.directStream.onMessage(function processDirectStreamMessage(message: string, sessionId: string) {
+          try {
+              self.logger.trace(() => `processDirectMessage/1: ${message}`);
+              const msg = JSON.parse(message);
+              if (typeof msg !== "object" || !("iccdm" in msg)) return;
+              self.logger.debug(() => `processDirectMessage: ${message}`);
+              
+              this.preventCallingMeteorHandler();
+              self.onDirectMessage(sessionId, msg.iccdm, msg.iccmsg);
+          } catch (e) {
+              // If we cannot parse the string into an object, it's not for us.
+          }
+      });
 
         Meteor.methods({
             idleFunction (msg) {

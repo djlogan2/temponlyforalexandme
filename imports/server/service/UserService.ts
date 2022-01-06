@@ -18,7 +18,7 @@ export default class UserService {
     }
 
     protected createAnonymousUser(hashtoken: string): User {
-        const record: Mongo.OptionalId<UserRecord> = {hashTokens: [hashtoken], isolation_group: "public"};
+        const record: Mongo.OptionalId<UserRecord> = {hashTokens: [hashtoken], isolation_group: "public", createdAt: new Date()};
         record._id = this.userdao.insert(record);
         return new User(record as UserRecord);
     }
