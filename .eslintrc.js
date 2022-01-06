@@ -24,7 +24,6 @@ module.exports = {
     },
     rules: {
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error"],
         // "consistent-return": "off",
         // "@typescript-eslint/consistent-return": ["error"],
         "import/no-unresolved": ["error", { ignore: ["^meteor/", "^/"] }],
@@ -42,6 +41,9 @@ module.exports = {
             },
         ],
         "no-use-before-define": 0,
+        "class-methods-use-this": 0,
+        "react/jsx-props-no-spreading": 0,
+        "@typescript-eslint/no-unused-vars": [true, {"ignore-pattern": "^_"}]
     },
     settings: {
         "import/resolver": {

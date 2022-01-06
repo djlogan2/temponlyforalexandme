@@ -1,27 +1,10 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import _ from "lodash";
 import RGL, { WidthProvider } from "react-grid-layout";
-import ClientConnection from "/lib/client/ClientConnection";
-import Stoppable from "/lib/Stoppable";
 import Widget from "./components/Widget";
 
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
-
-class ClientServer extends Stoppable {
-    private connection: ClientConnection;
-
-    constructor() {
-        super(null);
-        this.connection = new ClientConnection(this);
-    }
-
-    protected stopping(): void {
-        throw new Error("Method not implemented.");
-    }
-}
-
-window.ClientServer = new ClientServer();
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -40,8 +23,9 @@ const sizes = {
     },
 };
 
-const App = ({ onLayoutChange, ...rest }) => {
-    const generateLayout = () => _.map(new Array(rest.items), function (item, i) {
+const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
+    const generateLayout = () =>
+        _.map(new Array(rest.items), function (_item, i) {
             const y: any = _.result(rest, "y") || Math.ceil(Math.random() * 4) + 1;
             return {
                 x: (i * 2) % 12,
@@ -56,22 +40,17 @@ const App = ({ onLayoutChange, ...rest }) => {
             };
         });
 
-    const [layout, updateLayout] = useState(generateLayout());
+    const [layout] = useState(generateLayout());
 
-    return <ReactGridLayout
-                {...rest}
-                layout={layout}
-                onLayoutChange={onLayoutChange}
-                useCSSTransforms
-                allowOverlap
-                preventCollision
-    >
-                {layout.map((options) => (
-                    <div key={options.i}>
-                        <Widget sizes={sizes} {...options} />
-                    </div>
-                ))}
-            </ReactGridLayout>;
+    return (
+        <ReactGridLayout {...rest} layout={layout} onLayoutChange={onLayoutChange} useCSSTransforms allowOverlap preventCollision>
+            {layout.map((options) => (
+                <div key={options.i}>
+                    <Widget sizes={sizes} {...options} />
+                </div>
+            ))}
+        </ReactGridLayout>
+    );
 };
 
 export default App;
