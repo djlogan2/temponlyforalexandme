@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component } from "react";
 
 interface ISize {
     w: number;
@@ -17,13 +17,13 @@ export interface IWidgetProps {
 }
 
 interface IState {
-    currentLag?: number;
+    currentLag?: number | null;
     currentTab?: number;
     currentHash?: number;
 }
 
 export class Widget extends Component<IWidgetProps, IState> {
-    constructor(props) {
+    constructor(props: IWidgetProps) {
         super(props);
         this.state = {
             currentLag: null,
@@ -35,7 +35,7 @@ export class Widget extends Component<IWidgetProps, IState> {
     componentDidMount() {
         const eventEmitter = window.ClientServer.connection.getEmitter;
 
-        eventEmitter.on("lagChanged", () => {
+        eventEmitter?.on("lagChanged", () => {
             const lag = window.ClientServer.connection.getLag();
             this.setState({ currentLag: lag });
         });

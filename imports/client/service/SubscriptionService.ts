@@ -8,15 +8,13 @@ export default class SubscriptionService extends Stoppable {
      * @param{string} publication
      * @return{ICCEventEmitter} Basically an event emitter (on/off/removeAllListeners)
      */
-    // @ts-ignore
-    // eslint-disable-next-line class-methods-use-this
+
     public getSubscriptionEventEmitter(publication: string): ICCEventEmitter {
         if (!global.ICCServer.client) global.ICCServer.client = { dao: {}, subscriptions: {} };
         if (!global.ICCServer.client.subscriptions[publication]) global.ICCServer.client.subscriptions[publication] = new SubscriptionEventEmitter(publication, this);
         return global.ICCServer.client.subscriptions[publication].newEmitter();
     }
 
-    // eslint-disable-next-line class-methods-use-this
     protected stopping(): void {
         if (!(global?.ICCServer?.client?.subscriptions)) return;
         Object.values(global.ICCServer.client.subscriptions).forEach((sub) => sub.stop());

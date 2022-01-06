@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { render } from "react-dom";
+import "../lib/client/ClientServer";
 import * as React from "react";
 import App, { defaulApptProps } from "./app/App";
 

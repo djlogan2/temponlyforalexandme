@@ -2,7 +2,7 @@ import ClientConnection from "/lib/client/ClientConnection";
 import Stoppable from "/lib/Stoppable";
 
 export default class ClientServer extends Stoppable {
-    private connection: ClientConnection;
+    public connection: ClientConnection;
 
     constructor() {
         super(null);

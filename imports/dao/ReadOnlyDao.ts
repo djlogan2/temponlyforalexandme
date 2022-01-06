@@ -3,7 +3,6 @@ import MongoCollection from "/lib/MongoCollection";
 import Selector = Mongo.Selector;
 
 export default class ReadOnlyDao<T> extends MongoCollection<T> {
-    // eslint-disable-next-line class-methods-use-this
     protected fields(includeOrExclude: "include" | "exclude" | undefined, fields?: (keyof T)[]): null | Mongo.Options<T> {
         if (!fields) return null;
         const fld: Mongo.Options<T> = { fields: {} };
@@ -50,8 +49,6 @@ export default class ReadOnlyDao<T> extends MongoCollection<T> {
         return this.mongocollection.find(selector).fetch();
     }
 
-    // @ts-ignore
-    // eslint-disable-next-line class-methods-use-this
     protected stopping(): void {
         // Nothing for us to stop here
     }

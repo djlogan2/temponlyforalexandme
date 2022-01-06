@@ -147,4 +147,13 @@ export default class ClientConnection extends AbstractTimestampNode {
         super.stopping();
         if (this.idlehandle) Meteor.clearInterval(this.idlehandle);
     }
+    
+    // TODO These should be probably implemented
+    get getTabIdentifier() {
+      return 0;
+    }
+
+    public getConnectionFromCookie() {
+      return 0;
+    }
 }

@@ -114,16 +114,12 @@ export default class ConnectionService extends Stoppable {
         connection.onClose(() => this.onClose(ourconnection));
     }
 
-    // @ts-ignore
-    // eslint-disable-next-line class-methods-use-this
     private startupDeleteDefunctConnectionRecords() {
         // TODO:
         //  Look for connection records that do not have matching instance records
         //  Delete them
     }
 
-    // @ts-ignore
-    // eslint-disable-next-line class-methods-use-this
     protected stopping(): void {
         // Nothing to stop at this time
     }

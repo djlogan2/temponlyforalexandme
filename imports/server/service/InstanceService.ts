@@ -30,8 +30,7 @@ export default class InstanceService extends Stoppable {
     public get instanceid(): string {
         return this.sInstanceid;
     }
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+
     private onDefunctInstance(instance: InstanceRecord): void {
         // TODO: What do we want to do here? Nothing so far that I know of,
         //       except maybe call other guys?

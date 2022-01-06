@@ -25,7 +25,6 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
      */
     protected abstract emit(module: string, loglevel: LOGLEVEL): void;
 
-    // eslint-disable-next-line valid-jsdoc
     /**
      * This isn't for general use.
      */
@@ -39,7 +38,6 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
         }
     }
 
-    // eslint-disable-next-line valid-jsdoc
     /**
      * This isn't for general use.
      */
@@ -54,7 +52,6 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
         }
     }
 
-    // eslint-disable-next-line valid-jsdoc
     /**
      * This isn't for general use.
      */
@@ -67,7 +64,6 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
         this.emit(module, this.debugLevels.root);
     }
 
-    // eslint-disable-next-line class-methods-use-this
     protected onStop(): void {
         // Nothing to do
     }
