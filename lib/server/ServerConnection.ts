@@ -70,7 +70,6 @@ export default class ServerConnection extends AbstractTimestampNode {
 
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
         this.logger2.trace(() => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`);
-        // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }), this.connectionid);
     }
 

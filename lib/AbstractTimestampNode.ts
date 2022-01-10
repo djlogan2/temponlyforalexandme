@@ -30,7 +30,6 @@ export default abstract class AbstractTimestampNode extends Stoppable {
 
     protected pingtimes: number[] = [];
 
-    // @ts-ignore
     private logger = global.ICCServer.utilities.getLogger(this, "AbstractTimestampNode");
 
     protected constructor(parent: Stoppable | null, pingcount: number) {
@@ -43,7 +42,6 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         this.eventEmitter = new EventEmitter();
     }
 
-    // eslint-disable-next-line no-unused-vars
     protected abstract sendFunction(msg: PingMessage | PongMessage | PongResponse): void;
 
     protected PingReceived(ping: PingMessage): void {
@@ -62,8 +60,11 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         this.logger.trace(() => `PongReceived: ${JSON.stringify(pong)}`);
         const arrival = this.getMilliseconds();
         this.localvalues.delay = Math.abs(arrival - pong.originate - (pong.transmit - pong.receive));
-        // @ts-ignore
-        this.eventEmitter.emit("lagChanged");
+
+        if (this.eventEmitter) {
+          this.eventEmitter.emit("lagChanged");
+        }
+        
         this.localvalues.clock_offset = (pong.receive - pong.originate + pong.transmit - arrival) / 2;
 
         //

@@ -6,7 +6,6 @@ import Stoppable from "/lib/Stoppable";
 import CommonLogger from "/lib/CommonLogger";
 
 declare global {
-    // eslint-disable-next-line vars-on-top, no-var
     var ICCServer: {
         server?: {
             services: {loggerservice?: LoggerService}

@@ -17,7 +17,6 @@ export default class Publication<T> extends ReadOnlyDao<T> {
         const fld = this.fields(includeOrExclude, fields);
         const self = this;
         Meteor.publish(publicationname, function() {
-            // eslint-disable-next-line no-invalid-this
             self.events.on("stop", () => this.stop());
             if (fld) return self.mongocollection.find(selector, fld).fetch();
             return self.mongocollection.find(selector).fetch();

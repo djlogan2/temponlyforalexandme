@@ -57,7 +57,6 @@ export default class ClientConnection extends AbstractTimestampNode {
 
         this.logger2.trace(() => "constructor");
         Meteor.startup(() => {
-            // @ts-ignore
             this.connectionid = Meteor.connection._lastSessionId;
 
             const hashToken = this.getHashToken();
@@ -84,23 +83,17 @@ export default class ClientConnection extends AbstractTimestampNode {
 
         const self = this;
 
-        function processDirectStreamMessage(message: any): void {
-            try {
-                const msg = JSON.parse(message);
-                if (typeof msg !== "object" || !("iccdm" in msg)) return;
-                self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
-                // @ts-ignore
-                // eslint-disable-next-line no-invalid-this
-                this.preventCallingMeteorHandler();
-                self.onDirectMessage(msg.iccdm, msg.iccmsg);
-                // @ts-ignore
-            } catch (e) {
-                // If we cannot parse the string into an object, it's not for us.
-            }
-        }
-
-        // @ts-ignore
-        Meteor.directStream.onMessage(processDirectStreamMessage);
+        Meteor.directStream.onMessage(function processDirectStreamMessage(message: any): void {
+          try {
+              const msg = JSON.parse(message);
+              if (typeof msg !== "object" || !("iccdm" in msg)) return;
+              self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
+              this.preventCallingMeteorHandler();
+              self.onDirectMessage(msg.iccdm, msg.iccmsg);
+          } catch (e) {
+              // If we cannot parse the string into an object, it's not for us.
+          }
+      });
         this.start();
     }
 
@@ -126,14 +119,11 @@ export default class ClientConnection extends AbstractTimestampNode {
         }
     }
 
-    // eslint-disable-next-line class-methods-use-this
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse | IdleMessage): void {
         this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
-        // @ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
     }
 
-    // eslint-disable-next-line class-methods-use-this
     public getHashToken(): string | undefined {
         let hashToken = window.localStorage.getItem("ICCUser.hashToken");
         if(!hashToken) {

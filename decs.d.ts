@@ -24,8 +24,8 @@ declare global {
     }
 
     var Assets: {
-      getText: (assetPath: string, asyncCallBack?: () => void) => string;
-    }
+        getText: (assetPath: string, asyncCallBack?: () => void) => string;
+    };
 }
 
 declare module "meteor/meteor" {
@@ -35,11 +35,15 @@ declare module "meteor/meteor" {
         var directStream: {
             onMessage: onMessageFunc;
             broadcast: (message: string) => void;
-            send: (message: string) => void;
+            send: (message: string, sessionId?: string) => void;
         };
 
         var Assets: {
-          getText: (assetPath: string) => void;
-        }
+            getText: (assetPath: string) => void;
+        };
+
+        var connection: {
+            _lastSessionId: string;
+        };
     }
 }
