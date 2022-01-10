@@ -72,6 +72,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^7.0.4",
+    "lint-staged": "^12.1.7",
     "prettier": "^2.5.1",
     "puppeteer": "^13.0.1",
     "selenium-webdriver": "^3.0.0-beta-2",
@@ -85,9 +86,13 @@
     ],
     "plugins": []
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo \"[Husky] pre-commit\""
-    }
+  "lint-staged": {
+    "*.+(js|jsx|ts|tsx)": [
+      "eslint"
+    ],
+    "**/*.(js|ts|tsx|json)": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
