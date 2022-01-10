@@ -7,6 +7,7 @@
     "test": "meteor test --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer",
+    "prepare": "husky install",
     "lint": "eslint --ignore-path .gitignore .",
     "prettier": "prettier --ignore-path .gitignore \"**/*.(js|ts|tsx|json)\"",
     "check-types": "tsc",
@@ -70,6 +71,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^7.0.4",
     "prettier": "^2.5.1",
     "puppeteer": "^13.0.1",
     "selenium-webdriver": "^3.0.0-beta-2",
@@ -82,5 +84,10 @@
       "@babel/preset-react"
     ],
     "plugins": []
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo \"[Husky] pre-commit\""
+    }
   }
 }
