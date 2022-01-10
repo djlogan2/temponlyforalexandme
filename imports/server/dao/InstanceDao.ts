@@ -3,40 +3,42 @@ import { InstanceRecord } from "/lib/records/InstanceRecord";
 import Stoppable from "/lib/Stoppable";
 
 export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
-    private newcallbacks: ((instancerecord: InstanceRecord) => void)[] = [];
+  private newcallbacks: ((instancerecord: InstanceRecord) => void)[] = [];
 
-    private removedcallbacks: ((instanceid: string) => void)[] = [];
+  private removedcallbacks: ((instanceid: string) => void)[] = [];
 
-    private stopcallbacks: (() => void)[] = [];
+  private stopcallbacks: (() => void)[] = [];
 
-    constructor(parent: Stoppable | null) {
-        super(parent, "instances");
-    }
+  constructor(parent: Stoppable | null) {
+    super(parent, "instances");
+  }
 
-    public onNewInstance(func: (instancerecord: InstanceRecord) => void): void {
-        this.newcallbacks.push(func);
-    }
+  public onNewInstance(func: (instancerecord: InstanceRecord) => void): void {
+    this.newcallbacks.push(func);
+  }
 
-    public onStopping(func: () => void) {
-        this.stopcallbacks.push(func);
-    }
+  public onStopping(func: () => void) {
+    this.stopcallbacks.push(func);
+  }
 
-    public onDeletedInstance(func: (instanceid: string) => void): void {
-        this.removedcallbacks.push(func);
-    }
+  public onDeletedInstance(func: (instanceid: string) => void): void {
+    this.removedcallbacks.push(func);
+  }
 
-    protected onFieldsChanged(id: string, record: Partial<InstanceRecord>): void {
-    }
+  protected onFieldsChanged(
+    id: string,
+    record: Partial<InstanceRecord>,
+  ): void {}
 
-    protected onRecordAdded(id: string, record: Partial<InstanceRecord>): void {
-        this.newcallbacks.forEach((callback) => callback(record as InstanceRecord));
-    }
+  protected onRecordAdded(id: string, record: Partial<InstanceRecord>): void {
+    this.newcallbacks.forEach((callback) => callback(record as InstanceRecord));
+  }
 
-    protected onRecordRemoved(id: string): void {
-        this.removedcallbacks.forEach((callback) => callback(id));
-    }
+  protected onRecordRemoved(id: string): void {
+    this.removedcallbacks.forEach((callback) => callback(id));
+  }
 
-    protected onStop(): void {
-        this.stopcallbacks.forEach((callback) => callback());
-    }
+  protected onStop(): void {
+    this.stopcallbacks.forEach((callback) => callback());
+  }
 }

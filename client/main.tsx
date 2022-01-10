@@ -16,5 +16,5 @@ import App, { defaulApptProps } from "./app/App";
 // };
 
 Meteor.startup(() => {
-    render(<App {...defaulApptProps} />, document.getElementById("root"));
+  render(<App {...defaulApptProps} />, document.getElementById("root"));
 });

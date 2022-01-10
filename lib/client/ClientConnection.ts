@@ -37,113 +37,131 @@ import { Random } from "meteor/random";
 //
 
 const resetEvents = {
-    window: ["onload", "onmousemove", "onmousedown", "ontouchstart", "ontouchmove", "onclick", "onkeydown"],
-    document: ["pause", "resume"],
+  window: [
+    "onload",
+    "onmousemove",
+    "onmousedown",
+    "ontouchstart",
+    "ontouchmove",
+    "onclick",
+    "onkeydown",
+  ],
+  document: ["pause", "resume"],
 };
 
 export default class ClientConnection extends AbstractTimestampNode {
-    private connectionid: string = "none";
+  private connectionid: string = "none";
 
-    private focused: boolean = true;
+  private focused: boolean = true;
 
-    private idle: number = 0;
+  private idle: number = 0;
 
-    private logger2 = new ClientLogger(this, "client/ClientConnection");
+  private logger2 = new ClientLogger(this, "client/ClientConnection");
 
-    private idlehandle?: number;
+  private idlehandle?: number;
 
-    constructor(parent: Stoppable | null) {
-        super(parent, 60);
+  constructor(parent: Stoppable | null) {
+    super(parent, 60);
 
-        this.logger2.trace(() => "constructor");
-        Meteor.startup(() => {
-            this.connectionid = Meteor.connection._lastSessionId;
+    this.logger2.trace(() => "constructor");
+    Meteor.startup(() => {
+      this.connectionid = Meteor.connection._lastSessionId;
 
-            const hashToken = this.getHashToken();
+      const hashToken = this.getHashToken();
 
-            this.logger2.trace(() => `connection id=${this.connectionid}`);
+      this.logger2.trace(() => `connection id=${this.connectionid}`);
 
-            window.addEventListener("blur", () => this.isFocused(false));
-            window.addEventListener("focus", () => this.isFocused(true));
-            window.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
-            resetEvents.window.forEach((event) => window.addEventListener(event, () => this.isActive()));
-            resetEvents.document.forEach((event) => document.addEventListener(event, () => this.isActive()));
+      window.addEventListener("blur", () => this.isFocused(false));
+      window.addEventListener("focus", () => this.isFocused(true));
+      window.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
+      resetEvents.window.forEach((event) =>
+        window.addEventListener(event, () => this.isActive()),
+      );
+      resetEvents.document.forEach((event) =>
+        document.addEventListener(event, () => this.isActive()),
+      );
 
-            this.idlehandle = Meteor.setInterval(() => {
-                const idle: IdleMessage = {
-                    type: "idle",
-                    idleseconds: this.idle,
-                    focused: this.focused,
-                };
-                Meteor.call("idleFunction", idle);
-                this.idle += 1;
-            }, 1000);
-            Meteor.call("logonHashToken", hashToken);
-        });
+      this.idlehandle = Meteor.setInterval(() => {
+        const idle: IdleMessage = {
+          type: "idle",
+          idleseconds: this.idle,
+          focused: this.focused,
+        };
+        Meteor.call("idleFunction", idle);
+        this.idle += 1;
+      }, 1000);
+      Meteor.call("logonHashToken", hashToken);
+    });
 
-        const self = this;
+    const self = this;
 
-        Meteor.directStream.onMessage(function processDirectStreamMessage(message: any): void {
-          try {
-              const msg = JSON.parse(message);
-              if (typeof msg !== "object" || !("iccdm" in msg)) return;
-              self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
-              this.preventCallingMeteorHandler();
-              self.onDirectMessage(msg.iccdm, msg.iccmsg);
-          } catch (e) {
-              // If we cannot parse the string into an object, it's not for us.
-          }
-      });
-        this.start();
+    Meteor.directStream.onMessage(function processDirectStreamMessage(
+      message: any,
+    ): void {
+      try {
+        const msg = JSON.parse(message);
+        if (typeof msg !== "object" || !("iccdm" in msg)) return;
+        self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
+        this.preventCallingMeteorHandler();
+        self.onDirectMessage(msg.iccdm, msg.iccmsg);
+      } catch (e) {
+        // If we cannot parse the string into an object, it's not for us.
+      }
+    });
+    this.start();
+  }
+
+  private isActive(): void {
+    console.log("isActive called");
+    if (this.focused) this.idle = 0;
+  }
+
+  private isFocused(focused: boolean): void {
+    this.focused = focused;
+  }
+
+  private onDirectMessage(messagetype: string, message: any) {
+    this.logger2.trace(
+      () => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`,
+    );
+    switch (messagetype) {
+      case "ping":
+      case "pong":
+      case "rslt":
+        this.processIncomingMessage(message);
+        break;
+      default:
+        throw new Meteor.Error("INVALID_MESSAGE");
     }
+  }
 
-    private isActive(): void {
-        console.log("isActive called");
-        if (this.focused) this.idle = 0;
-    }
+  protected sendFunction(
+    msg: PingMessage | PongMessage | PongResponse | IdleMessage,
+  ): void {
+    this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
+    Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
+  }
 
-    private isFocused(focused: boolean): void {
-        this.focused = focused;
+  public getHashToken(): string | undefined {
+    let hashToken = window.localStorage.getItem("ICCUser.hashToken");
+    if (!hashToken) {
+      hashToken = Random.secret();
+      window.localStorage.setItem("ICCUser.hashToken", hashToken);
     }
+    return hashToken;
+  }
 
-    private onDirectMessage(messagetype: string, message: any) {
-        this.logger2.trace(() => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`);
-        switch (messagetype) {
-        case "ping":
-        case "pong":
-        case "rslt":
-            this.processIncomingMessage(message);
-            break;
-        default:
-            throw new Meteor.Error("INVALID_MESSAGE");
-        }
-    }
+  protected stopping() {
+    super.stopping();
+    if (this.idlehandle) Meteor.clearInterval(this.idlehandle);
+  }
 
-    protected sendFunction(msg: PingMessage | PongMessage | PongResponse | IdleMessage): void {
-        this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
-        Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
-    }
+  // TODO These should be probably implemented
+  get getTabIdentifier() {
+    return 0;
+  }
 
-    public getHashToken(): string | undefined {
-        let hashToken = window.localStorage.getItem("ICCUser.hashToken");
-        if(!hashToken) {
-            hashToken = Random.secret();
-            window.localStorage.setItem("ICCUser.hashToken", hashToken);
-        }
-        return hashToken;
-    }
-
-    protected stopping() {
-        super.stopping();
-        if (this.idlehandle) Meteor.clearInterval(this.idlehandle);
-    }
-    
-    // TODO These should be probably implemented
-    get getTabIdentifier() {
-      return 0;
-    }
-
-    public getConnectionFromCookie() {
-      return 0;
-    }
+  public getConnectionFromCookie() {
+    return 0;
+  }
 }

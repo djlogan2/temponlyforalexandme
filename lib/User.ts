@@ -1,13 +1,11 @@
-import {UserRecord} from "/lib/records/UserRecord";
+import { UserRecord } from "/lib/records/UserRecord";
 
 export default class User {
-    private userrecord: UserRecord;
+  private userrecord: UserRecord;
 
-    constructor(userrecord: UserRecord) {
-        this.userrecord = userrecord;
-    }
+  constructor(userrecord: UserRecord) {
+    this.userrecord = userrecord;
+  }
 
-    public logoff(): void {
-
-    }
+  public logoff(): void {}
 }

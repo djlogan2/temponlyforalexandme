@@ -10,82 +10,118 @@ import Stoppable from "/lib/Stoppable";
 import { consoleLogger } from "/lib/ConsoleLogger";
 
 export default class LoggerService {
-    private readableconfigdao: ReadOnlyLoggerConfigurationDao;
+  private readableconfigdao: ReadOnlyLoggerConfigurationDao;
 
-    private writeableconfigdao: WritableLoggerConfigurationDao;
+  private writeableconfigdao: WritableLoggerConfigurationDao;
 
-    private loggerdao: LogRecordsDao;
+  private loggerdao: LogRecordsDao;
 
-    public get events() {return this.readableconfigdao.events;}
+  public get events() {
+    return this.readableconfigdao.events;
+  }
 
-    constructor(loggerconfigdao: ReadOnlyLoggerConfigurationDao, writableconfigdao: WritableLoggerConfigurationDao, loggerdao: LogRecordsDao) {
-        this.readableconfigdao = loggerconfigdao;
-        this.writeableconfigdao = writableconfigdao;
-        this.loggerdao = loggerdao;
+  constructor(
+    loggerconfigdao: ReadOnlyLoggerConfigurationDao,
+    writableconfigdao: WritableLoggerConfigurationDao,
+    loggerdao: LogRecordsDao,
+  ) {
+    this.readableconfigdao = loggerconfigdao;
+    this.writeableconfigdao = writableconfigdao;
+    this.loggerdao = loggerdao;
 
-        if (!global.ICCServer) {
-            global.ICCServer = {
-                collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
-            };
-        }
-
-        if (global.ICCServer.server) {
-          global.ICCServer.server.services.loggerservice = this;
-        }
-
-        this.readLoggerConfiguration();
-
-        const self = this;
-        // TODO: Maybe fix this? Maybe not? Not sure, since we already have a Meteor.methods in here anyway
-        Meteor.publish("logger_configuration", () => global.ICCServer.collections.logger_configuration.find());
-        Meteor.methods({
-            writeToLog(module: string, level: LOGLEVEL, message: string) {
-                check(module, String);
-                check(level, String);
-                check(module, String);
-                check(message, String);
-                self.writeToLog(level, module, message, "client", this.userId, this.connection?.id);
-            },
-        });
+    if (!global.ICCServer) {
+      global.ICCServer = {
+        collections: {},
+        client: { subscriptions: {}, dao: {} },
+        server: { services: {} },
+        utilities: { getLogger: consoleLogger },
+      };
     }
 
-    private readLoggerConfiguration(): void {
-        const json = Assets.getText("logger_configuration.json");
-
-        if (json) {
-            const parsed = JSON.parse(json);
-            Object.entries(parsed).forEach(([module, level]) => {
-                const llLevel = (level as string).toLowerCase() as LOGLEVEL;
-                this.changeDebugLevel(module, llLevel);
-            });
-        }
+    if (global.ICCServer.server) {
+      global.ICCServer.server.services.loggerservice = this;
     }
 
-    public writeToLog(level: LOGLEVEL, module: string, message: string, type: LOGGERTYPE, userid?: string | null, connection?: string): void {
-        const date = new Date();
-        const text = message;
+    this.readLoggerConfiguration();
 
-        const record: Partial<LogRecord> = {
-            level,
-            module,
-            type,
-            date,
-            text,
-        };
-        if (userid) record.userid = userid;
-        if (connection) record.connection = connection;
-        this.loggerdao.insert(record);
-        const logstring = `${new Date().toDateString()} ${type.toUpperCase()} ${userid || "-"} ${connection || "-"} ${module} ${level} ${text}`;
-        console.log(logstring);
-    }
+    const self = this;
+    // TODO: Maybe fix this? Maybe not? Not sure, since we already have a Meteor.methods in here anyway
+    Meteor.publish("logger_configuration", () =>
+      global.ICCServer.collections.logger_configuration.find(),
+    );
+    Meteor.methods({
+      writeToLog(module: string, level: LOGLEVEL, message: string) {
+        check(module, String);
+        check(level, String);
+        check(module, String);
+        check(message, String);
+        self.writeToLog(
+          level,
+          module,
+          message,
+          "client",
+          this.userId,
+          this.connection?.id,
+        );
+      },
+    });
+  }
 
-    public changeDebugLevel(module: string, newlevel: LOGLEVEL): void {
-        this.writeableconfigdao.upsert({ module }, { $set: { debuglevel: newlevel } });
+  private readLoggerConfiguration(): void {
+    const json = Assets.getText("logger_configuration.json");
+
+    if (json) {
+      const parsed = JSON.parse(json);
+      Object.entries(parsed).forEach(([module, level]) => {
+        const llLevel = (level as string).toLowerCase() as LOGLEVEL;
+        this.changeDebugLevel(module, llLevel);
+      });
     }
+  }
+
+  public writeToLog(
+    level: LOGLEVEL,
+    module: string,
+    message: string,
+    type: LOGGERTYPE,
+    userid?: string | null,
+    connection?: string,
+  ): void {
+    const date = new Date();
+    const text = message;
+
+    const record: Partial<LogRecord> = {
+      level,
+      module,
+      type,
+      date,
+      text,
+    };
+    if (userid) record.userid = userid;
+    if (connection) record.connection = connection;
+    this.loggerdao.insert(record);
+    const logstring = `${new Date().toDateString()} ${type.toUpperCase()} ${
+      userid || "-"
+    } ${connection || "-"} ${module} ${level} ${text}`;
+    console.log(logstring);
+  }
+
+  public changeDebugLevel(module: string, newlevel: LOGLEVEL): void {
+    this.writeableconfigdao.upsert(
+      { module },
+      { $set: { debuglevel: newlevel } },
+    );
+  }
 }
 
 if (!global.ICCServer) {
-    global.ICCServer = {
-        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: (parent: Stoppable, identifier: string) => new ServerLogger(parent, identifier) },
-    };
+  global.ICCServer = {
+    collections: {},
+    client: { subscriptions: {}, dao: {} },
+    server: { services: {} },
+    utilities: {
+      getLogger: (parent: Stoppable, identifier: string) =>
+        new ServerLogger(parent, identifier),
+    },
+  };
 }

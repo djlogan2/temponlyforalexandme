@@ -13,15 +13,22 @@ import WritableUserDao from "/imports/server/dao/WritableUserDao";
 const parent = null;
 
 if (!global.ICCServer) {
-    global.ICCServer = {
-        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
-    };
+  global.ICCServer = {
+    collections: {},
+    client: { subscriptions: {}, dao: {} },
+    server: { services: {} },
+    utilities: { getLogger: consoleLogger },
+  };
 }
 const readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
 const writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
 const logrecordsdao = new LogRecordsDao(null);
 
-const loggerservice = new LoggerService(readableloggerconfigdao, writableloggerconfigdao, logrecordsdao);
+const loggerservice = new LoggerService(
+  readableloggerconfigdao,
+  writableloggerconfigdao,
+  logrecordsdao,
+);
 
 const instancedao = new InstanceDao(parent);
 const connectiondao = new ConnectionDao(parent);
@@ -29,4 +36,9 @@ const connectiondao = new ConnectionDao(parent);
 const instanceservice = new InstanceService(parent, instancedao);
 const writabluseredao = new WritableUserDao(null);
 const userservice = new UserService(writabluseredao);
-const connectionservice = new ConnectionService(parent, instanceservice, connectiondao, userservice);
+const connectionservice = new ConnectionService(
+  parent,
+  instanceservice,
+  connectiondao,
+  userservice,
+);

@@ -26,13 +26,9 @@
     "types": ["node", "mocha"],
     "esModuleInterop": true,
     "preserveSymlinks": true,
-    "inlineSourceMap": true,
-//    "sourceMap": true,
-//    "sourceRoot": "http://localhost:3000/debug/source",
+    "inlineSourceMap": true
+    //    "sourceMap": true,
+    //    "sourceRoot": "http://localhost:3000/debug/source",
   },
-  "exclude": [
-    "./.meteor/**",
-    "./packages/**"
-  ]
+  "exclude": ["./.meteor/**", "./packages/**"]
 }
-
