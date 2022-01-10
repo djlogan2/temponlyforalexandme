@@ -1,10 +1,11 @@
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import Stoppable from "/lib/Stoppable";
+import {SubscriptionNames} from "/lib/SubscriptionNames";
 
 export default abstract class PooledEventEmitter extends Stoppable {
     private count: number = 0;
 
-    protected poolname: string;
+    protected poolname: SubscriptionNames;
 
     /**
      * The name of the pool. In this class, it is for informational purposes only
@@ -12,7 +13,7 @@ export default abstract class PooledEventEmitter extends Stoppable {
      * @param{Stoppable} parent Our stoppable parent, or null
      * @protected
      */
-    protected constructor(poolname: string, parent: Stoppable | null) {
+    protected constructor(poolname: SubscriptionNames, parent: Stoppable | null) {
         super(parent);
         this.poolname = poolname;
     }

@@ -1,10 +1,9 @@
 import { Meteor } from "meteor/meteor";
 import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
-// @ts-ignore
+// prepare-to-remove-ts-ignore
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { expect } from "chai";
 import { Mongo } from "meteor/mongo";
-import {consoleLogger} from "/lib/ConsoleLogger";
 
 interface TestRecord {
     _id: string;
@@ -13,11 +12,6 @@ interface TestRecord {
     data3: string;
 }
 
-if (!global.ICCServer) {
-    global.ICCServer = {
-        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
-    };
-}
 if (!global.ICCServer.collections.readonlydaotest) global.ICCServer.collections.readonlydaotest = new Mongo.Collection<TestRecord>("readonlydaotest");
 
 function insert(): Promise<void[]> {
@@ -39,7 +33,7 @@ function insert(): Promise<void[]> {
     const promises: Promise<void>[] = [];
     data.forEach((record) => {
         promises.push(new Promise<void>((resolve, reject) => {
-            global.ICCServer.collections.readonlydaotest.insert(record, (err: any) => {
+            globalThis.ICCServer.utilities.getCollection("readonlydaotest").insert(record, (err: any) => {
                 if (err) reject(err); else resolve();
             });
         }));
@@ -48,7 +42,7 @@ function insert(): Promise<void[]> {
 }
 
 Meteor.methods({ ReadOnlyDaoTest: insert });
-Meteor.publish("readonlydaotest", () => global.ICCServer.collections.readonlydaotest.find());
+Meteor.publish("readonlydaotest", () => globalThis.ICCServer.utilities.getCollection("readonlydaotest").find());
 
 describe("ReadOnlyDao", function() {
     beforeEach(function(done) {
@@ -67,7 +61,7 @@ describe("ReadOnlyDao", function() {
 
     describe("get", function() {
         it("should return undefined when id not found", function() {
-            // @ts-ignore
+            // prepare-to-remove-ts-ignore
             // eslint-disable-next-line no-invalid-this
             const r = new ReadOnlyDao<TestRecord>("readonlydaotest", null);
             const tr = r.get("notfound");
@@ -85,7 +79,7 @@ describe("ReadOnlyDao", function() {
 
     describe("readOne", function() {
         it("should return undefined when id not found", function() {
-            // @ts-ignore
+            // prepare-to-remove-ts-ignore
             // eslint-disable-next-line no-invalid-this
             const r = new ReadOnlyDao<TestRecord>("readonlydaotest", null);
             const tr = r.readOne({ data1: "a" });
@@ -119,7 +113,7 @@ describe("ReadOnlyDao", function() {
 
     describe("readMany", function() {
         it("should return undefined when id not found", function() {
-            // @ts-ignore
+            // prepare-to-remove-ts-ignore
             // eslint-disable-next-line no-invalid-this
             const r = new ReadOnlyDao<TestRecord>("readonlydaotest", null);
             const tr = r.readMany({ data1: "a" });

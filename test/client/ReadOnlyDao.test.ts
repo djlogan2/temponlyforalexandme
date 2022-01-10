@@ -1,10 +1,9 @@
 import { Meteor } from "meteor/meteor";
 import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
-// @ts-ignore
+// prepare-to-remove-ts-ignore
 import { resetDatabase } from "meteor/xolvio:cleaner";
-// @ts-ignore
+// prepare-to-remove-ts-ignore
 import { expect } from "chai";
-import {consoleLogger} from "/lib/ConsoleLogger";
 
 interface TestRecord {
     _id: string;
@@ -13,11 +12,6 @@ interface TestRecord {
     data3: string;
 }
 
-if (!global.ICCServer) {
-    global.ICCServer = {
-        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
-    };
-}
 Meteor.subscribe("readonlydaotest");
 
 describe("ReadOnlyDao", function() {
@@ -37,7 +31,7 @@ describe("ReadOnlyDao", function() {
 
     describe("get", function() {
         it("should return undefined when id not found", function() {
-            // @ts-ignore
+            // prepare-to-remove-ts-ignore
             // eslint-disable-next-line no-invalid-this
             const r = new ReadOnlyDao<TestRecord>("readonlydaotest", null);
             const tr = r.get("notfound");
@@ -55,7 +49,7 @@ describe("ReadOnlyDao", function() {
 
     describe("readOne", function() {
         it("should return undefined when id not found", function() {
-            // @ts-ignore
+            // prepare-to-remove-ts-ignore
             // eslint-disable-next-line no-invalid-this
             const r = new ReadOnlyDao<TestRecord>("readonlydaotest", null);
             const tr = r.readOne({ data1: "a" });
@@ -89,7 +83,7 @@ describe("ReadOnlyDao", function() {
 
     describe("readMany", function() {
         it("should return undefined when id not found", function() {
-            // @ts-ignore
+            // prepare-to-remove-ts-ignore
             // eslint-disable-next-line no-invalid-this
             const r = new ReadOnlyDao<TestRecord>("readonlydaotest", null);
             const tr = r.readMany({ data1: "a" });

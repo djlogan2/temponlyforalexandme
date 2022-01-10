@@ -10,8 +10,6 @@ export default class ClientServer extends Stoppable {
     }
 
     protected stopping(): void {
-        throw new Error("Method not implemented.");
+        // Nothing to stop yet
     }
 }
-
-window.ClientServer = new ClientServer();

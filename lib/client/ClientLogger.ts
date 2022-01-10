@@ -7,8 +7,8 @@ export default class ClientLogger extends CommonLogger {
     constructor(parent: Stoppable, module: string) {
         super(parent, module, "client");
         if (!Meteor.isTest && !Meteor.isAppTest) {
-            if (!(global.ICCServer?.client?.dao?.loggerconfigdao)) return;
-            const loggerconfigdao = global.ICCServer.client.dao.loggerconfigdao as ReadOnlyLoggerConfigurationDao;
+            if (!(globalThis.loggerconfigdao)) return;
+            const loggerconfigdao = globalThis.loggerconfigdao as ReadOnlyLoggerConfigurationDao;
             loggerconfigdao.events.on(module, this.logLevelChanged);
         }
     }
@@ -25,11 +25,9 @@ export default class ClientLogger extends CommonLogger {
 
     protected stopping(): void {
         if (!Meteor.isTest && !Meteor.isAppTest) {
-            if (!(global.ICCServer?.client?.dao?.loggerconfigdao)) return;
-            const loggerconfigdao = global.ICCServer.client.dao.loggerconfigdao as ReadOnlyLoggerConfigurationDao;
+            if (!(globalThis.loggerconfigdao)) return;
+            const loggerconfigdao = globalThis.loggerconfigdao as ReadOnlyLoggerConfigurationDao;
             loggerconfigdao.events.off(this.module, this.logLevelChanged);
         }
     }
 }
-
-if (!global.ICCServer) global.ICCServer = { collections: {}, client: { subscriptions: {}, dao: {} }, utilities: { getLogger: (parent: Stoppable, identifier: string) => new ClientLogger(parent, identifier) } };

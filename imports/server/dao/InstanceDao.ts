@@ -25,10 +25,10 @@ export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
         this.removedcallbacks.push(func);
     }
 
-    protected onFieldsChanged(id: string, record: Partial<InstanceRecord>): void {
+    protected onFieldsChanged(_id: string, _record: Partial<InstanceRecord>): void {
     }
 
-    protected onRecordAdded(id: string, record: Partial<InstanceRecord>): void {
+    protected onRecordAdded(_id: string, record: Partial<InstanceRecord>): void {
         this.newcallbacks.forEach((callback) => callback(record as InstanceRecord));
     }
 

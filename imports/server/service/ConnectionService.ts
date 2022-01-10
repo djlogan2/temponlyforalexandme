@@ -14,6 +14,7 @@ export default class ConnectionService extends Stoppable {
     private connectiondao: ConnectionDao;
 
     private instanceservice: InstanceService;
+
     private userservice: UserService;
 
     private connections: { [key: string]: ServerConnection } = {};
@@ -36,7 +37,7 @@ export default class ConnectionService extends Stoppable {
               const msg = JSON.parse(message);
               if (typeof msg !== "object" || !("iccdm" in msg)) return;
               self.logger.debug(() => `processDirectMessage: ${message}`);
-              
+
               this.preventCallingMeteorHandler();
               self.onDirectMessage(sessionId, msg.iccdm, msg.iccmsg);
           } catch (e) {

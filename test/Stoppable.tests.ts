@@ -5,15 +5,15 @@ class TestStoppable extends Stoppable {
 
     private callback: (depth: number) => void;
 
-    // @ts-ignore
-    private child: TestStoppable | null;
-
+    // // prepare-to-remove-ts-ignore
+    // private child: TestStoppable | null;
+    //
     constructor(parent: Stoppable | null, depth: number, callback: (d: number) => void) {
         super(parent);
         this.depth = depth;
         this.callback = callback;
-        if (this.depth < 5) this.child = new TestStoppable(this, depth + 1, this.callback);
-        else {this.child = null;}
+        // if (this.depth < 5) this.child = new TestStoppable(this, depth + 1, this.callback);
+        // else {this.child = null;}
     }
 
     protected stopping(): void {

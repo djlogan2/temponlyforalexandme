@@ -1,24 +1,26 @@
 import PooledEventEmitter from "/lib/PooledEventEmitter";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import {expect} from "chai";
+import {SubscriptionNames} from "/lib/SubscriptionNames";
 
 class TestPooledEventEmitter extends PooledEventEmitter {
     public stopCalled: boolean = false;
-    constructor(poolname: string) {
+
+    constructor(poolname: SubscriptionNames) {
         super(poolname, null);
     }
 
-    // @ts-ignore
+    // prepare-to-remove-ts-ignore
     // eslint-disable-next-line class-methods-use-this
     protected onFirstEvent(): void {
     }
 
-    // @ts-ignore
+    // prepare-to-remove-ts-ignore
     // eslint-disable-next-line class-methods-use-this
     protected onLastEvent(): void {
     }
 
-    // @ts-ignore
+    // prepare-to-remove-ts-ignore
     // eslint-disable-next-line class-methods-use-this
     protected stopping(): void {
         this.stopCalled = true;
@@ -26,11 +28,10 @@ class TestPooledEventEmitter extends PooledEventEmitter {
 }
 describe("SubscriptionService", function() {
     it("should stop subscriptions when the service is stopped", function() {
-        if (!global.ICCServer.client) global.ICCServer.client = { dao: {}, subscriptions: {} };
         const sub1 = new TestPooledEventEmitter("sub1");
         const sub2 = new TestPooledEventEmitter("sub2");
         const sub3 = new TestPooledEventEmitter("sub3");
-        global.ICCServer.client.subscriptions = {
+        globalThis.subscriptions = {
             sub1,
             sub2,
             sub3,

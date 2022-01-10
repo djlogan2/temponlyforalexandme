@@ -1,12 +1,23 @@
-export interface UserRecord {
+export interface LoggedInConnection {
+    connection: string;
+    loginDate: Date;
+    useragent: string;
+    ipaddress: string;
+    focused: boolean;
+    idleseconds: number;
+}
+
+export interface HashToken {
+    hashtoken: string;
+    connections?: LoggedInConnection[];
+}
+
+export default interface UserRecord {
     _id: string;
     createdAt: Date;
     username?: string;
     isolation_group: string;
-    hashTokens?: string[];
-    login?: {
-        loginDate: Date;
-        useragent: string;
-        ipaddress: string;
-    }
+    loggedin: boolean;
+    loginlock?: string;
+    logins: HashToken[];
 }

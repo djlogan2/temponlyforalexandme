@@ -2,6 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
 import Stoppable from "/lib/Stoppable";
+import {CollectionNames} from "/lib/CollectionNames";
 
 export default class ReadWriteDao<T> extends ReadOnlyDao<T> {
     private boundinsert: (record: Mongo.OptionalId<T>) => string;
@@ -17,7 +18,7 @@ export default class ReadWriteDao<T> extends ReadOnlyDao<T> {
      * @param{string} collection The name of the Mongo collection
      * @param{Stoppable | null} parent Our parent, if we have one
      */
-    constructor(collection: string, parent: Stoppable | null) {
+    constructor(collection: CollectionNames, parent: Stoppable | null) {
         super(collection, parent);
         this.boundinsert = Meteor.bindEnvironment((record: Mongo.OptionalId<T>) => this.mongocollection.insert(record));
         this.boundremove = Meteor.bindEnvironment((selector: Mongo.Selector<T>) => this.mongocollection.remove(selector));

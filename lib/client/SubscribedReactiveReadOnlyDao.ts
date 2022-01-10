@@ -2,6 +2,8 @@ import Stoppable from "/lib/Stoppable";
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
+import {SubscriptionNames} from "/lib/SubscriptionNames";
+import {CollectionNames} from "/lib/CollectionNames";
 
 export default abstract class SubscribedReactiveReadOnlyDao<T> extends ReactiveReadOnlyDao<T> {
     private pEvents: ICCEventEmitter;
@@ -10,7 +12,7 @@ export default abstract class SubscribedReactiveReadOnlyDao<T> extends ReactiveR
         return this.pEvents;
     }
 
-    constructor(publicationname: string, collection: string, parent: Stoppable | null, subscriptionservice: SubscriptionService) {
+    constructor(publicationname: SubscriptionNames, collection: CollectionNames, parent: Stoppable | null, subscriptionservice: SubscriptionService) {
         super(parent, collection);
         this.pEvents = subscriptionservice.getSubscriptionEventEmitter(publicationname);
     }

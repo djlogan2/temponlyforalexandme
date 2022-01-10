@@ -5,12 +5,14 @@ import { PingMessage } from "/lib/records/PingMessage";
 import { PongMessage } from "/lib/records/PongMessage";
 import { PongResponse } from "/lib/records/PongResponse";
 import EventEmitter from "eventemitter3";
+import CommonLogger from "/lib/CommonLogger";
 
 export default abstract class AbstractTimestampNode extends Stoppable {
     private intervalHandle?: number;
 
     private cleanupHandle?: number;
-    private eventEmitter?: EventEmitter;
+
+    private eventEmitter: EventEmitter;
 
     protected pendingrequests: { [key: string]: PingMessage };
 
@@ -30,8 +32,8 @@ export default abstract class AbstractTimestampNode extends Stoppable {
 
     protected pingtimes: number[] = [];
 
-    // @ts-ignore
-    private logger = global.ICCServer.utilities.getLogger(this, "AbstractTimestampNode");
+    // prepare-to-remove-ts-ignore
+    private logger: CommonLogger = globalThis.ICCServer.utilities.getLogger(this, "AbstractTimestampNode");
 
     protected constructor(parent: Stoppable | null, pingcount: number) {
         super(parent);
@@ -39,7 +41,6 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         this.localvalues = { current_clock_offset: 0 };
         this.remotevalues = { current_clock_offset: 0 };
         this.pendingrequests = {};
-
         this.eventEmitter = new EventEmitter();
     }
 
@@ -62,7 +63,7 @@ export default abstract class AbstractTimestampNode extends Stoppable {
         this.logger.trace(() => `PongReceived: ${JSON.stringify(pong)}`);
         const arrival = this.getMilliseconds();
         this.localvalues.delay = Math.abs(arrival - pong.originate - (pong.transmit - pong.receive));
-        // @ts-ignore
+        // prepare-to-remove-ts-ignore
         this.eventEmitter.emit("lagChanged");
         this.localvalues.clock_offset = (pong.receive - pong.originate + pong.transmit - arrival) / 2;
 
@@ -138,10 +139,6 @@ export default abstract class AbstractTimestampNode extends Stoppable {
 
     public getLag(): number | undefined {
         return this.localvalues.delay;
-    }
-
-    public get getEmitter(): EventEmitter | undefined {
-        return this.eventEmitter;
     }
 
     public start(): void {

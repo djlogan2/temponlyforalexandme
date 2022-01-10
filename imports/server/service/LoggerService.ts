@@ -1,13 +1,10 @@
 import { check } from "meteor/check";
 import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
 import { Meteor } from "meteor/meteor";
-import ServerLogger from "/lib/server/ServerLogger";
 import { LOGGERTYPE, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 import { LogRecord } from "/lib/records/LogRecord";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
-import Stoppable from "/lib/Stoppable";
-import { consoleLogger } from "/lib/ConsoleLogger";
 
 export default class LoggerService {
     private readableconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -23,21 +20,13 @@ export default class LoggerService {
         this.writeableconfigdao = writableconfigdao;
         this.loggerdao = loggerdao;
 
-        if (!global.ICCServer) {
-            global.ICCServer = {
-                collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
-            };
-        }
-
-        if (global.ICCServer.server) {
-          global.ICCServer.server.services.loggerservice = this;
-        }
+          globalThis.ICCServer.loggerservice = this;
 
         this.readLoggerConfiguration();
 
         const self = this;
         // TODO: Maybe fix this? Maybe not? Not sure, since we already have a Meteor.methods in here anyway
-        Meteor.publish("logger_configuration", () => global.ICCServer.collections.logger_configuration.find());
+        Meteor.publish("logger_configuration", () => globalThis.ICCServer.utilities.getCollection("logger_configuration").find());
         Meteor.methods({
             writeToLog(module: string, level: LOGLEVEL, message: string) {
                 check(module, String);
@@ -82,10 +71,4 @@ export default class LoggerService {
     public changeDebugLevel(module: string, newlevel: LOGLEVEL): void {
         this.writeableconfigdao.upsert({ module }, { $set: { debuglevel: newlevel } });
     }
-}
-
-if (!global.ICCServer) {
-    global.ICCServer = {
-        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: (parent: Stoppable, identifier: string) => new ServerLogger(parent, identifier) },
-    };
 }

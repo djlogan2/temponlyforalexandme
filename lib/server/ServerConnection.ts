@@ -8,15 +8,35 @@ import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import User from "/lib/User";
+import UserRecord from "/lib/records/UserRecord";
+
+const STANDARD_USER_FIELDS: {[K in keyof Partial<UserRecord>]: 1} = {
+    _id: 1,
+    username: 1,
+};
 
 export default class ServerConnection extends AbstractTimestampNode {
     private connectionrecord: ConnectionRecord;
 
     private closefunctions: (() => void)[] = [];
 
+    private idlefunctions: ((connectionid: string, msg: IdleMessage) => void)[] = [];
+
     private logger2 = new ServerLogger(this, "server/ServerConnection");
 
     private user?: User;
+
+    private pIdle?: IdleMessage;
+
+    public get isIdle(): boolean {
+        if(!this.pIdle) return false;
+        return this.pIdle.idleseconds > 60;
+    }
+
+    public get idleSeconds(): number {
+        if(!this.pIdle) return 0;
+        return this.pIdle.idleseconds;
+    }
 
     public get _id(): string {
         return this.connectionrecord._id;
@@ -33,7 +53,9 @@ export default class ServerConnection extends AbstractTimestampNode {
     }
 
     public idleMessage(idle: IdleMessage): void {
+        this.pIdle = idle;
         this.logger2.debug(() => `idle=${JSON.stringify(idle)}`);
+        this.idlefunctions.forEach(fn => fn(this.connectionid, idle));
     }
 
     public handleDirectMessage(messagetype: string, message: any) {
@@ -68,13 +90,22 @@ export default class ServerConnection extends AbstractTimestampNode {
         this.closefunctions.push(func);
     }
 
+    public onIdle(fn: (connectionid: string, msg: IdleMessage) => void): void {
+        this.idlefunctions.push(fn);
+    }
+
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
         this.logger2.trace(() => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`);
-        // @ts-ignore
+        // prepare-to-remove-ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }), this.connectionid);
     }
 
     public logonUser(user: User): void {
         this.user = user;
+        Meteor.publish(null, function() {
+            if(globalThis.ICCServer?.collections?.users)
+            return globalThis.ICCServer.utilities.getCollection("users").find({_id: user.id}, {fields: STANDARD_USER_FIELDS})
+            return this.ready();
+        });
     }
 }

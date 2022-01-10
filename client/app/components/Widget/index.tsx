@@ -18,8 +18,8 @@ export interface IWidgetProps {
 
 interface IState {
     currentLag?: number | null;
-    currentTab?: number;
-    currentHash?: number;
+    currentTab?: string;
+    currentHash?: string;
 }
 
 export class Widget extends Component<IWidgetProps, IState> {
@@ -27,18 +27,24 @@ export class Widget extends Component<IWidgetProps, IState> {
         super(props);
         this.state = {
             currentLag: null,
-            currentTab: window.ClientServer.connection.getTabIdentifier,
-            currentHash: window.ClientServer.connection.getConnectionFromCookie(),
+            currentTab: window.connection?.connectionid,
+            //DJL: We can get to this if we want to, but why would we want to?
+            //     I'm not going to expose it unless you need moe to for some reason
+            //currentHash: window.connection.getConnectionFromCookie(),
         };
     }
 
     componentDidMount() {
-        const eventEmitter = window.ClientServer.connection.getEmitter;
-
-        eventEmitter?.on("lagChanged", () => {
-            const lag = window.ClientServer.connection.getLag();
-            this.setState({ currentLag: lag });
-        });
+        // DJL: We could set this up as an event of course, but the timestamp simply perfoms the
+        // ping/post/rsult sequence every 1000ms. It's guaranteed to change every 1000ms, so you could
+        // also just set up your own timer. If you would like an "architecture defined timer", then I
+        // we should set one up on purpose.
+        // const eventEmitter = window.connection?.getEmitter;
+        //
+        // eventEmitter?.on("lagChanged", () => {
+        //     const lag = window.connection?.getLag();
+        //     this.setState({ currentLag: lag });
+        // });
     }
 
     render() {

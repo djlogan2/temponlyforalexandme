@@ -14,8 +14,8 @@ export default abstract class WritableReactiveDao<T> extends ReactiveReadOnlyDao
         return this.mongocollection.remove(selector);
     }
 
-    public update(selector: Mongo.Selector<T>, modifier: Mongo.Modifier<T>) {
-        this.mongocollection.update(selector, modifier);
+    public update(selector: Mongo.Selector<T>, modifier: Mongo.Modifier<T>): number {
+        return this.mongocollection.update(selector, modifier);
     }
 
     public upsert(selector: Mongo.Selector<T>, modifier: Mongo.Modifier<T>): { numberAffected?: number | undefined; insertedId?: string | undefined; } {

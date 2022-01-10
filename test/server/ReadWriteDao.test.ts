@@ -1,5 +1,5 @@
 import { expect } from "chai";
-// @ts-ignore
+// prepare-to-remove-ts-ignore
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import ReadWriteDao from "/imports/server/dao/ReadWriteDao";
 
@@ -18,7 +18,7 @@ describe("ReadWriteDao", function() {
         it("should work", function() {
             const dao = new ReadWriteDao<TestRecord>("readwritedaotest", null);
             const id = dao.insert({ data: "somedata" });
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.deep.equal({ _id: id, data: "somedata" });
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.deep.equal({ _id: id, data: "somedata" });
         });
     });
 
@@ -26,9 +26,9 @@ describe("ReadWriteDao", function() {
         it("should work", function() {
             const dao = new ReadWriteDao<TestRecord>("readwritedaotest", null);
             const id = dao.insert({ data: "somedata" });
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.deep.equal({ _id: id, data: "somedata" });
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.deep.equal({ _id: id, data: "somedata" });
             dao.remove(id);
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.be.undefined;
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.be.undefined;
         });
     });
 
@@ -39,9 +39,9 @@ describe("ReadWriteDao", function() {
             for (let x = 0; x < 10; x += 1) {
                 ids.push(dao.insert({ data: "somedata" }));
             }
-            expect(global.ICCServer.collections.readwritedaotest.find().count()).to.equal(10);
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").find().count()).to.equal(10);
             dao.removeMany({ _id: { $in: ids.slice(0, 5) } });
-            expect(global.ICCServer.collections.readwritedaotest.find().count()).to.equal(5);
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").find().count()).to.equal(5);
         });
     });
 
@@ -49,9 +49,9 @@ describe("ReadWriteDao", function() {
         it("should work", function() {
             const dao = new ReadWriteDao<TestRecord>("readwritedaotest", null);
             const id = dao.insert({ data: "somedata" });
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.deep.equal({ _id: id, data: "somedata" });
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.deep.equal({ _id: id, data: "somedata" });
             dao.update({ data: "somedata" }, { $set: { data: "moredata" } });
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.deep.equal({ _id: id, data: "moredata" });
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.deep.equal({ _id: id, data: "moredata" });
         });
     });
 
@@ -59,15 +59,15 @@ describe("ReadWriteDao", function() {
         it("should insert a new record", function() {
             const dao = new ReadWriteDao<TestRecord>("readwritedaotest", null);
             const result = dao.upsert({ upsertkey: "up1" }, { $set: { data: "somedata" } });
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.deep.equal({ _id: result.insertedId, upsertkey: "up1", data: "somedata" });
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.deep.equal({ _id: result.insertedId, upsertkey: "up1", data: "somedata" });
         });
 
         it("should update an existing record", function() {
             const dao = new ReadWriteDao<TestRecord>("readwritedaotest", null);
             const result = dao.upsert({ upsertkey: "up1" }, { $set: { data: "somedata" } });
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.deep.equal({ _id: result.insertedId, upsertkey: "up1", data: "somedata" });
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.deep.equal({ _id: result.insertedId, upsertkey: "up1", data: "somedata" });
             dao.upsert({ upsertkey: "up1" }, { $set: { data: "moredata" } });
-            expect(global.ICCServer.collections.readwritedaotest.findOne()).to.deep.equal({ _id: result.insertedId, upsertkey: "up1", data: "moredata" });
+            expect(globalThis.ICCServer.utilities.getCollection("readwritedaotest").findOne()).to.deep.equal({ _id: result.insertedId, upsertkey: "up1", data: "moredata" });
         });
     });
     // // TODO: What to do when things fail? duplicate records, missing fields, not even sure what else

@@ -7,42 +7,15 @@ import Stoppable from "/lib/Stoppable";
 import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import { Random } from "meteor/random";
-
-//
-// The idle monitor
-//       this listeners below...should technically already be working! We just need to make sure
-//       and fix any bugs if we have any
-//       ALEX: So as of now, the focused/not focused works, but none of the other events are being fired. I do not yet know why.
-//
-// "hash token"
-//   When a connection is established, we obviously already get the "connection id" for the websocket
-//       I need some type of "hash token" that gets generated when a user connects for the first time,
-//          and then resuse this when they come back (i.e. from a cookie or localstorage or whatever)
-//     Even though this guy is anonymous, I want the server to know him as the "same" anonymous guy forever.
-//        (We will use this later to implement auto-login or remember me services)
-// The "tab" id
-//     The client to be able to create some type of random string, key, random set bytes, hash, something for each tab,
-//     so that we can differentiate between tabs
-//
-//    hashtoken           "tab token"
-//     2psdvkwp0459tw     roguse0-rg9wreg
-//     2psdvkwp0459tw     3456934856
-//     2psdvkwp0459tw     450974
-//
-// "Architecture"
-//     Get an instance of "ClientConnection" saved somewhere
-//     Decide how to extenalize data and methods for the components
-//
-//   In order to display my current lag, what I would display is localvalues.delay (or remotevalues.delay) <-- 56ms
-//
+import User from "/lib/User";
 
 const resetEvents = {
-    window: ["onload", "onmousemove", "onmousedown", "ontouchstart", "ontouchmove", "onclick", "onkeydown"],
+    globalThis: ["onload", "onmousemove", "onmousedown", "ontouchstart", "ontouchmove", "onclick", "onkeydown"],
     document: ["pause", "resume"],
 };
 
 export default class ClientConnection extends AbstractTimestampNode {
-    private connectionid: string = "none";
+    private pConnectionid: string = "none";
 
     private focused: boolean = true;
 
@@ -52,22 +25,27 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     private idlehandle?: number;
 
+    private user?: User;
+
+    public get connectionid() { return this.pConnectionid; }
+
     constructor(parent: Stoppable | null) {
         super(parent, 60);
+        globalThis.connection = this;
 
         this.logger2.trace(() => "constructor");
         Meteor.startup(() => {
-            // @ts-ignore
-            this.connectionid = Meteor.connection._lastSessionId;
+            // prepare-to-remove-ts-ignore
+            this.pConnectionid = Meteor.connection._lastSessionId;
 
             const hashToken = this.getHashToken();
 
-            this.logger2.trace(() => `connection id=${this.connectionid}`);
+            this.logger2.trace(() => `connection id=${this.pConnectionid}`);
 
-            window.addEventListener("blur", () => this.isFocused(false));
-            window.addEventListener("focus", () => this.isFocused(true));
-            window.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
-            resetEvents.window.forEach((event) => window.addEventListener(event, () => this.isActive()));
+            globalThis.addEventListener("blur", () => this.isFocused(false));
+            globalThis.addEventListener("focus", () => this.isFocused(true));
+            globalThis.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
+            resetEvents.globalThis.forEach((event) => globalThis.addEventListener(event, () => this.isActive()));
             resetEvents.document.forEach((event) => document.addEventListener(event, () => this.isActive()));
 
             this.idlehandle = Meteor.setInterval(() => {
@@ -84,22 +62,19 @@ export default class ClientConnection extends AbstractTimestampNode {
 
         const self = this;
 
-        function processDirectStreamMessage(message: any): void {
+        function processDirectStreamMessage(this: { preventCallingMeteorHandler: () => void }, message: any): void {
             try {
                 const msg = JSON.parse(message);
                 if (typeof msg !== "object" || !("iccdm" in msg)) return;
                 self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
-                // @ts-ignore
-                // eslint-disable-next-line no-invalid-this
                 this.preventCallingMeteorHandler();
                 self.onDirectMessage(msg.iccdm, msg.iccmsg);
-                // @ts-ignore
             } catch (e) {
                 // If we cannot parse the string into an object, it's not for us.
             }
         }
 
-        // @ts-ignore
+        // prepare-to-remove-ts-ignore
         Meteor.directStream.onMessage(processDirectStreamMessage);
         this.start();
     }
@@ -129,16 +104,16 @@ export default class ClientConnection extends AbstractTimestampNode {
     // eslint-disable-next-line class-methods-use-this
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse | IdleMessage): void {
         this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
-        // @ts-ignore
+        // prepare-to-remove-ts-ignore
         Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
     }
 
     // eslint-disable-next-line class-methods-use-this
     public getHashToken(): string | undefined {
-        let hashToken = window.localStorage.getItem("ICCUser.hashToken");
+        let hashToken = globalThis.localStorage.getItem("ICCUser.hashToken");
         if(!hashToken) {
             hashToken = Random.secret();
-            window.localStorage.setItem("ICCUser.hashToken", hashToken);
+            globalThis.localStorage.setItem("ICCUser.hashToken", hashToken);
         }
         return hashToken;
     }
@@ -146,14 +121,5 @@ export default class ClientConnection extends AbstractTimestampNode {
     protected stopping() {
         super.stopping();
         if (this.idlehandle) Meteor.clearInterval(this.idlehandle);
-    }
-    
-    // TODO These should be probably implemented
-    get getTabIdentifier() {
-      return 0;
-    }
-
-    public getConnectionFromCookie() {
-      return 0;
     }
 }

@@ -22,8 +22,8 @@ describe("SubscriptionEventEmitter", function() {
         expect(subscribecall.calledOnce, "SubscriptionEventEmitter 3").to.be.true;
         expect(stopsubscriptioncall.notCalled, "SubscriptionEventEmitter 4").to.be.true;
         expect(subscribecall.getCall(0).args[0]).to.equal("subscriptioneventemittertest", "SubscriptionEventEmitter 5");
-        // @ts-ignore
-        expect(global.ICCServer.client.subscriptions.subscriptioneventemittertest).instanceof(PooledEventEmitter, "SubscriptionEventEmitter 6");
+        // prepare-to-remove-ts-ignore
+        expect(globalThis.subscriptions.subscriptioneventemittertest).instanceof(PooledEventEmitter, "SubscriptionEventEmitter 6");
 
         see.on("xyz", console.log);
         expect(subscribecall.calledOnce, "SubscriptionEventEmitter 7").to.be.true;

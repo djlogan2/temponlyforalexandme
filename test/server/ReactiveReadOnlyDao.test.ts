@@ -1,11 +1,10 @@
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import EventEmitter from "eventemitter3";
 import { expect } from "chai";
-// @ts-ignore
+// prepare-to-remove-ts-ignore
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
-import {consoleLogger} from "/lib/ConsoleLogger";
 
 interface TestRecord {
     _id: string;
@@ -40,15 +39,15 @@ function remotedb(what: string) {
     switch (what) {
     case "add":
         return new Promise<void>((resolve, reject) => {
-            global.ICCServer.collections.reactivereadonlydaotest.insert({ _id: "found1", data: "data1" }, (err: any) => {if (err) reject(err); else resolve();});
+            globalThis.ICCServer.utilities.getCollection("reactivereadonlydaotest").insert({ _id: "found1", data: "data1" }, (err: any) => {if (err) reject(err); else resolve();});
         });
     case "change":
         return new Promise<void>((resolve, reject) => {
-            global.ICCServer.collections.reactivereadonlydaotest.update({ _id: "found1" }, { $set: { data: "data3" } }, undefined, (err: any) => {if (err) reject(err); else resolve();});
+            globalThis.ICCServer.utilities.getCollection("reactivereadonlydaotest").update({ _id: "found1" }, { $set: { data: "data3" } }, undefined, (err: any) => {if (err) reject(err); else resolve();});
         });
     case "remove":
         return new Promise<void>((resolve, reject) => {
-            global.ICCServer.collections.reactivereadonlydaotest.remove({ _id: "found1" }, (err: any) => {if (err) reject(err); else resolve();});
+            globalThis.ICCServer.utilities.getCollection("reactivereadonlydaotest").remove({ _id: "found1" }, (err: any) => {if (err) reject(err); else resolve();});
         });
     default:
         return Promise.reject(new Error("Unknown case"));
@@ -57,11 +56,11 @@ function remotedb(what: string) {
 
 function setdb(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        global.ICCServer.collections.reactivereadonlydaotest.insert({ _id: "found1", data: "data1" }, (err: any) => {
+        globalThis.ICCServer.utilities.getCollection("reactivereadonlydaotest").insert({ _id: "found1", data: "data1" }, (err: any) => {
             if (err) {reject(err); return;}
-            global.ICCServer.collections.reactivereadonlydaotest.update({ _id: "found1" }, { $set: { data: "data3" } }, undefined, (err2: any) => {
+            globalThis.ICCServer.utilities.getCollection("reactivereadonlydaotest").update({ _id: "found1" }, { $set: { data: "data3" } }, undefined, (err2: any) => {
                 if (err2) {reject(err2); return;}
-                global.ICCServer.collections.reactivereadonlydaotest.remove({ _id: "found1" }, (err3: any) => {
+                globalThis.ICCServer.utilities.getCollection("reactivereadonlydaotest").remove({ _id: "found1" }, (err3: any) => {
                     if (err3) reject(err3); else {
                         resolve();
                     }
@@ -71,14 +70,9 @@ function setdb(): Promise<void> {
     });
 }
 
-if (!global.ICCServer) {
-    global.ICCServer = {
-        collections: {}, client: { subscriptions: {}, dao: {} }, server: { services: {} }, utilities: { getLogger: consoleLogger },
-    };
-}
 if (!global.ICCServer.collections.readonlydaotest) global.ICCServer.collections.reactivereadonlydaotest = new Mongo.Collection<TestRecord>("reactivereadonlydaotest");
 
-Meteor.publish("reactivereadonlydaotest", () => global.ICCServer.collections.reactivereadonlydaotest.find());
+Meteor.publish("reactivereadonlydaotest", () => globalThis.ICCServer.utilities.getCollection("reactivereadonlydaotest").find());
 
 Meteor.methods({
     reactivereadonlydaotest: remotedb,

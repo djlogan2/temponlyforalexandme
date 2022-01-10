@@ -1,9 +1,10 @@
 import { Meteor } from "meteor/meteor";
 import PooledEventEmitter from "/lib/PooledEventEmitter";
 import Stoppable from "/lib/Stoppable";
+import {SubscriptionNames} from "/lib/SubscriptionNames";
 
 export default class SubscriptionEventEmitter extends PooledEventEmitter {
-    private publication: string;
+    private publication: SubscriptionNames;
 
     private subscription?: Meteor.SubscriptionHandle;
 
@@ -12,7 +13,7 @@ export default class SubscriptionEventEmitter extends PooledEventEmitter {
      * @param{string} publication The name of the servers publication
      * @param{Stoppable|null} parent if there is one
      */
-    constructor(publication: string, parent: Stoppable | null) {
+    constructor(publication: SubscriptionNames, parent: Stoppable | null) {
         super(publication, parent);
         this.publication = publication;
     }

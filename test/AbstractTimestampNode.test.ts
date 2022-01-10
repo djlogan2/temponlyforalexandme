@@ -10,17 +10,16 @@ class AbstractTimestampNodeTest extends AbstractTimestampNode {
 
     public sendFunctionMessage?: PingMessage | PongMessage | PongResponse;
 
-    public events?: EventEmitter;
+    public testevents = new EventEmitter();
 
-    constructor(emitter?: EventEmitter) {
+    constructor() {
         super(null, 60);
-        this.events = emitter;
     }
 
     protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
         this.sendFunctionCalled = true;
         this.sendFunctionMessage = msg;
-        if (this.events) this.events.emit("called", msg);
+        if (this.testevents) this.testevents.emit("called", msg);
     }
 
     public process(msg: PingMessage | PongMessage | PongResponse) {
@@ -32,9 +31,8 @@ describe("AbstractTimestampNode", function() {
 //    protected constructor(parent: Stoppable | null, pingcount: number) {
     it("should call sendFunction when sending a various messages", function(done) {
         let type = "ping";
-        const emitter = new EventEmitter();
-        const timestamp = new AbstractTimestampNodeTest(emitter);
-        emitter.on("called", (msg) => {
+        const timestamp = new AbstractTimestampNodeTest();
+        timestamp.testevents.on("called", (msg) => {
             const newmsg = { ...msg };
             switch (type) {
             case "ping":
@@ -51,7 +49,7 @@ describe("AbstractTimestampNode", function() {
             case "rslt":
                 expect(msg.type).to.equal("rslt");
                 timestamp.process(msg);
-                emitter.removeAllListeners();
+                timestamp.testevents.removeAllListeners();
                 timestamp.stop();
                 done();
                 break;
