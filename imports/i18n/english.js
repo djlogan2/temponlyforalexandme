@@ -1,4 +1,4 @@
-export const english = {
+export default {
   signup: {
     title: "Signup page",
     username: "Username",

@@ -2,7 +2,7 @@
   "root": "TRACE",
   "AbstractTimestampNode": "TRACE",
   "client/ClientConnection": "TRACE",
-  "server/ConnectionService_ts":  "TRACE",
+  "server/ConnectionService_ts": "TRACE",
   "server/InstanceService": "TRACE",
-  "server/ServerConnection":  "TRACE"
+  "server/ServerConnection": "TRACE"
 }

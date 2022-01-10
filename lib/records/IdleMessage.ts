@@ -1,5 +1,5 @@
 export interface IdleMessage {
-    type: "idle",
-    idleseconds: number,
-    focused: boolean
+  type: "idle";
+  idleseconds: number;
+  focused: boolean;
 }
