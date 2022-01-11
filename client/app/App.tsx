@@ -10,6 +10,7 @@ import "../../lib/client/ICCGlobal";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import ClientServer from "/lib/client/ClientServer";
+import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -18,7 +19,8 @@ globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
   null,
   window.subscriptionservice,
 );
-globalThis.icc = new ClientServer();
+const userdao = new CommonReadOnlyUserDao(null);
+globalThis.icc = new ClientServer(userdao);
 
 const sizes = {
   small: {

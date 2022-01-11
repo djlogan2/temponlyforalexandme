@@ -9,11 +9,20 @@ import ServerLogger from "/lib/server/ServerLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import ConnectionDao from "/imports/server/dao/ConnectionDao";
 import ServerUser from "/lib/server/ServerUser";
+import UserService from "/imports/server/service/UserService";
+import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import WritableUserDao from "/imports/server/dao/WritableUserDao";
 
 export default class ServerConnection extends AbstractTimestampNode {
   private connectiondao: ConnectionDao;
 
   private connectionrecord: ConnectionRecord;
+
+  private userservice: UserService;
+
+  private userdao: CommonReadOnlyUserDao;
+
+  private writableuserdao: WritableUserDao;
 
   private closefunctions: (() => void)[] = [];
 
@@ -83,11 +92,17 @@ export default class ServerConnection extends AbstractTimestampNode {
     parent: Stoppable | null,
     connectionrecord: ConnectionRecord,
     connectiondao: ConnectionDao,
+    userservice: UserService,
+    readonlyuserdao: CommonReadOnlyUserDao,
+    writableuserdao: WritableUserDao,
   ) {
     super(parent, 60);
     this.logger2.trace(
       () => `constructor: ${JSON.stringify(connectionrecord)}`,
     );
+    this.userdao = readonlyuserdao;
+    this.writableuserdao = writableuserdao;
+    this.userservice = userservice;
     this.connectionrecord = connectionrecord;
     this.connectiondao = connectiondao;
     this.start();
@@ -115,5 +130,11 @@ export default class ServerConnection extends AbstractTimestampNode {
       JSON.stringify({ iccdm: msg.type, iccmsg: msg }),
       this.connectionid,
     );
+  }
+
+  public login(hashtoken: string): string {
+    const id = this.userservice.logon(hashtoken);
+    this.user = new ServerUser(id, this.userdao, this.writableuserdao);
+    return id;
   }
 }

@@ -1,9 +1,8 @@
+import { Meteor } from "meteor/meteor";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import { Mongo } from "meteor/mongo";
 import UserRecord, { STANDARD_MEMBER_FIELDS } from "/lib/records/UserRecord";
 import ServerUser from "/lib/server/ServerUser";
-import { Meteor } from "meteor/meteor";
-import { check } from "meteor/check";
 import ServerLogger from "/lib/server/ServerLogger";
 import Stoppable from "/lib/Stoppable";
 import ConnectionRecord from "/lib/records/ConnectionRecord";
@@ -24,9 +23,10 @@ export default class UserService extends Stoppable {
     globalThis.ICCServer.services.userservice = this;
   }
 
-  public logon(hashtoken: string): void {
+  public logon(hashtoken: string): string {
     this.logger.debug(() => `logon hashtoken=${hashtoken}`);
     const userdb = this.getUserFromHashToken(hashtoken);
+    return userdb._id;
   }
 
   private createAnonymousUser(hashToken: string): UserRecord {
@@ -67,11 +67,69 @@ STANDARD_MEMBER_FIELDS.forEach((field) => {
   fields[field] = 1;
 });
 
+/*
+   So yea, a complicated publication, that will basically watch a connection record,
+   and publish the user record to the client. The user record will change depending on
+   what, if any, userid is in the connection record.
+ */
 Meteor.publish(null, function () {
-  const connectionrecord = globalThis.ICCServer.utilities
+  const publishthis = this;
+  let publishedId: string | null = null;
+
+  let userHandle: Meteor.LiveQueryHandle | null = null;
+  let userCursor: Mongo.Cursor<UserRecord> | null = null;
+
+  const publishUser = function () {
+    userCursor = globalThis.ICCServer.utilities
+      .getCollection("users")
+      .find({ _id: publishedId }, { fields });
+    userHandle = userCursor.observeChanges({
+      added(id, doc) {
+        publishthis.added("users", id, doc);
+        publishthis.ready();
+      },
+      changed(id, doc) {
+        publishthis.changed("users", id, doc);
+        publishthis.ready();
+      },
+      removed(id) {
+        publishthis.removed("users", id);
+        publishedId = null;
+        publishthis.ready();
+        publishthis.stop();
+      },
+    });
+  };
+
+  function updateUsers(id: string | null) {
+    if (userHandle) userHandle.stop();
+    publishedId = id;
+    if (id) publishUser();
+  }
+
+  const connectionCusor = globalThis.ICCServer.utilities
     .getCollection("connections")
-    .findOne({ connectionid: this.connection.id }) as ConnectionRecord;
-  return globalThis.ICCServer.utilities
-    .getCollection("users")
-    .find({ _id: connectionrecord.userid });
+    .find({
+      connectionid: this.connection.id,
+    }) as Mongo.Cursor<ConnectionRecord>;
+  const connectionHandle = connectionCusor.observeChanges({
+    added(id, doc) {
+      if ("userid" in doc) {
+        updateUsers(doc.userid as string);
+      }
+    },
+    changed(id, doc) {
+      if ("userid" in doc) {
+        updateUsers(doc.userid as string);
+      }
+    },
+    removed(id) {
+      updateUsers(null);
+    },
+  });
+
+  this.onStop(() => {
+    if (userHandle) userHandle.stop();
+    connectionHandle.stop();
+  });
 });

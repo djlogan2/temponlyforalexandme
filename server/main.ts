@@ -11,6 +11,7 @@ import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerCo
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 import UserService from "/imports/server/service/UserService";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
+import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 
 const parent = null;
 
@@ -29,12 +30,15 @@ const connectiondao = new ConnectionDao(parent);
 
 const instanceservice = new InstanceService(parent, instancedao);
 
-const userdao = new WritableUserDao(null);
-const userservice = new UserService(null, userdao);
+const readonlyuserdao = new CommonReadOnlyUserDao(null);
+const writableuserdao = new WritableUserDao(null);
+const userservice = new UserService(null, writableuserdao);
 // @ts-ignore
 const connectionservice = new ConnectionService(
   parent,
   instanceservice,
   connectiondao,
   userservice,
+  readonlyuserdao,
+  writableuserdao,
 );

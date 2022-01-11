@@ -9,6 +9,8 @@ import ServerLogger from "/lib/server/ServerLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import { check } from "meteor/check";
 import UserService from "/imports/server/service/UserService";
+import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import WritableUserDao from "/imports/server/dao/WritableUserDao";
 
 interface HttpHeadersICareAbout {
   "user-agent": string;
@@ -21,6 +23,10 @@ export default class ConnectionService extends Stoppable {
 
   private userservice: UserService;
 
+  private userdao: CommonReadOnlyUserDao;
+
+  private writableuserdao: WritableUserDao;
+
   private connections: { [key: string]: ServerConnection } = {};
 
   private logger = new ServerLogger(this, "server/ConnectionService_ts");
@@ -30,8 +36,12 @@ export default class ConnectionService extends Stoppable {
     instanceservice: InstanceService,
     connectiondao: ConnectionDao,
     userservice: UserService,
+    readonlyuserdao: CommonReadOnlyUserDao,
+    writableuserdao: WritableUserDao,
   ) {
     super(parent);
+    this.userdao = readonlyuserdao;
+    this.writableuserdao = writableuserdao;
     this.connectiondao = connectiondao;
     this.instanceservice = instanceservice;
     this.userservice = userservice;
@@ -126,12 +136,21 @@ export default class ConnectionService extends Stoppable {
       this,
       connrecord as ConnectionRecord,
       this.connectiondao,
+      this.userservice,
+      this.userdao,
+      this.writableuserdao,
     );
     this.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
   }
 
-  public login(connectionid: string, hashtoken: string): void {}
+  public login(connectionid: string, hashtoken: string): string {
+    if (!this.connections[connectionid])
+      throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION");
+    const userid = this.connections[connectionid].login(hashtoken);
+    this.connectiondao.update({ connectionid }, { $set: { userid } });
+    return userid;
+  }
 
   private startupDeleteDefunctConnectionRecords() {
     // TODO:
@@ -145,14 +164,22 @@ export default class ConnectionService extends Stoppable {
 }
 
 Meteor.methods({
-  newUserLogin(hashtoken: string) {
+  newUserLogin(hashtoken: string): Promise<string> {
     check(hashtoken, String);
-    if (!this.connection) throw new Meteor.Error("NULL_CONNECTION");
-    if (!globalThis.ICCServer?.services?.connectionservice)
-      throw new Meteor.Error("CONNECTIONSERVICE_NOT_FOUND");
-    globalThis.ICCServer.services.connectionservice.login(
-      this.connection.id,
-      hashtoken,
-    );
+    return new Promise<string>((resolve, reject) => {
+      if (!this.connection) {
+        reject(new Meteor.Error("NULL_CONNECTION"));
+        return;
+      }
+      if (!globalThis.ICCServer?.services?.connectionservice) {
+        reject(new Meteor.Error("CONNECTIONSERVICE_NOT_FOUND"));
+        return;
+      }
+      const userid = globalThis.ICCServer.services.connectionservice.login(
+        this.connection.id,
+        hashtoken,
+      );
+      resolve(userid);
+    });
   },
 });

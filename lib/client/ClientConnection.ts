@@ -8,6 +8,8 @@ import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import { Random } from "meteor/random";
 import User from "/lib/User";
+import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import ClientUser from "/lib/client/ClientUser";
 
 const resetEvents = {
   globalThis: [
@@ -25,6 +27,8 @@ const resetEvents = {
 export default class ClientConnection extends AbstractTimestampNode {
   private pConnectionid: string = "none";
 
+  private userdao: CommonReadOnlyUserDao;
+
   private focused: boolean = true;
 
   private idle: number = 0;
@@ -33,14 +37,15 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private idlehandle?: number;
 
-  private user?: User;
+  private user?: ClientUser;
 
   public get connectionid() {
     return this.pConnectionid;
   }
 
-  constructor(parent: Stoppable | null) {
+  constructor(parent: Stoppable | null, userdao: CommonReadOnlyUserDao) {
     super(parent, 60);
+    this.userdao = userdao;
     globalThis.connection = this;
 
     this.logger2.trace(() => "constructor");
@@ -53,6 +58,7 @@ export default class ClientConnection extends AbstractTimestampNode {
       );
       Meteor.call("newUserLogin", hashToken, (id: string) => {
         console.log(`user id returned: ${id}`);
+        this.user = new ClientUser(id);
       });
 
       this.logger2.debug(() => `connection id=${this.pConnectionid}`);
