@@ -1,6 +1,6 @@
 // noinspection JSUnusedLocalSymbols
 
-import "../imports/server/ICCGlobal";
+import "../lib/server/ICCGlobal";
 import LoggerService from "/imports/server/service/LoggerService";
 import InstanceService from "/imports/server/service/InstanceService";
 import InstanceDao from "/imports/server/dao/InstanceDao";
@@ -18,7 +18,11 @@ const readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
 const writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
 const logrecordsdao = new LogRecordsDao(null);
 // @ts-ignore
-const loggerservice = new LoggerService(readableloggerconfigdao, writableloggerconfigdao, logrecordsdao);
+const loggerservice = new LoggerService(
+  readableloggerconfigdao,
+  writableloggerconfigdao,
+  logrecordsdao,
+);
 
 const instancedao = new InstanceDao(parent);
 const connectiondao = new ConnectionDao(parent);
@@ -26,6 +30,11 @@ const connectiondao = new ConnectionDao(parent);
 const instanceservice = new InstanceService(parent, instancedao);
 
 const userdao = new WritableUserDao(null, instanceservice);
-const userservice = new UserService(userdao);
+const userservice = new UserService(null, userdao);
 // @ts-ignore
-const connectionservice = new ConnectionService(parent, instanceservice, connectiondao, userservice);
+const connectionservice = new ConnectionService(
+  parent,
+  instanceservice,
+  connectiondao,
+  userservice,
+);

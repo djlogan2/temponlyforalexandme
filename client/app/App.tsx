@@ -1,3 +1,4 @@
+import "../../lib/client/ClientServer";
 import React, { FC, useState } from "react";
 import _ from "lodash";
 import RGL, { WidthProvider } from "react-grid-layout";
@@ -5,8 +6,19 @@ import Widget from "./components/Widget";
 
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
+import "../../lib/client/ICCGlobal";
+import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
+import SubscriptionService from "/imports/client/service/SubscriptionService";
+import ClientServer from "/lib/client/ClientServer";
 
 const ReactGridLayout = WidthProvider(RGL);
+
+globalThis.subscriptionservice = new SubscriptionService(null);
+globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
+  null,
+  window.subscriptionservice,
+);
+globalThis.icc = new ClientServer();
 
 const sizes = {
   small: {

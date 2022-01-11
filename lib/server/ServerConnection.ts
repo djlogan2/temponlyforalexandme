@@ -8,104 +8,108 @@ import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import User from "/lib/User";
-import UserRecord from "/lib/records/UserRecord";
-
-const STANDARD_USER_FIELDS: {[K in keyof Partial<UserRecord>]: 1} = {
-    _id: 1,
-    username: 1,
-};
+import UserService from "/imports/server/service/UserService";
 
 export default class ServerConnection extends AbstractTimestampNode {
-    private connectionrecord: ConnectionRecord;
+  private userservice: UserService;
 
-    private closefunctions: (() => void)[] = [];
+  private connectionrecord: ConnectionRecord;
 
-    private idlefunctions: ((connectionid: string, msg: IdleMessage) => void)[] = [];
+  private closefunctions: (() => void)[] = [];
 
-    private logger2 = new ServerLogger(this, "server/ServerConnection");
+  private idlefunctions: ((connectionid: string, msg: IdleMessage) => void)[] =
+    [];
 
-    private user?: User;
+  private logger2 = new ServerLogger(this, "server/ServerConnection");
 
-    private pIdle?: IdleMessage;
+  private user?: User;
 
-    public get isIdle(): boolean {
-        if(!this.pIdle) return false;
-        return this.pIdle.idleseconds > 60;
+  private pIdle?: IdleMessage;
+
+  public get isIdle(): boolean {
+    if (!this.pIdle) return false;
+    return this.pIdle.idleseconds > 60;
+  }
+
+  public get idleSeconds(): number {
+    if (!this.pIdle) return 0;
+    return this.pIdle.idleseconds;
+  }
+
+  public get _id(): string {
+    return this.connectionrecord._id;
+  }
+
+  public get connectionid(): string {
+    return this.connectionrecord.connectionid;
+  }
+
+  protected stopping(): void {
+    super.stopping();
+    this.logger2.trace(() => `${this.connectionid} stopping`);
+    this.closing();
+  }
+
+  public idleMessage(idle: IdleMessage): void {
+    this.pIdle = idle;
+    this.logger2.trace(() => `idle=${JSON.stringify(idle)}`);
+    this.idlefunctions.forEach((fn) => fn(this.connectionid, idle));
+  }
+
+  public handleDirectMessage(messagetype: string, message: any) {
+    this.logger2.trace(
+      () =>
+        `${
+          this.connectionid
+        } handleDirectMessage: ${messagetype}: ${JSON.stringify(message)}`,
+    );
+    switch (messagetype) {
+      case "ping":
+      case "pong":
+      case "rslt":
+        this.processIncomingMessage(message);
+        break;
+      default:
+        throw new Meteor.Error("UNKNOWN_DIRECT_MESSAGE", messagetype);
     }
+  }
 
-    public get idleSeconds(): number {
-        if(!this.pIdle) return 0;
-        return this.pIdle.idleseconds;
-    }
+  constructor(
+    parent: Stoppable | null,
+    connectionrecord: ConnectionRecord,
+    userservice: UserService,
+  ) {
+    super(parent, 60);
+    this.logger2.trace(
+      () => `constructor: ${JSON.stringify(connectionrecord)}`,
+    );
+    this.connectionrecord = connectionrecord;
+    this.userservice = userservice;
+    this.start();
+  }
 
-    public get _id(): string {
-        return this.connectionrecord._id;
-    }
+  private closing(): void {
+    this.logger2.trace(() => `${this.connectionid} closing`);
+    this.closefunctions.forEach((func) => func());
+  }
 
-    public get connectionid(): string {
-        return this.connectionrecord.connectionid;
-    }
+  public onClose(func: () => void): void {
+    this.logger2.trace(() => `${this.connectionid} onClose`);
+    if (this.user) this.user.logoff();
+    this.closefunctions.push(func);
+  }
 
-    protected stopping(): void {
-        super.stopping();
-        this.logger2.trace(() => `${this.connectionid} stopping`);
-        this.closing();
-    }
+  public onIdle(fn: (connectionid: string, msg: IdleMessage) => void): void {
+    this.idlefunctions.push(fn);
+  }
 
-    public idleMessage(idle: IdleMessage): void {
-        this.pIdle = idle;
-        this.logger2.debug(() => `idle=${JSON.stringify(idle)}`);
-        this.idlefunctions.forEach(fn => fn(this.connectionid, idle));
-    }
-
-    public handleDirectMessage(messagetype: string, message: any) {
-        this.logger2.trace(() => `${this.connectionid} handleDirectMessage: ${messagetype}: ${JSON.stringify(message)}`);
-        switch (messagetype) {
-        case "ping":
-        case "pong":
-        case "rslt":
-            this.processIncomingMessage(message);
-            break;
-        default:
-            throw new Meteor.Error("UNKNOWN_DIRECT_MESSAGE", messagetype);
-        }
-    }
-
-    constructor(parent: Stoppable | null, connectionrecord: ConnectionRecord) {
-        super(parent, 60);
-        this.logger2.trace(() => `constructor: ${JSON.stringify(connectionrecord)}`);
-        this.connectionrecord = connectionrecord;
-        this.start();
-    }
-
-    private closing(): void {
-        this.logger2.debug(() => `${this.connectionid} closing`);
-        this.closefunctions.forEach((func) => func());
-    }
-
-    public onClose(func: () => void): void {
-        this.logger2.debug(() => `${this.connectionid} onClose`);
-        if(this.user)
-            this.user.logoff();
-        this.closefunctions.push(func);
-    }
-
-    public onIdle(fn: (connectionid: string, msg: IdleMessage) => void): void {
-        this.idlefunctions.push(fn);
-    }
-
-    protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
-        this.logger2.trace(() => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`);
-        // prepare-to-remove-ts-ignore
-        Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }), this.connectionid);
-    }
-
-    public logonUser(user: User): void {
-        this.user = user;
-        Meteor.publish(null, function() {
-            if(globalThis.ICCServer?.collections?.users)
-            return globalThis.ICCServer.utilities.getCollection("users").find({_id: user.id}, {fields: STANDARD_USER_FIELDS})
-            return this.ready();
-        });
-    }
+  protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
+    this.logger2.trace(
+      () => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`,
+    );
+    Meteor.directStream.send(
+      JSON.stringify({ iccdm: msg.type, iccmsg: msg }),
+      this.connectionid,
+    );
+  }
 }

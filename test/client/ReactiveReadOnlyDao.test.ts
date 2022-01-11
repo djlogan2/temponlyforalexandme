@@ -2,7 +2,7 @@
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import EventEmitter from "eventemitter3";
 import { expect } from "chai";
-// prepare-to-remove-ts-ignore
+// @ts-ignore
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { Meteor } from "meteor/meteor";
 
