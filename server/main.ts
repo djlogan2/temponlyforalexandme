@@ -29,7 +29,7 @@ const connectiondao = new ConnectionDao(parent);
 
 const instanceservice = new InstanceService(parent, instancedao);
 
-const userdao = new WritableUserDao(null, instanceservice);
+const userdao = new WritableUserDao(null);
 const userservice = new UserService(null, userdao);
 // @ts-ignore
 const connectionservice = new ConnectionService(

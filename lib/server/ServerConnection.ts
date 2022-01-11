@@ -7,11 +7,11 @@ import { PongResponse } from "../records/PongResponse";
 import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
-import User from "/lib/User";
-import UserService from "/imports/server/service/UserService";
+import ConnectionDao from "/imports/server/dao/ConnectionDao";
+import ServerUser from "/lib/server/ServerUser";
 
 export default class ServerConnection extends AbstractTimestampNode {
-  private userservice: UserService;
+  private connectiondao: ConnectionDao;
 
   private connectionrecord: ConnectionRecord;
 
@@ -22,7 +22,7 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   private logger2 = new ServerLogger(this, "server/ServerConnection");
 
-  private user?: User;
+  private user?: ServerUser;
 
   private pIdle?: IdleMessage;
 
@@ -53,7 +53,12 @@ export default class ServerConnection extends AbstractTimestampNode {
   public idleMessage(idle: IdleMessage): void {
     this.pIdle = idle;
     this.logger2.trace(() => `idle=${JSON.stringify(idle)}`);
+    this.connectiondao.update(
+      { connectionid: this.connectionid },
+      { $set: { focused: idle.focused, idleseconds: idle.idleseconds } },
+    );
     this.idlefunctions.forEach((fn) => fn(this.connectionid, idle));
+    if (this.user) this.user.updateIdle(this.connectionid, idle.idleseconds);
   }
 
   public handleDirectMessage(messagetype: string, message: any) {
@@ -77,14 +82,14 @@ export default class ServerConnection extends AbstractTimestampNode {
   constructor(
     parent: Stoppable | null,
     connectionrecord: ConnectionRecord,
-    userservice: UserService,
+    connectiondao: ConnectionDao,
   ) {
     super(parent, 60);
     this.logger2.trace(
       () => `constructor: ${JSON.stringify(connectionrecord)}`,
     );
     this.connectionrecord = connectionrecord;
-    this.userservice = userservice;
+    this.connectiondao = connectiondao;
     this.start();
   }
 
@@ -95,7 +100,6 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   public onClose(func: () => void): void {
     this.logger2.trace(() => `${this.connectionid} onClose`);
-    if (this.user) this.user.logoff();
     this.closefunctions.push(func);
   }
 

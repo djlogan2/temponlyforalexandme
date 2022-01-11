@@ -9,13 +9,14 @@ import ClientUser from "/lib/client/ClientUser";
 import ClientConnection from "/lib/client/ClientConnection";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import PooledEventEmitter from "/lib/PooledEventEmitter";
-import CommonUserDao from "/imports/dao/CommonUserDao";
 import { CollectionNames } from "/lib/CollectionNames";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import CommonLogger from "/lib/CommonLogger";
 import UserService from "/imports/server/service/UserService";
 import ClientServer from "/lib/client/ClientServer";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
+import ConnectionService from "/imports/server/service/ConnectionService";
+import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 
 declare module "meteor/universe:i18n";
 
@@ -49,13 +50,14 @@ declare global {
   var connection: ClientConnection;
   var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter };
   var loggerconfigdao: ReadOnlyLoggerConfigurationDao;
-  var userdao: CommonUserDao;
+  var userdao: CommonReadOnlyUserDao;
   /* Most of this is really server only, but some of it is used by both, most notably collections and utilities.getLogger */
   var ICCServer: {
     collections: { [K in CollectionNames]?: Mongo.Collection<any> };
     services: {
       loggerservice?: LoggerService;
       userservice?: UserService;
+      connectionservice?: ConnectionService;
     };
     utilities: {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;

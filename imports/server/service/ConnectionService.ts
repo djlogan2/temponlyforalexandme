@@ -10,6 +10,10 @@ import { IdleMessage } from "/lib/records/IdleMessage";
 import { check } from "meteor/check";
 import UserService from "/imports/server/service/UserService";
 
+interface HttpHeadersICareAbout {
+  "user-agent": string;
+}
+
 export default class ConnectionService extends Stoppable {
   private connectiondao: ConnectionDao;
 
@@ -33,6 +37,8 @@ export default class ConnectionService extends Stoppable {
     this.userservice = userservice;
 
     Meteor.onConnection((connection) => this.onConnection(connection));
+
+    globalThis.ICCServer.services.connectionservice = this;
 
     const self = this;
 
@@ -67,7 +73,6 @@ export default class ConnectionService extends Stoppable {
   //
   private idleMessage(connectionid: string, idle: IdleMessage): void {
     const connection = this.connections[connectionid];
-    this.userservice.updateIdle(connectionid, idle.focused, idle.idleseconds);
     this.logger.trace(() => `idleMessage connection=${connection}`);
     if (!connection) {
       // TODO: Handle this error
@@ -109,16 +114,24 @@ export default class ConnectionService extends Stoppable {
       connectionid: connection.id,
       instanceid: this.instanceservice.instanceid,
       startTime: new Date(),
+      useragent: (connection.httpHeaders as HttpHeadersICareAbout)[
+        "user-agent"
+      ],
+      ipaddress: connection.clientAddress,
+      focused: true,
+      idleseconds: 0,
     };
     connrecord._id = this.connectiondao.insert(connrecord);
     const ourconnection = new ServerConnection(
       this,
       connrecord as ConnectionRecord,
-      this.userservice,
+      this.connectiondao,
     );
     this.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
   }
+
+  public login(connectionid: string, hashtoken: string): void {}
 
   private startupDeleteDefunctConnectionRecords() {
     // TODO:
@@ -130,3 +143,16 @@ export default class ConnectionService extends Stoppable {
     // Nothing to stop at this time
   }
 }
+
+Meteor.methods({
+  newUserLogin(hashtoken: string) {
+    check(hashtoken, String);
+    if (!this.connection) throw new Meteor.Error("NULL_CONNECTION");
+    if (!globalThis.ICCServer?.services?.connectionservice)
+      throw new Meteor.Error("CONNECTIONSERVICE_NOT_FOUND");
+    globalThis.ICCServer.services.connectionservice.login(
+      this.connection.id,
+      hashtoken,
+    );
+  },
+});

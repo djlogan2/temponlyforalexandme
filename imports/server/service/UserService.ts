@@ -1,20 +1,14 @@
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import { Mongo } from "meteor/mongo";
-import UserRecord, {
-  LoggedInConnection,
-  STANDARD_MEMBER_FIELDS,
-} from "/lib/records/UserRecord";
+import UserRecord, { STANDARD_MEMBER_FIELDS } from "/lib/records/UserRecord";
 import ServerUser from "/lib/server/ServerUser";
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
 import ServerLogger from "/lib/server/ServerLogger";
 import Stoppable from "/lib/Stoppable";
+import ConnectionRecord from "/lib/records/ConnectionRecord";
 
 export type LogonCallback = (user: ServerUser) => void;
-
-interface HttpHeadersICareAbout {
-  "user-agent": string;
-}
 
 export default class UserService extends Stoppable {
   private userdao: WritableUserDao;
@@ -30,43 +24,17 @@ export default class UserService extends Stoppable {
     globalThis.ICCServer.services.userservice = this;
   }
 
-  public logon(
-    hashtoken: string,
-    connection: string,
-    useragent: string,
-    ipaddress: string,
-    callback?: LogonCallback,
-  ): void {
-    this.logger.debug(
-      () =>
-        `logon hashtoken=${hashtoken} connection=${connection} useragent=${useragent} ipaddress=${ipaddress} callback=${!!callback}`,
-    );
+  public logon(hashtoken: string): void {
+    this.logger.debug(() => `logon hashtoken=${hashtoken}`);
     const userdb = this.getUserFromHashToken(hashtoken);
-    const newConnection: LoggedInConnection = {
-      loginDate: new Date(),
-      focused: true,
-      idleseconds: 0,
-      connection,
-      useragent,
-      ipaddress,
-    };
-    this.userdao.login(
-      userdb._id,
-      hashtoken,
-      newConnection,
-      (id, _newlogin) => {
-        if (callback) callback(new ServerUser(id, this.userdao));
-      },
-    );
   }
 
-  private createAnonymousUser(): UserRecord {
+  private createAnonymousUser(hashToken: string): UserRecord {
     this.logger.debug(() => "creating anonymous user");
     const userrecord: Mongo.OptionalId<UserRecord> = {
       createdAt: new Date(),
       isolation_group: "public",
-      loggedin: false,
-      logins: [],
+      hashTokens: [{ hashtoken: hashToken, lastUsed: new Date() }],
     };
     userrecord._id = this.userdao.insert(userrecord);
     return userrecord as UserRecord;
@@ -74,22 +42,19 @@ export default class UserService extends Stoppable {
 
   private getUserFromHashToken(hashtoken: string): UserRecord {
     this.logger.debug(() => `getUserFromHashToken hashtoken=${hashtoken}`);
-    let userrecord = this.userdao.readOne({ hashTokens: hashtoken });
+    const userrecord = this.userdao.readOne({
+      "hashTokens.hashtoken": hashtoken,
+    });
     this.logger.debug(
       () => `userrecord=${userrecord?._id || "NO RECORD FOUND IN DATABASE"}`,
     );
 
-    if (!userrecord) userrecord = this.createAnonymousUser();
-
-    return userrecord;
-  }
-
-  public updateIdle(
-    connection: string,
-    focused: boolean,
-    idleseconds: number,
-  ): void {
-    this.userdao.updateIdle(connection, focused, idleseconds);
+    if (!userrecord) return this.createAnonymousUser(hashtoken);
+    this.userdao.update(
+      { "hashTokens.hashtoken": hashtoken },
+      { $set: { "hashTokens.$.lastUsed": new Date() } },
+    );
+    return this.userdao.get(userrecord._id) as UserRecord;
   }
 
   protected stopping(): void {
@@ -103,23 +68,10 @@ STANDARD_MEMBER_FIELDS.forEach((field) => {
 });
 
 Meteor.publish(null, function () {
+  const connectionrecord = globalThis.ICCServer.utilities
+    .getCollection("connections")
+    .findOne({ connectionid: this.connection.id }) as ConnectionRecord;
   return globalThis.ICCServer.utilities
     .getCollection("users")
-    .find({ "logins.connections.connection": this.connection.id }, { fields });
-});
-
-Meteor.methods({
-  newUserLogin(hashtoken: string) {
-    check(hashtoken, String);
-    if (!this.connection) throw new Meteor.Error("NULL_CONNECTION");
-    if (!globalThis.ICCServer.services.userservice)
-      throw new Meteor.Error("USERSERVICE_NOT_DEFINED");
-    globalThis.ICCServer.services.userservice.logon(
-      hashtoken,
-      this.connection.id,
-      (this.connection.httpHeaders as HttpHeadersICareAbout)["user-agent"],
-      this.connection.clientAddress,
-      (user) => user.id,
-    );
-  },
+    .find({ _id: connectionrecord.userid });
 });

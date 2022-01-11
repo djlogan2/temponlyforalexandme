@@ -1,15 +1,6 @@
-export interface LoggedInConnection {
-  connection: string;
-  loginDate: Date;
-  useragent: string;
-  ipaddress: string;
-  focused: boolean;
-  idleseconds: number;
-}
-
 export interface HashToken {
   hashtoken: string;
-  connections?: LoggedInConnection[];
+  lastUsed: Date;
 }
 
 export default interface UserRecord {
@@ -17,9 +8,8 @@ export default interface UserRecord {
   createdAt: Date;
   username?: string;
   isolation_group: string;
-  loggedin: boolean;
-  updatelock?: string;
-  logins: HashToken[];
+  idleSince?: Date;
+  hashTokens: HashToken[];
 }
 
 export const STANDARD_MEMBER_FIELDS: Array<keyof UserRecord> = [
