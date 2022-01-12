@@ -1,15 +1,15 @@
 import { Meteor } from "meteor/meteor";
-import { PingMessage } from "../records/PingMessage";
-import { PongMessage } from "../records/PongMessage";
-import { PongResponse } from "../records/PongResponse";
 import AbstractTimestampNode from "/lib/AbstractTimestampNode";
 import Stoppable from "/lib/Stoppable";
 import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import { Random } from "meteor/random";
-import User from "/lib/User";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import ClientUser from "/lib/client/ClientUser";
+import EventEmitter from "eventemitter3";
+import { PingMessage } from "../records/PingMessage";
+import { PongMessage } from "../records/PongMessage";
+import { PongResponse } from "../records/PongResponse";
 
 const resetEvents = {
   globalThis: [
@@ -39,6 +39,8 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private user?: ClientUser;
 
+  private eventemitter = new EventEmitter();
+
   public get connectionid() {
     return this.pConnectionid;
   }
@@ -63,11 +65,11 @@ export default class ClientConnection extends AbstractTimestampNode {
 
       this.logger2.debug(() => `connection id=${this.pConnectionid}`);
 
-      globalThis.addEventListener("blur", () => this.isFocused(false));
-      globalThis.addEventListener("focus", () => this.isFocused(true));
-      globalThis.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
+      window.addEventListener("blur", () => this.isFocused(false));
+      window.addEventListener("focus", () => this.isFocused(true));
+      window.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
       resetEvents.globalThis.forEach((event) =>
-        globalThis.addEventListener(event, () => this.isActive()),
+        window.addEventListener(event, () => this.isActive()),
       );
       resetEvents.document.forEach((event) =>
         document.addEventListener(event, () => this.isActive()),
@@ -112,6 +114,22 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private isFocused(focused: boolean): void {
     this.focused = focused;
+  }
+
+  // TODO: FYI Alex, I would prefer you do it this way. I really don't want an eventemitter in AbstractTimestampNode,
+  //       because that class is used on the server as well as the client.
+  //       For client emitters, I think we should have them at this level.
+  //       I don't see any code that uses this anymore, so maybe you need to either fix that or take this out,
+  //       but in the meantime I would prefer to make sure event emitters the client needs are defined only
+  //       on the client, and only moved down if the server has a similar need.
+
+  public get events() {
+    return this.eventemitter;
+  }
+
+  protected PongReceived(pong: PongMessage): void {
+    super.PongReceived(pong);
+    this.eventemitter.emit("lagchanged", this.localvalues.delay);
   }
 
   private onDirectMessage(messagetype: string, message: any) {

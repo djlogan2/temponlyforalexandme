@@ -179,6 +179,7 @@ Meteor.methods({
         this.connection.id,
         hashtoken,
       );
+      console.log(`Returning ${userid} to newUserLogin caller`);
       resolve(userid);
     });
   },

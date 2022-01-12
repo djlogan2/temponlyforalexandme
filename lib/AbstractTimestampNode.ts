@@ -4,15 +4,12 @@ import Stoppable from "/lib/Stoppable";
 import { PingMessage } from "/lib/records/PingMessage";
 import { PongMessage } from "/lib/records/PongMessage";
 import { PongResponse } from "/lib/records/PongResponse";
-import EventEmitter from "eventemitter3";
 import CommonLogger from "/lib/CommonLogger";
 
 export default abstract class AbstractTimestampNode extends Stoppable {
   private intervalHandle?: number;
 
   private cleanupHandle?: number;
-
-  private eventEmitter: EventEmitter;
 
   protected pendingrequests: { [key: string]: PingMessage };
 
@@ -43,7 +40,6 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     this.localvalues = { current_clock_offset: 0 };
     this.remotevalues = { current_clock_offset: 0 };
     this.pendingrequests = {};
-    this.eventEmitter = new EventEmitter();
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -69,7 +65,6 @@ export default abstract class AbstractTimestampNode extends Stoppable {
     this.localvalues.delay = Math.abs(
       arrival - pong.originate - (pong.transmit - pong.receive),
     );
-    this.eventEmitter.emit("lagChanged");
     this.localvalues.clock_offset =
       (pong.receive - pong.originate + pong.transmit - arrival) / 2;
 
