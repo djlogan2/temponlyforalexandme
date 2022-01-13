@@ -11,6 +11,7 @@ import { check } from "meteor/check";
 import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
+import ServerUser from "/lib/server/ServerUser";
 
 interface HttpHeadersICareAbout {
   "user-agent": string;
@@ -160,6 +161,12 @@ export default class ConnectionService extends Stoppable {
 
   protected stopping(): void {
     // Nothing to stop at this time
+  }
+
+  public getUser(connectionid: string): ServerUser | undefined {
+    if (!this.connections[connectionid])
+      throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION");
+    return this.connections[connectionid].user;
   }
 }
 

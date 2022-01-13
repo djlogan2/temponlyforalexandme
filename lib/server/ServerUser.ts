@@ -9,6 +9,10 @@ export default class ServerUser extends User {
 
   private writableuserdao: WritableUserDao;
 
+  setLocale(locale: string): void {
+    this.writableuserdao.update({ _id: this.id }, { $set: { locale } });
+  }
+
   constructor(
     id: string,
     userdao: CommonReadOnlyUserDao,

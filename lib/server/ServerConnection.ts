@@ -31,7 +31,7 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   private logger2 = new ServerLogger(this, "server/ServerConnection");
 
-  private user?: ServerUser;
+  private pUser?: ServerUser;
 
   private pIdle?: IdleMessage;
 
@@ -67,7 +67,7 @@ export default class ServerConnection extends AbstractTimestampNode {
       { $set: { focused: idle.focused, idleseconds: idle.idleseconds } },
     );
     this.idlefunctions.forEach((fn) => fn(this.connectionid, idle));
-    if (this.user) this.user.updateIdle(this.connectionid, idle.idleseconds);
+    if (this.pUser) this.pUser.updateIdle(this.connectionid, idle.idleseconds);
   }
 
   public handleDirectMessage(messagetype: string, message: any) {
@@ -134,7 +134,11 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   public login(hashtoken: string): string {
     const id = this.userservice.logon(hashtoken);
-    this.user = new ServerUser(id, this.userdao, this.writableuserdao);
+    this.pUser = new ServerUser(id, this.userdao, this.writableuserdao);
     return id;
+  }
+
+  public get user(): ServerUser | undefined {
+    return this.pUser;
   }
 }
