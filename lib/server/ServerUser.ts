@@ -1,6 +1,7 @@
 import User from "/lib/User";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import Stoppable from "/lib/Stoppable";
 
 export default class ServerUser extends User {
   private isidle: boolean = false;
@@ -14,11 +15,12 @@ export default class ServerUser extends User {
   }
 
   constructor(
+    parent: Stoppable | null,
     id: string,
     userdao: CommonReadOnlyUserDao,
     writabledao: WritableUserDao,
   ) {
-    super(id, userdao);
+    super(parent, id, userdao);
     this.writableuserdao = writabledao;
   }
 
@@ -40,4 +42,6 @@ export default class ServerUser extends User {
       }
     }
   }
+
+  protected stopping(): void {}
 }

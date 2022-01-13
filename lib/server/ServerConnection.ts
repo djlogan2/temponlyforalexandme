@@ -134,7 +134,7 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   public login(hashtoken: string): string {
     const id = this.userservice.logon(hashtoken);
-    this.pUser = new ServerUser(id, this.userdao, this.writableuserdao);
+    this.pUser = new ServerUser(this, id, this.userdao, this.writableuserdao);
     return id;
   }
 

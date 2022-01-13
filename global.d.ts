@@ -47,6 +47,7 @@ declare global {
   var loggerdao: ReadOnlyLoggerConfigurationDao;
   var Assets: any;
   var user: ClientUser;
+  var userlist: { [id: string]: ClientUser };
   var connection: ClientConnection;
   var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter };
   var loggerconfigdao: ReadOnlyLoggerConfigurationDao;

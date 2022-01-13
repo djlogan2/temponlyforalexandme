@@ -1,10 +1,10 @@
 import { Meteor } from "meteor/meteor";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import UserRecord from "/lib/records/UserRecord";
-import ConnectionService from "/imports/server/service/ConnectionService";
 import { check } from "meteor/check";
+import Stoppable from "/lib/Stoppable";
 
-export default abstract class User {
+export default abstract class User extends Stoppable {
   protected userdao: CommonReadOnlyUserDao;
 
   private pId: string;
@@ -25,7 +25,12 @@ export default abstract class User {
     return this.pId;
   }
 
-  constructor(id: string, userdao: CommonReadOnlyUserDao) {
+  constructor(
+    parent: Stoppable | null,
+    id: string,
+    userdao: CommonReadOnlyUserDao,
+  ) {
+    super(parent);
     this.pId = id;
     this.userdao = userdao;
   }
