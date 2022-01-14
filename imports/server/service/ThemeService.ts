@@ -27,6 +27,14 @@ export default class ThemeService extends Stoppable {
       let themeHandle: Meteor.LiveQueryHandle | null = null;
       let themeCursor: Mongo.Cursor<ThemeRecord> | null = null;
 
+      //
+      // While I understand what you are trying to do here, I'm not entirely certain
+      // I agree with it. Firstly, it should NOT be using the connection collection
+      // directly. Let's start adding events (or onSomething(/*handlesomething*/ () => {})
+      // While I am agnostic about which one of the two we choose, I would prefer that we
+      // only choose one or the other and not have both architectures all over so future
+      // programmers have to figure out which one to use today :)
+      //
       const publishTheme = function () {
         themeCursor = globalThis.ICCServer.utilities
           .getCollection("themes")
@@ -91,6 +99,9 @@ export default class ThemeService extends Stoppable {
     });
   }
 
+  // If you are going to use custom live handles, they have to be stopped here!!!!!
+  // ALL dangling resources in a class, events, timers, handles, MUST be stapped if this instance is stopped.
+  // Parents and children will handle their own resources, but instances have to handle theirs.
   protected stopping(): void {
     // Nothing to stop yet
   }

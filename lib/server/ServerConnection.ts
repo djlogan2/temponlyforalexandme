@@ -14,7 +14,15 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import ServerTheme from "./ServerTheme";
 import ThemeService from "/imports/server/service/ThemeService";
+// I think that 99% of the time, we do not need the server to use the clients read only dao
+// The WritableThemeDown in this case will basically do 100% of what the read only dao will do
+// The only two reason the server would ever need the CommonReadOnly guy would be if there
+//      was a "CommonTheme" class that read from the CommonThemeDao
+// If the server needed to start() listeners the CommonThemeDao provided.
+//    However, it could just use WritableReactiveDao for that
+// I haven't looked through all of the code to see if this is necessary, but I'm betting it's not.
 import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
+// This is the one we would use
 import WritableThemeDao from "/imports/server/dao/WritableThemeDao";
 
 export default class ServerConnection extends AbstractTimestampNode {
