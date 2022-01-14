@@ -15,6 +15,7 @@ import ThemeService from "./ThemeService";
 import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
 import WritableThemeDao from "../dao/WritableThemeDao";
 import ClientTheme from "/lib/client/ClientTheme";
+import ServerUser from "/lib/server/ServerUser";
 
 interface HttpHeadersICareAbout {
   "user-agent": string;
@@ -177,6 +178,12 @@ export default class ConnectionService extends Stoppable {
 
   protected stopping(): void {
     // Nothing to stop at this time
+  }
+
+  public getUser(connectionid: string): ServerUser | undefined {
+    if (!this.connections[connectionid])
+      throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION");
+    return this.connections[connectionid].user;
   }
 }
 

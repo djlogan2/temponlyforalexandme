@@ -51,6 +51,7 @@ declare global {
   var Assets: any;
   var user: ClientUser;
   var theme: ClientTheme;
+  var userlist: { [id: string]: ClientUser };
   var connection: ClientConnection;
   var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter };
   var loggerconfigdao: ReadOnlyLoggerConfigurationDao;

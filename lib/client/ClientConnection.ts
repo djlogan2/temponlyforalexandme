@@ -82,10 +82,20 @@ export default class ClientConnection extends AbstractTimestampNode {
       this.logger2.debug(
         () => `Calling newUserLogin with hashToken=${hashToken}`,
       );
-      Meteor.call("newUserLogin", hashToken, (id: string) => {
-        console.log(`user id returned: ${id}`);
-        this.user = new ClientUser(id);
-      });
+      Meteor.call(
+        "newUserLogin",
+        hashToken,
+        (err: Meteor.Error, id: string) => {
+          if (err) {
+            this.logger2.error(() => `Call returned an error: ${err.message}`);
+          } else {
+            this.logger2.debug(() => `newUserLogin returns ${id}`);
+            this.user = new ClientUser(this, id);
+            globalThis.user = this.user;
+            this.eventemitter.emit("loggedin");
+          }
+        },
+      );
 
       this.logger2.debug(() => `connection id=${this.pConnectionid}`);
 

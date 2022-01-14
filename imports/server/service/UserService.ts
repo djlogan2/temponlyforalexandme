@@ -34,6 +34,8 @@ export default class UserService extends Stoppable {
     const userrecord: Mongo.OptionalId<UserRecord> = {
       createdAt: new Date(),
       isolation_group: "public",
+      // TODO: Have the browser pass us locale!
+      locale: "en_us",
       hashTokens: [{ hashtoken: hashToken, lastUsed: new Date() }],
     };
     userrecord._id = this.userdao.insert(userrecord);

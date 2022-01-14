@@ -6,6 +6,7 @@ import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";
 
 globalThis.subscriptions = {};
+globalThis.userlist = {};
 
 globalThis.ICCServer = {
   collections: {},
