@@ -5,11 +5,15 @@ import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import { Random } from "meteor/random";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
 import ClientUser from "/lib/client/ClientUser";
+import ClientTheme from "/lib/client/ClientTheme";
 import EventEmitter from "eventemitter3";
 import { PingMessage } from "../records/PingMessage";
 import { PongMessage } from "../records/PongMessage";
 import { PongResponse } from "../records/PongResponse";
+import ThemeRecord, { EThemesEnum } from "../records/ThemeRecord";
+import { THEME_STORAGE_KEY } from "/imports/themes/light";
 
 const resetEvents = {
   globalThis: [
@@ -29,6 +33,8 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private userdao: CommonReadOnlyUserDao;
 
+  private themedao: CommonReadOnlyThemeDao;
+
   private focused: boolean = true;
 
   private idle: number = 0;
@@ -39,15 +45,33 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private user?: ClientUser;
 
+  private _theme: ClientTheme = new ClientTheme(
+    this,
+    localStorage.getItem(THEME_STORAGE_KEY) as EThemesEnum,
+  );
+
   private eventemitter = new EventEmitter();
 
   public get connectionid() {
     return this.pConnectionid;
   }
 
-  constructor(parent: Stoppable | null, userdao: CommonReadOnlyUserDao) {
+  public getTheme(themeType: EThemesEnum) {
+    return this.themedao.readOne({ "theme.type": themeType });
+  }
+
+  public get theme() {
+    return this._theme;
+  }
+
+  constructor(
+    parent: Stoppable | null,
+    userdao: CommonReadOnlyUserDao,
+    themedao: CommonReadOnlyThemeDao,
+  ) {
     super(parent, 60);
     this.userdao = userdao;
+    this.themedao = themedao;
     globalThis.connection = this;
 
     this.logger2.trace(() => "constructor");
@@ -163,6 +187,24 @@ export default class ClientConnection extends AbstractTimestampNode {
       globalThis.localStorage.setItem("ICCUser.hashToken", hashToken);
     }
     return hashToken;
+  }
+
+  public changeTheme(theme: EThemesEnum): void {
+    const item = localStorage.getItem(THEME_STORAGE_KEY);
+    if (item === theme) {
+      return;
+    }
+
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+    this._theme.changeTheme(theme);
+  }
+
+  public subscribeToThemes(cb: (data: ThemeRecord) => void) {
+    this._theme.events.on("themes", (data: ThemeRecord) => {
+      if (data) {
+        cb(data);
+      }
+    });
   }
 
   protected stopping() {

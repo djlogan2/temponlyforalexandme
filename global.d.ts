@@ -17,6 +17,9 @@ import ClientServer from "/lib/client/ClientServer";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import CommonReadOnlyThemeDao from "./imports/dao/CommonReadOnlyThemeDao";
+import ClientTheme from "./lib/client/ClientTheme";
+import ThemeService from "./imports/server/service/ThemeService";
 
 declare module "meteor/universe:i18n";
 
@@ -47,10 +50,12 @@ declare global {
   var loggerdao: ReadOnlyLoggerConfigurationDao;
   var Assets: any;
   var user: ClientUser;
+  var theme: ClientTheme;
   var connection: ClientConnection;
   var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter };
   var loggerconfigdao: ReadOnlyLoggerConfigurationDao;
   var userdao: CommonReadOnlyUserDao;
+  var themedao: CommonReadOnlyThemeDao;
   /* Most of this is really server only, but some of it is used by both, most notably collections and utilities.getLogger */
   var ICCServer: {
     collections: { [K in CollectionNames]?: Mongo.Collection<any> };
@@ -58,6 +63,7 @@ declare global {
       loggerservice?: LoggerService;
       userservice?: UserService;
       connectionservice?: ConnectionService;
+      themeservice?: ThemeService;
     };
     utilities: {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;

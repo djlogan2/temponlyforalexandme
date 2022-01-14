@@ -1,26 +1,15 @@
-import "../../lib/client/ClientServer";
-import React, { FC, useState } from "react";
 import _ from "lodash";
+import React, { FC, useEffect, useState } from "react";
 import RGL, { WidthProvider } from "react-grid-layout";
+import "../../lib/client/ClientServer";
+import "../../lib/client/ICCGlobal";
 import Widget from "./components/Widget";
-
+import light from "/imports/themes/light";
+import { EThemesEnum } from "/lib/records/ThemeRecord";
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
-import "../../lib/client/ICCGlobal";
-import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
-import SubscriptionService from "/imports/client/service/SubscriptionService";
-import ClientServer from "/lib/client/ClientServer";
-import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 
 const ReactGridLayout = WidthProvider(RGL);
-
-globalThis.subscriptionservice = new SubscriptionService(null);
-globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
-  null,
-  window.subscriptionservice,
-);
-const userdao = new CommonReadOnlyUserDao(null);
-globalThis.icc = new ClientServer(userdao);
 
 const sizes = {
   small: {
@@ -38,6 +27,16 @@ const sizes = {
 };
 
 const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
+  // should be one global place where we store
+  // and just distribute it all over the app
+  // via context or something else
+  const [styles, setStyles] = useState<typeof light.styles>();
+  useEffect(() => {
+    globalThis.icc.connection.subscribeToThemes((data) => {
+      setStyles(data.theme.styles || {});
+    });
+  }, []);
+
   const generateLayout = () =>
     _.map(new Array(rest.items), function (_item, i) {
       const y: any = _.result(rest, "y") || Math.ceil(Math.random() * 4) + 1;
@@ -56,22 +55,42 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
 
   const [layout] = useState(generateLayout());
 
-  return (
-    <ReactGridLayout
-      {...rest}
-      layout={layout}
-      onLayoutChange={onLayoutChange}
-      useCSSTransforms
-      allowOverlap
-      preventCollision
-    >
-      {layout.map((options) => (
-        <div key={options.i}>
-          <Widget sizes={sizes} {...options} />
-        </div>
+  return styles ? (
+    <>
+      {(Object.keys(EThemesEnum) as EThemesEnum[]).map((theme) => (
+        <button
+          key={theme}
+          type="button"
+          style={{
+            cursor: "pointer",
+            padding: "5px",
+          }}
+          onClick={() => {
+            globalThis.icc.connection.changeTheme(theme);
+          }}
+          onKeyUp={() => {}}
+        >
+          {theme}
+        </button>
       ))}
-    </ReactGridLayout>
-  );
+
+      <ReactGridLayout
+        {...rest}
+        layout={layout}
+        onLayoutChange={onLayoutChange}
+        useCSSTransforms
+        allowOverlap
+        preventCollision
+        style={styles?.App}
+      >
+        {layout.map((options) => (
+          <div key={options.i}>
+            <Widget sizes={sizes} {...options} />
+          </div>
+        ))}
+      </ReactGridLayout>
+    </>
+  ) : null;
 };
 
 export default App;

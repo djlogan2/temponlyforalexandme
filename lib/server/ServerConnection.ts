@@ -12,6 +12,10 @@ import ServerUser from "/lib/server/ServerUser";
 import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
+import ServerTheme from "./ServerTheme";
+import ThemeService from "/imports/server/service/ThemeService";
+import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
+import WritableThemeDao from "/imports/server/dao/WritableThemeDao";
 
 export default class ServerConnection extends AbstractTimestampNode {
   private connectiondao: ConnectionDao;
@@ -24,6 +28,12 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   private writableuserdao: WritableUserDao;
 
+  private themeservice: ThemeService;
+
+  private themedao: CommonReadOnlyThemeDao;
+
+  private writablethemedao: WritableThemeDao;
+
   private closefunctions: (() => void)[] = [];
 
   private idlefunctions: ((connectionid: string, msg: IdleMessage) => void)[] =
@@ -32,6 +42,8 @@ export default class ServerConnection extends AbstractTimestampNode {
   private logger2 = new ServerLogger(this, "server/ServerConnection");
 
   private user?: ServerUser;
+
+  private theme?: ServerTheme;
 
   private pIdle?: IdleMessage;
 
@@ -95,6 +107,9 @@ export default class ServerConnection extends AbstractTimestampNode {
     userservice: UserService,
     readonlyuserdao: CommonReadOnlyUserDao,
     writableuserdao: WritableUserDao,
+    themeservice: ThemeService,
+    readonlythemedao: CommonReadOnlyThemeDao,
+    writablethemedao: WritableThemeDao,
   ) {
     super(parent, 60);
     this.logger2.trace(
@@ -105,6 +120,11 @@ export default class ServerConnection extends AbstractTimestampNode {
     this.userservice = userservice;
     this.connectionrecord = connectionrecord;
     this.connectiondao = connectiondao;
+    this.themedao = readonlythemedao;
+    this.writablethemedao = writablethemedao;
+    this.themeservice = themeservice;
+
+    this.theme = new ServerTheme(this, this.themedao, this.writablethemedao);
     this.start();
   }
 

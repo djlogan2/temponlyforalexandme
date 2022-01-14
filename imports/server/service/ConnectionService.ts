@@ -11,6 +11,10 @@ import { check } from "meteor/check";
 import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
+import ThemeService from "./ThemeService";
+import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
+import WritableThemeDao from "../dao/WritableThemeDao";
+import ClientTheme from "/lib/client/ClientTheme";
 
 interface HttpHeadersICareAbout {
   "user-agent": string;
@@ -26,6 +30,12 @@ export default class ConnectionService extends Stoppable {
   private userdao: CommonReadOnlyUserDao;
 
   private writableuserdao: WritableUserDao;
+
+  private themeservice: ThemeService;
+
+  private themedao: CommonReadOnlyThemeDao;
+
+  private writablethemedao: WritableThemeDao;
 
   private connections: { [key: string]: ServerConnection } = {};
 
@@ -45,6 +55,10 @@ export default class ConnectionService extends Stoppable {
     this.connectiondao = connectiondao;
     this.instanceservice = instanceservice;
     this.userservice = userservice;
+
+    this.themedao = new CommonReadOnlyThemeDao(null);
+    this.writablethemedao = new WritableThemeDao(null);
+    this.themeservice = new ThemeService(null, this.writablethemedao);
 
     Meteor.onConnection((connection) => this.onConnection(connection));
 
@@ -139,6 +153,9 @@ export default class ConnectionService extends Stoppable {
       this.userservice,
       this.userdao,
       this.writableuserdao,
+      this.themeservice,
+      this.themedao,
+      this.writablethemedao,
     );
     this.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
