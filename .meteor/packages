@@ -23,5 +23,5 @@ universe:i18n
 xolvio:cleaner
 meteortesting:mocha
 jquery
-standard-minifier-js
+standard-minifier-js@2.8.0
 lmieulet:meteor-coverage

@@ -31,11 +31,18 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
   // and just distribute it all over the app
   // via context or something else
   const [styles, setStyles] = useState<typeof light.styles>();
+  const [translate, updateTranslate] = useState<Object>();
   useEffect(() => {
     globalThis.icc.connection.subscribeToThemes((data) => {
       setStyles(data.theme.styles || {});
     });
+
+    globalThis.icc.connection.subscribeToI18n((data) => {
+      updateTranslate(data.translations || {});
+    });
   }, []);
+
+  console.log(translate);
 
   const generateLayout = () =>
     _.map(new Array(rest.items), function (_item, i) {

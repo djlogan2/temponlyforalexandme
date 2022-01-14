@@ -30,7 +30,7 @@ module.exports = {
     "max-len": ["error", { code: 2048 }],
     "no-underscore-dangle": [
       "error",
-      { allow: ["_id", "_lastSessionId", "_theme"] },
+      { allow: ["_id", "_lastSessionId", "_theme", "_i18n"] },
     ],
     "react/jsx-filename-extension": [
       2,

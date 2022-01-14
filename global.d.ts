@@ -2,6 +2,7 @@
 // noinspection ES6ConvertVarToLetConst
 
 import "meteor/meteor";
+import ClientI18n from "/lib/client/ClientI18n";
 import { Mongo } from "meteor/mongo";
 import LoggerService from "./imports/server/service/LoggerService";
 import Stoppable from "./lib/Stoppable";
@@ -20,6 +21,7 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import CommonReadOnlyThemeDao from "./imports/dao/CommonReadOnlyThemeDao";
 import ClientTheme from "./lib/client/ClientTheme";
 import ThemeService from "./imports/server/service/ThemeService";
+import I18nService from "./imports/server/service/I18nService";
 
 declare module "meteor/universe:i18n";
 
@@ -51,6 +53,7 @@ declare global {
   var Assets: any;
   var user: ClientUser;
   var theme: ClientTheme;
+  var i18n: ClientI18n;
   var userlist: { [id: string]: ClientUser };
   var connection: ClientConnection;
   var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter };
@@ -65,6 +68,7 @@ declare global {
       userservice?: UserService;
       connectionservice?: ConnectionService;
       themeservice?: ThemeService;
+      i18nservice?: I18nService;
     };
     utilities: {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;

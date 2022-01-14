@@ -1,3 +1,4 @@
+import CommonReadOnlyI18nDao from "/imports/dao/CommonReadOnlyI18nDao";
 import { Meteor } from "meteor/meteor";
 import { render } from "react-dom";
 import * as React from "react";
@@ -16,7 +17,9 @@ globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
 );
 const userdao = new CommonReadOnlyUserDao(null);
 const themedao = new CommonReadOnlyThemeDao(null);
-globalThis.icc = new ClientServer(userdao, themedao);
+const i18ndao = new CommonReadOnlyI18nDao(null);
+
+globalThis.icc = new ClientServer(userdao, themedao, i18ndao);
 
 // window.onerror = function myErrorHandler(
 //     message: Event | string,

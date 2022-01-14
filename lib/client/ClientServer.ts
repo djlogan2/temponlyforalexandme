@@ -1,3 +1,4 @@
+import CommonReadOnlyI18nDao from "/imports/dao/CommonReadOnlyI18nDao";
 import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
 import ClientConnection from "/lib/client/ClientConnection";
 import Stoppable from "/lib/Stoppable";
@@ -9,9 +10,10 @@ export default class ClientServer extends Stoppable {
   constructor(
     userdao: CommonReadOnlyUserDao,
     themedao: CommonReadOnlyThemeDao,
+    i18ndao: CommonReadOnlyI18nDao,
   ) {
     super(null);
-    this.connection = new ClientConnection(this, userdao, themedao);
+    this.connection = new ClientConnection(this, userdao, themedao, i18ndao);
   }
 
   protected stopping(): void {

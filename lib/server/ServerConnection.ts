@@ -1,5 +1,8 @@
 import ConnectionRecord from "/lib/records/ConnectionRecord";
 import Stoppable from "/lib/Stoppable";
+import CommonReadOnlyI18nDao from "../../imports/dao/CommonReadOnlyI18nDao";
+import WritableI18nDao from "../../imports/server/dao/WritableI18nDao";
+import I18nService from "../../imports/server/service/I18nService";
 import AbstractTimestampNode from "../AbstractTimestampNode";
 import { PingMessage } from "../records/PingMessage";
 import { PongMessage } from "../records/PongMessage";
@@ -12,6 +15,7 @@ import ServerUser from "/lib/server/ServerUser";
 import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
+import ServerI18n from "./ServerI18n";
 import ServerTheme from "./ServerTheme";
 import ThemeService from "/imports/server/service/ThemeService";
 // I think that 99% of the time, we do not need the server to use the clients read only dao
@@ -42,6 +46,12 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   private writablethemedao: WritableThemeDao;
 
+  private i18nservice: I18nService;
+
+  private i18ndao: CommonReadOnlyI18nDao;
+
+  private writablei18ndao: WritableI18nDao;
+
   private closefunctions: (() => void)[] = [];
 
   private idlefunctions: ((connectionid: string, msg: IdleMessage) => void)[] =
@@ -52,6 +62,8 @@ export default class ServerConnection extends AbstractTimestampNode {
   private pUser?: ServerUser;
 
   private theme?: ServerTheme;
+
+  private i18n?: ServerI18n;
 
   private pIdle?: IdleMessage;
 
@@ -118,6 +130,9 @@ export default class ServerConnection extends AbstractTimestampNode {
     themeservice: ThemeService,
     readonlythemedao: CommonReadOnlyThemeDao,
     writablethemedao: WritableThemeDao,
+    i18nservice: I18nService,
+    readonlyi18ndao: CommonReadOnlyI18nDao,
+    writablei18ndao: WritableI18nDao,
   ) {
     super(parent, 60);
     this.logger2.trace(
@@ -131,8 +146,12 @@ export default class ServerConnection extends AbstractTimestampNode {
     this.themedao = readonlythemedao;
     this.writablethemedao = writablethemedao;
     this.themeservice = themeservice;
+    this.i18nservice = i18nservice;
+    this.writablei18ndao = writablei18ndao;
+    this.i18ndao = readonlyi18ndao;
 
     this.theme = new ServerTheme(this, this.themedao, this.writablethemedao);
+    this.i18n = new ServerI18n(this, this.writablei18ndao);
     this.start();
   }
 

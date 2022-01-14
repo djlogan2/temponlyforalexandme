@@ -6,4 +6,5 @@ export type SubscriptionNames =
   | "sub2"
   | "sub3"
   | "subscriptioneventemittertest"
-  | "themes";
+  | "themes"
+  | "i18n";

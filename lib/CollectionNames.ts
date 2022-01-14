@@ -8,4 +8,5 @@ export type CollectionNames =
   | "reactivereadonlydaotest"
   | "readonlydaotest"
   | "readwritedaotest"
-  | "themes";
+  | "themes"
+  | "clientI18n";
