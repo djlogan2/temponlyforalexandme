@@ -4,7 +4,7 @@ import RGL, { WidthProvider } from "react-grid-layout";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import Widget from "./components/Widget";
-import BasicInput from "./shared/Inputs/BasicInput";
+import BasicInput from "./shared/Inputs/Input";
 import light from "/imports/themes/light";
 import { EThemesEnum } from "/lib/records/ThemeRecord";
 import "/node_modules/react-grid-layout/css/styles.css";
