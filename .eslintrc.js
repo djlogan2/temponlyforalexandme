@@ -26,7 +26,7 @@ module.exports = {
     "no-unused-vars": "off",
     // "consistent-return": "off",
     // "@typescript-eslint/consistent-return": ["error"],
-    "import/no-unresolved": ["error", { ignore: ["^meteor/", "^/"] }],
+    "import/no-unresolved": 0,
     "max-len": ["error", { code: 2048 }],
     "no-underscore-dangle": [
       "error",
@@ -49,6 +49,7 @@ module.exports = {
     // "@typescript-eslint/no-unused-vars": [true, {"ignore-pattern": "^_"}],
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
+    "react/require-default-props": 0,
   },
   settings: {
     "import/resolver": {
