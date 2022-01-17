@@ -103,8 +103,6 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
           label="Label"
           placeholder="Hello"
           msgText="Message text"
-          error
-          type="password"
         />
       </div>
     </>

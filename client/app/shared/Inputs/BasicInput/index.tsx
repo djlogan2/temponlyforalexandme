@@ -1,7 +1,7 @@
 import { noop } from "lodash";
-import React, { FC, InputHTMLAttributes, useState } from "react";
-import "../../../../stylesheets/BasicInput/index.scss";
+import React, { FC, InputHTMLAttributes } from "react";
 import clsx from "clsx";
+import useStyles from "./styles";
 
 interface IBasicInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -18,18 +18,22 @@ const BasicInput: FC<IBasicInputProps> = ({
   onFocus = noop,
   onBlur = noop,
   ...rest
-}) => (
-  <div className={clsx("formControl", error && "formControl--error")}>
-    <div className="formControl__inputContainer">
-      {!!label && (
-        <label htmlFor={name} className="formControl__label">
-          {label}
-        </label>
-      )}
-      <input {...rest} className="formControl__input" name={name} id={name} />
+}) => {
+  const classes = useStyles();
+
+  return (
+    <div className={clsx(error && classes.formControlError)}>
+      <div className={classes.inputContainer}>
+        {!!label && (
+          <label htmlFor={name} className={classes.label}>
+            {label}
+          </label>
+        )}
+        <input {...rest} className={classes.input} name={name} id={name} />
+      </div>
+      {!!msgText && <p className={classes.msg}>{msgText}</p>}
     </div>
-    {!!msgText && <div className="formControl__msg">{msgText}</div>}
-  </div>
-);
+  );
+};
 
 export default BasicInput;
