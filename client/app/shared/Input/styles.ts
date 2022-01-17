@@ -1,6 +1,10 @@
 import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
+  formControl: {
+    position: "relative",
+    width: "min-content",
+  },
   formControlError: {
     color: "#ff0000",
 
@@ -24,9 +28,9 @@ const useStyles = createUseStyles({
   },
 
   inputContainer: {
-    maxWidth: "312px",
-    height: "63px",
+    minWidth: "305px",
     width: "100%",
+    height: "63px",
     padding: "8px 16px",
     backgroundColor: "#f5f5f5",
     boxSizing: "border-box",
@@ -59,6 +63,7 @@ const useStyles = createUseStyles({
     outline: "none",
     fontSize: "16px",
     padding: 0,
+    width: "100%",
 
     "&:disabled": {
       color: "#9698A1",
@@ -81,6 +86,20 @@ const useStyles = createUseStyles({
       left: "16px",
       top: "1.5px",
     },
+  },
+
+  inputWithIcon: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+
+  icon: {
+    width: 16,
+    height: 16,
+    margin: {
+      left: 2,
+    },
+    cursor: "pointer",
   },
 });
 

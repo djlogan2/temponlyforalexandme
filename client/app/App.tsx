@@ -4,7 +4,8 @@ import RGL, { WidthProvider } from "react-grid-layout";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import Widget from "./components/Widget";
-import BasicInput from "./shared/Inputs/Input";
+import Input from "./shared/Input";
+import Select from "./shared/Select";
 import light from "/imports/themes/light";
 import { EThemesEnum } from "/lib/records/ThemeRecord";
 import "/node_modules/react-grid-layout/css/styles.css";
@@ -26,6 +27,16 @@ const sizes = {
     h: 6,
   },
 };
+
+const Icon: FC = () => (
+  <div
+    style={{
+      width: "16px",
+      height: "16px",
+      backgroundColor: "red",
+    }}
+  />
+);
 
 const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
   // should be one global place where we store
@@ -97,13 +108,19 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
           </div>
         ))}
       </ReactGridLayout>
-      <div style={{ padding: "100px" }}>
-        <BasicInput
-          name="basic-input"
-          label="Label"
-          placeholder="Hello"
-          msgText="Message text"
-        />
+      <div>
+        <div style={{ padding: "100px" }}>
+          <Input
+            name="basic-input"
+            label="Label"
+            placeholder="Hello"
+            msgText="Message text"
+            type="password"
+          />
+        </div>
+        <div style={{ padding: "100px" }}>
+          <Select options={["test", "test2", "test3"]} />
+        </div>
       </div>
     </>
   ) : null;
