@@ -2,6 +2,8 @@ import { noop } from "lodash";
 import React, { FC, InputHTMLAttributes, useState } from "react";
 import clsx from "clsx";
 import useStyles from "./styles";
+import AttentionIcon from "../../components/icons/Attention";
+import Eye2Icon from "../../components/icons/Eye2";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -60,15 +62,19 @@ const Input: FC<IInputProps> = ({
             </div>
           )}
 
+          {error && <AttentionIcon color="red" />}
+
           {!Icon && type === "password" && (
-            <div
-              style={{ width: 16, height: 16, backgroundColor: "red" }}
+            <span
+              style={{ cursor: "pointer" }}
               onClick={() => {
                 onIconClick();
                 setInputType(inputType === "password" ? "text" : "password");
               }}
               role="presentation"
-            />
+            >
+              <Eye2Icon />
+            </span>
           )}
         </div>
       </div>

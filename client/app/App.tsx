@@ -4,8 +4,11 @@ import RGL, { WidthProvider } from "react-grid-layout";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import Widget from "./components/Widget";
+import Checkbox from "./shared/Checkbox";
 import Input from "./shared/Input";
 import Select from "./shared/Select";
+import Switch from "./shared/Switch";
+import TextArea from "./shared/TextArea";
 import light from "/imports/themes/light";
 import { EThemesEnum } from "/lib/records/ThemeRecord";
 import "/node_modules/react-grid-layout/css/styles.css";
@@ -109,17 +112,32 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
         ))}
       </ReactGridLayout>
       <div>
-        <div style={{ padding: "100px" }}>
-          <Input
-            name="basic-input"
-            label="Label"
-            placeholder="Hello"
-            msgText="Message text"
-            type="password"
-          />
+        <h1>INPUTS</h1>
+        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+          <div>
+            <Input
+              name="basic-input"
+              label="Label"
+              placeholder="Hello"
+              msgText="Message text"
+              type="password"
+            />
+          </div>
+          <div>
+            <Select options={["test", "test2", "test3"]} onSelect={() => {}} />
+          </div>
+          <div style={{ width: 305 }}>
+            <TextArea name="textarea" msgText="Message text" />
+          </div>
         </div>
-        <div style={{ padding: "100px" }}>
-          <Select options={["test", "test2", "test3"]} />
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <div>
+          <Checkbox name="checkbox" onChange={(e) => console.log(e)} />
+          <Checkbox name="checkbox1" onChange={(e) => console.log(e)} circled />
+        </div>
+        <div>
+          <Switch name="switch" onChange={(e) => console.log(e)} />
         </div>
       </div>
     </>

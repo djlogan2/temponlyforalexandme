@@ -3,7 +3,8 @@ import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
   formControl: {
     position: "relative",
-    width: "min-content",
+    maxWidth: 305,
+    width: "100%",
   },
   formControlError: {
     color: "#ff0000",
@@ -28,14 +29,12 @@ const useStyles = createUseStyles({
   },
 
   inputContainer: {
-    minWidth: "305px",
     width: "100%",
     height: "63px",
     padding: "8px 16px",
     backgroundColor: "#f5f5f5",
     boxSizing: "border-box",
     borderRadius: "8px",
-    fontFamily: "Helvetica, sans-serif",
     color: "#101010",
     display: "flex",
     flexDirection: "column",

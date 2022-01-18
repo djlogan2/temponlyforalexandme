@@ -2,7 +2,8 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   container: {
-    width: "min-content",
+    maxWidth: 305,
+    width: "100%",
     position: "relative",
   },
   list: {
@@ -14,6 +15,7 @@ const useStyles = createUseStyles({
     "border-radius": "8px",
     width: "100%",
     padding: 0,
+    backgroundColor: "#FFFFFF",
   },
   item: {
     padding: "6px 16px",
@@ -21,6 +23,7 @@ const useStyles = createUseStyles({
 
     "&:hover": {
       backgroundColor: "#ECEFF5",
+      color: "#0F5AB6",
     },
   },
 });
