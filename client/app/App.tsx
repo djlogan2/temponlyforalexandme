@@ -1,45 +1,17 @@
-import _ from "lodash";
+import ActionButton from "/client/app/shared/Buttons/ActionButton";
+import Heading1 from "/client/app/shared/Typographies/Heading1";
+import Heading2 from "/client/app/shared/Typographies/Heading2";
+import Heading3 from "/client/app/shared/Typographies/Heading3";
+import Heading4 from "/client/app/shared/Typographies/Heading4";
+import Heading5 from "/client/app/shared/Typographies/Heading5";
+import Heading6 from "/client/app/shared/Typographies/Heading6";
+import Paragraph from "/client/app/shared/Typographies/Paragraph";
+import SmallParagraph from "/client/app/shared/Typographies/SmallParagraph";
+import Title from "/client/app/shared/Typographies/Title";
 import React, { FC, useEffect, useState } from "react";
-import RGL, { WidthProvider } from "react-grid-layout";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
-import Widget from "./components/Widget";
-import Checkbox from "./shared/Checkbox";
-import Input from "./shared/Input";
-import Select from "./shared/Select";
-import Switch from "./shared/Switch";
-import TextArea from "./shared/TextArea";
 import light from "/imports/themes/light";
-import { EThemesEnum } from "/lib/records/ThemeRecord";
-import "/node_modules/react-grid-layout/css/styles.css";
-import "/node_modules/react-resizable/css/styles.css";
-
-const ReactGridLayout = WidthProvider(RGL);
-
-const sizes = {
-  small: {
-    w: 2,
-    h: 2,
-  },
-  medium: {
-    w: 4,
-    h: 4,
-  },
-  large: {
-    w: 6,
-    h: 6,
-  },
-};
-
-const Icon: FC = () => (
-  <div
-    style={{
-      width: "16px",
-      height: "16px",
-      backgroundColor: "red",
-    }}
-  />
-);
 
 const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
   // should be one global place where we store
@@ -59,89 +31,31 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
 
   console.log(translate);
 
-  const generateLayout = () =>
-    _.map(new Array(rest.items), function (_item, i) {
-      const y: any = _.result(rest, "y") || Math.ceil(Math.random() * 4) + 1;
-      return {
-        x: (i * 2) % 12,
-        y: Math.floor(i / 6) * y,
-        w: 2,
-        h: y,
-        i: i.toString(),
-        minW: sizes.small.w,
-        maxW: sizes.large.w,
-        minH: sizes.small.h,
-        maxH: sizes.large.h,
-      };
-    });
-
-  const [layout] = useState(generateLayout());
-
-  return styles ? (
-    <>
-      {(Object.keys(EThemesEnum) as EThemesEnum[]).map((theme) => (
-        <button
-          key={theme}
-          type="button"
-          style={{
-            cursor: "pointer",
-            padding: "5px",
-          }}
-          onClick={() => {
-            globalThis.icc.connection.changeTheme(theme);
-          }}
-          onKeyUp={() => {}}
-        >
-          {theme}
-        </button>
-      ))}
-
-      <ReactGridLayout
-        {...rest}
-        layout={layout}
-        onLayoutChange={onLayoutChange}
-        useCSSTransforms
-        allowOverlap
-        preventCollision
-        style={styles?.App}
-      >
-        {layout.map((options) => (
-          <div key={options.i}>
-            <Widget sizes={sizes} {...options} />
-          </div>
-        ))}
-      </ReactGridLayout>
-      <div>
-        <h1>INPUTS</h1>
-        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-          <div>
-            <Input
-              name="basic-input"
-              label="Label"
-              placeholder="Hello"
-              msgText="Message text"
-              type="password"
-            />
-          </div>
-          <div>
-            <Select options={["test", "test2", "test3"]} onSelect={() => {}} />
-          </div>
-          <div style={{ width: 305 }}>
-            <TextArea name="textarea" msgText="Message text" />
-          </div>
-        </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-        <div>
-          <Checkbox name="checkbox" onChange={(e) => console.log(e)} />
-          <Checkbox name="checkbox1" onChange={(e) => console.log(e)} circled />
-        </div>
-        <div>
-          <Switch name="switch" onChange={(e) => console.log(e)} />
-        </div>
-      </div>
-    </>
-  ) : null;
+  return (
+    <div>
+      <ActionButton name="fakeButton" hoverText="1234">
+        123
+      </ActionButton>
+      <ActionButton name="fakeButton" hoverText="1234" disabled>
+        123
+      </ActionButton>
+      <Title name="test">Big title</Title>
+      <Heading1 name="test1">Heading 1</Heading1>
+      <Heading2 name="test2">Heading 2</Heading2>
+      <Heading3 name="test3">Heading 3</Heading3>
+      <Heading4 name="test4">Heading 4</Heading4>
+      <Heading5 name="test5">Heading 5</Heading5>
+      <Heading6 name="test6">Heading 6</Heading6>
+      <Paragraph name="testPar">Paragraph</Paragraph>
+      <Paragraph name="testParLink" link="https://www.google.com">
+        Paragraph with link
+      </Paragraph>
+      <SmallParagraph name="testSmallPar">Small paragraph</SmallParagraph>
+      <SmallParagraph name="testSmallParLink" link="https://www.google.com">
+        Small paragraph with link
+      </SmallParagraph>
+    </div>
+  );
 };
 
 export default App;
