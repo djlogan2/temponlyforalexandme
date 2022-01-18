@@ -1,8 +1,7 @@
 /* eslint-disable no-var,vars-on-top */
 // noinspection ES6ConvertVarToLetConst
 
-import "meteor/meteor";
-import ClientI18n from "/lib/client/ClientI18n";
+import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import LoggerService from "./imports/server/service/LoggerService";
 import Stoppable from "./lib/Stoppable";
@@ -18,10 +17,9 @@ import ClientServer from "/lib/client/ClientServer";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
-import CommonReadOnlyThemeDao from "./imports/dao/CommonReadOnlyThemeDao";
-import ClientTheme from "./lib/client/ClientTheme";
-import ThemeService from "./imports/server/service/ThemeService";
-import I18nService from "./imports/server/service/I18nService";
+import ServerUser from "/lib/server/ServerUser";
+import ServerConnection from "/lib/server/ServerConnection";
+import Clienti18n from "/lib/client/Clienti18n";
 
 declare module "meteor/universe:i18n";
 
@@ -30,6 +28,7 @@ declare module "meteor/xolvio:cleaner" {
 }
 
 declare module "meteor/meteor" {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
   module Meteor {
     var connection: { _lastSessionId: string };
     var directStream: {
@@ -48,18 +47,16 @@ declare module "meteor/meteor" {
 declare global {
   /* The client stuff that will be in 'window' */
   var icc: ClientServer;
+  var i18n: Clienti18n;
   var subscriptionservice: SubscriptionService;
   var loggerdao: ReadOnlyLoggerConfigurationDao;
   var Assets: any;
   var user: ClientUser;
-  var theme: ClientTheme;
-  var i18n: ClientI18n;
   var userlist: { [id: string]: ClientUser };
   var connection: ClientConnection;
   var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter };
   var loggerconfigdao: ReadOnlyLoggerConfigurationDao;
   var userdao: CommonReadOnlyUserDao;
-  var themedao: CommonReadOnlyThemeDao;
   /* Most of this is really server only, but some of it is used by both, most notably collections and utilities.getLogger */
   var ICCServer: {
     collections: { [K in CollectionNames]?: Mongo.Collection<any> };
@@ -67,12 +64,11 @@ declare global {
       loggerservice?: LoggerService;
       userservice?: UserService;
       connectionservice?: ConnectionService;
-      themeservice?: ThemeService;
-      i18nservice?: I18nService;
     };
     utilities: {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;
       getCollection: (collectionname: CollectionNames) => Mongo.Collection<any>;
+      getUser: (connection: Meteor.Connection | null) => ServerUser | undefined;
     };
   };
 }

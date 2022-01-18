@@ -91,6 +91,7 @@ export default class LoggerService {
     const logstring = `${new Date().toDateString()} ${type.toUpperCase()} ${
       userid || "-"
     } ${connection || "-"} ${module} ${level} ${text}`;
+    // eslint-disable-next-line no-console
     console.log(logstring);
   }
 

@@ -13,13 +13,13 @@ export default class InstanceService extends Stoppable {
     this.instancedao.stop();
   }
 
-  private sInstanceid: string;
+  private readonly sInstanceid: string;
 
-  private instancedao: InstanceDao;
+  private readonly instancedao: InstanceDao;
 
-  private ourpinghandle: number;
+  private readonly ourpinghandle: number;
 
-  private ourdefuncthandle: number;
+  private readonly ourdefuncthandle: number;
 
   private startOurPing(): number {
     return Meteor.setInterval(() => {
@@ -34,7 +34,7 @@ export default class InstanceService extends Stoppable {
     return this.sInstanceid;
   }
 
-  private onDefunctInstance(instance: InstanceRecord): void {
+  private onDefunctInstance(_instance: InstanceRecord): void {
     // TODO: What do we want to do here? Nothing so far that I know of,
     //       except maybe call other guys?
   }

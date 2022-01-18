@@ -11,12 +11,6 @@ import { check } from "meteor/check";
 import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
-import CommonReadOnlyI18nDao from "../../dao/CommonReadOnlyI18nDao";
-import WritableI18nDao from "../dao/WritableI18nDao";
-import I18nService from "./I18nService";
-import ThemeService from "./ThemeService";
-import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
-import WritableThemeDao from "../dao/WritableThemeDao";
 import ServerUser from "/lib/server/ServerUser";
 
 interface HttpHeadersICareAbout {
@@ -24,27 +18,15 @@ interface HttpHeadersICareAbout {
 }
 
 export default class ConnectionService extends Stoppable {
-  private connectiondao: ConnectionDao;
+  private readonly connectiondao: ConnectionDao;
 
-  private instanceservice: InstanceService;
+  private readonly instanceservice: InstanceService;
 
-  private userservice: UserService;
+  private readonly userservice: UserService;
 
-  private userdao: CommonReadOnlyUserDao;
+  private readonly userdao: CommonReadOnlyUserDao;
 
-  private writableuserdao: WritableUserDao;
-
-  private themeservice: ThemeService;
-
-  private themedao: CommonReadOnlyThemeDao;
-
-  private writablethemedao: WritableThemeDao;
-
-  private i18ndao: CommonReadOnlyI18nDao;
-
-  private writablei18ndao: WritableI18nDao;
-
-  private i18nservice: I18nService;
+  private readonly writableuserdao: WritableUserDao;
 
   private connections: { [key: string]: ServerConnection } = {};
 
@@ -64,14 +46,6 @@ export default class ConnectionService extends Stoppable {
     this.connectiondao = connectiondao;
     this.instanceservice = instanceservice;
     this.userservice = userservice;
-
-    this.themedao = new CommonReadOnlyThemeDao(null);
-    this.writablethemedao = new WritableThemeDao(null);
-    this.themeservice = new ThemeService(null, this.writablethemedao);
-
-    this.i18ndao = new CommonReadOnlyI18nDao(null);
-    this.writablei18ndao = new WritableI18nDao(null);
-    this.i18nservice = new I18nService(null, this.writablei18ndao);
 
     Meteor.onConnection((connection) => this.onConnection(connection));
 
@@ -166,21 +140,19 @@ export default class ConnectionService extends Stoppable {
       this.userservice,
       this.userdao,
       this.writableuserdao,
-      this.themeservice,
-      this.themedao,
-      this.writablethemedao,
-      this.i18nservice,
-      this.i18ndao,
-      this.writablei18ndao,
     );
     this.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
   }
 
-  public login(connectionid: string, hashtoken: string): string {
+  public login(
+    connectionid: string,
+    hashtoken: string,
+    locale: string,
+  ): string {
     if (!this.connections[connectionid])
       throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION");
-    const userid = this.connections[connectionid].login(hashtoken);
+    const userid = this.connections[connectionid].login(hashtoken, locale);
     this.connectiondao.update({ connectionid }, { $set: { userid } });
     return userid;
   }
@@ -203,8 +175,9 @@ export default class ConnectionService extends Stoppable {
 }
 
 Meteor.methods({
-  newUserLogin(hashtoken: string): Promise<string> {
+  newUserLogin(hashtoken: string, locale: string): Promise<string> {
     check(hashtoken, String);
+    check(locale, String);
     return new Promise<string>((resolve, reject) => {
       if (!this.connection) {
         reject(new Meteor.Error("NULL_CONNECTION"));
@@ -217,8 +190,8 @@ Meteor.methods({
       const userid = globalThis.ICCServer.services.connectionservice.login(
         this.connection.id,
         hashtoken,
+        locale,
       );
-      console.log(`Returning ${userid} to newUserLogin caller`);
       resolve(userid);
     });
   },

@@ -4,12 +4,16 @@ import RGL, { WidthProvider } from "react-grid-layout";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import Widget from "./components/Widget";
-import light from "/imports/themes/light";
-import { EThemesEnum } from "/lib/records/ThemeRecord";
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
+import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
+import Clienti18n from "/lib/client/Clienti18n";
 
 const ReactGridLayout = WidthProvider(RGL);
+
+const i18ndao = new Clienti18nReadOnlyDao(null);
+// noinspection JSUnusedLocalSymbols
+const i18nguy = new Clienti18n(i18ndao);
 
 const sizes = {
   small: {
@@ -30,19 +34,19 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
   // should be one global place where we store
   // and just distribute it all over the app
   // via context or something else
-  const [styles, setStyles] = useState<typeof light.styles>();
-  const [translate, updateTranslate] = useState<Object>();
+  // const [styles, setStyles] = useState<typeof light.styles>();
+  // const [translate, updateTranslate] = useState<Object>();
   useEffect(() => {
-    globalThis.icc.connection.subscribeToThemes((data) => {
-      setStyles(data.theme.styles || {});
-    });
-
-    globalThis.icc.connection.subscribeToI18n((data) => {
-      updateTranslate(data.translations || {});
-    });
+    // globalThis.icc.connection.subscribeToThemes((data) => {
+    //   setStyles(data.theme.styles || {});
+    // });
+    //
+    // globalThis.icc.connection.subscribeToI18n((data) => {
+    //   updateTranslate(data.translations || {});
+    // });
   }, []);
 
-  console.log(translate);
+  // console.log(translate);
 
   const generateLayout = () =>
     _.map(new Array(rest.items), function (_item, i) {
@@ -62,24 +66,24 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
 
   const [layout] = useState(generateLayout());
 
-  return styles ? (
+  return (
     <>
-      {(Object.keys(EThemesEnum) as EThemesEnum[]).map((theme) => (
-        <button
-          key={theme}
-          type="button"
-          style={{
-            cursor: "pointer",
-            padding: "5px",
-          }}
-          onClick={() => {
-            globalThis.icc.connection.changeTheme(theme);
-          }}
-          onKeyUp={() => {}}
-        >
-          {theme}
-        </button>
-      ))}
+      {/* {(Object.keys(EThemesEnum) as EThemesEnum[]).map((theme) => ( */}
+      {/*  <button */}
+      {/*    key={theme} */}
+      {/*    type="button" */}
+      {/*    style={{ */}
+      {/*      cursor: "pointer", */}
+      {/*      padding: "5px", */}
+      {/*    }} */}
+      {/*    onClick={() => { */}
+      {/*      globalThis.icc.connection.changeTheme(theme); */}
+      {/*    }} */}
+      {/*    onKeyUp={() => {}} */}
+      {/*  > */}
+      {/*    {theme} */}
+      {/*  </button> */}
+      {/* ))} */}
 
       <ReactGridLayout
         {...rest}
@@ -88,7 +92,7 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
         useCSSTransforms
         allowOverlap
         preventCollision
-        style={styles?.App}
+        // style={styles?.App}
       >
         {layout.map((options) => (
           <div key={options.i}>
@@ -97,7 +101,7 @@ const App: FC<typeof defaulApptProps> = ({ onLayoutChange, ...rest }) => {
         ))}
       </ReactGridLayout>
     </>
-  ) : null;
+  );
 };
 
 export default App;

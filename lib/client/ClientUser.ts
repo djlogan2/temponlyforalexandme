@@ -5,7 +5,7 @@ import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 
 export default class ClientUser extends User {
-  private pEvents;
+  private readonly pEvents;
 
   public get events() {
     return this.pEvents;

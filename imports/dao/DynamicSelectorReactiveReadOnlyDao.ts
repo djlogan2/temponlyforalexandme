@@ -1,15 +1,11 @@
-import { Meteor } from "meteor/meteor";
-import Stoppable from "/lib/Stoppable";
 import { Mongo } from "meteor/mongo";
-import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
-import { CollectionNames } from "/lib/CollectionNames";
+import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 
-export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
-  protected observehandle?: Meteor.LiveQueryHandle;
-
-  constructor(parent: Stoppable | null, collection: CollectionNames) {
-    super(collection, parent);
-  }
+export default abstract class DynamicSelectorReactiveReadOnlyDao<
+  T,
+> extends ReactiveReadOnlyDao<T> {
+  // ReadOnlyDao<T> {
+  private cursor?: Mongo.Cursor<T, any>;
 
   /**
    *
@@ -18,28 +14,48 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
    * @param{string[]} fields An array of fields to either be included or excluded in the returned data. Remember that only returned fields are watched!
    * @protected
    */
-  protected start(
+  public setSelector(
     selector: Mongo.Selector<T>,
     includeOrExclude?: "include" | "exclude",
     fields?: (keyof T)[],
   ): void {
     const self = this;
-    const fld = this.fields(includeOrExclude, fields);
+    const fld = fields ? this.fields(includeOrExclude, fields) : null;
 
-    let cursor;
+    let newcursor;
 
-    if (fld) cursor = this.mongocollection.find(selector, fld);
-    else cursor = this.mongocollection.find(selector);
+    if (fld) newcursor = this.mongocollection.find(selector, fld);
+    else newcursor = this.mongocollection.find(selector);
 
-    this.observehandle = cursor.observeChanges({
+    const ids: string[] = [];
+    if (this.cursor) this.cursor.forEach((rec) => ids.push(rec._id));
+
+    if (this.observehandle) this.observehandle.stop();
+
+    this.cursor = newcursor;
+
+    let count = this.cursor.count();
+
+    this.observehandle = this.cursor.observeChanges({
       added(id, doc) {
-        self.onRecordAdded(id, doc);
+        const idx = ids?.length ? ids.indexOf(id) : -1;
+        if (idx === -1) self.onRecordAdded(id, doc);
+        else {
+          ids.splice(idx, 1);
+        }
+        if (count) {
+          count -= 1;
+          if (!count) ids.forEach((rid) => self.onRecordRemoved(rid));
+        }
+        if (!count) self.onReady();
       },
       changed(id, doc) {
         self.onFieldsChanged(id, doc);
+        if (!count) self.onReady();
       },
       removed(id) {
         self.onRecordRemoved(id);
+        if (!count) self.onReady();
       },
     });
   }
@@ -76,6 +92,8 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
    * @protected
    */
   protected abstract onRecordRemoved(id: string): void;
+
+  protected abstract onReady(): void;
 
   protected abstract onStop(): void;
 }
