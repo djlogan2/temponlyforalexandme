@@ -27,7 +27,7 @@ export default abstract class DynamicSelectorReactiveReadOnlyDao<
     if (fld) newcursor = this.mongocollection.find(selector, fld);
     else newcursor = this.mongocollection.find(selector);
 
-    const ids: string[] = [];
+    let ids: string[] = [];
     if (this.cursor) this.cursor.forEach((rec) => ids.push(rec._id));
 
     if (this.observehandle) this.observehandle.stop();
@@ -46,6 +46,7 @@ export default abstract class DynamicSelectorReactiveReadOnlyDao<
         if (count) {
           count -= 1;
           if (!count) ids.forEach((rid) => self.onRecordRemoved(rid));
+          ids = [];
         }
         if (!count) self.onReady();
       },
