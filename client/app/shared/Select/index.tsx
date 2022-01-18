@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { noop } from "lodash";
 import React, { FC, useRef, useState } from "react";
+import Chevron from "../../components/icons/Chevron";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import Input from "../Input";
 import useStyles from "./styles";
@@ -38,7 +39,12 @@ const Select: FC<ISelectProps> = ({
           setShowOptions(true);
         }}
         rightIcon={
-          <div style={{ width: 16, height: 16, backgroundColor: "red" }} />
+          <span
+            onClick={() => setShowOptions((val) => !val)}
+            role="presentation"
+          >
+            <Chevron color={showOptions ? "#0F5AB6" : "#000"} />
+          </span>
         }
         value={selected}
         onChange={noop}
