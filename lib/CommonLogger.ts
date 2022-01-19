@@ -22,7 +22,11 @@ export default abstract class CommonLogger extends Stoppable {
    * @param{string} identifier The name of the module (should be unique to each logger instance)
    * @param{"client"|"server"} clientServer Whether this is a client logger or a server logger
    */
-  constructor(parent: Stoppable, identifier: string, clientServer: LOGGERTYPE) {
+  protected constructor(
+    parent: Stoppable,
+    identifier: string,
+    clientServer: LOGGERTYPE,
+  ) {
     super(parent);
     this.identifier = identifier;
     this.type = clientServer;

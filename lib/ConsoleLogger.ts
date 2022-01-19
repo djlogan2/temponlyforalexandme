@@ -34,6 +34,7 @@ export default class ConsoleLogger extends CommonLogger {
     const logstring = `${new Date().toDateString()} ${this.type.toUpperCase()} ${
       userid || "-"
     } ${module} ${level} ${message}`;
+    // eslint-disable-next-line no-console
     console.log(logstring);
   }
 }

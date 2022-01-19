@@ -5,18 +5,10 @@ import ClientLogger from "/lib/client/ClientLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import { Random } from "meteor/random";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
-import CommonReadOnlyThemeDao from "/imports/dao/CommonReadOnlyThemeDao";
 import ClientUser from "/lib/client/ClientUser";
-import ClientTheme from "/lib/client/ClientTheme";
-import EventEmitter from "eventemitter3";
-import CommonReadOnlyI18nDao from "../../imports/dao/CommonReadOnlyI18nDao";
-import ClientI18nRecord from "../records/ClientI18nRecord";
 import { PingMessage } from "../records/PingMessage";
 import { PongMessage } from "../records/PongMessage";
 import { PongResponse } from "../records/PongResponse";
-import ThemeRecord, { EThemesEnum } from "../records/ThemeRecord";
-import { THEME_STORAGE_KEY } from "/imports/themes/light";
-import ClientI18n from "./ClientI18n";
 
 const resetEvents = {
   globalThis: [
@@ -36,10 +28,6 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private userdao: CommonReadOnlyUserDao;
 
-  private themedao: CommonReadOnlyThemeDao;
-
-  private i18ndao: CommonReadOnlyI18nDao;
-
   private focused: boolean = true;
 
   private idle: number = 0;
@@ -50,44 +38,13 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private user?: ClientUser;
 
-  private _theme: ClientTheme = new ClientTheme(
-    this,
-    localStorage.getItem(THEME_STORAGE_KEY) as EThemesEnum,
-  );
-
-  private _i18n: ClientI18n = new ClientI18n(
-    this,
-    this.user?.locale || "en-US",
-  );
-
-  private eventemitter = new EventEmitter();
-
   public get connectionid() {
     return this.pConnectionid;
   }
 
-  public getTheme(themeType: EThemesEnum) {
-    return this.themedao.readOne({ "theme.type": themeType });
-  }
-
-  public getI18n(locale: string) {
-    return this.i18ndao.readOne({ locale });
-  }
-
-  public get theme() {
-    return this._theme;
-  }
-
-  constructor(
-    parent: Stoppable | null,
-    userdao: CommonReadOnlyUserDao,
-    themedao: CommonReadOnlyThemeDao,
-    i18ndao: CommonReadOnlyI18nDao,
-  ) {
+  constructor(parent: Stoppable | null, userdao: CommonReadOnlyUserDao) {
     super(parent, 60);
     this.userdao = userdao;
-    this.themedao = themedao;
-    this.i18ndao = i18ndao;
     globalThis.connection = this;
 
     this.logger2.trace(() => "constructor");
@@ -108,7 +65,6 @@ export default class ClientConnection extends AbstractTimestampNode {
             this.logger2.debug(() => `newUserLogin returns ${id}`);
             this.user = new ClientUser(this, id);
             globalThis.user = this.user;
-            this.eventemitter.emit("loggedin");
           }
         },
       );
@@ -166,20 +122,8 @@ export default class ClientConnection extends AbstractTimestampNode {
     this.focused = focused;
   }
 
-  // TODO: FYI Alex, I would prefer you do it this way. I really don't want an eventemitter in AbstractTimestampNode,
-  //       because that class is used on the server as well as the client.
-  //       For client emitters, I think we should have them at this level.
-  //       I don't see any code that uses this anymore, so maybe you need to either fix that or take this out,
-  //       but in the meantime I would prefer to make sure event emitters the client needs are defined only
-  //       on the client, and only moved down if the server has a similar need.
-
-  public get events() {
-    return this.eventemitter;
-  }
-
   protected PongReceived(pong: PongMessage): void {
     super.PongReceived(pong);
-    this.eventemitter.emit("lagchanged", this.localvalues.delay);
   }
 
   private onDirectMessage(messagetype: string, message: any) {
@@ -213,32 +157,6 @@ export default class ClientConnection extends AbstractTimestampNode {
       globalThis.localStorage.setItem("ICCUser.hashToken", hashToken);
     }
     return hashToken;
-  }
-
-  public changeTheme(theme: EThemesEnum): void {
-    const item = localStorage.getItem(THEME_STORAGE_KEY);
-    if (item === theme) {
-      return;
-    }
-
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
-    this._theme.changeTheme(theme);
-  }
-
-  public subscribeToThemes(cb: (data: ThemeRecord) => void) {
-    this._theme.events.on("themes", (data: ThemeRecord) => {
-      if (data) {
-        cb(data);
-      }
-    });
-  }
-
-  public subscribeToI18n(cb: (data: ClientI18nRecord) => void) {
-    this._i18n.events.on("i18n", (data: ClientI18nRecord) => {
-      if (data) {
-        cb(data);
-      }
-    });
   }
 
   protected stopping() {

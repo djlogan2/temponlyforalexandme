@@ -3,7 +3,7 @@ import { LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import Stoppable from "/lib/Stoppable";
 
 export default class ServerLogger extends CommonLogger {
-  private fn;
+  private readonly fn;
 
   constructor(parent: Stoppable, module: string) {
     super(parent, module, "server");

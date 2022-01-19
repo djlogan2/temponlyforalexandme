@@ -1,4 +1,4 @@
-// eslint-disable-next-line max-classes-per-file
+/* eslint-disable no-console,max-classes-per-file */
 import PooledEventEmitter from "/lib/PooledEventEmitter";
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import { expect } from "chai";

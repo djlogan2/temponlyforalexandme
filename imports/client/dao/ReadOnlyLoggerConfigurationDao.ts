@@ -5,7 +5,7 @@ import { LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 
 export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLoggerConfigurationDao {
-  private pEvents: ICCEventEmitter;
+  private readonly pEvents: ICCEventEmitter;
 
   public get events() {
     return this.pEvents;

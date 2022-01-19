@@ -1,9 +1,9 @@
 import Stoppable from "/lib/Stoppable";
 
 class TestStoppable extends Stoppable {
-  private depth: number;
+  private readonly depth: number;
 
-  private callback: (depth: number) => void;
+  private readonly callback: (depth: number) => void;
 
   // private child: TestStoppable | null;
   //

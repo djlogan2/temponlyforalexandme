@@ -21,5 +21,8 @@ globalThis.ICCServer = {
         collectionname
       ] as Mongo.Collection<any>;
     },
+    getUser() {
+      return undefined;
+    },
   },
 };

@@ -7,7 +7,7 @@ import Stoppable from "/lib/Stoppable";
 export default abstract class User extends Stoppable {
   protected userdao: CommonReadOnlyUserDao;
 
-  private pId: string;
+  private readonly pId: string;
 
   abstract setLocale(locale: string): void;
 
@@ -25,7 +25,7 @@ export default abstract class User extends Stoppable {
     return this.pId;
   }
 
-  constructor(
+  protected constructor(
     parent: Stoppable | null,
     id: string,
     userdao: CommonReadOnlyUserDao,
@@ -39,13 +39,7 @@ export default abstract class User extends Stoppable {
 Meteor.methods({
   "User.setLocale"(locale: string) {
     check(locale, String);
-    if (!globalThis.ICCServer.services.connectionservice)
-      throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION_SERVICE");
-    if (!this.connection?.id)
-      throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION_ID");
-    const user = globalThis.ICCServer.services.connectionservice.getUser(
-      this.connection?.id,
-    );
+    const user = globalThis.ICCServer.utilities.getUser(this.connection);
     if (!user) return;
     user.setLocale(locale);
   },

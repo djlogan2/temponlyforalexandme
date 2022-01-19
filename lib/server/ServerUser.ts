@@ -2,6 +2,7 @@ import User from "/lib/User";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import Stoppable from "/lib/Stoppable";
+import EventEmitter from "eventemitter3";
 
 export default class ServerUser extends User {
   private isidle: boolean = false;
@@ -10,8 +11,15 @@ export default class ServerUser extends User {
 
   private writableuserdao: WritableUserDao;
 
+  private pEvents = new EventEmitter<"locale">();
+
+  public get events() {
+    return this.pEvents;
+  }
+
   setLocale(locale: string): void {
     this.writableuserdao.update({ _id: this.id }, { $set: { locale } });
+    this.pEvents.emit("locale", locale);
   }
 
   constructor(

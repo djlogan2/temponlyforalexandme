@@ -23,26 +23,25 @@ export default class UserService extends Stoppable {
     globalThis.ICCServer.services.userservice = this;
   }
 
-  public logon(hashtoken: string): string {
+  public logon(hashtoken: string, locale: string): string {
     this.logger.debug(() => `logon hashtoken=${hashtoken}`);
-    const userdb = this.getUserFromHashToken(hashtoken);
+    const userdb = this.getUserFromHashToken(hashtoken, locale);
     return userdb._id;
   }
 
-  private createAnonymousUser(hashToken: string): UserRecord {
+  private createAnonymousUser(hashToken: string, locale: string): UserRecord {
     this.logger.debug(() => "creating anonymous user");
     const userrecord: Mongo.OptionalId<UserRecord> = {
       createdAt: new Date(),
       isolation_group: "public",
-      // TODO: Have the browser pass us locale!
-      locale: "en_us",
+      locale,
       hashTokens: [{ hashtoken: hashToken, lastUsed: new Date() }],
     };
     userrecord._id = this.userdao.insert(userrecord);
     return userrecord as UserRecord;
   }
 
-  private getUserFromHashToken(hashtoken: string): UserRecord {
+  private getUserFromHashToken(hashtoken: string, locale: string): UserRecord {
     this.logger.debug(() => `getUserFromHashToken hashtoken=${hashtoken}`);
     const userrecord = this.userdao.readOne({
       "hashTokens.hashtoken": hashtoken,
@@ -51,7 +50,7 @@ export default class UserService extends Stoppable {
       () => `userrecord=${userrecord?._id || "NO RECORD FOUND IN DATABASE"}`,
     );
 
-    if (!userrecord) return this.createAnonymousUser(hashtoken);
+    if (!userrecord) return this.createAnonymousUser(hashtoken, locale);
     this.userdao.update(
       { "hashTokens.hashtoken": hashtoken },
       { $set: { "hashTokens.$.lastUsed": new Date() } },
@@ -125,7 +124,7 @@ Meteor.publish(null, function () {
         updateUsers(doc.userid as string);
       }
     },
-    removed(id) {
+    removed(_id) {
       updateUsers(null);
     },
   });

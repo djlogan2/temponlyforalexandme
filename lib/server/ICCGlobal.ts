@@ -4,6 +4,7 @@ import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
 import CommonLogger from "/lib/CommonLogger";
 import { CollectionNames } from "/lib/CollectionNames";
+import ServerUser from "/lib/server/ServerUser";
 
 globalThis.ICCServer = {
   collections: {},
@@ -17,6 +18,14 @@ globalThis.ICCServer = {
       return globalThis.ICCServer.collections[
         collectionname
       ] as Mongo.Collection<any>;
+    },
+    getUser: (connection: Meteor.Connection | null): ServerUser | undefined => {
+      if (!connection) return undefined;
+      if (!connection.id) return undefined;
+      if (!globalThis.ICCServer?.services?.connectionservice) return undefined;
+      return globalThis.ICCServer.services.connectionservice.getUser(
+        connection.id,
+      );
     },
   },
 };
