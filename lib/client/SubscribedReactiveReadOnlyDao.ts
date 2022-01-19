@@ -23,7 +23,7 @@ export default abstract class SubscribedReactiveReadOnlyDao<
   ) {
     super(parent, collection);
     this.pEvents =
-      subscriptionservice.getSubscriptionEventEmitter(publicationname);
+      subscriptionservice.getSubscriptionEventEmitter<E>(publicationname);
   }
 
   protected stopping(): void {

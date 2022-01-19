@@ -4,6 +4,10 @@ import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 export default class Clienti18n extends Commoni18n {
   private dao: Clienti18nReadOnlyDao;
 
+  public get events() {
+    return this.dao.events;
+  }
+
   constructor(dao: Clienti18nReadOnlyDao) {
     super();
     this.dao = dao;
