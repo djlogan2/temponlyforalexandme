@@ -1,3 +1,5 @@
+// noinspection JSUnusedLocalSymbols
+
 import _ from "lodash";
 import React, { FC, useEffect, useState } from "react";
 import RGL, { WidthProvider } from "react-grid-layout";
@@ -8,12 +10,19 @@ import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
 import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import Clienti18n from "/lib/client/Clienti18n";
+import ThemeReadOnlyDao from "/imports/client/dao/ThemeReadOnlyDao";
+import SubscriptionService from "/imports/client/service/SubscriptionService";
+import ClientTheme from "/lib/client/ClientTheme";
 
 const ReactGridLayout = WidthProvider(RGL);
 
-const i18ndao = new Clienti18nReadOnlyDao(null);
-// noinspection JSUnusedLocalSymbols
+const subscriptionservice = new SubscriptionService(null);
+
+const i18ndao = new Clienti18nReadOnlyDao(null, subscriptionservice);
+const themedao = new ThemeReadOnlyDao(null, subscriptionservice);
+
 const i18nguy = new Clienti18n(i18ndao);
+const theme = new ClientTheme(themedao);
 
 const sizes = {
   small: {
