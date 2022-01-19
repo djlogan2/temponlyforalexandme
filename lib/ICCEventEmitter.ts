@@ -1,12 +1,12 @@
 import EventEmitter from "eventemitter3";
 import PooledEventEmitter from "/lib/PooledEventEmitter";
 
-export default class ICCEventEmitter {
-  private pool: PooledEventEmitter;
+export default class ICCEventEmitter<T extends string> {
+  private pool: PooledEventEmitter<T>;
 
   private emitter = new EventEmitter();
 
-  private constructor(pool: PooledEventEmitter) {
+  private constructor(pool: PooledEventEmitter<T>) {
     this.pool = pool;
   }
 
@@ -15,7 +15,9 @@ export default class ICCEventEmitter {
    * This method is not designed to be called by you. The pool instance ({PooledEventEmitter}) will call this.
    * @param{PooledEventEmitter} pool - The {PooledEventEmitter} this event emitter belongs to.
    */
-  public static getNew(pool: PooledEventEmitter): ICCEventEmitter {
+  public static getNew<T extends string>(
+    pool: PooledEventEmitter<T>,
+  ): ICCEventEmitter<T> {
     return new ICCEventEmitter(pool);
   }
 
@@ -24,7 +26,7 @@ export default class ICCEventEmitter {
    * @param{string} event
    * @param{function} fn The callback
    */
-  public on(event: string, fn: (...args: any[]) => void): void {
+  public on(event: T, fn: (...args: any[]) => void): void {
     if (!this.emitter.eventNames().length) this.pool.addActiveEmitter();
     this.emitter.on(event, fn);
   }
@@ -34,7 +36,7 @@ export default class ICCEventEmitter {
    * @param{string} event
    * @param{function} fn An optional function for which to remove
    */
-  public off(event: string, fn?: (...args: any[]) => void): void {
+  public off(event: T, fn?: (...args: any[]) => void): void {
     this.emitter.off(event, fn);
     if (!this.emitter.eventNames().length) {
       this.pool.removeActiveEmitter();
@@ -55,7 +57,7 @@ export default class ICCEventEmitter {
    * @param{string} event
    * @param{any|undefined} args
    */
-  public emit(event: string, ...args: any[]): void {
+  public emit(event: T, ...args: any[]): void {
     this.emitter.emit(event, ...args);
   }
 }

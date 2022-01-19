@@ -3,7 +3,9 @@ import PooledEventEmitter from "/lib/PooledEventEmitter";
 import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 
-export default class SubscriptionEventEmitter extends PooledEventEmitter {
+export default class SubscriptionEventEmitter<
+  E extends string,
+> extends PooledEventEmitter<E> {
   private readonly publication: SubscriptionNames;
 
   private subscription?: Meteor.SubscriptionHandle;

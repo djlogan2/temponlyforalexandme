@@ -24,5 +24,11 @@ globalThis.ICCServer = {
     getUser() {
       return undefined;
     },
+    getConnection() {
+      return undefined;
+    },
+    publish() {
+      return undefined;
+    },
   },
 };

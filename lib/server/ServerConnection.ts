@@ -13,7 +13,6 @@ import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import { EventEmitter } from "eventemitter3";
-import I18nPublication from "/lib/server/I18nPublication";
 
 export default class ServerConnection extends AbstractTimestampNode {
   private connectiondao: ConnectionDao;
@@ -25,8 +24,6 @@ export default class ServerConnection extends AbstractTimestampNode {
   private readonly userdao: CommonReadOnlyUserDao;
 
   private readonly writableuserdao: WritableUserDao;
-
-  private i18npublication: I18nPublication;
 
   private pEvents = new EventEmitter<
     "idlemessage" | "closing" | "userlogin" | "userlogout"
@@ -113,7 +110,6 @@ export default class ServerConnection extends AbstractTimestampNode {
     this.userservice = userservice;
     this.connectionrecord = connectionrecord;
     this.connectiondao = connectiondao;
-    this.i18npublication = new I18nPublication(parent, this);
 
     this.start();
   }

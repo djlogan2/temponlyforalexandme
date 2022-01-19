@@ -11,16 +11,16 @@ export default class SubscriptionService extends Stoppable {
    * @return{ICCEventEmitter} Basically an event emitter (on/off/removeAllListeners)
    */
 
-  public getSubscriptionEventEmitter(
+  public getSubscriptionEventEmitter<E extends string>(
     publication: SubscriptionNames,
-  ): ICCEventEmitter {
+  ): ICCEventEmitter<E> {
     if (!globalThis.subscriptions[publication])
       globalThis.subscriptions[publication] = new SubscriptionEventEmitter(
         publication,
         this,
       );
     return (
-      globalThis.subscriptions[publication] as PooledEventEmitter
+      globalThis.subscriptions[publication] as PooledEventEmitter<E>
     ).newEmitter();
   }
 

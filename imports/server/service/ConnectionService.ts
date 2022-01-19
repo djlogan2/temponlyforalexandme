@@ -167,6 +167,10 @@ export default class ConnectionService extends Stoppable {
     // Nothing to stop at this time
   }
 
+  public getConnection(connectionid: string): ServerConnection | undefined {
+    return this.connections[connectionid];
+  }
+
   public getUser(connectionid: string): ServerUser | undefined {
     if (!this.connections[connectionid])
       throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION");

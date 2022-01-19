@@ -3,7 +3,7 @@ import SubscriptionService from "/imports/client/service/SubscriptionService";
 import { expect } from "chai";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 
-class TestPooledEventEmitter extends PooledEventEmitter {
+class TestPooledEventEmitter extends PooledEventEmitter<"a"> {
   public stopCalled: boolean = false;
 
   constructor(poolname: SubscriptionNames) {

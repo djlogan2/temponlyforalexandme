@@ -5,8 +5,11 @@ import { SubscriptionNames } from "/lib/SubscriptionNames";
 import { CollectionNames } from "/lib/CollectionNames";
 import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
 
-export default abstract class SubscribedReadOnlyDao<T> extends ReadOnlyDao<T> {
-  private readonly pEvents: ICCEventEmitter;
+export default abstract class SubscribedReadOnlyDao<
+  T,
+  E extends string,
+> extends ReadOnlyDao<T> {
+  private readonly pEvents: ICCEventEmitter<E>;
 
   public get events() {
     return this.pEvents;
