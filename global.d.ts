@@ -21,6 +21,7 @@ import ServerUser from "/lib/server/ServerUser";
 import Clienti18n from "/lib/client/Clienti18n";
 import ServerConnection from "/lib/server/ServerConnection";
 import ThemeService from "/imports/server/service/ThemeService";
+import I18nService from "/imports/server/service/i18nService";
 
 declare module "meteor/universe:i18n";
 
@@ -74,6 +75,7 @@ declare global {
       userservice?: UserService;
       connectionservice?: ConnectionService;
       themeservice?: ThemeService;
+      i18n?: I18nService;
     };
     utilities: {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;

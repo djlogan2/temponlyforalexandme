@@ -1,13 +1,16 @@
-import { Subscription } from "meteor/meteor";
+import { Meteor, Subscription } from "meteor/meteor";
 import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReactiveReadOnlyDao";
 import { i18nRecord } from "/lib/records/i18nRecord";
 import ServerConnection from "/lib/server/ServerConnection";
 import ServerUser from "/lib/server/ServerUser";
+import I18nService from "/imports/server/service/i18nService";
 
 export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<i18nRecord> {
   private connection: ServerConnection;
 
   private user?: ServerUser;
+
+  private service: I18nService;
 
   private publishobject: Subscription;
 
@@ -19,6 +22,11 @@ export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<
 
   constructor(connection: ServerConnection, publishobject: Subscription) {
     super(connection, "i18n");
+
+    if (!globalThis.ICCServer?.services?.i18n)
+      throw new Meteor.Error("I18N_SERVICE_NOT_FOUND");
+
+    this.service = globalThis.ICCServer.services.i18n;
 
     this.publishobject = publishobject;
 
@@ -42,7 +50,7 @@ export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<
   }
 
   private onLocaleChange(locale: string): void {
-    this.setSelector({ locale });
+    this.setSelector(this.service.getLocaleSelector(locale));
   }
 
   private onLogout(): void {
