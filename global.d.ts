@@ -28,6 +28,14 @@ declare module "meteor/xolvio:cleaner" {
   var resetDatabase: () => void;
 }
 
+declare module "react" {
+  type TRequiredComponentProps = {
+    keyboardFunctions: { [key: string]: void }[];
+    classes: { [key: string]: void }[];
+  };
+  type FCICC<P = {}> = FunctionComponent<P & TRequiredComponentProps>;
+}
+
 declare module "meteor/meteor" {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   module Meteor {
