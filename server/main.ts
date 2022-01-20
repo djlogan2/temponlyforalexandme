@@ -12,27 +12,40 @@ import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerCo
 import UserService from "/imports/server/service/UserService";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import ThemeService from "/imports/server/service/ThemeService";
+import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
+import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
 
 const parent = null;
 
+// -------------- FIRST FIRST FIRST --------------
+//
+// Because this is the logger, it really has to be initialized first.
+// Once we get through this, then we can intialize dao's and services however we want.
+//
 const readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
 const writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
 const logrecordsdao = new LogRecordsDao(null);
+
 // @ts-ignore
 const loggerservice = new LoggerService(
   readableloggerconfigdao,
   writableloggerconfigdao,
   logrecordsdao,
 );
+// -------------- FIRST FIRST FIRST --------------
 
 const instancedao = new InstanceDao(parent);
 const connectiondao = new ConnectionDao(parent);
 
-const instanceservice = new InstanceService(parent, instancedao);
-
 const readonlyuserdao = new CommonReadOnlyUserDao(null);
 const writableuserdao = new WritableUserDao(null);
-const userservice = new UserService(null, writableuserdao);
+const themeheaderdao = new WritableThemeHeaderDao(null);
+const themedatadao = new WritableThemeDataDao(null);
+
+const instanceservice = new InstanceService(parent, instancedao);
+const themeservice = new ThemeService(themeheaderdao, themedatadao);
+const userservice = new UserService(null, writableuserdao, themeservice);
 
 // @ts-ignore
 const connectionservice = new ConnectionService(

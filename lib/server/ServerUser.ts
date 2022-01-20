@@ -11,10 +11,18 @@ export default class ServerUser extends User {
 
   private writableuserdao: WritableUserDao;
 
-  private pEvents = new EventEmitter<"locale">();
+  private pEvents = new EventEmitter<"locale" | "theme">();
 
   public get events() {
     return this.pEvents;
+  }
+
+  setTheme(theme: string | null): void {
+    if (theme)
+      this.writableuserdao.update({ _id: this.id }, { $set: { theme } });
+    else
+      this.writableuserdao.update({ _id: this.id }, { $unset: { theme: 1 } });
+    this.pEvents.emit("theme", theme);
   }
 
   setLocale(locale: string): void {

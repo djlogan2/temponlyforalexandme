@@ -20,6 +20,7 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import ServerUser from "/lib/server/ServerUser";
 import Clienti18n from "/lib/client/Clienti18n";
 import ServerConnection from "/lib/server/ServerConnection";
+import ThemeService from "/imports/server/service/ThemeService";
 
 declare module "meteor/universe:i18n";
 
@@ -64,6 +65,7 @@ declare global {
       loggerservice?: LoggerService;
       userservice?: UserService;
       connectionservice?: ConnectionService;
+      themeservice?: ThemeService;
     };
     utilities: {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;

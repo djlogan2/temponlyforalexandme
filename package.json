@@ -19,6 +19,7 @@
     "@babel/runtime": "^7.16.7",
     "client": "0.0.1",
     "clsx": "^1.1.1",
+    "css-to-react-native-transform": "^2.0.0",
     "eventemitter3": "^4.0.7",
     "formik": "^2.2.9",
     "ip": "^1.1.5",

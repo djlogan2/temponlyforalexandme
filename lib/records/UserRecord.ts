@@ -10,6 +10,7 @@ export default interface UserRecord {
   isolation_group: string;
   idleSince?: Date;
   locale: string;
+  theme: string;
   hashTokens: HashToken[];
 }
 

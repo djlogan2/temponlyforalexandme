@@ -2,22 +2,27 @@ import { Meteor } from "meteor/meteor";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import { Mongo } from "meteor/mongo";
 import UserRecord, { STANDARD_MEMBER_FIELDS } from "/lib/records/UserRecord";
-import ServerUser from "/lib/server/ServerUser";
 import ServerLogger from "/lib/server/ServerLogger";
 import Stoppable from "/lib/Stoppable";
 import ConnectionRecord from "/lib/records/ConnectionRecord";
-
-export type LogonCallback = (user: ServerUser) => void;
+import ThemeService from "/imports/server/service/ThemeService";
 
 export default class UserService extends Stoppable {
   private userdao: WritableUserDao;
 
+  private themeservice: ThemeService;
+
   private logger;
 
-  constructor(parent: Stoppable | null, userdao: WritableUserDao) {
+  constructor(
+    parent: Stoppable | null,
+    userdao: WritableUserDao,
+    themeservice: ThemeService,
+  ) {
     super(parent);
     this.logger = new ServerLogger(this, "UserService_ts");
     this.userdao = userdao;
+    this.themeservice = themeservice;
     if (globalThis.ICCServer.services.userservice)
       throw new Meteor.Error("USERSERVICE_ALREADY_DEFINED");
     globalThis.ICCServer.services.userservice = this;
@@ -35,6 +40,7 @@ export default class UserService extends Stoppable {
       createdAt: new Date(),
       isolation_group: "public",
       locale,
+      theme: this.themeservice.getDefaultTheme(),
       hashTokens: [{ hashtoken: hashToken, lastUsed: new Date() }],
     };
     userrecord._id = this.userdao.insert(userrecord);

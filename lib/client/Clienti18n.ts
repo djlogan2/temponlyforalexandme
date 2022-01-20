@@ -14,9 +14,16 @@ export default class Clienti18n extends Commoni18n {
     globalThis.i18n = this;
   }
 
-  public localize(token: string): string {
-    // we have to get it from the database
+  public translate(token: string, ...args: string[]): string {
     const record = this.dao.readOne({ token });
-    return record?.text || token;
+    if (!record) return token;
+
+    let translatedtext = record.text;
+
+    for (let x = 0; x < args.length; x += 1) {
+      const replacement = `{${x}}`;
+      translatedtext = translatedtext.replaceAll(replacement, args[x]);
+    }
+    return translatedtext;
   }
 }

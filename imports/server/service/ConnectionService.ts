@@ -15,6 +15,7 @@ import ServerUser from "/lib/server/ServerUser";
 
 interface HttpHeadersICareAbout {
   "user-agent": string;
+  "accept-language": string;
 }
 
 export default class ConnectionService extends Stoppable {
@@ -179,9 +180,8 @@ export default class ConnectionService extends Stoppable {
 }
 
 Meteor.methods({
-  newUserLogin(hashtoken: string, locale: string): Promise<string> {
+  newUserLogin(hashtoken: string): Promise<string> {
     check(hashtoken, String);
-    check(locale, String);
     return new Promise<string>((resolve, reject) => {
       if (!this.connection) {
         reject(new Meteor.Error("NULL_CONNECTION"));
@@ -191,10 +191,14 @@ Meteor.methods({
         reject(new Meteor.Error("CONNECTIONSERVICE_NOT_FOUND"));
         return;
       }
+      const localestring = (
+        this.connection.httpHeaders as HttpHeadersICareAbout
+      )["accept-language"];
+      const pieces = (localestring || "en").split(",");
       const userid = globalThis.ICCServer.services.connectionservice.login(
         this.connection.id,
         hashtoken,
-        locale,
+        pieces[0],
       );
       resolve(userid);
     });

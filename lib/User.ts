@@ -21,6 +21,10 @@ export default abstract class User extends Stoppable {
     return this.me.locale;
   }
 
+  get theme(): string {
+    return this.me.theme;
+  }
+
   public get id(): string {
     return this.pId;
   }

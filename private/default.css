@@ -1,0 +1,22 @@
+/* themename: default */
+/* x_id: abcd */
+/* xisolation_group: cty */
+.system {
+    font-family: Helvetica;
+}
+
+.button {
+    parent: system;
+    background-color: black;
+    color: white;
+}
+
+.activebutton {
+    parent: button;
+    color: blue;
+}
+
+.dangerbutton {
+    parent: "activebutton";
+    background-color: red;
+}
