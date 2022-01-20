@@ -19,4 +19,13 @@ export default class Clienti18n extends Commoni18n {
     const record = this.dao.readOne({ token });
     return record?.text || token;
   }
+
+  public fakeGetTranslations(): object {
+    return {
+      main_screen: {
+        button: "Simple button",
+        input: "Simple input",
+      },
+    };
+  }
 }
