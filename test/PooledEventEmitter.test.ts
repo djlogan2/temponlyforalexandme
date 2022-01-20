@@ -12,7 +12,9 @@ class TestStoppable extends Stoppable {
   protected stopping(): void {}
 }
 
-class TestPooledEventEmitter extends PooledEventEmitter {
+class TestPooledEventEmitter extends PooledEventEmitter<
+  "testevent" | "testeventtwo" | "testevent2"
+> {
   public onFrstEventCalled: number = 0;
 
   public onLastEventCalled: number = 0;

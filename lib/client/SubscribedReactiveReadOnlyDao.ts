@@ -7,8 +7,9 @@ import { CollectionNames } from "/lib/CollectionNames";
 
 export default abstract class SubscribedReactiveReadOnlyDao<
   T,
+  E extends string,
 > extends ReactiveReadOnlyDao<T> {
-  private readonly pEvents: ICCEventEmitter;
+  private readonly pEvents: ICCEventEmitter<E>;
 
   public get events() {
     return this.pEvents;
@@ -22,7 +23,7 @@ export default abstract class SubscribedReactiveReadOnlyDao<
   ) {
     super(parent, collection);
     this.pEvents =
-      subscriptionservice.getSubscriptionEventEmitter(publicationname);
+      subscriptionservice.getSubscriptionEventEmitter<E>(publicationname);
   }
 
   protected stopping(): void {

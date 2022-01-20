@@ -1,7 +1,7 @@
 /* eslint-disable no-var,vars-on-top */
 // noinspection ES6ConvertVarToLetConst
 
-import { Meteor } from "meteor/meteor";
+import { Meteor, Subscription } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import LoggerService from "./imports/server/service/LoggerService";
 import Stoppable from "./lib/Stoppable";
@@ -18,8 +18,8 @@ import SubscriptionService from "/imports/client/service/SubscriptionService";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import ServerUser from "/lib/server/ServerUser";
-import ServerConnection from "/lib/server/ServerConnection";
 import Clienti18n from "/lib/client/Clienti18n";
+import ServerConnection from "/lib/server/ServerConnection";
 
 declare module "meteor/universe:i18n";
 
@@ -54,7 +54,7 @@ declare global {
   var user: ClientUser;
   var userlist: { [id: string]: ClientUser };
   var connection: ClientConnection;
-  var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter };
+  var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter<any> };
   var loggerconfigdao: ReadOnlyLoggerConfigurationDao;
   var userdao: CommonReadOnlyUserDao;
   /* Most of this is really server only, but some of it is used by both, most notably collections and utilities.getLogger */
@@ -69,6 +69,13 @@ declare global {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;
       getCollection: (collectionname: CollectionNames) => Mongo.Collection<any>;
       getUser: (connection: Meteor.Connection | null) => ServerUser | undefined;
+      getConnection: (
+        connection: Meteor.Connection | null,
+      ) => ServerConnection | undefined;
+      publish: (
+        subscription: SubscriptionNames,
+        fn: (this: Subscription, ...args: string[]) => void,
+      ) => void;
     };
   };
 }

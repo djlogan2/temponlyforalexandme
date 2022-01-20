@@ -1,16 +1,15 @@
-import { Meteor, Subscription } from "meteor/meteor";
+import { Subscription } from "meteor/meteor";
 import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReactiveReadOnlyDao";
 import { i18nRecord } from "/lib/records/i18nRecord";
 import ServerConnection from "/lib/server/ServerConnection";
 import ServerUser from "/lib/server/ServerUser";
-import Stoppable from "/lib/Stoppable";
 
 export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<i18nRecord> {
   private connection: ServerConnection;
 
   private user?: ServerUser;
 
-  private publishobject?: Subscription;
+  private publishobject: Subscription;
 
   private readonly pUserlogin: (user: ServerUser) => void;
 
@@ -18,8 +17,10 @@ export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<
 
   private readonly pLocale: (locale: string) => void;
 
-  constructor(parent: Stoppable | null, connection: ServerConnection) {
-    super(parent, "i18n");
+  constructor(connection: ServerConnection, publishobject: Subscription) {
+    super(connection, "i18n");
+
+    this.publishobject = publishobject;
 
     this.pUserlogin = (user) => this.onLogin(user);
     this.pUserlogout = () => this.onLogout();
@@ -28,12 +29,6 @@ export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<
     this.connection = connection;
     this.connection.events.on("userlogin", this.pUserlogin);
     this.connection.events.on("userlogout", this.pUserlogout);
-
-    const self = this;
-    Meteor.publish("i18n", function () {
-      self.publishobject = this;
-      if (!self.connection.user) this.ready();
-    });
 
     if (this.connection.user) this.onLogin(this.connection.user);
   }
