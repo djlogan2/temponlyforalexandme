@@ -65,7 +65,7 @@ export default class Writablei18nDao extends ReadWriteDao<i18nRecord> {
     } else newlocale = "en";
 
     this.mongocollection
-      .find({ token: { $in: tokenlist }, locale })
+      .find({ token: { $in: tokenlist }, locale: newlocale })
       .forEach((record) => {
         ids.push(record._id);
         foundtokens.push(record.token);
@@ -81,7 +81,7 @@ export default class Writablei18nDao extends ReadWriteDao<i18nRecord> {
   }
 
   public getLocaleSelector(locale: string): Mongo.Selector<i18nRecord> {
-    const lowerlocale = locale.toLocaleLowerCase().replaceAll("-", "_");
+    const lowerlocale = locale.toLowerCase().replace("-", "_");
     const exceptions = this.getLocaleExceptions(lowerlocale);
     return { $or: [{ locale: lowerlocale }, { _id: { $in: exceptions } }] };
   }

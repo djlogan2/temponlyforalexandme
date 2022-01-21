@@ -40,6 +40,8 @@ export default class ThemeService {
       delete classObject.parent;
     }
 
+    parent = parent.replace(/(^"|"$)/g, "");
+
     const headerrecord = this.headerdao.readOne(header);
     let id;
     if (!headerrecord) {
@@ -74,12 +76,12 @@ export default class ThemeService {
   }
 
   public getDefaultTheme(isolationgroup?: string): string {
-    let defaulttheme = this.themedao.readOne({
+    let defaulttheme = this.headerdao.readOne({
       themename: "default",
       isolation_group: isolationgroup || "public",
     });
     if (!defaulttheme)
-      defaulttheme = this.themedao.readOne({
+      defaulttheme = this.headerdao.readOne({
         themename: "default",
         isolation_group: { $exists: false },
       });

@@ -12,6 +12,10 @@ export default class Clienti18n extends Commoni18n {
     super();
     this.dao = dao;
     globalThis.i18n = this;
+    // TODO: Just a dummy event to fire up the subscription. Like themes, we need to either have events to catch,
+    //  or convert this into a class that doesn't need an event, or convert the server publication to a null
+    //  publication.
+    this.dao.events.on("event", () => {});
   }
 
   public translate(token: string, ...args: string[]): string {
