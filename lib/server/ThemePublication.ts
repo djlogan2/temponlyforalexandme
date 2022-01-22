@@ -2,9 +2,9 @@ import { Subscription } from "meteor/meteor";
 import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReactiveReadOnlyDao";
 import ServerConnection from "/lib/server/ServerConnection";
 import ServerUser from "/lib/server/ServerUser";
-import { ThemeData } from "/lib/records/ThemeRecord";
+import { ThemeHeaderRecord } from "/lib/records/ThemeRecord";
 
-export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao<ThemeData> {
+export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao<ThemeHeaderRecord> {
   private connection: ServerConnection;
 
   private user?: ServerUser;
@@ -18,7 +18,7 @@ export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao
   private readonly pTheme: (theme: string) => void;
 
   constructor(connection: ServerConnection, publishobject: Subscription) {
-    super(connection, "themedata");
+    super(connection, "themeheaders");
 
     this.publishobject = publishobject;
 
@@ -42,25 +42,33 @@ export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao
   }
 
   private onThemeChange(theme: string): void {
-    this.setSelector({ theme });
+    this.setSelector({ _id: theme });
   }
 
   private onLogout(): void {}
 
-  protected onFieldsChanged(id: string, record: Partial<ThemeData>): void {
-    if (this.publishobject) this.publishobject.changed("themedata", id, record);
+  protected onFieldsChanged(
+    id: string,
+    record: Partial<ThemeHeaderRecord>,
+  ): void {
+    if (this.publishobject)
+      this.publishobject.changed("themeheaders", id, record);
   }
 
   protected onReady(): void {
     if (this.publishobject) this.publishobject.ready();
   }
 
-  protected onRecordAdded(id: string, record: Partial<ThemeData>): void {
-    if (this.publishobject) this.publishobject.added("themedata", id, record);
+  protected onRecordAdded(
+    id: string,
+    record: Partial<ThemeHeaderRecord>,
+  ): void {
+    if (this.publishobject)
+      this.publishobject.added("themeheaders", id, record);
   }
 
   protected onRecordRemoved(id: string): void {
-    if (this.publishobject) this.publishobject.removed("themedata", id);
+    if (this.publishobject) this.publishobject.removed("themeheaders", id);
   }
 
   protected onStop(): void {

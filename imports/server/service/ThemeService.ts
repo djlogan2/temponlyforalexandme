@@ -3,7 +3,7 @@ import { Mongo } from "meteor/mongo";
 import _ from "lodash";
 import transform from "css-to-react-native-transform";
 import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
-import { ThemeData, ThemeHeaderRecord } from "/lib/records/ThemeRecord";
+import { ThemeDataRecord, ThemeHeaderRecord } from "/lib/records/ThemeRecord";
 import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
 import ThemePublication from "/lib/server/ThemePublication";
 
@@ -50,20 +50,25 @@ export default class ThemeService {
         themename: header.themename as string,
         isolation_group: header.isolation_group,
         public: false,
+        reactclass: {},
       };
       id = this.headerdao.insert(newheader);
     } else id = headerrecord._id;
 
-    const themedata = this.themedao.readOne({ theme: id, className });
+    const themedata = this.themedao.readOne({
+      theme: id,
+      className,
+    }) as ThemeDataRecord;
 
     if (!themedata) {
-      const newthemerecord: Mongo.OptionalId<ThemeData> = {
+      const newthemerecord: Mongo.OptionalId<ThemeDataRecord> = {
         theme: id,
         className,
         parentClassName: parent,
         styleobject: classObject,
       };
       this.themedao.insert(newthemerecord);
+      this.updateReactClass(id, className);
     } else if (
       themedata.parentClassName !== parent ||
       !_.isEqual(themedata.styleobject, classObject)
@@ -72,7 +77,52 @@ export default class ThemeService {
         { _id: themedata._id },
         { $set: { parentClassName: parent, styleobject: classObject } },
       );
+      this.updateReactClass(id, className);
     }
+  }
+
+  private getCombined(theme: string, className: string): any {
+    const record = this.themedao.readOne({ theme, className });
+    if (!record) return {};
+    if (!record.parentClassName) return record?.styleobject;
+    const tocombine = this.getCombined(theme, record.parentClassName);
+    return _.merge(tocombine, record.styleobject);
+  }
+
+  private updateReactClass(theme: string, className: string): void {
+    const allclasses: string[] = [className];
+    let nextlevel = [className];
+
+    while (nextlevel.length) {
+      const classes = this.themedao.readMany({
+        theme,
+        parentClassName: { $in: allclasses },
+      });
+      nextlevel = [];
+      if (classes) nextlevel = classes.map((rec) => rec.className);
+      allclasses.push(...nextlevel);
+    }
+
+    const header = this.headerdao.readOne({ _id: theme });
+    let updated = false;
+
+    if (!header) throw new Meteor.Error("UNABLE_TO_FIND_THEME_HEADER");
+
+    allclasses.forEach((newClassName) => {
+      const combined = this.getCombined(theme, newClassName);
+      if (
+        !(header.reactclass as any)[newClassName] ||
+        !_.isEqual((header.reactclass as any)[newClassName], combined)
+      ) {
+        (header.reactclass as any)[newClassName] = combined;
+        updated = true;
+      }
+    });
+    if (updated)
+      this.headerdao.update(
+        { _id: theme },
+        { $set: { reactclass: header.reactclass } },
+      );
   }
 
   public getDefaultTheme(isolationgroup?: string): string {

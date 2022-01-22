@@ -3,9 +3,10 @@ export interface ThemeHeaderRecord {
   themename: string;
   isolation_group?: string;
   public: boolean;
+  reactclass: object;
 }
 
-export interface ThemeData {
+export interface ThemeDataRecord {
   _id: string;
   theme: string; // Parent theme id
   parentClassName: string; // if this parent exists, load that then this

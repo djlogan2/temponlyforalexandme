@@ -1,26 +1,36 @@
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import Stoppable from "/lib/Stoppable";
 import SubscribedReactiveReadOnlyDao from "/lib/client/SubscribedReactiveReadOnlyDao";
-import { ThemeData } from "/lib/records/ThemeRecord";
+import { ThemeHeaderRecord } from "/lib/records/ThemeRecord";
 
 export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
-  ThemeData,
-  "event"
+  ThemeHeaderRecord,
+  "themechanged"
 > {
   constructor(
     parent: Stoppable | null,
     subscriptionservice: SubscriptionService,
   ) {
-    super("themes", "themedata", parent, subscriptionservice);
+    super("themes", "themeheaders", parent, subscriptionservice);
   }
 
-  protected onFieldsChanged(id: string, record: Partial<ThemeData>): void {
-    this.events.emit("event");
+  protected onFieldsChanged(
+    id: string,
+    record: Partial<ThemeHeaderRecord>,
+  ): void {
+    this.events.emit("themechanged", this.readOne({}));
   }
 
-  protected onRecordAdded(id: string, record: Partial<ThemeData>): void {}
+  protected onRecordAdded(
+    id: string,
+    record: Partial<ThemeHeaderRecord>,
+  ): void {
+    this.events.emit("themechanged", this.readOne({}));
+  }
 
-  protected onRecordRemoved(id: string): void {}
+  protected onRecordRemoved(id: string): void {
+    this.events.emit("themechanged", null);
+  }
 
   protected onStop(): void {}
 }

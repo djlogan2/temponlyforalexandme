@@ -9,6 +9,9 @@ export default class Writablei18nDao extends ReadWriteDao<i18nRecord> {
   //  arrays. I put the exception arrays in memory because I think it would take FOR-EVER
   //  to do this by hand for every subscription!
   //  Also, if ICC does thier jobs right, there will never BE any exceptions! :)
+  //   Also, now that I'm thinking about it more, maybe we just create a third collection
+  //   that has this, and then we don't have to keep it in memory, and we can make THAT one
+  //   reactive to update users subscriptions. That's probably the best idea.
   private loadedtokens: string[] = [];
 
   private localeexceptions: { [locale: string]: string[] } = {};

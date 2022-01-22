@@ -22,6 +22,7 @@ import Clienti18n from "/lib/client/Clienti18n";
 import ServerConnection from "/lib/server/ServerConnection";
 import ThemeService from "/imports/server/service/ThemeService";
 import I18nService from "/imports/server/service/i18nService";
+import ClientTheme from "/lib/client/ClientTheme";
 
 declare module "meteor/universe:i18n";
 
@@ -58,6 +59,7 @@ declare global {
   /* The client stuff that will be in 'window' */
   var icc: ClientServer;
   var i18n: Clienti18n;
+  var theme: ClientTheme;
   var subscriptionservice: SubscriptionService;
   var loggerdao: ReadOnlyLoggerConfigurationDao;
   var Assets: any;

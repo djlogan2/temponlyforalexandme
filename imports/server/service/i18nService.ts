@@ -2,7 +2,6 @@ import I18nPublication from "/lib/server/I18nPublication";
 import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
 import { i18nRecord } from "/lib/records/i18nRecord";
 import { Mongo } from "meteor/mongo";
-import { Meteor } from "meteor/meteor";
 
 export default class I18nService {
   private dao: Writablei18nDao;
