@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { FCICC } from "react";
+import PropTypes from "prop-types";
 import useStyles from "./styles";
 
 interface Heading3Props {
@@ -6,12 +7,12 @@ interface Heading3Props {
   className?: string;
 }
 
-const Heading3: FC<Heading3Props> = ({ name, children, ...rest }) => {
+const Heading3: FCICC<Heading3Props> = ({ name, token, ...rest }) => {
   const classes = useStyles();
 
   return (
     <div id={name} className={classes.heading3} {...rest}>
-      {children}
+      {window.i18n.translate(token.token, ...token.args)}
     </div>
   );
 };

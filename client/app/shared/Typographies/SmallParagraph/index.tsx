@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, FCICC } from "react";
 import useStyles from "./styles";
 
 interface SmallParagraphProps {
@@ -7,9 +7,9 @@ interface SmallParagraphProps {
   link?: string;
 }
 
-const SmallParagraph: FC<SmallParagraphProps> = ({
+const SmallParagraph: FCICC<SmallParagraphProps> = ({
   name,
-  children,
+  token,
   link,
   ...rest
 }) => {
@@ -17,11 +17,11 @@ const SmallParagraph: FC<SmallParagraphProps> = ({
 
   return link ? (
     <a id={name} className={classes.link} href={link}>
-      {children}
+      {window.i18n.translate(token.token, ...token.args)}
     </a>
   ) : (
     <div id={name} className={classes.smallParagraph} {...rest}>
-      {children}
+      {window.i18n.translate(token.token, ...token.args)}
     </div>
   );
 };

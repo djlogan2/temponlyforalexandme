@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, FCICC } from "react";
 import useStyles from "./styles";
 
 interface ParagraphProps {
@@ -7,16 +7,16 @@ interface ParagraphProps {
   link?: string;
 }
 
-const Paragraph: FC<ParagraphProps> = ({ name, children, link, ...rest }) => {
+const Paragraph: FCICC<ParagraphProps> = ({ name, token, link, ...rest }) => {
   const classes = useStyles();
 
   return link ? (
     <a id={name} className={classes.link} href={link}>
-      {children}
+      {window.i18n.translate(token.token, ...token.args)}
     </a>
   ) : (
     <div id={name} className={classes.paragraph} {...rest}>
-      {children}
+      {window.i18n.translate(token.token, ...token.args)}
     </div>
   );
 };

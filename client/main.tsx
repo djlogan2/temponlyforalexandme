@@ -30,7 +30,15 @@ globalThis.icc = new ClientServer(userdao);
 
 Meteor.startup(() => {
   render(
-    <App keyboardFunctions={[]} classes={[]} {...defaulApptProps} />,
+    <App
+      token={{
+        token: "",
+        args: [],
+      }}
+      keyboardFunctions={[]}
+      classes={[]}
+      {...defaulApptProps}
+    />,
     document.getElementById("root"),
   );
 });

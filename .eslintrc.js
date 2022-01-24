@@ -46,6 +46,7 @@ module.exports = {
     "no-use-before-define": 0,
     "class-methods-use-this": 0,
     "react/jsx-props-no-spreading": 0,
+    "react/prop-types": 0,
     // "@typescript-eslint/no-unused-vars": [true, {"ignore-pattern": "^_"}],
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],

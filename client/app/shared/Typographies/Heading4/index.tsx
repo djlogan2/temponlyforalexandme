@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, FCICC } from "react";
 import useStyles from "./styles";
 
 interface Heading4Props {
@@ -6,12 +6,12 @@ interface Heading4Props {
   className?: string;
 }
 
-const Heading4: FC<Heading4Props> = ({ name, children, ...rest }) => {
+const Heading4: FCICC<Heading4Props> = ({ name, token, ...rest }) => {
   const classes = useStyles();
 
   return (
     <div id={name} className={classes.heading4} {...rest}>
-      {children}
+      {window.i18n.translate(token.token, ...token.args)}
     </div>
   );
 };

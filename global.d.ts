@@ -34,6 +34,7 @@ declare module "react" {
   type TRequiredComponentProps = {
     keyboardFunctions: { [key: string]: void }[];
     classes: { [key: string]: void }[];
+    token: { token: string; args: string[] };
   };
   type FCICC<P = {}> = FunctionComponent<P & TRequiredComponentProps>;
 }

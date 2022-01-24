@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, FCICC } from "react";
 import useStyles from "./styles";
 
 interface TitleProps {
@@ -6,12 +6,12 @@ interface TitleProps {
   className?: string;
 }
 
-const Title: FC<TitleProps> = ({ name, children, ...rest }) => {
+const Title: FCICC<TitleProps> = ({ name, token, ...rest }) => {
   const classes = useStyles();
 
   return (
     <div id={name} className={classes.title} {...rest}>
-      {children}
+      {window.i18n.translate(token.token, ...token.args)}
     </div>
   );
 };

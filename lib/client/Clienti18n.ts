@@ -30,13 +30,4 @@ export default class Clienti18n extends Commoni18n {
     }
     return translatedtext;
   }
-
-  public fakeGetTranslations(): object {
-    return {
-      main_screen: {
-        button: "Simple button",
-        input: "Simple input",
-      },
-    };
-  }
 }

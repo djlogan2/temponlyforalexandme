@@ -1,21 +1,19 @@
-import React, { FC, ButtonHTMLAttributes } from "react";
+import React, { FC, ButtonHTMLAttributes, FCICC } from "react";
 import useStyles from "./styles";
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   name: string;
-  // icon: string;
   className?: string;
   hoverText: string;
   onButtonClick?: () => void;
 }
 
-const ActionButton: FC<ActionButtonProps> = ({
+const ActionButton: FCICC<ActionButtonProps> = ({
   name,
-  // icon,
   className,
   onButtonClick,
-  children,
   hoverText,
+  token,
   ...rest
 }) => {
   const classes = useStyles();
@@ -29,7 +27,7 @@ const ActionButton: FC<ActionButtonProps> = ({
         className={classes.button}
         {...rest}
       >
-        {children}
+        {window.i18n.translate(token.token, ...token.args)}
       </button>
       <div className={classes.hoverElement}>{hoverText}</div>
     </div>
