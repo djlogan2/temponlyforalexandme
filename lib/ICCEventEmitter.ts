@@ -27,7 +27,7 @@ export default class ICCEventEmitter<T extends string> {
    * @param{function} fn The callback
    */
   public on(event: T, fn: (...args: any[]) => void): void {
-    if (!this.emitter.eventNames().length) this.pool.addActiveEmitter();
+    if (!this.emitter.eventNames().length) this.pool.addActiveEmitter(this);
     this.emitter.on(event, fn);
   }
 

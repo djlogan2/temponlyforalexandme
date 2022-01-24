@@ -24,15 +24,16 @@ export default abstract class PooledEventEmitter<
    * This returns an emitter connected to this pool, so that when people call ".on", ".off" and ".removeListeners", this class instance will be notified when the first one signs up and the last one cleans up.
    * @return{ICCEventEmitter} ICCEventEmitter
    */
-  public newEmitter(): ICCEventEmitter<T> {
+  public newEmitter(): ICCEventEmitter<T | "ready"> {
     return ICCEventEmitter.getNew(this);
   }
 
   /**
    * This is not for public use. The emitters will call this.
    */
-  public addActiveEmitter(): void {
-    if (!this.count) this.onFirstEvent();
+  public addActiveEmitter(emitter: ICCEventEmitter<T | "ready">): void {
+    if (!this.count) this.onFirstEvent(() => emitter.emit("ready"));
+    else emitter.emit("ready");
     this.count += 1;
   }
 
@@ -48,7 +49,7 @@ export default abstract class PooledEventEmitter<
    * Called when the first emitter signs up for the first events. Subsequent events, and even subsequent emitters, will NOT trigger this method.
    * @protected
    */
-  protected abstract onFirstEvent(): void;
+  protected abstract onFirstEvent(isready: () => void): void;
 
   /**
    * Called when the last emitter removes the last listener. If this method is invoked, there are no emitters listening to any events in this pool.

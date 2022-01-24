@@ -25,8 +25,12 @@ export default class SubscriptionEventEmitter<
    * It's purpose of course is to subscribe to the collection
    * @protected
    */
-  protected onFirstEvent(): void {
-    this.subscription = Meteor.subscribe(this.publication);
+  protected onFirstEvent(isready: () => void): void {
+    this.subscription = Meteor.subscribe(this.publication, {
+      onReady: () => {
+        if (isready) isready();
+      },
+    });
   }
 
   /**
