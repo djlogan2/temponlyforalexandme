@@ -1,12 +1,14 @@
 import { Meteor } from "meteor/meteor";
 import { render } from "react-dom";
 import * as React from "react";
+import { Provider } from "react-redux";
 import App, { defaulApptProps } from "./app/App";
 
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import ClientServer from "/lib/client/ClientServer";
+import { store } from "./app/store";
 
 globalThis.subscriptionservice = new SubscriptionService(null);
 globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
@@ -30,15 +32,17 @@ globalThis.icc = new ClientServer(userdao);
 
 Meteor.startup(() => {
   render(
-    <App
-      token={{
-        token: "",
-        args: [],
-      }}
-      keyboardFunctions={[]}
-      classes={[]}
-      {...defaulApptProps}
-    />,
+    <Provider store={store}>
+      <App
+        token={{
+          token: "",
+          args: [],
+        }}
+        keyboardFunctions={[]}
+        classes={[]}
+        {...defaulApptProps}
+      />
+    </Provider>,
     document.getElementById("root"),
   );
 });
