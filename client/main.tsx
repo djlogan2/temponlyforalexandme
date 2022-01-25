@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { render } from "react-dom";
 import * as React from "react";
 import { Provider } from "react-redux";
-import App, { defaulApptProps } from "./app/App";
+import App from "./app/App";
 
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
@@ -40,7 +40,6 @@ Meteor.startup(() => {
         }}
         keyboardFunctions={[]}
         classes={[]}
-        {...defaulApptProps}
       />
     </Provider>,
     document.getElementById("root"),

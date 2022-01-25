@@ -52,6 +52,9 @@ module.exports = {
     "@typescript-eslint/no-shadow": ["error"],
     "react/require-default-props": 0,
     "no-undef": 0,
+    "import/prefer-default-export": 0,
+    "react/display-name": 0,
+    "no-param-reassign": 0,
   },
   settings: {
     "import/resolver": {

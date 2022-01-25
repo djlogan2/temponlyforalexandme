@@ -19,4 +19,6 @@ export default class ClientTheme extends CommonTheme {
       console.log(`THEME: ${JSON.stringify(reactclass)}`);
     });
   }
+
+  public getTheme = () => this.dao.readOne({});
 }
