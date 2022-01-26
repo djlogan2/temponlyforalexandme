@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { noop } from "lodash";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, FCICC, useRef, useState } from "react";
 import Chevron from "../../components/icons/Chevron";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import Input from "../Input";
@@ -13,7 +13,8 @@ interface ISelectProps {
   className?: string;
 }
 
-const Select: FC<ISelectProps> = ({
+const Select: FCICC<ISelectProps> = ({
+  token,
   options,
   disabled,
   onSelect = noop,
@@ -33,7 +34,7 @@ const Select: FC<ISelectProps> = ({
     <div className={clsx(classes.container, className)} ref={ref}>
       <Input
         placeholder="Placeholder"
-        label="Label"
+        token={token}
         name="select"
         onFocus={() => {
           setShowOptions(true);
@@ -49,6 +50,8 @@ const Select: FC<ISelectProps> = ({
         value={selected}
         onChange={noop}
         disabled={disabled}
+        keyboardFunctions={[]}
+        classes={[]}
       />
 
       {showOptions && (

@@ -2,8 +2,6 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   title: {
-    width: "153px",
-    height: "50px",
     fontFamily: "Helvetica Neue",
     fontStyle: "normal",
     fontWeight: "normal",

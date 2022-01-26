@@ -2,8 +2,6 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   heading3: {
-    width: "97px",
-    height: "25px",
     fontFamily: "Helvetica Neue",
     fontStyle: "normal",
     fontWeight: "normal",

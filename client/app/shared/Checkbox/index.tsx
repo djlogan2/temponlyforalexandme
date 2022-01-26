@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { FC, InputHTMLAttributes, useState } from "react";
+import React, { FC, FCICC, InputHTMLAttributes, useState } from "react";
 import useStyles from "./styles";
 
 interface ICheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,12 +9,12 @@ interface ICheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-const Checkbox: FC<ICheckboxProps> = ({
+const Checkbox: FCICC<ICheckboxProps> = ({
   name,
   className,
   children,
   circled,
-  disabled = true,
+  disabled,
   onChange,
   ...rest
 }) => {

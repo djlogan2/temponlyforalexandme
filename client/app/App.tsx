@@ -1,6 +1,11 @@
 // noinspection JSUnusedLocalSymbols
 
+import DummyChessboard from "/client/app/components/DummyChessboard";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
+import Checkbox from "/client/app/shared/Checkbox";
+import Input from "/client/app/shared/Input";
+import Switch from "/client/app/shared/Switch";
+import TextArea from "/client/app/shared/TextArea";
 import Heading1 from "/client/app/shared/Typographies/Heading1";
 import Heading2 from "/client/app/shared/Typographies/Heading2";
 import Heading3 from "/client/app/shared/Typographies/Heading3";
@@ -40,90 +45,198 @@ const App: FCICC = ({ classes, ...rest }) => {
   }, [classes]);
 
   return (
-    <div style={{ width: "100vw" }}>
-      <ActionButton
-        name="fakeButton"
-        hoverText="1234"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <ActionButton
-        name="fakeButton"
-        hoverText="1234"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        disabled
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Title
-        name="test"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Heading1
-        name="test1"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Heading2
-        name="test2"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Heading3
-        name="test3"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Heading4
-        name="test4"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Heading5
-        name="test5"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Heading6
-        name="test6"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Paragraph
-        name="testPar"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <Paragraph
-        name="testParLink"
-        link="https://www.google.com"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <SmallParagraph
-        name="testSmallPar"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
-      <SmallParagraph
-        name="testSmallParLink"
-        link="https://www.google.com"
-        token={{ token: "TEST_TOKEN", args: [] }}
-        keyboardFunctions={[]}
-        classes={[]}
-      />
+    <div style={{ display: "flex" }}>
+      <div
+        style={{
+          width: "50vw",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+        }}
+      >
+        <ActionButton
+          name="fakeButton"
+          hoverText="1234"
+          token={{ token: "FAKE_BUTTON", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <ActionButton
+          name="fakeButton"
+          hoverText="1234"
+          token={{ token: "FAKE_BUTTON", args: [] }}
+          disabled
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Title
+          name="test"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Heading1
+          name="test1"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Heading2
+          name="test2"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Heading3
+          name="test3"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Heading4
+          name="test4"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Heading5
+          name="test5"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Heading6
+          name="test6"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Paragraph
+          name="testPar"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Paragraph
+          name="testParLink"
+          link="https://www.google.com"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <SmallParagraph
+          name="testSmallPar"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <SmallParagraph
+          name="testSmallParLink"
+          link="https://www.google.com"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+        />
+        <Input
+          name="fakeInput1"
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "FAKE_INPUT",
+            args: [],
+          }}
+          msgText={{
+            token: "FAKE_MSG_TEXT",
+            args: [],
+          }}
+        />
+        <Input
+          error
+          name="fakeInput2"
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "FAKE_INPUT",
+            args: [],
+          }}
+          msgText={{
+            token: "FAKE_MSG_TEXT",
+            args: [],
+          }}
+        />
+        <Input
+          type="password"
+          name="fakeInput3"
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "FAKE_INPUT",
+            args: [],
+          }}
+          msgText={{
+            token: "FAKE_MSG_TEXT",
+            args: [],
+          }}
+        />
+        <Switch
+          name="fakeSwitch1"
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "",
+            args: [],
+          }}
+        />
+        <Checkbox
+          name="fakeCheckbox1"
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "",
+            args: [],
+          }}
+        />
+        <Checkbox
+          name="fakeCheckbox2"
+          disabled
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "",
+            args: [],
+          }}
+        />
+        <TextArea
+          name="fakeTextArea1"
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "FAKE_INPUT",
+            args: [],
+          }}
+          msgText={{
+            token: "FAKE_MSG_TEXT",
+            args: [],
+          }}
+          placeHolder={{
+            token: "FAKE_PLACEHOLDER",
+            args: [],
+          }}
+        />
+      </div>
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ width: "40%", height: "auto" }}>
+          <DummyChessboard />
+        </div>
+      </div>
     </div>
   );
 };

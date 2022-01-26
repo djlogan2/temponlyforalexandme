@@ -24,7 +24,7 @@ const ActionButton: FCICC<ActionButtonProps> = ({
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.container, activeButtonClass)}>
+    <div className={classes.container}>
       {/* eslint-disable-next-line react/button-has-type */}
       <button
         name={name}
