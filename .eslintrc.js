@@ -52,6 +52,10 @@ module.exports = {
     "@typescript-eslint/no-shadow": ["error"],
     "react/require-default-props": 0,
     "no-undef": 0,
+    // TODO: Why did we add these three? It removes three errors, at least two of them
+    //  are important! We should not be reassigning parameters, and we should have default
+    //  exports. I am not a fan of just turning off errors so we don't have to write good
+    //  code. Is there an actual reason why these must be turned off?
     "import/prefer-default-export": 0,
     "react/display-name": 0,
     "no-param-reassign": 0,
