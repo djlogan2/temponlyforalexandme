@@ -11,10 +11,12 @@ interface ISelectProps {
   disabled?: boolean;
   onSelect: (item: string) => void;
   className?: string;
+  placeHolder: { token: string; args: string[] };
 }
 
 const Select: FCICC<ISelectProps> = ({
   token,
+  placeHolder,
   options,
   disabled,
   onSelect = noop,
@@ -33,7 +35,10 @@ const Select: FCICC<ISelectProps> = ({
   return (
     <div className={clsx(classes.container, className)} ref={ref}>
       <Input
-        placeholder="Placeholder"
+        placeholder={window.i18n.translate(
+          placeHolder.token,
+          ...placeHolder.args,
+        )}
         token={token}
         name="select"
         onFocus={() => {

@@ -4,6 +4,7 @@ import DummyChessboard from "/client/app/components/DummyChessboard";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
 import Checkbox from "/client/app/shared/Checkbox";
 import Input from "/client/app/shared/Input";
+import Select from "/client/app/shared/Select";
 import Switch from "/client/app/shared/Switch";
 import TextArea from "/client/app/shared/TextArea";
 import Heading1 from "/client/app/shared/Typographies/Heading1";
@@ -45,11 +46,11 @@ const App: FCICC = ({ classes, ...rest }) => {
   }, [classes]);
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", margin: "25px" }}>
       <div
         style={{
           width: "50vw",
-          height: "100vh",
+          height: "calc(100vh - 60px)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
@@ -179,6 +180,20 @@ const App: FCICC = ({ classes, ...rest }) => {
             args: [],
           }}
         />
+        <Select
+          options={["Fake item 1", "Fake item 2"]}
+          onSelect={() => null}
+          keyboardFunctions={[]}
+          classes={[]}
+          token={{
+            token: "FAKE_INPUT",
+            args: [],
+          }}
+          placeHolder={{
+            token: "FAKE_PLACEHOLDER",
+            args: [],
+          }}
+        />
         <Switch
           name="fakeSwitch1"
           keyboardFunctions={[]}
@@ -228,7 +243,7 @@ const App: FCICC = ({ classes, ...rest }) => {
       <div
         style={{
           width: "100%",
-          height: "100vh",
+          height: "calc(100vh - 60px)",
           display: "flex",
           justifyContent: "center",
         }}
