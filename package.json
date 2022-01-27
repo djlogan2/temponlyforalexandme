@@ -19,7 +19,7 @@
     "@babel/runtime": "^7.16.7",
     "@reduxjs/toolkit": "^1.7.1",
     "chess.js": "^0.12.0",
-    "chessboard": "git+https://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@github.com/chessclub/v2icc-chessboard.git#release-1.0.5.1",
+    "chessboard": "https://github.com/chessclub/v2icc-chessboard.git",
     "client": "0.0.1",
     "clsx": "^1.1.1",
     "css-to-react-native-transform": "^2.0.0",
