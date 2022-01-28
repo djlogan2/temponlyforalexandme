@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { FC, TextareaHTMLAttributes } from "react";
-import useStyles from "./styles";
+import { useAppSelector } from "../../store/hooks";
 
 interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
@@ -16,18 +16,18 @@ const TextArea: FC<ITextAreaProps> = ({
   error,
   ...rest
 }) => {
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   return (
     <div
       className={clsx(
-        classes.container,
+        classes.textareaContainer,
         className,
-        error && classes.containerError,
+        error && classes.textareaContainerError,
       )}
     >
-      <div className={classes.areaContainer}>
-        <label className={classes.label} htmlFor={name}>
+      <div className={classes.textareaAreaContainer}>
+        <label className={classes.textareaLabel} htmlFor={name}>
           Label
           <textarea
             {...rest}
@@ -38,7 +38,7 @@ const TextArea: FC<ITextAreaProps> = ({
           />
         </label>
       </div>
-      {!!msgText && <p className={classes.msg}>{msgText}</p>}
+      {!!msgText && <p className={classes.textareaMsg}>{msgText}</p>}
     </div>
   );
 };

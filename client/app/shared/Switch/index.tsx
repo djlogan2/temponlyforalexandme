@@ -1,19 +1,18 @@
-import { noop } from "lodash";
 import React, { FC, InputHTMLAttributes, useState } from "react";
-import useStyles from "./styles";
+import { useAppSelector } from "../../store/hooks";
 
 interface ISwitchProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
 }
 
 const Switch: FC<ISwitchProps> = ({ name, onChange }) => {
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   const [isToggled, setIsToggled] = useState(false);
   const onToggleHandler = () => setIsToggled(!isToggled);
 
   return (
-    <label className={classes.toggleSwitch} htmlFor={name}>
+    <label className={classes.switchToggle} htmlFor={name}>
       <input
         name={name}
         id={name}

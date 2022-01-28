@@ -1,6 +1,5 @@
 import React, { FCICC } from "react";
-import PropTypes from "prop-types";
-import useStyles from "./styles";
+import { useAppSelector } from "/client/app/store/hooks";
 
 interface Heading3Props {
   name: string;
@@ -8,7 +7,7 @@ interface Heading3Props {
 }
 
 const Heading3: FCICC<Heading3Props> = ({ name, token, ...rest }) => {
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   return (
     <div id={name} className={classes.heading3} {...rest}>

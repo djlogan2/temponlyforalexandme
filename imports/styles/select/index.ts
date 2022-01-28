@@ -1,12 +1,12 @@
-import { createUseStyles } from "react-jss";
-
-const useStyles = createUseStyles({
-  container: {
+export default {
+  selectContainer: {
+    parent: "system",
     maxWidth: 305,
     width: "100%",
     position: "relative",
   },
-  list: {
+  selectList: {
+    parent: "system",
     position: "absolute",
     listStyleType: "none",
     marginTop: "8px",
@@ -17,7 +17,8 @@ const useStyles = createUseStyles({
     padding: 0,
     backgroundColor: "#FFFFFF",
   },
-  item: {
+  selectItem: {
+    parent: "system",
     padding: "6px 16px",
     cursor: "pointer",
 
@@ -26,6 +27,4 @@ const useStyles = createUseStyles({
       color: "#0F5AB6",
     },
   },
-});
-
-export default useStyles;
+};

@@ -35,7 +35,7 @@ const App: FCICC = ({ classes, ...rest }) => {
 
   useEffect(() => {
     if (Object.keys(classes).length) {
-      dispatch(updateClasses(classes as unknown as { [key: string]: string }));
+      dispatch(updateClasses(classes as any));
     }
   }, [classes]);
 

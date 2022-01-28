@@ -1,6 +1,4 @@
-import clsx from "clsx";
-import React, { FC, ButtonHTMLAttributes, FCICC } from "react";
-import useStyles from "./styles";
+import React, { ButtonHTMLAttributes, FCICC } from "react";
 import { useAppSelector } from "/client/app/store/hooks";
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,23 +16,20 @@ const ActionButton: FCICC<ActionButtonProps> = ({
   token,
   ...rest
 }) => {
-  const activeButtonClass = useAppSelector(
-    (state) => state.theming.classes.activebutton,
-  );
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   return (
-    <div className={clsx(classes.container, activeButtonClass)}>
+    <div className={classes.activeButtonContainer}>
       {/* eslint-disable-next-line react/button-has-type */}
       <button
         name={name}
         onClick={onButtonClick}
-        className={classes.button}
+        className={classes.activeButton}
         {...rest}
       >
         {window.i18n.translate(token.token, ...token.args)}
       </button>
-      <div className={classes.hoverElement}>{hoverText}</div>
+      <div className={classes.activeButtonHoverElement}>{hoverText}</div>
     </div>
   );
 };

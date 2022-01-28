@@ -2,21 +2,26 @@
 /* x_id: abcd */
 /* xisolation_group: cty */
 .system {
-    font-family: Helvetica;
+  font-family: Helvetica;
 }
 
 .button {
-    parent: system;
-    background-color: black;
-    color: white;
+  parent: system;
+  background-color: black;
+  color: white;
 }
 
 .activebutton {
-    parent: button;
-    color: blue;
+  parent: button;
+  color: blue;
 }
 
 .dangerbutton {
-    parent: "activebutton";
-    background-color: red;
+  parent: "activebutton";
+  background-color: red;
+}
+
+.test {
+  parent: button;
+  border: 1px solid black;
 }

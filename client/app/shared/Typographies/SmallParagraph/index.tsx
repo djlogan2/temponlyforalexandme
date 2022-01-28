@@ -1,5 +1,5 @@
-import React, { FC, FCICC } from "react";
-import useStyles from "./styles";
+import React, { FCICC } from "react";
+import { useAppSelector } from "/client/app/store/hooks";
 
 interface SmallParagraphProps {
   name: string;
@@ -13,10 +13,10 @@ const SmallParagraph: FCICC<SmallParagraphProps> = ({
   link,
   ...rest
 }) => {
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   return link ? (
-    <a id={name} className={classes.link} href={link}>
+    <a id={name} className={classes.smallParagraphLink} href={link}>
       {window.i18n.translate(token.token, ...token.args)}
     </a>
   ) : (

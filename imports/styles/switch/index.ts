@@ -1,7 +1,6 @@
-import { createUseStyles } from "react-jss";
-
-const useStyles = createUseStyles({
-  toggleSwitch: {
+export default {
+  switchToggle: {
+    parent: "system",
     position: "relative",
     display: "inline-block",
     width: "35px",
@@ -38,6 +37,7 @@ const useStyles = createUseStyles({
   },
 
   switch: {
+    parent: "system",
     position: "absolute",
     cursor: "pointer",
     borderRadius: "25px",
@@ -48,6 +48,4 @@ const useStyles = createUseStyles({
     left: 0,
     transition: "0.2s ease",
   },
-});
-
-export default useStyles;
+};

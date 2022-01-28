@@ -1,7 +1,6 @@
-import { createUseStyles } from "react-jss";
-
-const useStyles = createUseStyles({
+export default {
   heading3: {
+    parent: "system",
     width: "97px",
     height: "25px",
     fontFamily: "Helvetica Neue",
@@ -11,6 +10,4 @@ const useStyles = createUseStyles({
     lineHeight: "25px",
     color: "#131314",
   },
-});
-
-export default useStyles;
+};

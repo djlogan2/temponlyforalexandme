@@ -9,7 +9,7 @@ import injectSheet from "react-jss";
 export const withDynamicStyles =
   (Component: FCICC) =>
   ({ ...props }: TRequiredComponentProps) => {
-    const [data, setData] = useState<any>();
+    const [data, setData] = useState<object>();
 
     useEffect(() => {
       theme.events.on("ready", () => {
@@ -26,16 +26,5 @@ export const withDynamicStyles =
       CustomComponent = injectSheet(data)(CustomComponent) as unknown as FCICC;
     }
 
-    return !data ? (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      />
-    ) : (
-      <CustomComponent {...props} />
-    );
+    return data ? <CustomComponent {...props} /> : null;
   };

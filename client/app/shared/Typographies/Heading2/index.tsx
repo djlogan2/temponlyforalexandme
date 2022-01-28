@@ -1,5 +1,5 @@
-import React, { FC, FCICC } from "react";
-import useStyles from "./styles";
+import React, { FCICC } from "react";
+import { useAppSelector } from "/client/app/store/hooks";
 
 interface Heading2Props {
   name: string;
@@ -7,7 +7,7 @@ interface Heading2Props {
 }
 
 const Heading2: FCICC<Heading2Props> = ({ name, token, ...rest }) => {
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   return (
     <div id={name} className={classes.heading2} {...rest}>

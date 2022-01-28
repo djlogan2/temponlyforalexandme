@@ -11,7 +11,7 @@ export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
     parent: Stoppable | null,
     subscriptionservice: SubscriptionService,
   ) {
-    super("themes", "themeheaders", parent, subscriptionservice);
+    super("themeheaders", "themeheaders", parent, subscriptionservice);
   }
 
   protected onFieldsChanged(

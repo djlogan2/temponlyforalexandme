@@ -1,11 +1,11 @@
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import _ from "lodash";
-import transform from "css-to-react-native-transform";
 import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
 import { ThemeDataRecord, ThemeHeaderRecord } from "/lib/records/ThemeRecord";
 import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
 import ThemePublication from "/lib/server/ThemePublication";
+import themeObject from "/imports/styles/default";
 
 export default class ThemeService {
   private themedao: WritableThemeDataDao;
@@ -29,7 +29,7 @@ export default class ThemeService {
     let parent;
     const classObject = { ..._classObject };
 
-    if (className === "system") {
+    if (className === "@global") {
       if ("parent" in classObject)
         throw new Meteor.Error("SYSTEM_CANNOT_HAVE_PARENT");
       parent = "root";
@@ -143,35 +143,13 @@ export default class ThemeService {
   }
 }
 
-function getThemeRecordFromComments(css: string): Partial<ThemeHeaderRecord> {
-  const record: Partial<ThemeHeaderRecord> = {};
-  const re = /(\/\*\s*(_id|themename|isolation_group)\s*:\s*(.*?)\s*\*\/)/;
-  const testme: string[] = css.split(re);
-  if (testme.length > 1) testme.shift();
-  while (testme.length > 1) {
-    testme.shift(); // /* key: value */
-    const key = testme.shift() as "_id" | "themename" | "isolation_group";
-    const value = testme.shift();
-    testme.shift(); // the newline
-    record[key] = value;
-  }
-  if ("_id" in record) {
-    if (Object.keys(record).length > 1)
-      throw new Meteor.Error("THEME_ID_MUST_BE_ONLY_IDENTIFIER");
-  } else if (!Object.keys(record).length)
-    throw new Meteor.Error("THEME_HEADER_COMMENTS_NOT_FOUND");
-  else if (!("themename" in record))
-    throw new Meteor.Error("THEME_HEADER_THEMENAME_OR_ID_IS_REQUIRED");
-
-  return record;
-}
-
 Meteor.startup(() => {
-  const css = Assets.getText("default.css");
-  const reactobject = transform(css);
-  const header = getThemeRecordFromComments(css);
+  const { styles, themename, ...rest } = themeObject;
+  const header = {
+    themename,
+  };
 
-  Object.entries(reactobject).forEach(([className, classObject]) => {
+  Object.entries(styles).forEach(([className, classObject]) => {
     if (!globalThis.ICCServer?.services?.themeservice) return;
     globalThis.ICCServer.services.themeservice.updateClass(
       header,
@@ -181,7 +159,7 @@ Meteor.startup(() => {
   });
 });
 
-globalThis.ICCServer.utilities.publish("themes", function () {
+globalThis.ICCServer.utilities.publish("themeheaders", function () {
   const connection = globalThis.ICCServer.utilities.getConnection(
     this.connection,
   );

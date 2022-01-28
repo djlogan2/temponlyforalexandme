@@ -1,32 +1,33 @@
-import { createUseStyles } from "react-jss";
-
-const useStyles = createUseStyles({
-  containerError: {
-    "& $areaContainer": {
+export default {
+  textareaContainerError: {
+    parent: "system",
+    "& $textareaAreaContainer": {
       outline: "2px solid #FF0000",
 
       "&:focus-within": {
         outline: "2px solid #FF0000",
       },
 
-      "&label": {
+      "& $textareaLabel": {
         color: "#FF0000 !important",
       },
     },
 
-    "& $label": {
+    "& $textareaLabel": {
       color: "#FF0000",
     },
 
-    "& $msg": {
+    "& $textareaMsg": {
       color: "#FF0000",
     },
   },
-  container: {
+  textareaContainer: {
+    parent: "system",
     boxSizing: "border-box",
     fontFamily: "Helvetica Neue",
   },
-  areaContainer: {
+  textareaAreaContainer: {
+    parent: "system",
     color: "#101010",
     borderRadius: 8,
     backgroundColor: "#F5F5F5",
@@ -37,7 +38,8 @@ const useStyles = createUseStyles({
       color: "#0F5AB6",
     },
   },
-  label: {
+  textareaLabel: {
+    parent: "system",
     display: "flex",
     flexDirection: "column",
     fontSize: 10,
@@ -46,6 +48,7 @@ const useStyles = createUseStyles({
     boxSizing: "border-box",
   },
   textarea: {
+    parent: "system",
     width: "100%",
     height: 142,
     backgroundColor: "transparent",
@@ -59,11 +62,10 @@ const useStyles = createUseStyles({
       backgroundColor: "#55586A",
     },
   },
-  msg: {
+  textareaMsg: {
+    parent: "system",
     color: "#55586A",
     fontSize: 12,
     marginLeft: 16,
   },
-});
-
-export default useStyles;
+};

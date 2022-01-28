@@ -1,12 +1,14 @@
-import { createUseStyles } from "react-jss";
+export default {
+  inputFormControl: {
+    parent: "system",
 
-const useStyles = createUseStyles({
-  formControl: {
     position: "relative",
     maxWidth: 305,
     width: "100%",
   },
-  formControlError: {
+  inputFormControlError: {
+    parent: "system",
+
     color: "#ff0000",
 
     "& $inputContainer": {
@@ -14,7 +16,7 @@ const useStyles = createUseStyles({
       outline: "2px solid #ff0000",
     },
 
-    "& $label": {
+    "& $inputLabel": {
       color: "inherit",
     },
 
@@ -23,12 +25,14 @@ const useStyles = createUseStyles({
       color: "inherit",
     },
 
-    "& $msg": {
+    "& $inputMsg": {
       color: "inherit",
     },
   },
 
   inputContainer: {
+    parent: "system",
+
     width: "100%",
     height: "63px",
     padding: "8px 16px",
@@ -44,19 +48,23 @@ const useStyles = createUseStyles({
       outline: "2px solid #d2d2d2",
       color: "#0F5AB6",
 
-      label: {
+      "& $inputLabel": {
         color: "inherit",
       },
     },
   },
 
-  label: {
+  inputLabel: {
+    parent: "system",
+
     display: "block",
     marginBottom: "8px",
     fontSize: "10px",
   },
 
   input: {
+    parent: "system",
+
     backgroundColor: "transparent",
     border: "none",
     outline: "none",
@@ -77,7 +85,9 @@ const useStyles = createUseStyles({
     },
   },
 
-  msg: {
+  inputMsg: {
+    parent: "system",
+
     color: "#55586a",
     fontSize: "14px",
     margin: {
@@ -88,11 +98,15 @@ const useStyles = createUseStyles({
   },
 
   inputWithIcon: {
+    parent: "system",
+
     display: "flex",
     justifyContent: "space-between",
   },
 
-  icon: {
+  inputIcon: {
+    parent: "system",
+
     width: 16,
     height: 16,
     margin: {
@@ -100,6 +114,4 @@ const useStyles = createUseStyles({
     },
     cursor: "pointer",
   },
-});
-
-export default useStyles;
+};

@@ -1,9 +1,9 @@
 import { noop } from "lodash";
 import React, { FC, InputHTMLAttributes, useState } from "react";
 import clsx from "clsx";
-import useStyles from "./styles";
 import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";
+import { useAppSelector } from "../../store/hooks";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -26,20 +26,20 @@ const Input: FC<IInputProps> = ({
   onIconClick = noop,
   ...rest
 }) => {
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
   const [inputType, setInputType] = useState(type || "text");
 
   return (
     <div
       className={clsx(
         className,
-        classes.formControl,
-        error && classes.formControlError,
+        classes.inputFormControl,
+        error && classes.inputFormControlError,
       )}
     >
       <div className={classes.inputContainer}>
         {!!label && (
-          <label htmlFor={name} className={classes.label}>
+          <label htmlFor={name} className={classes.inputLabel}>
             {label}
           </label>
         )}
@@ -53,7 +53,7 @@ const Input: FC<IInputProps> = ({
           />
           {!!Icon && (
             <div
-              className={classes.icon}
+              className={classes.inputIcon}
               onClick={onIconClick}
               onKeyDown={() => {}}
               role="presentation"
@@ -78,7 +78,7 @@ const Input: FC<IInputProps> = ({
           )}
         </div>
       </div>
-      {!!msgText && <p className={classes.msg}>{msgText}</p>}
+      {!!msgText && <p className={classes.inputMsg}>{msgText}</p>}
     </div>
   );
 };

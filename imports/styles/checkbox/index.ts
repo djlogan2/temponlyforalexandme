@@ -1,7 +1,6 @@
-import { createUseStyles } from "react-jss";
-
-const useStyles = createUseStyles({
-  disabled: {
+export default {
+  checkboxDisabled: {
+    parent: "system",
     "& $checkbox": {
       borderColor: "rgba(15, 90, 182, 0.5)",
     },
@@ -11,12 +10,14 @@ const useStyles = createUseStyles({
       borderColor: "rgba(15, 90, 182, 0.5)",
     },
   },
-  label: {
+  checkboxLabel: {
+    parent: "system",
     display: "flex",
     alignItems: "center",
     cursor: "pointer",
   },
-  circled: {
+  checkboxCircled: {
+    parent: "system",
     "& $checkbox": {
       borderRadius: "50%",
       border: "1px solid #019DF4",
@@ -26,7 +27,8 @@ const useStyles = createUseStyles({
       background: "#000",
     },
   },
-  nativeCheckBox: {
+  checkboxNative: {
+    parent: "system",
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
     height: 1,
@@ -36,6 +38,7 @@ const useStyles = createUseStyles({
     width: 1,
   },
   checkbox: {
+    parent: "system",
     display: "inline-block",
     height: 22,
     width: 22,
@@ -45,9 +48,8 @@ const useStyles = createUseStyles({
     borderRadius: 2,
   },
   checkboxActive: {
+    parent: "system",
     borderColor: "#0F5AB6",
     background: "#0F5AB6",
   },
-});
-
-export default useStyles;
+};

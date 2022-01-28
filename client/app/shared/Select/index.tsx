@@ -3,8 +3,8 @@ import { noop } from "lodash";
 import React, { FC, useRef, useState } from "react";
 import Chevron from "../../components/icons/Chevron";
 import useOnClickOutside from "../../hooks/useClickOutside";
+import { useAppSelector } from "../../store/hooks";
 import Input from "../Input";
-import useStyles from "./styles";
 
 interface ISelectProps {
   options: string[];
@@ -27,10 +27,10 @@ const Select: FC<ISelectProps> = ({
   useOnClickOutside(ref, () => {
     setShowOptions(false);
   });
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   return (
-    <div className={clsx(classes.container, className)} ref={ref}>
+    <div className={clsx(classes.selectContainer, className)} ref={ref}>
       <Input
         placeholder="Placeholder"
         label="Label"
@@ -52,7 +52,7 @@ const Select: FC<ISelectProps> = ({
       />
 
       {showOptions && (
-        <ul className={classes.list}>
+        <ul className={classes.selectList}>
           {items.map((item) => (
             <li
               key={item}
@@ -62,7 +62,7 @@ const Select: FC<ISelectProps> = ({
                 onSelect(item);
               }}
               onKeyDown={() => {}}
-              className={classes.item}
+              className={classes.selectItem}
               role="presentation"
             >
               {item}

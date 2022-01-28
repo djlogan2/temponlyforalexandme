@@ -1,5 +1,5 @@
-import React, { FC, FCICC } from "react";
-import useStyles from "./styles";
+import React, { FCICC } from "react";
+import { useAppSelector } from "/client/app/store/hooks";
 
 interface ParagraphProps {
   name: string;
@@ -8,10 +8,10 @@ interface ParagraphProps {
 }
 
 const Paragraph: FCICC<ParagraphProps> = ({ name, token, link, ...rest }) => {
-  const classes = useStyles();
+  const classes = useAppSelector((state) => state.theming.classes);
 
   return link ? (
-    <a id={name} className={classes.link} href={link}>
+    <a id={name} className={classes.paragraphLink} href={link}>
       {window.i18n.translate(token.token, ...token.args)}
     </a>
   ) : (

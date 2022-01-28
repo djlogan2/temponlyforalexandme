@@ -1,7 +1,6 @@
-import { createUseStyles } from "react-jss";
-
-const useStyles = createUseStyles({
+export default {
   paragraph: {
+    parent: "system",
     fontFamily: "Helvetica Neue",
     fontStyle: "normal",
     fontWeight: "normal",
@@ -9,7 +8,8 @@ const useStyles = createUseStyles({
     lineHeight: "19px",
     color: "#131314",
   },
-  link: {
+  paragraphLink: {
+    parent: "system",
     color: "#0F5AB6",
     fontFamily: "Helvetica Neue",
     fontStyle: "normal",
@@ -17,6 +17,4 @@ const useStyles = createUseStyles({
     fontSize: "16px",
     lineHeight: "19px",
   },
-});
-
-export default useStyles;
+};
