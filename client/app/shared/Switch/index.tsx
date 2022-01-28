@@ -1,12 +1,16 @@
-import React, { FC, InputHTMLAttributes, useState } from "react";
+import React, { FCICC, InputHTMLAttributes, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 
 interface ISwitchProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
 }
 
-const Switch: FC<ISwitchProps> = ({ name, onChange }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
+const Switch: FCICC<ISwitchProps> = ({ name, onChange }) => {
+  const classes = useAppSelector((state) => {
+    const { switchToggle, switch: switchCircle } = state.theming.classes;
+
+    return { switchToggle, switchCircle };
+  });
 
   const [isToggled, setIsToggled] = useState(false);
   const onToggleHandler = () => setIsToggled(!isToggled);
@@ -26,7 +30,7 @@ const Switch: FC<ISwitchProps> = ({ name, onChange }) => {
           }
         }}
       />
-      <span className={classes.switch} />
+      <span className={classes.switchCircle} />
     </label>
   );
 };

@@ -33,8 +33,8 @@ declare module "meteor/xolvio:cleaner" {
 declare module "react" {
   type TRequiredComponentProps = {
     keyboardFunctions: { [key: string]: void }[];
-    classes: any;
     token: { token: string; args: string[] };
+    classes: string[];
   };
   type FCICC<P = {}> = FunctionComponent<P & TRequiredComponentProps>;
 }

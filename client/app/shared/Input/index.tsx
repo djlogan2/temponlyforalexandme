@@ -1,5 +1,5 @@
 import { noop } from "lodash";
-import React, { FC, InputHTMLAttributes, useState } from "react";
+import React, { FC, FCICC, InputHTMLAttributes, useState } from "react";
 import clsx from "clsx";
 import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";
@@ -7,18 +7,17 @@ import { useAppSelector } from "../../store/hooks";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  label?: string;
   error?: boolean;
-  msgText?: string;
+  msgText?: { token: string; args: string[] };
   rightIcon?: JSX.Element;
   className?: string;
   onIconClick?: () => void;
 }
 
-const Input: FC<IInputProps> = ({
+const Input: FCICC<IInputProps> = ({
   name,
-  label,
   type,
+  token,
   msgText,
   error,
   className,
@@ -38,9 +37,9 @@ const Input: FC<IInputProps> = ({
       )}
     >
       <div className={classes.inputContainer}>
-        {!!label && (
+        {!!token && (
           <label htmlFor={name} className={classes.inputLabel}>
-            {label}
+            {window.i18n.translate(token.token, ...token.args)}
           </label>
         )}
         <div className={classes.inputWithIcon}>
@@ -78,7 +77,11 @@ const Input: FC<IInputProps> = ({
           )}
         </div>
       </div>
-      {!!msgText && <p className={classes.inputMsg}>{msgText}</p>}
+      {!!msgText && (
+        <p className={classes.inputMsg}>
+          {window.i18n.translate(msgText.token, ...msgText.args)}
+        </p>
+      )}
     </div>
   );
 };

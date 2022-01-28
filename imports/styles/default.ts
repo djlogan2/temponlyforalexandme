@@ -12,6 +12,7 @@ import checkbox from "./checkbox";
 import input from "./input";
 import select from "./select";
 import switchComponent from "./switch";
+import textarea from "./textarea";
 
 export default {
   themename: "default",
@@ -62,5 +63,6 @@ export default {
     ...input,
     ...select,
     ...switchComponent,
+    ...textarea,
   },
 };

@@ -18,6 +18,8 @@
   "dependencies": {
     "@babel/runtime": "^7.16.7",
     "@reduxjs/toolkit": "^1.7.1",
+    "chess.js": "^0.12.0",
+    "chessboard": "https://github.com/chessclub/v2icc-chessboard.git",
     "client": "0.0.1",
     "clsx": "^1.1.1",
     "eventemitter3": "^4.0.7",

@@ -20,6 +20,36 @@ export default class I18nService {
         locale: "es",
         text: "Este es un token de prueba con tres argumentos, arg0={0} arg1={1} arg2={2}",
       });
+
+      this.dao.insert({
+        token: "FAKE_BUTTON",
+        locale: "en",
+        text: "Button 1",
+      });
+
+      this.dao.insert({
+        token: "FAKE_TEXT",
+        locale: "en",
+        text: "Typography test",
+      });
+
+      this.dao.insert({
+        token: "FAKE_INPUT",
+        locale: "en",
+        text: "Input 1",
+      });
+
+      this.dao.insert({
+        token: "FAKE_MSG_TEXT",
+        locale: "en",
+        text: "Message text 1",
+      });
+
+      this.dao.insert({
+        token: "FAKE_PLACEHOLDER",
+        locale: "en",
+        text: "Placeholder text 1",
+      });
     }
     globalThis.ICCServer.services.i18n = this;
   }
