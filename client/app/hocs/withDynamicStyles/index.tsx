@@ -23,6 +23,7 @@ export const withDynamicStyles =
     useEffect(() => {
       theme.events.on("ready", () => {
         const fetchedData = theme.getTheme();
+
         if (fetchedData?.reactclass) {
           setData(fetchedData.reactclass);
         }

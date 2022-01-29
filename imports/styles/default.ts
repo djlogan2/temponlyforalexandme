@@ -20,14 +20,8 @@ export default {
   xisolation_group: "cty",
 
   styles: {
-    "@global": {
-      "*": {
-        fontSize: "100%",
-        fontFamily: "inherit",
-      },
-      body: {
-        fontFamily: "Helvetica",
-      },
+    system: {
+      fontFamily: "Helvetica",
     },
 
     button: {

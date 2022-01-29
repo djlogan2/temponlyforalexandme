@@ -1,7 +1,6 @@
 export default {
   activeButton: {
-    parent: "system",
-    extend: ["button"],
+    parent: "button",
     backgroundColor: "purple",
   },
 

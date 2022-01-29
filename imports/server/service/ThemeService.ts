@@ -29,7 +29,7 @@ export default class ThemeService {
     let parent;
     const classObject = { ..._classObject };
 
-    if (className === "@global") {
+    if (className === "system") {
       if ("parent" in classObject)
         throw new Meteor.Error("SYSTEM_CANNOT_HAVE_PARENT");
       parent = "root";
