@@ -3,6 +3,7 @@ import { noop } from "lodash";
 import React, { FC, FCICC, useRef, useState } from "react";
 import Chevron from "../../components/icons/Chevron";
 import useOnClickOutside from "../../hooks/useClickOutside";
+import useTranslate from "../../hooks/useTranslate";
 import { useAppSelector } from "../../store/hooks";
 import Input from "../Input";
 
@@ -25,6 +26,7 @@ const Select: FCICC<ISelectProps> = ({
   const [items, setitems] = useState(options);
   const [selected, setSelected] = useState("");
   const [showOptions, setShowOptions] = useState(false);
+  const placeholderText = useTranslate(placeHolder);
 
   const ref = useRef<HTMLDivElement>(null);
   useOnClickOutside(ref, () => {
@@ -35,10 +37,7 @@ const Select: FCICC<ISelectProps> = ({
   return (
     <div className={clsx(classes.selectContainer, className)} ref={ref}>
       <Input
-        placeholder={window.i18n.translate(
-          placeHolder.token,
-          ...placeHolder.args,
-        )}
+        placeholder={placeholderText}
         token={token}
         name="select"
         onFocus={() => {

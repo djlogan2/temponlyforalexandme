@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import themingReducer from "./features/theming";
+import i18nReducer from "./features/i18n";
 
 export const store = configureStore({
   reducer: {
     theming: themingReducer,
+    i18n: i18nReducer,
   },
 });
 

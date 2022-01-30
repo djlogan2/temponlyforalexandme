@@ -1,8 +1,6 @@
 export default {
   heading3: {
     parent: "system",
-    width: "97px",
-    height: "25px",
     fontFamily: "Helvetica Neue",
     fontStyle: "normal",
     fontWeight: "normal",

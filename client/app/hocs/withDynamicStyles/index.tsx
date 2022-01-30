@@ -5,11 +5,14 @@ import React, {
   useState,
 } from "react";
 import injectSheet from "react-jss";
+import { updateTranslations } from "../../store/features/i18n";
+import { useAppDispatch } from "../../store/hooks";
 
 export const withDynamicStyles =
   (Component: FCICC) =>
   ({ ...props }: TRequiredComponentProps) => {
     const [data, setData] = useState<object>();
+    const dispatch = useAppDispatch();
 
     //
     // TODO: So this is exactly what I'm talking about. Why do you think you must have theme.events.on.ready?
@@ -26,6 +29,23 @@ export const withDynamicStyles =
 
         if (fetchedData?.reactclass) {
           setData(fetchedData.reactclass);
+        }
+      });
+
+      i18n.events.on("ready", () => {
+        const fetchedData = i18n.getTranslations();
+
+        const translations = fetchedData?.reduce(
+          (prev: { [key: string]: string }, curr) => {
+            prev[curr.token] = curr.text;
+
+            return prev;
+          },
+          {},
+        );
+
+        if (translations) {
+          dispatch(updateTranslations(translations));
         }
       });
     }, []);

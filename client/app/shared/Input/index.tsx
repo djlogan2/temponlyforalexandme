@@ -4,6 +4,7 @@ import clsx from "clsx";
 import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";
 import { useAppSelector } from "../../store/hooks";
+import useTranslate from "../../hooks/useTranslate";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -27,6 +28,8 @@ const Input: FCICC<IInputProps> = ({
 }) => {
   const classes = useAppSelector((state) => state.theming.classes);
   const [inputType, setInputType] = useState(type || "text");
+  const labelText = useTranslate(token);
+  const inputMsgText = msgText && useTranslate(msgText);
 
   return (
     <div
@@ -39,7 +42,7 @@ const Input: FCICC<IInputProps> = ({
       <div className={classes.inputContainer}>
         {!!token && (
           <label htmlFor={name} className={classes.inputLabel}>
-            {window.i18n.translate(token.token, ...token.args)}
+            {labelText}
           </label>
         )}
         <div className={classes.inputWithIcon}>
@@ -77,11 +80,7 @@ const Input: FCICC<IInputProps> = ({
           )}
         </div>
       </div>
-      {!!msgText && (
-        <p className={classes.inputMsg}>
-          {window.i18n.translate(msgText.token, ...msgText.args)}
-        </p>
-      )}
+      {!!msgText && <p className={classes.inputMsg}>{inputMsgText}</p>}
     </div>
   );
 };

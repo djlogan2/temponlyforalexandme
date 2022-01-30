@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React, { FCICC, TextareaHTMLAttributes } from "react";
+import useTranslate from "../../hooks/useTranslate";
 import { useAppSelector } from "../../store/hooks";
 
 interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -20,6 +21,9 @@ const TextArea: FCICC<ITextAreaProps> = ({
   ...rest
 }) => {
   const classes = useAppSelector((state) => state.theming.classes);
+  const labelText = useTranslate(token);
+  const placeholderText = placeHolder && useTranslate(placeHolder);
+  const textAreaMsgText = msgText && useTranslate(msgText);
 
   return (
     <div
@@ -31,24 +35,17 @@ const TextArea: FCICC<ITextAreaProps> = ({
     >
       <div className={classes.textareaAreaContainer}>
         <label className={classes.textareaLabel} htmlFor={name}>
-          {window.i18n.translate(token.token, ...token.args)}
+          {labelText}
           <textarea
             {...rest}
             name={name}
             id={name}
-            placeholder={
-              placeHolder &&
-              window.i18n.translate(placeHolder.token, ...placeHolder.args)
-            }
+            placeholder={placeHolder && placeholderText}
             className={classes.textarea}
           />
         </label>
       </div>
-      {!!msgText && (
-        <p className={classes.textareaMsg}>
-          {window.i18n.translate(msgText.token, ...msgText.args)}
-        </p>
-      )}
+      {!!msgText && <p className={classes.textareaMsg}>{textAreaMsgText}</p>}
     </div>
   );
 };

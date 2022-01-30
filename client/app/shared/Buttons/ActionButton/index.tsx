@@ -1,4 +1,5 @@
 import React, { ButtonHTMLAttributes, FCICC } from "react";
+import useTranslate from "/client/app/hooks/useTranslate";
 import { useAppSelector } from "/client/app/store/hooks";
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,6 +18,7 @@ const ActionButton: FCICC<ActionButtonProps> = ({
   ...rest
 }) => {
   const classes = useAppSelector((state) => state.theming.classes);
+  const translation = useTranslate(token);
 
   return (
     <div className={classes.activeButtonContainer}>
@@ -27,7 +29,7 @@ const ActionButton: FCICC<ActionButtonProps> = ({
         className={classes.activeButton}
         {...rest}
       >
-        {window.i18n.translate(token.token, ...token.args)}
+        {translation}
       </button>
       <div className={classes.activeButtonHoverElement}>{hoverText}</div>
     </div>

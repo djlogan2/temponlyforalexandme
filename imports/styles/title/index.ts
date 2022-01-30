@@ -1,8 +1,6 @@
 export default {
   title: {
     parent: "system",
-    width: "153px",
-    height: "50px",
     fontFamily: "Helvetica Neue",
     fontStyle: "normal",
     fontWeight: "normal",

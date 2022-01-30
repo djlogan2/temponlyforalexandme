@@ -27,6 +27,7 @@ import ClientTheme from "/lib/client/ClientTheme";
 import { withDynamicStyles } from "./hocs/withDynamicStyles";
 import { useAppDispatch } from "./store/hooks";
 import { updateClasses } from "./store/features/theming";
+import { updateTranslations } from "./store/features/i18n";
 
 const subscriptionservice = new SubscriptionService(null);
 

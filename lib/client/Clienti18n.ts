@@ -18,6 +18,8 @@ export default class Clienti18n extends Commoni18n {
     this.dao.events.on("event", () => {});
   }
 
+  public getTranslations = () => this.dao.readMany({});
+
   public translate(token: string, ...args: string[]): string {
     const record = this.dao.readOne({ token });
     if (!record) return token;

@@ -1,4 +1,5 @@
 import React, { FCICC } from "react";
+import useTranslate from "/client/app/hooks/useTranslate";
 import { useAppSelector } from "/client/app/store/hooks";
 
 interface SmallParagraphProps {
@@ -14,14 +15,15 @@ const SmallParagraph: FCICC<SmallParagraphProps> = ({
   ...rest
 }) => {
   const classes = useAppSelector((state) => state.theming.classes);
+  const translation = useTranslate(token);
 
   return link ? (
     <a id={name} className={classes.smallParagraphLink} href={link}>
-      {window.i18n.translate(token.token, ...token.args)}
+      {translation}
     </a>
   ) : (
     <div id={name} className={classes.smallParagraph} {...rest}>
-      {window.i18n.translate(token.token, ...token.args)}
+      {translation}
     </div>
   );
 };
