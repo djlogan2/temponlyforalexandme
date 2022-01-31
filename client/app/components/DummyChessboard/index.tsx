@@ -157,7 +157,14 @@ class DummyChessboard extends Component {
 
     return (
       <ChessBoard
-        raf={{ inside: true, vertical: "bottom", horizontal: "right" }}
+        raf={{
+          inside: true,
+          bottom: false,
+          right: true,
+          left: false,
+          top: true,
+          relay: true,
+        }}
         perspective="white"
         fen={fen}
         boardSquares={{
@@ -202,9 +209,11 @@ class DummyChessboard extends Component {
           },
           files: {
             color: "#9698A1",
+            secondColor: "#ffffff",
           },
           ranks: {
             color: "#9698A1",
+            secondColor: "#ffffff",
           },
           promotion: {
             backgroundColor: "#a8a8a8",
