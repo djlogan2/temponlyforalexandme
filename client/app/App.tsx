@@ -28,6 +28,7 @@ import { withDynamicStyles } from "./hocs/withDynamicStyles";
 import { useAppDispatch } from "./store/hooks";
 import { updateClasses } from "./store/features/theming";
 import { updateTranslations } from "./store/features/i18n";
+import PlayerInfo from "./components/PlayerInfo";
 
 const subscriptionservice = new SubscriptionService(null);
 
@@ -51,7 +52,7 @@ const App: FCICC = ({ classes, ...rest }) => {
       <div
         style={{
           width: "50vw",
-          height: "calc(100vh - 60px)",
+          height: "calc(100% - 60px)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
@@ -78,6 +79,40 @@ const App: FCICC = ({ classes, ...rest }) => {
           keyboardFunctions={[]}
           classes={[]}
         />
+        <div>
+          <h1>PlayerInfo component</h1>
+
+          <div>
+            <PlayerInfo
+              userStatus="online"
+              picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              rank={2500}
+              username="Grand_Master01"
+              title="WGM"
+              lagLevel={3}
+              keyboardFunctions={[]}
+              classes={[]}
+              token={{ token: "FAKE_TEXT", args: [] }}
+            />
+            <div
+              style={{
+                padding: "10px",
+              }}
+            />
+            <PlayerInfo
+              userStatus="online"
+              picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              rank={2500}
+              username="Grand_Master01"
+              title="GM"
+              lagLevel={1}
+              keyboardFunctions={[]}
+              classes={[]}
+              token={{ token: "FAKE_TEXT", args: [] }}
+              flip
+            />
+          </div>
+        </div>
         <Heading1
           name="test1"
           token={{ token: "FAKE_TEXT", args: [] }}

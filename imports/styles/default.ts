@@ -13,6 +13,7 @@ import input from "./input";
 import select from "./select";
 import switchComponent from "./switch";
 import textarea from "./textarea";
+import playerInfo from "./playerInfo";
 
 export default {
   themename: "default",
@@ -58,5 +59,6 @@ export default {
     ...select,
     ...switchComponent,
     ...textarea,
+    ...playerInfo,
   },
 };
