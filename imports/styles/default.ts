@@ -1,5 +1,6 @@
 import activeButton from "./activeButton";
 import title from "./title";
+import digitalClock from "./digitalClock";
 import heading1 from "./heading1";
 import heading2 from "./heading2";
 import heading3 from "./heading3";
@@ -60,5 +61,6 @@ export default {
     ...switchComponent,
     ...textarea,
     ...playerInfo,
+    ...digitalClock,
   },
 };

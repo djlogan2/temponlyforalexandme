@@ -3,6 +3,7 @@
 import DummyChessboard from "/client/app/components/DummyChessboard";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
 import Checkbox from "/client/app/shared/Checkbox";
+import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
 import Input from "/client/app/shared/Input";
 import Select from "/client/app/shared/Select";
 import Switch from "/client/app/shared/Switch";
@@ -64,6 +65,16 @@ const App: FCICC = ({ classes, ...rest }) => {
           token={{ token: "FAKE_BUTTON", args: [] }}
           keyboardFunctions={[]}
           classes={[]}
+        />
+        <DigitalClock
+          time="00:00:30"
+          keyboardFunctions={[]}
+          token={{
+            token: "",
+            args: [],
+          }}
+          classes={[]}
+          status="in"
         />
         <ActionButton
           name="fakeButton"

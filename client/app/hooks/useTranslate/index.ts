@@ -1,10 +1,10 @@
-import { TRequiredComponentProps, TToken } from "react";
+import { TToken } from "react";
 import { useAppSelector } from "../../store/hooks";
 
 const useTranslate = ({ token, args }: TToken) => {
-  const translation = useAppSelector((state) => state.i18n.translations[token]);
-
-  let translatedtext = translation;
+  let translatedtext = useAppSelector(
+    (state) => state.i18n.translations[token] || token,
+  );
 
   for (let x = 0; x < args.length; x += 1) {
     const replacement = `{${x}}`;
