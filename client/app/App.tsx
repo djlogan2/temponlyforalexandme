@@ -4,6 +4,7 @@ import DummyChessboard from "/client/app/components/DummyChessboard";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
 import Checkbox from "/client/app/shared/Checkbox";
 import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
+import GameTitle from "/client/app/shared/GameTitle";
 import Input from "/client/app/shared/Input";
 import Select from "/client/app/shared/Select";
 import Switch from "/client/app/shared/Switch";
@@ -17,7 +18,7 @@ import Heading6 from "/client/app/shared/Typographies/Heading6";
 import Paragraph from "/client/app/shared/Typographies/Paragraph";
 import SmallParagraph from "/client/app/shared/Typographies/SmallParagraph";
 import Title from "/client/app/shared/Typographies/Title";
-import React, { FCICC, useEffect, useState } from "react";
+import React, { FCICC, useEffect } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
@@ -28,8 +29,8 @@ import ClientTheme from "/lib/client/ClientTheme";
 import { withDynamicStyles } from "./hocs/withDynamicStyles";
 import { useAppDispatch } from "./store/hooks";
 import { updateClasses } from "./store/features/theming";
-import { updateTranslations } from "./store/features/i18n";
 import PlayerInfo from "./components/PlayerInfo";
+import CapturedPieces from "/client/app/components/CapturedPieces";
 
 const subscriptionservice = new SubscriptionService(null);
 
@@ -59,6 +60,7 @@ const App: FCICC = ({ classes, ...rest }) => {
           justifyContent: "space-around",
         }}
       >
+        <CapturedPieces color="black" soliders={{ k: 3, q: 2, p: 4 }} />
         <ActionButton
           name="fakeButton"
           hoverText="1234"
@@ -75,6 +77,17 @@ const App: FCICC = ({ classes, ...rest }) => {
           }}
           classes={[]}
           status="in"
+        />
+        <GameTitle
+          minutes={10}
+          instance="game_title_semifinal"
+          date="May 22, 2022"
+          keyboardFunctions={[]}
+          token={{
+            token: "",
+            args: [],
+          }}
+          classes={[]}
         />
         <ActionButton
           name="fakeButton"

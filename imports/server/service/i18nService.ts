@@ -50,6 +50,18 @@ export default class I18nService {
         locale: "en",
         text: "Placeholder text 1",
       });
+
+      this.dao.insert({
+        token: "game_title_title",
+        locale: "en",
+        text: "{0} minutes",
+      });
+
+      this.dao.insert({
+        token: "game_title_semifinal",
+        locale: "en",
+        text: "| Semifinal",
+      });
     }
     globalThis.ICCServer.services.i18n = this;
   }
