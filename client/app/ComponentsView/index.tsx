@@ -1,4 +1,5 @@
 import React, { FCICC } from "react";
+import Movelist from "../components/Movelist";
 import CapturedPieces from "/client/app/components/CapturedPieces";
 import DummyChessboard from "/client/app/components/DummyChessboard";
 import PlayerInfo from "/client/app/components/PlayerInfo";
@@ -110,6 +111,27 @@ const ComponentsView: FCICC<IComponentsView> = () => (
           />
         </div>
       </div>
+
+      <div>
+        <h2>Movelist</h2>
+        <Movelist
+          openingName="FAKE_TEXT"
+          token={{ token: "FAKE_TEXT", args: [] }}
+          keyboardFunctions={[]}
+          classes={[]}
+          moves={new Array(10).fill(0).map((_, i) => ({
+            first: {
+              move: `c${i}`,
+              piece: "q",
+            },
+            second: {
+              move: `d${i}`,
+              piece: "n",
+            },
+          }))}
+        />
+      </div>
+
       <Heading1
         name="test1"
         token={{ token: "FAKE_TEXT", args: [] }}

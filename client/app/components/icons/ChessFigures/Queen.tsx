@@ -2,13 +2,15 @@ import React, { FC } from "react";
 
 interface IQueenProps {
   color: string;
+  width?: number;
+  height?: number;
 }
 // eslint-disable max-len
-const Queen: FC<IQueenProps> = ({ color }) => (
+const Queen: FC<IQueenProps> = ({ color, width = 20, height = 19 }) => (
   <svg
-    width="38"
-    height="37"
-    viewBox="0 0 38 37"
+    width={width}
+    height={height}
+    viewBox={`0 0 ${width} ${height}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >

@@ -15,6 +15,10 @@ import select from "./select";
 import switchComponent from "./switch";
 import textarea from "./textarea";
 import playerInfo from "./playerInfo";
+import movelist from "./movelist";
+import scrollBar from "./scrollBar";
+import regularButton from "./regularButton";
+import smallButton from "./smallButton";
 
 export default {
   themename: "default",
@@ -24,25 +28,25 @@ export default {
   styles: {
     system: {
       fontFamily: "Helvetica",
+      boxSizing: "border-box",
     },
 
     button: {
       parent: "system",
       backgroundColor: "#55586A",
-      width: "52px",
-      height: "52px",
       border: "none",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      borderRadius: "50%",
       color: "white",
-      padding: "12px 16px",
       fontSize: "16px",
       "&:disabled": {
+        pointerPointer: "events",
         backgroundColor: "#55586A",
       },
+
       outline: 0,
+      cursor: "pointer",
     },
 
     ...activeButton,
@@ -62,5 +66,9 @@ export default {
     ...textarea,
     ...playerInfo,
     ...digitalClock,
+    ...movelist,
+    ...scrollBar,
+    ...regularButton,
+    ...smallButton,
   },
 };

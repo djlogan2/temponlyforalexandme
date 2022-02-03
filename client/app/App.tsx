@@ -1,16 +1,17 @@
-import ComponentsView from "/client/app/ComponentsView";
 import React, { FCICC, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
-import SubscriptionService from "/imports/client/service/SubscriptionService";
+import { withDynamicStyles } from "./hocs/withDynamicStyles";
+import useTranslate from "./hooks/useTranslate";
+import { updateClasses } from "./store/features/theming";
+import { useAppDispatch } from "./store/hooks";
+import ComponentsView from "/client/app/ComponentsView";
 import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import ThemeReadOnlyDao from "/imports/client/dao/ThemeReadOnlyDao";
+import SubscriptionService from "/imports/client/service/SubscriptionService";
 import Clienti18n from "/lib/client/Clienti18n";
 import ClientTheme from "/lib/client/ClientTheme";
-import { withDynamicStyles } from "./hocs/withDynamicStyles";
-import { useAppDispatch } from "./store/hooks";
-import { updateClasses } from "./store/features/theming";
-import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 
 const subscriptionservice = new SubscriptionService(null);
 
@@ -22,6 +23,14 @@ const theme = new ClientTheme(themedao);
 
 const App: FCICC = ({ classes, ...rest }) => {
   const dispatch = useAppDispatch();
+  const activeButtonTranslation = useTranslate({
+    token: "FAKE_BUTTON",
+    args: [],
+  });
+  const disabledButtonTranslation = useTranslate({
+    token: "FAKE_BUTTON",
+    args: [],
+  });
 
   useEffect(() => {
     if (Object.keys(classes).length) {
