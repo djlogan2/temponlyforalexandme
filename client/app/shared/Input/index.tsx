@@ -5,7 +5,7 @@ import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";
 import { useAppSelector } from "../../store/hooks";
 import useTranslate from "../../hooks/useTranslate";
-import "./index.scss";
+import styles from "./index.m.scss";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -32,10 +32,12 @@ const Input: FCICC<IInputProps> = ({
   const labelText = useTranslate(token);
   const inputMsgText = msgText && useTranslate(msgText);
 
+  console.log(styles);
+
   return (
     <div
       className={clsx(
-        "test",
+        styles.test,
         className,
         classes.inputFormControl,
         error && classes.inputFormControlError,

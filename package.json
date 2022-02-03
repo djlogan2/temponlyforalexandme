@@ -103,5 +103,11 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "cssModules": {
+    "extensions": [
+      "m.scss",
+      "module.scss"
+    ]
   }
 }
