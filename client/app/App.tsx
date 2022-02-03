@@ -23,14 +23,6 @@ const theme = new ClientTheme(themedao);
 
 const App: FCICC = ({ classes, ...rest }) => {
   const dispatch = useAppDispatch();
-  const activeButtonTranslation = useTranslate({
-    token: "FAKE_BUTTON",
-    args: [],
-  });
-  const disabledButtonTranslation = useTranslate({
-    token: "FAKE_BUTTON",
-    args: [],
-  });
 
   useEffect(() => {
     if (Object.keys(classes).length) {

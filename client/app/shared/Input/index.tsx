@@ -5,6 +5,7 @@ import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";
 import { useAppSelector } from "../../store/hooks";
 import useTranslate from "../../hooks/useTranslate";
+import "./index.scss";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -34,6 +35,7 @@ const Input: FCICC<IInputProps> = ({
   return (
     <div
       className={clsx(
+        "test",
         className,
         classes.inputFormControl,
         error && classes.inputFormControlError,

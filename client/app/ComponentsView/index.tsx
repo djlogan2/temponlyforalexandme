@@ -1,4 +1,5 @@
 import React, { FCICC } from "react";
+import Flip from "../components/icons/Flip";
 import Movelist from "../components/Movelist";
 import CapturedPieces from "/client/app/components/CapturedPieces";
 import DummyChessboard from "/client/app/components/DummyChessboard";
@@ -306,9 +307,7 @@ const ComponentsView: FCICC<IComponentsView> = () => (
         justifyContent: "center",
       }}
     >
-      <div style={{ width: "40%", height: "auto" }}>
-        <DummyChessboard />
-      </div>
+      <DummyChessboard />
     </div>
   </div>
 );
