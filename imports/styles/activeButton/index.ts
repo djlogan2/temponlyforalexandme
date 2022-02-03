@@ -1,7 +1,35 @@
 export default {
   activeButton: {
     parent: "button",
-    backgroundColor: "purple",
+    borderRadius: "50%",
+  },
+
+  activeButtonDark: {
+    parent: "system",
+    backgroundColor: "#131314",
+  },
+  activeButtonRed: {
+    parent: "system",
+    backgroundColor: "#FF0000",
+  },
+  activeButtonDarkLight: {
+    parent: "system",
+    backgroundColor: "#55586A",
+  },
+  activeButtonMedium: {
+    parent: "system",
+    width: 48,
+    height: 48,
+  },
+  activeButtonSmall: {
+    parent: "system",
+    width: 36,
+    height: 36,
+  },
+  activeButtonBig: {
+    parent: "system",
+    width: 52,
+    height: 52,
   },
 
   activeButtonContainer: {
@@ -11,6 +39,10 @@ export default {
     "& $activeButton:active + $activeButtonHoverElement": {
       opacity: 0,
     },
+  },
+
+  activeButtonContainerHover: {
+    parent: "system",
     "&:hover": {
       "& $activeButton:disabled + $activeButtonHoverElement": {
         opacity: 0,

@@ -59,6 +59,7 @@ module.exports = {
     "import/prefer-default-export": 0,
     "react/display-name": 0,
     "no-param-reassign": 0,
+    "react/no-array-index-key": 0,
   },
   settings: {
     "import/resolver": {

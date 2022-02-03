@@ -31,6 +31,8 @@ import { useAppDispatch } from "./store/hooks";
 import { updateClasses } from "./store/features/theming";
 import PlayerInfo from "./components/PlayerInfo";
 import CapturedPieces from "/client/app/components/CapturedPieces";
+import Movelist from "./components/Movelist";
+import useTranslate from "./hooks/useTranslate";
 
 const subscriptionservice = new SubscriptionService(null);
 
@@ -42,6 +44,14 @@ const theme = new ClientTheme(themedao);
 
 const App: FCICC = ({ classes, ...rest }) => {
   const dispatch = useAppDispatch();
+  const activeButtonTranslation = useTranslate({
+    token: "FAKE_BUTTON",
+    args: [],
+  });
+  const disabledButtonTranslation = useTranslate({
+    token: "FAKE_BUTTON",
+    args: [],
+  });
 
   useEffect(() => {
     if (Object.keys(classes).length) {
@@ -67,7 +77,9 @@ const App: FCICC = ({ classes, ...rest }) => {
           token={{ token: "FAKE_BUTTON", args: [] }}
           keyboardFunctions={[]}
           classes={[]}
-        />
+        >
+          {activeButtonTranslation}
+        </ActionButton>
         <DigitalClock
           time="00:00:30"
           keyboardFunctions={[]}
@@ -96,7 +108,9 @@ const App: FCICC = ({ classes, ...rest }) => {
           disabled
           keyboardFunctions={[]}
           classes={[]}
-        />
+        >
+          {disabledButtonTranslation}
+        </ActionButton>
         <Title
           name="test"
           token={{ token: "FAKE_TEXT", args: [] }}
@@ -108,7 +122,7 @@ const App: FCICC = ({ classes, ...rest }) => {
 
           <div>
             <PlayerInfo
-              userStatus="online"
+              userStatus="offline"
               picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               rank={2500}
               username="Grand_Master01"
@@ -136,6 +150,25 @@ const App: FCICC = ({ classes, ...rest }) => {
               flip
             />
           </div>
+        </div>
+        <div>
+          <h2>Movelist</h2>
+          <Movelist
+            openingName="FAKE_TEXT"
+            token={{ token: "FAKE_TEXT", args: [] }}
+            keyboardFunctions={[]}
+            classes={[]}
+            moves={new Array(10).fill(0).map((_, i) => ({
+              first: {
+                move: `c${i}`,
+                piece: "q",
+              },
+              second: {
+                move: `d${i}`,
+                piece: "n",
+              },
+            }))}
+          />
         </div>
         <Heading1
           name="test1"

@@ -6,7 +6,7 @@ import Rook from "../icons/ChessFigures/Rook";
 import Queen from "../icons/ChessFigures/Queen";
 import King from "../icons/ChessFigures/King";
 
-type TFigures = "p" | "n" | "b" | "r" | "q" | "k";
+export type TFigures = "p" | "n" | "b" | "r" | "q" | "k";
 
 type TColors = "white" | "black";
 
@@ -15,7 +15,7 @@ export interface ICapturedPiecesProps {
   soliders: { [K in TFigures]?: number };
 }
 
-const ComponentsMap: { [K in TFigures]: FC<{ color: string }> } = {
+export const ComponentsMap: { [K in TFigures]: FC<{ color: string }> } = {
   p: Pawn,
   n: Knight,
   b: Bishop,

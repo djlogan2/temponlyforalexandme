@@ -2,14 +2,16 @@ import React, { FC } from "react";
 
 interface IKnightProps {
   color: string;
+  width?: number;
+  height?: number;
 }
 // eslint-disable max-len
 
-const Knight: FC<IKnightProps> = ({ color }) => (
+const Knight: FC<IKnightProps> = ({ color, width = 20, height = 19 }) => (
   <svg
-    width="20"
-    height="19"
-    viewBox="0 0 20 19"
+    width={width}
+    height={height}
+    viewBox={`0 0 ${width} ${height}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >

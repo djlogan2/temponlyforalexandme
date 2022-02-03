@@ -2,13 +2,15 @@ import React, { FC } from "react";
 
 interface IPawnProps {
   color: string;
+  width?: number;
+  height?: number;
 }
 
-const Pawn: FC<IPawnProps> = ({ color }) => (
+const Pawn: FC<IPawnProps> = ({ color, width = 20, height = 19 }) => (
   <svg
-    width="36"
-    height="37"
-    viewBox="0 0 36 37"
+    width={width}
+    height={height}
+    viewBox={`0 0 ${width} ${height}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
