@@ -5,10 +5,7 @@ export type CollectionNames =
   | "log_records"
   | "logger_configuration"
   | "themes"
-  | "themedata"
-  | "themeheaders"
   | "users"
-  /* tests */
   | "dynamicselectorreactivereadonlytest"
   | "reactivereadonlydaotest"
   | "readonlydaotest"

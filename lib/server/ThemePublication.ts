@@ -2,9 +2,9 @@ import { Subscription } from "meteor/meteor";
 import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReactiveReadOnlyDao";
 import ServerConnection from "/lib/server/ServerConnection";
 import ServerUser from "/lib/server/ServerUser";
-import { ThemeHeaderRecord } from "/lib/records/ThemeRecord";
+import { ThemeRecord } from "/lib/records/ThemeRecord";
 
-export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao<ThemeHeaderRecord> {
+export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao<ThemeRecord> {
   private connection: ServerConnection;
 
   private user?: ServerUser;
@@ -47,24 +47,16 @@ export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao
 
   private onLogout(): void {}
 
-  protected onFieldsChanged(
-    id: string,
-    record: Partial<ThemeHeaderRecord>,
-  ): void {
-    if (this.publishobject)
-      this.publishobject.changed("themes", id, record);
+  protected onFieldsChanged(id: string, record: Partial<ThemeRecord>): void {
+    if (this.publishobject) this.publishobject.changed("themes", id, record);
   }
 
   protected onReady(): void {
     if (this.publishobject) this.publishobject.ready();
   }
 
-  protected onRecordAdded(
-    id: string,
-    record: Partial<ThemeHeaderRecord>,
-  ): void {
-    if (this.publishobject)
-      this.publishobject.added("themes", id, record);
+  protected onRecordAdded(id: string, record: Partial<ThemeRecord>): void {
+    if (this.publishobject) this.publishobject.added("themes", id, record);
   }
 
   protected onRecordRemoved(id: string): void {

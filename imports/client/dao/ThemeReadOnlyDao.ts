@@ -5,7 +5,7 @@ import { ThemeRecord } from "/lib/records/ThemeRecord";
 
 export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
   ThemeRecord,
-  "themechanged" | "ready"
+  "ready" | "themechanged"
 > {
   constructor(
     parent: Stoppable | null,
@@ -14,17 +14,11 @@ export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
     super("themes", "themes", parent, subscriptionservice);
   }
 
-  protected onFieldsChanged(
-    id: string,
-    record: Partial<ThemeRecord>,
-  ): void {
+  protected onFieldsChanged(id: string, record: Partial<ThemeRecord>): void {
     this.events.emit("themechanged", this.readOne({}));
   }
 
-  protected onRecordAdded(
-    id: string,
-    record: Partial<ThemeRecord>,
-  ): void {
+  protected onRecordAdded(id: string, record: Partial<ThemeRecord>): void {
     this.events.emit("themechanged", this.readOne({}));
   }
 
