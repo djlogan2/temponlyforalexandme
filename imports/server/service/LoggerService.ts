@@ -1,58 +1,57 @@
-import { check } from "meteor/check";
 import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
-import { Meteor } from "meteor/meteor";
+import { Subscription } from "meteor/meteor";
 import { LOGGERTYPE, LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 import { LogRecord } from "/lib/records/LogRecord";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
+import LoggerClientMethod from "../clientmethods/LoggerClientMethod";
+import ConnectionService from "/imports/server/service/ConnectionService";
+import PublicationService from "/imports/server/service/PublicationService";
+import Stoppable from "/lib/Stoppable";
+import ServerConnection from "/lib/server/ServerConnection";
+import LoggerPublication from "/imports/server/publications/LoggerPublication";
+import ServerUser from "/lib/server/ServerUser";
 
-export default class LoggerService {
+export default class LoggerService extends Stoppable {
   private readableconfigdao: ReadOnlyLoggerConfigurationDao;
 
   private writeableconfigdao: WritableLoggerConfigurationDao;
 
   private loggerdao: LogRecordsDao;
 
+  private loggerclientmethod: LoggerClientMethod;
+
   public get events() {
     return this.readableconfigdao.events;
   }
 
   constructor(
+    parent: Stoppable | null,
     loggerconfigdao: ReadOnlyLoggerConfigurationDao,
     writableconfigdao: WritableLoggerConfigurationDao,
     loggerdao: LogRecordsDao,
+    connectionservice: ConnectionService,
+    publicationservice: PublicationService,
   ) {
+    super(parent);
     this.readableconfigdao = loggerconfigdao;
     this.writeableconfigdao = writableconfigdao;
     this.loggerdao = loggerdao;
-
-    globalThis.ICCServer.services.loggerservice = this;
+    this.loggerclientmethod = new LoggerClientMethod(this, connectionservice);
 
     this.readLoggerConfiguration();
 
-    const self = this;
-    // TODO: Maybe fix this? Maybe not? Not sure, since we already have a Meteor.methods in here anyway
-    Meteor.publish("logger_configuration", () =>
-      globalThis.ICCServer.utilities
-        .getCollection("logger_configuration")
-        .find(),
+    globalThis.ICCServer.services.loggerservice = this;
+
+    publicationservice.publishDao(
+      "logger_configuration",
+      (
+        sub: Subscription,
+        _connection: ServerConnection | null,
+        _user: ServerUser | null,
+        ..._args: string[]
+      ) => new LoggerPublication(this, sub),
     );
-    Meteor.methods({
-      writeToLog(module: string, level: LOGLEVEL, message: string) {
-        check(module, String);
-        check(level, String);
-        check(module, String);
-        check(message, String);
-        self.writeToLog(
-          level,
-          module,
-          message,
-          "client",
-          this.userId,
-          this.connection?.id,
-        );
-      },
-    });
   }
 
   private readLoggerConfiguration(): void {
@@ -101,4 +100,6 @@ export default class LoggerService {
       { $set: { debuglevel: newlevel } },
     );
   }
+
+  protected stopping(): void {}
 }

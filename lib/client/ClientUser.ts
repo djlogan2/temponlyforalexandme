@@ -4,6 +4,7 @@ import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import EventEmitter from "eventemitter3";
+import { ClientCalls } from "/lib/server/AbstractClientMethod";
 
 type UserEvents = "locale";
 
@@ -40,7 +41,11 @@ export default class ClientUser extends User {
   }
 
   public setLocale(locale: string): void {
-    Meteor.call("User.setLocale", locale);
+    Meteor.call("user_set", "locale", locale);
+  }
+
+  setTheme(theme: string | null): void {
+    Meteor.call("user_set", "theme", theme);
   }
 
   public localeUpdated(locale: string): void {

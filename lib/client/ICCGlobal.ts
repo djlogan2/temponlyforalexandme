@@ -21,14 +21,5 @@ globalThis.ICCServer = {
         collectionname
       ] as Mongo.Collection<any>;
     },
-    getUser() {
-      return undefined;
-    },
-    getConnection() {
-      return undefined;
-    },
-    publish() {
-      return undefined;
-    },
   },
 };

@@ -9,7 +9,6 @@ import ConnectionDao from "/imports/server/dao/ConnectionDao";
 import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
-import UserService from "/imports/server/service/UserService";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import ThemeService from "/imports/server/service/ThemeService";
@@ -17,6 +16,7 @@ import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
 import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
 import I18nService from "/imports/server/service/i18nService";
 import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
+import UserService from "/imports/server/publications/UserPublication";
 
 const parent = null;
 
@@ -29,12 +29,6 @@ const readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
 const writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
 const logrecordsdao = new LogRecordsDao(null);
 
-// @ts-ignore
-const loggerservice = new LoggerService(
-  readableloggerconfigdao,
-  writableloggerconfigdao,
-  logrecordsdao,
-);
 // -------------- FIRST FIRST FIRST --------------
 
 const instancedao = new InstanceDao(parent);
@@ -47,16 +41,17 @@ const themedatadao = new WritableThemeDataDao(null);
 const i18nwritabledao = new Writablei18nDao(null);
 
 const instanceservice = new InstanceService(parent, instancedao);
-const themeservice = new ThemeService(themeheaderdao, themedatadao);
-const userservice = new UserService(null, writableuserdao, themeservice);
-const i18nservice = new I18nService(i18nwritabledao);
 
-// @ts-ignore
 const connectionservice = new ConnectionService(
   parent,
   instanceservice,
   connectiondao,
-  userservice,
   readonlyuserdao,
   writableuserdao,
+  i18nwritabledao,
+  themeheaderdao,
+  themedatadao,
+  readableloggerconfigdao,
+  writableloggerconfigdao,
+  logrecordsdao,
 );

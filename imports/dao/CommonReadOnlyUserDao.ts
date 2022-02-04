@@ -50,6 +50,4 @@ export default class CommonReadOnlyUserDao extends ReactiveReadOnlyDao<UserRecor
     // Not sure what to do here yet, but I'm sure the client will start to reveal its needs soon!
     // Without a start, this won't be called anyway
   }
-
-  protected onStop(): void {}
 }

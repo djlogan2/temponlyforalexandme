@@ -31,6 +31,4 @@ export default class Clienti18nReadOnlyDao extends SubscribedReactiveReadOnlyDao
   protected onRecordRemoved(_id: string): void {
     // TODO: What to do if a token record gets deleted??
   }
-
-  protected onStop(): void {}
 }

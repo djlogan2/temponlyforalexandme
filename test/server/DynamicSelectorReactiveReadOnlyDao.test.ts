@@ -36,7 +36,7 @@ class TestReactiveReadOnlyDao extends DynamicSelectorReactiveReadOnlyDao<TestRec
     this.events.emit("removed", id);
   }
 
-  protected onStop(): void {
+  protected stopping(): void {
     this.events.emit("onstop");
   }
 

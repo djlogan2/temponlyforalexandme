@@ -78,8 +78,4 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
     }
     this.emit(module, this.debugLevels.root);
   }
-
-  protected onStop(): void {
-    // Nothing to do
-  }
 }

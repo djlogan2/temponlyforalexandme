@@ -13,6 +13,4 @@ export default class CommonReadOnlyPlayedGameDao extends ReactiveReadOnlyDao<Pla
   ): void {}
 
   protected onRecordRemoved(id: string): void {}
-
-  protected onStop(): void {}
 }
