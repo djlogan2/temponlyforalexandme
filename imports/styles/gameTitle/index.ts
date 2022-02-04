@@ -4,6 +4,7 @@ export default {
     fontStyle: "normal",
     fontWeight: "bold",
     fontSize: "14px",
+    marginLeft: "10px",
     lineHeight: "105%",
     color: "#55586A",
   },
