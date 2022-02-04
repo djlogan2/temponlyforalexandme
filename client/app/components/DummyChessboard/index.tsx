@@ -157,97 +157,98 @@ class DummyChessboard extends Component {
     } = this.state;
 
     return (
-      <div>
-        <div style={{ width: 400, height: 400 }}>
-          <ChessBoard
-            raf={{
-              inside: true,
-              bottom: false,
-              right: true,
-              left: false,
-              top: true,
-              relay: true,
-            }}
-            perspective="white"
-            fen={fen}
-            boardSquares={{
-              light: { default: "#A2D1E3", active: "#9c9c9c" },
-              dark: { default: "#1D91C0", active: "#1255A1" },
-            }}
-            pieceImages={{
-              bB: "static/images/newPieces/bB.png",
-              bK: "static/images/newPieces/bK.png",
-              bN: "static/images/newPieces/bN.png",
-              bP: "static/images/newPieces/bP.png",
-              bQ: "static/images/newPieces/bQ.png",
-              bR: "static/images/newPieces/bR.png",
-              wB: "static/images/newPieces/wB.png",
-              wK: "static/images/newPieces/wK.png",
-              wN: "static/images/newPieces/wN.png",
-              wP: "static/images/newPieces/wP.png",
-              wQ: "static/images/newPieces/wQ.png",
-              wR: "static/images/newPieces/wR.png",
-            }}
-            accessibilityPieces={{
-              bP: "Black pawn",
-              bR: "Black rook",
-              bN: "Black knight",
-              bB: "Black bishop",
-              bQ: "Black queen",
-              bK: "Black king",
-              wP: "White pawn",
-              wR: "White rook",
-              wN: "White knight",
-              wB: "White bishop",
-              wQ: "White queen",
-              wK: "White king",
-              emptySquare: "Empty square",
-              legalMoves: "Legal moves: ",
-            }}
-            styles={{
-              wrapper: {},
-              boardWrapper: {
-                backgroundColor: "#55586A",
-                borderRadius: "15px",
-              },
-              files: {
-                color: "#9698A1",
-                secondColor: "#ffffff",
-              },
-              ranks: {
-                color: "#9698A1",
-                secondColor: "#ffffff",
-              },
-              promotion: {
-                backgroundColor: "#a8a8a8",
-              },
-            }}
-            movable={legalMoves}
-            circles={circles}
-            arrows={arrows}
-            onUpdateCircles={(circle: {
-              color: string;
-              event: any;
-              piece: any;
-            }) => this.handleUpdateCircles(circle)}
-            onUpdateArrows={(arrow: {
-              color: string;
-              event: any;
-              piece: { to: any; from: any };
-            }) => this.handleUpdateArrows(arrow)}
-            onMove={(move: any[], promotion: any) =>
-              this.handleMove(move, promotion)
-            }
-            smartMoves={smartMoves}
-            showLegalMoves={showLegalMoves}
-            smallSize={smallSize}
-            isHovering
-            promotionPieces={["q", "n", "b", "r"]}
-          />
-        </div>
-        <div>
-          <Flip onClick={() => {}} />
-        </div>
+      <div
+        id="fake-styles"
+        style={{
+          width: `${(576 / 1366) * 100}vw`,
+          height: `${(576 / 1366) * 100}vw`,
+        }}
+      >
+        <ChessBoard
+          raf={{
+            inside: false,
+            bottom: false,
+            right: false,
+            left: false,
+            top: false,
+            relay: true,
+          }}
+          perspective="white"
+          fen={fen}
+          boardSquares={{
+            light: { default: "#A2D1E3", active: "#9c9c9c" },
+            dark: { default: "#1D91C0", active: "#1255A1" },
+          }}
+          pieceImages={{
+            bB: "static/images/newPieces/bB.png",
+            bK: "static/images/newPieces/bK.png",
+            bN: "static/images/newPieces/bN.png",
+            bP: "static/images/newPieces/bP.png",
+            bQ: "static/images/newPieces/bQ.png",
+            bR: "static/images/newPieces/bR.png",
+            wB: "static/images/newPieces/wB.png",
+            wK: "static/images/newPieces/wK.png",
+            wN: "static/images/newPieces/wN.png",
+            wP: "static/images/newPieces/wP.png",
+            wQ: "static/images/newPieces/wQ.png",
+            wR: "static/images/newPieces/wR.png",
+          }}
+          accessibilityPieces={{
+            bP: "Black pawn",
+            bR: "Black rook",
+            bN: "Black knight",
+            bB: "Black bishop",
+            bQ: "Black queen",
+            bK: "Black king",
+            wP: "White pawn",
+            wR: "White rook",
+            wN: "White knight",
+            wB: "White bishop",
+            wQ: "White queen",
+            wK: "White king",
+            emptySquare: "Empty square",
+            legalMoves: "Legal moves: ",
+          }}
+          styles={{
+            wrapper: {},
+            boardWrapper: {
+              backgroundColor: "#55586A",
+              borderRadius: "15px",
+            },
+            files: {
+              color: "#9698A1",
+              secondColor: "#ffffff",
+            },
+            ranks: {
+              color: "#9698A1",
+              secondColor: "#ffffff",
+            },
+            promotion: {
+              backgroundColor: "#a8a8a8",
+            },
+          }}
+          movable={legalMoves}
+          circles={circles}
+          arrows={arrows}
+          onUpdateCircles={(circle: {
+            color: string;
+            event: any;
+            piece: any;
+          }) => this.handleUpdateCircles(circle)}
+          onUpdateArrows={(arrow: {
+            color: string;
+            event: any;
+            piece: { to: any; from: any };
+          }) => this.handleUpdateArrows(arrow)}
+          onMove={(move: any[], promotion: any) =>
+            this.handleMove(move, promotion)
+          }
+          smartMoves={smartMoves}
+          showLegalMoves={showLegalMoves}
+          smallSize={smallSize}
+          isHovering
+          promotionPieces={["q", "n", "b", "r"]}
+        />
       </div>
     );
   }
