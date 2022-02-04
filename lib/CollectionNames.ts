@@ -4,6 +4,7 @@ export type CollectionNames =
   | "instances"
   | "log_records"
   | "logger_configuration"
+  | "themes"
   | "themedata"
   | "themeheaders"
   | "users"

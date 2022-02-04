@@ -18,7 +18,7 @@ export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao
   private readonly pTheme: (theme: string) => void;
 
   constructor(connection: ServerConnection, publishobject: Subscription) {
-    super(connection, "themeheaders");
+    super(connection, "themes");
 
     this.publishobject = publishobject;
 
@@ -52,7 +52,7 @@ export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao
     record: Partial<ThemeHeaderRecord>,
   ): void {
     if (this.publishobject)
-      this.publishobject.changed("themeheaders", id, record);
+      this.publishobject.changed("themes", id, record);
   }
 
   protected onReady(): void {
@@ -64,11 +64,11 @@ export default class ThemePublication extends DynamicSelectorReactiveReadOnlyDao
     record: Partial<ThemeHeaderRecord>,
   ): void {
     if (this.publishobject)
-      this.publishobject.added("themeheaders", id, record);
+      this.publishobject.added("themes", id, record);
   }
 
   protected onRecordRemoved(id: string): void {
-    if (this.publishobject) this.publishobject.removed("themeheaders", id);
+    if (this.publishobject) this.publishobject.removed("themes", id);
   }
 
   protected onStop(): void {
