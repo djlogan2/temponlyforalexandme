@@ -1,9 +1,8 @@
 import { Meteor } from "meteor/meteor";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import UserRecord from "/lib/records/UserRecord";
-import { check } from "meteor/check";
 import Stoppable from "/lib/Stoppable";
-import { UserRoles } from "./Roles";
+import { UserRoles } from "./enums/Roles";
 
 export default abstract class User extends Stoppable {
   protected userdao: CommonReadOnlyUserDao;
@@ -30,8 +29,8 @@ export default abstract class User extends Stoppable {
 
   public isAuthorized(roles: string[]): boolean {
     if (this.me.isdeveloper) return true;
-    return this.roles.some((requestedrole) =>
-      this.me.roles.some((userrole) => userrole === requestedrole),
+    return roles.some((requestedrole) =>
+      this.roles.some((userrole) => userrole === requestedrole),
     );
   }
 

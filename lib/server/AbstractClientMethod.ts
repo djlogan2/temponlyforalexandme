@@ -1,5 +1,5 @@
 import { Meteor } from "meteor/meteor";
-import { UserRoles } from "../Roles";
+import { UserRoles } from "../enums/Roles";
 import ServerConnection from "./ServerConnection";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { HttpHeadersICareAbout } from "/imports/server/clientmethods/ConnectionLoginMethod";

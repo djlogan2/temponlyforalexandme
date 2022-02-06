@@ -44,8 +44,10 @@ export default abstract class DynamicSelectorReactiveReadOnlyDao<
         }
         if (count) {
           count -= 1;
-          if (!count) ids.forEach((rid) => self.onRecordRemoved(rid));
-          ids = [];
+          if (!count) {
+            ids.forEach((rid) => self.onRecordRemoved(rid));
+            ids = [];
+          }
         }
         if (!count) self.onReady();
       },

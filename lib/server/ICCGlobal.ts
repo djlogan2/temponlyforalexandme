@@ -1,4 +1,4 @@
-import { Meteor, Subscription } from "meteor/meteor";
+import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";

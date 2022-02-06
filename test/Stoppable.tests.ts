@@ -5,8 +5,8 @@ class TestStoppable extends Stoppable {
 
   private readonly callback: (depth: number) => void;
 
-  // private child: TestStoppable | null;
-  //
+  private child: TestStoppable | null;
+
   constructor(
     parent: Stoppable | null,
     depth: number,
@@ -15,8 +15,11 @@ class TestStoppable extends Stoppable {
     super(parent);
     this.depth = depth;
     this.callback = callback;
-    // if (this.depth < 5) this.child = new TestStoppable(this, depth + 1, this.callback);
-    // else {this.child = null;}
+    if (this.depth < 5)
+      this.child = new TestStoppable(this, depth + 1, this.callback);
+    else {
+      this.child = null;
+    }
   }
 
   protected stopping(): void {
@@ -26,6 +29,7 @@ class TestStoppable extends Stoppable {
 
 describe("Stoppable", function () {
   it("should call all it's internal 'stopping' and all of its childrens 'stopping' methods when stop() is called", function (done) {
+    this.timeout(50000000);
     let active = [0, 1, 2, 3, 4, 5];
     const testme = new TestStoppable(null, 0, (depth) => {
       active = active.filter((n) => n !== depth);

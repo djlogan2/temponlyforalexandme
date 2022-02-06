@@ -1,4 +1,4 @@
-import { UserRoles } from "../Roles";
+import { UserRoles } from "../enums/Roles";
 
 export interface HashToken {
   hashtoken: string;

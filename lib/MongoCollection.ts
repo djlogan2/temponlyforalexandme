@@ -16,8 +16,4 @@ export default abstract class MongoCollection<T> extends Stoppable {
       collection
     ] as Mongo.Collection<T>;
   }
-
-  public get isempty(): boolean {
-    return !this.mongocollection.find({}).count();
-  }
 }
