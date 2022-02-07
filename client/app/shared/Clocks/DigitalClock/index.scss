@@ -1,0 +1,28 @@
+.digitalClock {
+  color: #FFFFFF;
+  background-color: #55586A;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-family: Helvetica Neue;
+  font-weight: bold;
+}
+.digitalClockInactive {
+  color: #55586A;
+  background-color: #FFFFFF;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-family: Helvetica Neue;
+  font-weight: bold;
+}
+
+.digitalClockError {
+  color: #FFFFFF;
+  background-color: #FF0000;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-family: Helvetica Neue;
+  font-weight: bold;
+}

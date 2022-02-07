@@ -1,0 +1,25 @@
+.selectContainer {
+  max-width: 305;
+  width: 100%;
+  position: relative;
+}
+.selectList {
+  position: absolute;
+  list-style-type: none;
+  margin-top: 8px;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  width: 100%;
+  padding: 0;
+  background-color: #ffffff;
+}
+.selectItem {
+  padding: 6px 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eceff5;
+    color: #0f5ab6;
+  }
+}
