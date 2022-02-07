@@ -1,11 +1,11 @@
 import { Subscription } from "meteor/meteor";
 import ServerConnection from "/lib/server/ServerConnection";
-import { ThemeHeaderRecord } from "/lib/records/ThemeRecord";
+import { ThemeRecord } from "/lib/records/ThemeRecord";
 import Stoppable from "/lib/Stoppable";
 import Publication from "/imports/server/service/Publication";
 import ServerUser from "/lib/server/ServerUser";
 
-export default class ThemePublication extends Publication<ThemeHeaderRecord> {
+export default class ThemePublication extends Publication<ThemeRecord> {
   private connection?: ServerConnection;
 
   private user?: ServerUser;
@@ -21,7 +21,7 @@ export default class ThemePublication extends Publication<ThemeHeaderRecord> {
     connection: ServerConnection | null,
     publishobject: Subscription,
   ) {
-    super(parent, publishobject, "themeheaders");
+    super(parent, publishobject, "themes");
 
     this.pUserlogin = (user) => this.onLogin(user);
     this.pUserlogout = () => this.onLogout();

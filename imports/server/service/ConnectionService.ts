@@ -11,8 +11,7 @@ import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import I18nService from "/imports/server/service/i18nService";
 import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
 import ThemeService from "/imports/server/service/ThemeService";
-import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
-import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
+import WritableThemeDao from "/imports/server/dao/WritableThemeDao";
 import ConnectionLoginMethod, {
   HttpHeadersICareAbout,
 } from "/imports/server/clientmethods/ConnectionLoginMethod";
@@ -61,8 +60,7 @@ export default class ConnectionService extends Stoppable {
     readonlyuserdao: CommonReadOnlyUserDao,
     writableuserdao: WritableUserDao,
     i18nwritabledao: Writablei18nDao,
-    themeheaderdao: WritableThemeHeaderDao,
-    themedatadao: WritableThemeDataDao,
+    themedao: WritableThemeDao,
     readableloggerconfigdao: ReadOnlyLoggerConfigurationDao,
     writableloggerconfigdao: WritableLoggerConfigurationDao,
     logrecordsdao: LogRecordsDao,
@@ -83,8 +81,7 @@ export default class ConnectionService extends Stoppable {
     );
     this.themeservice = new ThemeService(
       this,
-      themeheaderdao,
-      themedatadao,
+      themedao,
       this.publicationservice,
     );
     this.userservice = new UserService(

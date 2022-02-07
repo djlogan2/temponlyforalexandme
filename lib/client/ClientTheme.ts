@@ -21,4 +21,6 @@ export default class ClientTheme extends CommonTheme {
   }
 
   public getTheme = () => this.dao.readOne({});
+
+  public getThemes = () => this.dao.readMany({});
 }

@@ -12,8 +12,7 @@ import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerCo
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import ThemeService from "/imports/server/service/ThemeService";
-import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
-import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
+import WritableThemeDao from "/imports/server/dao/WritableThemeDao";
 import I18nService from "/imports/server/service/i18nService";
 import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
 import UserService from "/imports/server/publications/UserPublication";
@@ -36,8 +35,7 @@ const connectiondao = new ConnectionDao(parent);
 
 const readonlyuserdao = new CommonReadOnlyUserDao(null);
 const writableuserdao = new WritableUserDao(null);
-const themeheaderdao = new WritableThemeHeaderDao(null);
-const themedatadao = new WritableThemeDataDao(null);
+const themedao = new WritableThemeDao(null);
 const i18nwritabledao = new Writablei18nDao(null);
 
 const instanceservice = new InstanceService(parent, instancedao);
@@ -49,8 +47,7 @@ const connectionservice = new ConnectionService(
   readonlyuserdao,
   writableuserdao,
   i18nwritabledao,
-  themeheaderdao,
-  themedatadao,
+  themedao,
   readableloggerconfigdao,
   writableloggerconfigdao,
   logrecordsdao,

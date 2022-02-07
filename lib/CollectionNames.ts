@@ -4,8 +4,7 @@ export type CollectionNames =
   | "instances"
   | "log_records"
   | "logger_configuration"
-  | "themedata"
-  | "themeheaders"
+  | "themes"
   | "users"
   /* tests */
   | "dynamicselectorreactivereadonlytest"
