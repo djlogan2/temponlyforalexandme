@@ -4,7 +4,7 @@ import React, { FC, FCICC, useRef, useState } from "react";
 import Chevron from "../../components/icons/Chevron";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import useTranslate from "../../hooks/useTranslate";
-import { useAppSelector } from "../../store/hooks";
+import "./index.scss";
 import Input from "../Input";
 
 interface ISelectProps {
@@ -32,10 +32,9 @@ const Select: FCICC<ISelectProps> = ({
   useOnClickOutside(ref, () => {
     setShowOptions(false);
   });
-  const classes = useAppSelector((state) => state.theming.classes);
 
   return (
-    <div className={clsx(classes.selectContainer, className)} ref={ref}>
+    <div className={clsx("selectContainer", className)} ref={ref}>
       <Input
         placeholder={placeholderText}
         token={token}
@@ -59,7 +58,7 @@ const Select: FCICC<ISelectProps> = ({
       />
 
       {showOptions && (
-        <ul className={classes.selectList}>
+        <ul className="selectList">
           {items.map((item) => (
             <li
               key={item}
@@ -69,7 +68,7 @@ const Select: FCICC<ISelectProps> = ({
                 onSelect(item);
               }}
               onKeyDown={() => {}}
-              className={classes.selectItem}
+              className="selectItem"
               role="presentation"
             >
               {item}

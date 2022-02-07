@@ -4,18 +4,15 @@ import {
   CLOCK_STATUS_INACTIVE,
 } from "/client/app/data/constants";
 
-export const getStyleOnStatusClock = (
-  status: string,
-  classes: { [key: string]: string },
-) => {
+export const getStyleOnStatusClock = (status: string) => {
   switch (status) {
     case CLOCK_STATUS_IN:
-      return classes.digitalClock;
+      return "digitalClock";
     case CLOCK_STATUS_INACTIVE:
-      return classes.digitalClockInactive;
+      return "digitalClockInactive";
     case CLOCK_STATUS_FINISHING:
-      return classes.digitalClockError;
+      return "digitalClockError";
     default:
-      return classes.digitalClock;
+      return "digitalClock";
   }
 };

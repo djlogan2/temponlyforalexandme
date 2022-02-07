@@ -1,6 +1,6 @@
 import { getStyleOnStatusClock } from "/client/app/data/utils";
-import { useAppSelector } from "/client/app/store/hooks";
 import React, { FCICC } from "react";
+import "./index.scss";
 import Heading2 from "/client/app/shared/Typographies/Heading2";
 
 interface IDigitalClock {
@@ -8,18 +8,14 @@ interface IDigitalClock {
   status: "in" | "inactive" | "finishing";
 }
 
-const DigitalClock: FCICC<IDigitalClock> = ({ time, status }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
-
-  return (
-    <Heading2
-      name="digitalClock"
-      token={{ token: time, args: [] }}
-      classes={[]}
-      keyboardFunctions={[]}
-      className={getStyleOnStatusClock(status, classes)}
-    />
-  );
-};
+const DigitalClock: FCICC<IDigitalClock> = ({ time, status }) => (
+  <Heading2
+    name="digitalClock"
+    token={{ token: time, args: [] }}
+    classes={[]}
+    keyboardFunctions={[]}
+    className={getStyleOnStatusClock(status)}
+  />
+);
 
 export default DigitalClock;
