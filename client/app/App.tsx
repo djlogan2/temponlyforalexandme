@@ -8,10 +8,9 @@ import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import ThemeReadOnlyDao from "/imports/client/dao/ThemeReadOnlyDao";
 import Clienti18n from "/lib/client/Clienti18n";
 import ClientTheme from "/lib/client/ClientTheme";
-import { withDynamicStyles } from "./hocs/withDynamicStyles";
-import { useAppDispatch } from "./store/hooks";
-import { updateClasses } from "./store/features/theming";
+import { withTranslations } from "./hocs/withTranslations";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
+import Theme, { ThemeContext } from "./theme";
 
 const subscriptionservice = new SubscriptionService(null);
 
@@ -22,40 +21,37 @@ const i18nClient = new Clienti18n(i18ndao);
 const theme = new ClientTheme(themedao);
 
 const App: FCICC = ({ classes, ...rest }) => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (Object.keys(classes).length) {
-      dispatch(updateClasses(classes as any));
-    }
-  }, [classes]);
+  console.log("Render app");
 
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <ComponentsView
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
-          />
-        </Route>
-        <Route exact path="/game">
-          <GameMarkup
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
-          />
-        </Route>
-      </Switch>
-    </Router>
+    <ThemeContext.Provider value={theme as any}>
+      <Theme />
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <ComponentsView
+              keyboardFunctions={[]}
+              token={{
+                token: "",
+                args: [],
+              }}
+              classes={[]}
+            />
+          </Route>
+          <Route exact path="/game">
+            <GameMarkup
+              keyboardFunctions={[]}
+              token={{
+                token: "",
+                args: [],
+              }}
+              classes={[]}
+            />
+          </Route>
+        </Switch>
+      </Router>
+    </ThemeContext.Provider>
   );
 };
 
-export default withDynamicStyles(App);
+export default withTranslations(App);
