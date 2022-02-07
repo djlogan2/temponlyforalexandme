@@ -36,7 +36,7 @@ class TestReactiveReadOnlyDao extends DynamicSelectorReactiveReadOnlyDao<TestRec
     this.events.emit("removed", id);
   }
 
-  protected onStop(): void {
+  protected stopping(): void {
     this.events.emit("onstop");
   }
 
@@ -45,7 +45,7 @@ class TestReactiveReadOnlyDao extends DynamicSelectorReactiveReadOnlyDao<TestRec
   }
 }
 
-describe.only("ReactiveReadOnlyDao", function () {
+describe("ReactiveReadOnlyDao", function () {
   beforeEach(function (done) {
     if (!global.ICCServer.collections.dynamicselectorreactivereadonlytest)
       global.ICCServer.collections.dynamicselectorreactivereadonlytest =
@@ -80,7 +80,6 @@ describe.only("ReactiveReadOnlyDao", function () {
   });
 
   it("should call onRecordAdded when a record is added", function (done) {
-    this.timeout(5000000);
     const dao = new TestReactiveReadOnlyDao();
     let records = [];
     dao.events.on("added", (id, record) => {
@@ -95,6 +94,8 @@ describe.only("ReactiveReadOnlyDao", function () {
       chai.assert.fail("Changed should not be called"),
     );
 
+    //
+
     dao.events.on("ready", () => {
       expect(records.length).to.equal(4);
       records = [];
@@ -108,6 +109,7 @@ describe.only("ReactiveReadOnlyDao", function () {
         records.push(record);
       });
       dao.events.on("ready", () => {
+        dao.events.removeAllListeners();
         expect(removed.length).to.equal(2);
         expect(records.length).to.equal(2);
         done();

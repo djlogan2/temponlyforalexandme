@@ -1,24 +1,51 @@
-import { Meteor } from "meteor/meteor";
+import { Meteor, Subscription } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import _ from "lodash";
 import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
 import { ThemeDataRecord, ThemeHeaderRecord } from "/lib/records/ThemeRecord";
 import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
-import ThemePublication from "/lib/server/ThemePublication";
+import PublicationService from "/imports/server/service/PublicationService";
+import ThemePublication from "/imports/server/publications/ThemePublication";
+import ServerConnection from "/lib/server/ServerConnection";
+import Stoppable from "/lib/Stoppable";
 import themeObject from "/imports/styles/default";
+import ServerUser from "/lib/server/ServerUser";
 
-export default class ThemeService {
+export default class ThemeService extends Stoppable {
   private themedao: WritableThemeDataDao;
 
   private headerdao: WritableThemeHeaderDao;
 
   constructor(
+    parent: Stoppable | null,
     headerdao: WritableThemeHeaderDao,
     themedao: WritableThemeDataDao,
+    publicationservice: PublicationService,
   ) {
+    super(parent);
     this.headerdao = headerdao;
     this.themedao = themedao;
-    globalThis.ICCServer.services.themeservice = this;
+    publicationservice.publishDao(
+      "themeheaders",
+      (
+        pub: Subscription,
+        connection: ServerConnection | null,
+        ...args: any[]
+      ) => new ThemePublication(parent, connection, pub),
+    );
+  }
+
+  private startup(): void {
+    Meteor.startup(() => {
+      const { styles, themename, ...rest } = themeObject;
+      const header = {
+        themename,
+      };
+
+      Object.entries(styles).forEach(([className, classObject]) => {
+        this.updateClass(header, className, classObject as Object);
+      });
+    });
   }
 
   public updateClass(
@@ -141,29 +168,15 @@ export default class ThemeService {
       );
     return defaulttheme._id;
   }
-}
 
-Meteor.startup(() => {
-  const { styles, themename, ...rest } = themeObject;
-  const header = {
-    themename,
-  };
+  protected stopping(): void {}
 
-  Object.entries(styles).forEach(([className, classObject]) => {
-    if (!globalThis.ICCServer?.services?.themeservice) return;
-    globalThis.ICCServer.services.themeservice.updateClass(
-      header,
-      className,
-      classObject as Object,
+  isAuthorized(user: ServerUser, themeid: string): boolean {
+    const header = this.headerdao.get(themeid);
+    return (
+      !!header &&
+      (!header.isolation_group ||
+        header.isolation_group === user.isolation_group)
     );
-  });
-});
-
-globalThis.ICCServer.utilities.publish("themeheaders", function () {
-  const connection = globalThis.ICCServer.utilities.getConnection(
-    this.connection,
-  );
-  if (!connection) return;
-  const themepub = new ThemePublication(connection, this);
-  if (!connection.user) this.ready();
-});
+  }
+}

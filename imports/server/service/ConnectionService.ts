@@ -6,17 +6,24 @@ import { Mongo } from "meteor/mongo";
 import ServerConnection from "/lib/server/ServerConnection";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
-import { IdleMessage } from "/lib/records/IdleMessage";
-import { check } from "meteor/check";
-import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
-import ServerUser from "/lib/server/ServerUser";
-
-interface HttpHeadersICareAbout {
-  "user-agent": string;
-  "accept-language": string;
-}
+import I18nService from "/imports/server/service/i18nService";
+import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
+import ThemeService from "/imports/server/service/ThemeService";
+import WritableThemeHeaderDao from "/imports/server/dao/WritableThemeHeaderDao";
+import WritableThemeDataDao from "/imports/server/dao/WritableThemeDataDao";
+import ConnectionLoginMethod, {
+  HttpHeadersICareAbout,
+} from "/imports/server/clientmethods/ConnectionLoginMethod";
+import LoggerService from "/imports/server/service/LoggerService";
+import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
+import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
+import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
+import ConnectionIdleMethod from "/imports/server/clientmethods/ConnectionIdleMethod";
+import PublicationService from "/imports/server/service/PublicationService";
+import UserService from "/imports/server/service/UserService";
+import EventEmitter from "eventemitter3";
 
 export default class ConnectionService extends Stoppable {
   private readonly connectiondao: ConnectionDao;
@@ -25,32 +32,79 @@ export default class ConnectionService extends Stoppable {
 
   private readonly userservice: UserService;
 
+  private readonly publicationservice: PublicationService;
+
   private readonly userdao: CommonReadOnlyUserDao;
 
   private readonly writableuserdao: WritableUserDao;
 
+  private connectionLoginMethod: ConnectionLoginMethod;
+
+  private connectionIdleMethod: ConnectionIdleMethod;
+
   private connections: { [key: string]: ServerConnection } = {};
 
+  private events = new EventEmitter();
+
   private logger = new ServerLogger(this, "server/ConnectionService_ts");
+
+  private i18nservice: I18nService;
+
+  private readonly themeservice: ThemeService;
+
+  private loggerservice: LoggerService;
 
   constructor(
     parent: Stoppable | null,
     instanceservice: InstanceService,
     connectiondao: ConnectionDao,
-    userservice: UserService,
     readonlyuserdao: CommonReadOnlyUserDao,
     writableuserdao: WritableUserDao,
+    i18nwritabledao: Writablei18nDao,
+    themeheaderdao: WritableThemeHeaderDao,
+    themedatadao: WritableThemeDataDao,
+    readableloggerconfigdao: ReadOnlyLoggerConfigurationDao,
+    writableloggerconfigdao: WritableLoggerConfigurationDao,
+    logrecordsdao: LogRecordsDao,
   ) {
     super(parent);
     this.userdao = readonlyuserdao;
     this.writableuserdao = writableuserdao;
     this.connectiondao = connectiondao;
     this.instanceservice = instanceservice;
-    this.userservice = userservice;
+    this.connectionLoginMethod = new ConnectionLoginMethod(this);
+    this.connectionIdleMethod = new ConnectionIdleMethod(this);
+    this.publicationservice = new PublicationService(this, this);
+    this.i18nservice = new I18nService(
+      this,
+      i18nwritabledao,
+      this,
+      this.publicationservice,
+    );
+    this.themeservice = new ThemeService(
+      this,
+      themeheaderdao,
+      themedatadao,
+      this.publicationservice,
+    );
+    this.userservice = new UserService(
+      this,
+      writableuserdao,
+      this.themeservice,
+      this.publicationservice,
+    );
+    this.loggerservice = new LoggerService(
+      this,
+      readableloggerconfigdao,
+      writableloggerconfigdao,
+      logrecordsdao,
+      this,
+      this.publicationservice,
+    );
 
     Meteor.onConnection((connection) => this.onConnection(connection));
 
-    globalThis.ICCServer.services.connectionservice = this;
+    // globalThis.ICCServer.services.connectionservice = this;
 
     const self = this;
 
@@ -59,10 +113,10 @@ export default class ConnectionService extends Stoppable {
       sessionId: string,
     ) {
       try {
-        self.logger.trace(() => `processDirectMessage/1: ${message}`);
+        self.logger.debug(() => `processDirectMessage/1: ${message}`);
         const msg = JSON.parse(message);
         if (typeof msg !== "object" || !("iccdm" in msg)) return;
-        self.logger.trace(() => `processDirectMessage: ${message}`);
+        self.logger.debug(() => `processDirectMessage: ${message}`);
 
         this.preventCallingMeteorHandler();
         self.onDirectMessage(sessionId, msg.iccdm, msg.iccmsg);
@@ -70,27 +124,6 @@ export default class ConnectionService extends Stoppable {
         // If we cannot parse the string into an object, it's not for us.
       }
     });
-
-    Meteor.methods({
-      idleFunction(msg) {
-        check(msg, Object);
-        if (this.connection?.id)
-          self.idleMessage(this.connection.id, msg as IdleMessage);
-      },
-    });
-  }
-
-  //
-  // [{"hashtoken": "JX9frpUPpgHStOX1kkRdnC_zO5cSuYGtOaRHKLuTZpZ", "connections": [{"loginDate": new ISODate("2022-01-11T04:49:35.738Z"), "focused": true, "idleseconds": new NumberInt("0"), "connection": "dKxtHcBwSidbPNRK3", "useragent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36", "ipaddress": "127.0.0.1"}]}]
-  //
-  private idleMessage(connectionid: string, idle: IdleMessage): void {
-    const connection = this.connections[connectionid];
-    this.logger.trace(() => `idleMessage connection=${connection}`);
-    if (!connection) {
-      // TODO: Handle this error
-      return;
-    }
-    connection.idleMessage(idle);
   }
 
   private onDirectMessage(
@@ -98,30 +131,31 @@ export default class ConnectionService extends Stoppable {
     messagetype: string,
     msgobject: any,
   ): void {
-    this.logger.trace(
+    this.logger.debug(
       () =>
         `onDirectMessage session=${session} messagetype=${messagetype} message=${JSON.stringify(
           msgobject,
         )}`,
     );
     const connection = this.connections[session];
-    this.logger.trace(() => `onDirectMessage connection=${connection}`);
+    this.logger.debug(() => `onDirectMessage connection=${connection}`);
     if (!connection) {
       // TODO: Handle this error
       return;
     }
-    connection.handleDirectMessage(messagetype, msgobject);
+    if (!Array.isArray(connection))
+      connection.handleDirectMessage(messagetype, msgobject);
   }
 
   private onClose(ourconnection: ServerConnection): void {
-    this.logger.trace(() => `${ourconnection.connectionid} onClose`);
+    this.logger.debug(() => `${ourconnection.connectionid} onClose`);
     ourconnection.stop();
     delete this.connections[ourconnection.connectionid];
     this.connectiondao.remove(ourconnection._id);
   }
 
   private onConnection(connection: Meteor.Connection): void {
-    this.logger.trace(() => `onConnection connection=${connection.id}`);
+    this.logger.debug(() => `onConnection connection=${connection.id}`);
     const connrecord: Mongo.OptionalId<ConnectionRecord> = {
       connectionid: connection.id,
       instanceid: this.instanceservice.instanceid,
@@ -144,16 +178,20 @@ export default class ConnectionService extends Stoppable {
     );
     this.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
+    this.events.emit(connection.id, ourconnection);
   }
 
-  public login(
+  public async login(
     connectionid: string,
     hashtoken: string,
     locale: string,
-  ): string {
-    if (!this.connections[connectionid])
-      throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION");
-    const userid = this.connections[connectionid].login(hashtoken, locale);
+  ): Promise<string> {
+    this.logger.debug(
+      () =>
+        `login connection=${connectionid} hashtoken=${hashtoken} locale=${locale}`,
+    );
+    const connection = await this.getConnection(connectionid);
+    const userid = connection.login(hashtoken, locale);
     this.connectiondao.update({ connectionid }, { $set: { userid } });
     return userid;
   }
@@ -168,39 +206,28 @@ export default class ConnectionService extends Stoppable {
     // Nothing to stop at this time
   }
 
-  public getConnection(connectionid: string): ServerConnection | undefined {
-    return this.connections[connectionid];
-  }
-
-  public getUser(connectionid: string): ServerUser | undefined {
-    if (!this.connections[connectionid])
-      throw new Meteor.Error("UNABLE_TO_FIND_CONNECTION");
-    return this.connections[connectionid].user;
+  public async getConnection(connection: string): Promise<ServerConnection> {
+    this.logger.debug(() => `getConnection conn=${connection}`);
+    return new Promise<ServerConnection>((resolve) => {
+      if (this.connections[connection]) {
+        this.logger.debug(
+          () => `getConnection conn=${connection} resolving valid connection`,
+        );
+        resolve(this.connections[connection]);
+        return;
+      }
+      this.logger.debug(
+        () => `getConnection conn=${connection} not ready, listening for event`,
+      );
+      const func = (ourconnection: ServerConnection) => {
+        resolve(ourconnection);
+        this.events.off(connection, func);
+        this.logger.debug(
+          () =>
+            `getConnection conn=${connection} finally ready, resolving event`,
+        );
+      };
+      this.events.on(connection, func);
+    });
   }
 }
-
-Meteor.methods({
-  newUserLogin(hashtoken: string): Promise<string> {
-    check(hashtoken, String);
-    return new Promise<string>((resolve, reject) => {
-      if (!this.connection) {
-        reject(new Meteor.Error("NULL_CONNECTION"));
-        return;
-      }
-      if (!globalThis.ICCServer?.services?.connectionservice) {
-        reject(new Meteor.Error("CONNECTIONSERVICE_NOT_FOUND"));
-        return;
-      }
-      const localestring = (
-        this.connection.httpHeaders as HttpHeadersICareAbout
-      )["accept-language"];
-      const pieces = (localestring || "en").split(",");
-      const userid = globalThis.ICCServer.services.connectionservice.login(
-        this.connection.id,
-        hashtoken,
-        pieces[0],
-      );
-      resolve(userid);
-    });
-  },
-});

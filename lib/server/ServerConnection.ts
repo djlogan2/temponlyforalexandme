@@ -8,11 +8,11 @@ import { Meteor } from "meteor/meteor";
 import ServerLogger from "/lib/server/ServerLogger";
 import { IdleMessage } from "/lib/records/IdleMessage";
 import ConnectionDao from "/imports/server/dao/ConnectionDao";
-import ServerUser from "/lib/server/ServerUser";
-import UserService from "/imports/server/service/UserService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import { EventEmitter } from "eventemitter3";
+import UserService from "/imports/server/service/UserService";
+import ServerUser from "/lib/server/ServerUser";
 
 export default class ServerConnection extends AbstractTimestampNode {
   private connectiondao: ConnectionDao;
@@ -32,6 +32,7 @@ export default class ServerConnection extends AbstractTimestampNode {
   public get events() {
     return this.pEvents;
   }
+
   // private closefunctions: (() => void)[] = [];
   //
   // private idlefunctions: ((connectionid: string, msg: IdleMessage) => void)[] =
@@ -58,15 +59,19 @@ export default class ServerConnection extends AbstractTimestampNode {
     return this.connectionrecord.connectionid;
   }
 
+  public get user(): ServerUser | undefined {
+    return this.pUser;
+  }
+
   protected stopping(): void {
     super.stopping();
-    this.logger2.trace(() => `${this.connectionid} stopping`);
+    this.logger2.debug(() => `${this.connectionid} stopping`);
     this.closing();
   }
 
   public idleMessage(idle: IdleMessage): void {
     this.pIdle = idle;
-    this.logger2.trace(() => `idle=${JSON.stringify(idle)}`);
+    this.logger2.debug(() => `idle=${JSON.stringify(idle)}`);
     this.connectiondao.update(
       { connectionid: this.connectionid },
       { $set: { focused: idle.focused, idleseconds: idle.idleseconds } },
@@ -76,7 +81,7 @@ export default class ServerConnection extends AbstractTimestampNode {
   }
 
   public handleDirectMessage(messagetype: string, message: any) {
-    this.logger2.trace(
+    this.logger2.debug(
       () =>
         `${
           this.connectionid
@@ -102,7 +107,7 @@ export default class ServerConnection extends AbstractTimestampNode {
     writableuserdao: WritableUserDao,
   ) {
     super(parent, 60);
-    this.logger2.trace(
+    this.logger2.debug(
       () => `constructor: ${JSON.stringify(connectionrecord)}`,
     );
     this.userdao = readonlyuserdao;
@@ -115,12 +120,12 @@ export default class ServerConnection extends AbstractTimestampNode {
   }
 
   private closing(): void {
-    this.logger2.trace(() => `${this.connectionid} closing`);
+    this.logger2.debug(() => `${this.connectionid} closing`);
     this.events.emit("closing");
   }
 
   protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
-    this.logger2.trace(
+    this.logger2.debug(
       () => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`,
     );
     Meteor.directStream.send(
@@ -130,14 +135,15 @@ export default class ServerConnection extends AbstractTimestampNode {
   }
 
   public login(hashtoken: string, locale: string): string {
+    this.logger2.debug(
+      () =>
+        `${this.connectionid} login hashtoken=${hashtoken} locale=${locale}`,
+    );
     this.locale = locale;
     const id = this.userservice.logon(hashtoken, locale);
     this.pUser = new ServerUser(this, id, this.userdao, this.writableuserdao);
     this.events.emit("userlogin", this.pUser);
+    this.logger2.debug(() => `${this.connectionid} login emitted "userlogin"`);
     return id;
-  }
-
-  public get user(): ServerUser | undefined {
-    return this.pUser;
   }
 }

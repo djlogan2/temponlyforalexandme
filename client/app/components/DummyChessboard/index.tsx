@@ -3,7 +3,6 @@ import React, { Component } from "react";
 // @ts-ignore
 import ChessBoard from "chessboard";
 import "chessboard/dist/index.css";
-import Flip from "../icons/Flip";
 
 const Chess = require("chess.js");
 
@@ -166,7 +165,7 @@ class DummyChessboard extends Component {
       >
         <ChessBoard
           raf={{
-            inside: false,
+            inside: true,
             bottom: false,
             right: false,
             left: false,

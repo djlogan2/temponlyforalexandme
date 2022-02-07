@@ -31,6 +31,4 @@ export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
   protected onRecordRemoved(id: string): void {
     this.events.emit("themechanged", null);
   }
-
-  protected onStop(): void {}
 }

@@ -1,12 +1,9 @@
-import { Meteor, Subscription } from "meteor/meteor";
+import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
 import CommonLogger from "/lib/CommonLogger";
 import { CollectionNames } from "/lib/CollectionNames";
-import ServerUser from "/lib/server/ServerUser";
-import ServerConnection from "/lib/server/ServerConnection";
-import { SubscriptionNames } from "/lib/SubscriptionNames";
 
 globalThis.ICCServer = {
   collections: {},
@@ -20,30 +17,6 @@ globalThis.ICCServer = {
       return globalThis.ICCServer.collections[
         collectionname
       ] as Mongo.Collection<any>;
-    },
-    getUser: (connection: Meteor.Connection | null): ServerUser | undefined => {
-      if (!connection?.id) return undefined;
-      return (
-        globalThis.ICCServer?.services?.connectionservice?.getUser(
-          connection.id,
-        ) || undefined
-      );
-    },
-    getConnection: (
-      connection: Meteor.Connection | null,
-    ): ServerConnection | undefined => {
-      if (!connection?.id) return undefined;
-      return (
-        globalThis.ICCServer?.services?.connectionservice?.getConnection(
-          connection.id,
-        ) || undefined
-      );
-    },
-    publish: (
-      subscription: SubscriptionNames,
-      fn: (this: Subscription, ...any: string[]) => void,
-    ) => {
-      Meteor.publish(subscription, fn);
     },
   },
 };

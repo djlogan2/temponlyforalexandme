@@ -4,7 +4,6 @@ import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 export default abstract class DynamicSelectorReactiveReadOnlyDao<
   T,
 > extends ReactiveReadOnlyDao<T> {
-  // ReadOnlyDao<T> {
   private cursor?: Mongo.Cursor<T, any>;
 
   /**
@@ -45,8 +44,10 @@ export default abstract class DynamicSelectorReactiveReadOnlyDao<
         }
         if (count) {
           count -= 1;
-          if (!count) ids.forEach((rid) => self.onRecordRemoved(rid));
-          ids = [];
+          if (!count) {
+            ids.forEach((rid) => self.onRecordRemoved(rid));
+            ids = [];
+          }
         }
         if (!count) self.onReady();
       },
@@ -62,12 +63,24 @@ export default abstract class DynamicSelectorReactiveReadOnlyDao<
   }
 
   /**
+   * Call this method if you want to delete all of the records at the client and remove the cursor/handle
+   * @protected
+   */
+  protected killCursor(): void {
+    if (!this.cursor) return;
+    this.cursor.forEach((rec) => this.onRecordRemoved(rec._id));
+    this.onReady();
+    this.observehandle?.stop();
+    delete this.cursor;
+    delete this.observehandle;
+  }
+
+  /**
    * Called by the framework when somebody has requested this instance, or a parent of this instance, to be stopped.
    * @protected
    */
   protected stopping(): void {
     super.stopping();
-    this.onStop();
     if (this.observehandle) this.observehandle.stop();
   }
 
@@ -95,6 +108,4 @@ export default abstract class DynamicSelectorReactiveReadOnlyDao<
   protected abstract onRecordRemoved(id: string): void;
 
   protected abstract onReady(): void;
-
-  protected abstract onStop(): void;
 }

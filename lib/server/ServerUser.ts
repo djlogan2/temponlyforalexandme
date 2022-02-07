@@ -17,7 +17,7 @@ export default class ServerUser extends User {
     return this.pEvents;
   }
 
-  setTheme(theme: string | null): void {
+  public setTheme(theme: string | null): void {
     if (theme)
       this.writableuserdao.update({ _id: this.id }, { $set: { theme } });
     else
@@ -25,7 +25,7 @@ export default class ServerUser extends User {
     this.pEvents.emit("theme", theme);
   }
 
-  setLocale(locale: string): void {
+  public setLocale(locale: string): void {
     this.writableuserdao.update({ _id: this.id }, { $set: { locale } });
     this.pEvents.emit("locale", locale);
   }

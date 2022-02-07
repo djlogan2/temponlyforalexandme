@@ -1,18 +1,17 @@
-import { Meteor, Subscription } from "meteor/meteor";
-import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReactiveReadOnlyDao";
+import { Subscription } from "meteor/meteor";
 import { i18nRecord } from "/lib/records/i18nRecord";
 import ServerConnection from "/lib/server/ServerConnection";
-import ServerUser from "/lib/server/ServerUser";
 import I18nService from "/imports/server/service/i18nService";
+import Stoppable from "/lib/Stoppable";
+import Publication from "/imports/server/service/Publication";
+import ServerUser from "/lib/server/ServerUser";
 
-export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<i18nRecord> {
-  private connection: ServerConnection;
+export default class I18nPublication extends Publication<i18nRecord> {
+  private connection: ServerConnection | null;
 
-  private user?: ServerUser;
+  private user?: ServerUser | null;
 
   private service: I18nService;
-
-  private publishobject: Subscription;
 
   private readonly pUserlogin: (user: ServerUser) => void;
 
@@ -20,25 +19,27 @@ export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<
 
   private readonly pLocale: (locale: string) => void;
 
-  constructor(connection: ServerConnection, publishobject: Subscription) {
-    super(connection, "i18n");
+  constructor(
+    parent: Stoppable | null,
+    service: I18nService,
+    pub: Subscription,
+    connection: ServerConnection | null,
+    user: ServerUser | null,
+  ) {
+    super(parent, pub, "i18n");
 
-    if (!globalThis.ICCServer?.services?.i18n)
-      throw new Meteor.Error("I18N_SERVICE_NOT_FOUND");
-
-    this.service = globalThis.ICCServer.services.i18n;
-
-    this.publishobject = publishobject;
-
-    this.pUserlogin = (user) => this.onLogin(user);
+    this.pUserlogin = (user2) => this.onLogin(user2);
     this.pUserlogout = () => this.onLogout();
     this.pLocale = (locale) => this.onLocaleChange(locale);
 
+    this.service = service;
     this.connection = connection;
-    this.connection.events.on("userlogin", this.pUserlogin);
-    this.connection.events.on("userlogout", this.pUserlogout);
-
-    if (this.connection.user) this.onLogin(this.connection.user);
+    this.user = user;
+    if (this.connection) {
+      this.connection.events.on("userlogin", this.pUserlogin);
+      this.connection.events.on("userlogout", this.pUserlogout);
+      if (this.connection.user) this.onLogin(this.connection.user);
+    }
   }
 
   private onLogin(user: ServerUser): void {
@@ -57,25 +58,11 @@ export default class I18nPublication extends DynamicSelectorReactiveReadOnlyDao<
     // Don't just go back to the browser, leave it in whatever locale it was in when the user logged out
   }
 
-  protected onFieldsChanged(id: string, record: Partial<i18nRecord>): void {
-    if (this.publishobject) this.publishobject.changed("i18n", id, record);
-  }
-
-  protected onReady(): void {
-    if (this.publishobject) this.publishobject.ready();
-  }
-
-  protected onRecordAdded(id: string, record: Partial<i18nRecord>): void {
-    if (this.publishobject) this.publishobject.added("i18n", id, record);
-  }
-
-  protected onRecordRemoved(id: string): void {
-    if (this.publishobject) this.publishobject.removed("i18n", id);
-  }
-
-  protected onStop(): void {
-    this.connection.events.off("userlogin", this.pUserlogin);
-    this.connection.events.off("userlogout", this.pUserlogout);
+  protected stopping(): void {
+    if (this.connection) {
+      this.connection.events.off("userlogin", this.pUserlogin);
+      this.connection.events.off("userlogout", this.pUserlogout);
+    }
     if (this.user) this.user.events.off("locale", this.pLocale);
   }
 }

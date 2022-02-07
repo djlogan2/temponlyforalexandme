@@ -4,4 +4,3 @@ node_modules/
 .coverage/
 .meteor/local
 tsconfig.tsbuildinfo
-package-lock.json

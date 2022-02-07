@@ -12,17 +12,17 @@ import PooledEventEmitter from "/lib/PooledEventEmitter";
 import { CollectionNames } from "/lib/CollectionNames";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import CommonLogger from "/lib/CommonLogger";
-import UserService from "/imports/server/service/UserService";
 import ClientServer from "/lib/client/ClientServer";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
-import ServerUser from "/lib/server/ServerUser";
 import Clienti18n from "/lib/client/Clienti18n";
 import ServerConnection from "/lib/server/ServerConnection";
 import ThemeService from "/imports/server/service/ThemeService";
 import I18nService from "/imports/server/service/i18nService";
 import ClientTheme from "/lib/client/ClientTheme";
+import UserService from "/imports/server/publications/UserPublication";
+import ServerUser from "/lib/server/ServerUser";
 
 declare module "meteor/universe:i18n";
 
@@ -80,22 +80,10 @@ declare global {
     collections: { [K in CollectionNames]?: Mongo.Collection<any> };
     services: {
       loggerservice?: LoggerService;
-      userservice?: UserService;
-      connectionservice?: ConnectionService;
-      themeservice?: ThemeService;
-      i18n?: I18nService;
     };
     utilities: {
       getLogger: (parent: Stoppable, identifier: string) => CommonLogger;
       getCollection: (collectionname: CollectionNames) => Mongo.Collection<any>;
-      getUser: (connection: Meteor.Connection | null) => ServerUser | undefined;
-      getConnection: (
-        connection: Meteor.Connection | null,
-      ) => ServerConnection | undefined;
-      publish: (
-        subscription: SubscriptionNames,
-        fn: (this: Subscription, ...args: string[]) => void,
-      ) => void;
     };
   };
 }

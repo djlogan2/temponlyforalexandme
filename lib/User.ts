@@ -1,8 +1,8 @@
 import { Meteor } from "meteor/meteor";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import UserRecord from "/lib/records/UserRecord";
-import { check } from "meteor/check";
 import Stoppable from "/lib/Stoppable";
+import { UserRoles } from "./enums/Roles";
 
 export default abstract class User extends Stoppable {
   protected userdao: CommonReadOnlyUserDao;
@@ -11,10 +11,27 @@ export default abstract class User extends Stoppable {
 
   abstract setLocale(locale: string): void;
 
+  abstract setTheme(theme: string | null): void;
+
   protected get me(): UserRecord {
     const me = this.userdao.get(this.pId);
     if (!me) throw new Meteor.Error("UNABLE_TO_FIND_USER");
     return me;
+  }
+
+  public get isolation_group(): string {
+    return this.me.isolation_group;
+  }
+
+  public get roles(): UserRoles[] {
+    return this.me.roles;
+  }
+
+  public isAuthorized(roles: string[]): boolean {
+    if (this.me.isdeveloper) return true;
+    return roles.some((requestedrole) =>
+      this.roles.some((userrole) => userrole === requestedrole),
+    );
   }
 
   get locale(): string {
@@ -39,12 +56,3 @@ export default abstract class User extends Stoppable {
     this.userdao = userdao;
   }
 }
-
-Meteor.methods({
-  "User.setLocale"(locale: string) {
-    check(locale, String);
-    const user = globalThis.ICCServer.utilities.getUser(this.connection);
-    if (!user) return;
-    user.setLocale(locale);
-  },
-});

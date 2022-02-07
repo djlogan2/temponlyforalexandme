@@ -50,7 +50,6 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
    */
   protected stopping(): void {
     super.stopping();
-    this.onStop();
     if (this.observehandle) this.observehandle.stop();
   }
 
@@ -76,6 +75,4 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
    * @protected
    */
   protected abstract onRecordRemoved(id: string): void;
-
-  protected abstract onStop(): void;
 }

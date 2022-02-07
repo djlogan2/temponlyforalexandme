@@ -25,7 +25,10 @@ const GameTitle: FCICC<IGameTitle> = ({ minutes, instance, date }) => {
       }}
     >
       <RapidIcon />
-      <div className={clsx(classes.gameTitleTitle)}>
+      <div
+        className={clsx(classes.gameTitleTitle)}
+        style={{ marginLeft: "10px" }}
+      >
         {window.i18n.translate("game_title_title", `${minutes}`)}
       </div>
       {instance && (

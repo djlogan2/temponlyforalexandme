@@ -2,80 +2,38 @@ import I18nPublication from "/lib/server/I18nPublication";
 import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
 import { i18nRecord } from "/lib/records/i18nRecord";
 import { Mongo } from "meteor/mongo";
+import ConnectionService from "/imports/server/service/ConnectionService";
+import PublicationService from "/imports/server/service/PublicationService";
+import ServerConnection from "/lib/server/ServerConnection";
+import { Subscription } from "meteor/meteor";
+import Stoppable from "/lib/Stoppable";
+import ServerUser from "/lib/server/ServerUser";
 
-export default class I18nService {
+export default class I18nService extends Stoppable {
   private dao: Writablei18nDao;
 
-  constructor(dao: Writablei18nDao) {
+  constructor(
+    parent: Stoppable | null,
+    dao: Writablei18nDao,
+    connectionservice: ConnectionService,
+    publicationservice: PublicationService,
+  ) {
+    super(parent);
     this.dao = dao;
-    if (this.dao.isempty) {
-      this.dao.insert({
-        token: "TEST_TOKEN",
-        locale: "en",
-        text: "This is a test token with three arguments, arg0={0} arg1={1} arg2={2}",
-      });
-      // @ts-ignore
-      this.dao.insert({
-        token: "TEST_TOKEN",
-        locale: "es",
-        text: "Este es un token de prueba con tres argumentos, arg0={0} arg1={1} arg2={2}",
-      });
-
-      this.dao.insert({
-        token: "FAKE_BUTTON",
-        locale: "en",
-        text: "Button 1",
-      });
-
-      this.dao.insert({
-        token: "FAKE_TEXT",
-        locale: "en",
-        text: "Typography test",
-      });
-
-      this.dao.insert({
-        token: "FAKE_INPUT",
-        locale: "en",
-        text: "Input 1",
-      });
-
-      this.dao.insert({
-        token: "FAKE_MSG_TEXT",
-        locale: "en",
-        text: "Message text 1",
-      });
-
-      this.dao.insert({
-        token: "FAKE_PLACEHOLDER",
-        locale: "en",
-        text: "Placeholder text 1",
-      });
-
-      this.dao.insert({
-        token: "game_title_title",
-        locale: "en",
-        text: "{0} minutes",
-      });
-
-      this.dao.insert({
-        token: "game_title_semifinal",
-        locale: "en",
-        text: "| Semifinal",
-      });
-    }
-    globalThis.ICCServer.services.i18n = this;
+    publicationservice.publishDao(
+      "i18n",
+      (
+        sub: Subscription,
+        connection: ServerConnection | null,
+        user: ServerUser | null,
+        ...args: any[]
+      ) => new I18nPublication(parent, this, sub, connection, user),
+    );
   }
 
   public getLocaleSelector(locale: string): Mongo.Selector<i18nRecord> {
     return this.dao.getLocaleSelector(locale);
   }
-}
 
-globalThis.ICCServer.utilities.publish("i18n", function () {
-  const connection = globalThis.ICCServer.utilities.getConnection(
-    this.connection,
-  );
-  if (!connection) return;
-  const _i18n = new I18nPublication(connection, this);
-  if (!connection.user) this.ready();
-});
+  protected stopping(): void {}
+}

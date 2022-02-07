@@ -47,7 +47,7 @@ export default class ClientConnection extends AbstractTimestampNode {
     this.userdao = userdao;
     globalThis.connection = this;
 
-    this.logger2.trace(() => "constructor");
+    this.logger2.debug(() => "constructor");
     Meteor.startup(() => {
       this.pConnectionid = Meteor.connection._lastSessionId;
 
@@ -101,7 +101,7 @@ export default class ClientConnection extends AbstractTimestampNode {
       try {
         const msg = JSON.parse(message);
         if (typeof msg !== "object" || !("iccdm" in msg)) return;
-        self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
+        self.logger2.debug(() => `processDirectStreamMessage: ${message}`);
         this.preventCallingMeteorHandler();
         self.onDirectMessage(msg.iccdm, msg.iccmsg);
       } catch (e) {
@@ -127,7 +127,7 @@ export default class ClientConnection extends AbstractTimestampNode {
   }
 
   private onDirectMessage(messagetype: string, message: any) {
-    this.logger2.trace(
+    this.logger2.debug(
       () => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`,
     );
     switch (messagetype) {
@@ -145,7 +145,7 @@ export default class ClientConnection extends AbstractTimestampNode {
   protected sendFunction(
     msg: PingMessage | PongMessage | PongResponse | IdleMessage,
   ): void {
-    this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
+    this.logger2.debug(() => `sendFunction msg=${JSON.stringify(msg)}`);
     Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
   }
 

@@ -1,7 +1,9 @@
 import DummyChessboard from "/client/app/components/DummyChessboard";
+import Flip from "/client/app/components/icons/Flip";
 import Movelist from "/client/app/components/Movelist";
 import PlayerInfo from "/client/app/components/PlayerInfo";
 import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
+import GameTitle from "/client/app/shared/GameTitle";
 import React, { FCICC } from "react";
 
 interface IGameMarkup {}
@@ -50,7 +52,30 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
         token={{ token: "FAKE_TEXT", args: [] }}
       />
     </div>
-    <DummyChessboard />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        height: "100%",
+      }}
+    >
+      <div style={{ marginBottom: "1%" }}>
+        <GameTitle
+          minutes={15}
+          keyboardFunctions={[]}
+          token={{
+            token: "",
+            args: [],
+          }}
+          classes={[]}
+        />
+      </div>
+      <DummyChessboard />
+      <div style={{ textAlign: "right", marginTop: "1%" }}>
+        <Flip onClick={() => null} />
+      </div>
+    </div>
     <div
       style={{
         display: "flex",
