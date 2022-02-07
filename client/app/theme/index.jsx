@@ -11,8 +11,9 @@ const Theme = () => {
   console.log('__________________');
 
   useEffect(() => {
-    // Here we need to get the current user theme
-    console.log(theme.getTheme());
+    theme.events.on('ready', () => {
+      console.log('Ready', theme.getTheme());
+    });
   }, [])
 
   // return '';
