@@ -1,5 +1,6 @@
 import { noop } from "lodash";
 import React, { FC, FCICC, useState } from "react";
+import "./index.scss";
 import { SCREEN_LARGE } from "../../constants/breakpoints";
 import useWindowSize from "../../hooks/userWindowSize";
 import ActionButton from "../../shared/Buttons/ActionButton";
@@ -7,7 +8,6 @@ import RegularButton from "../../shared/Buttons/RegularButton";
 import SmallButton from "../../shared/Buttons/SmallButton";
 import ScrollBar from "../../shared/ScrollBar";
 import SmallParagraph from "../../shared/Typographies/SmallParagraph";
-import { useAppSelector } from "../../store/hooks";
 import { ComponentsMap, TFigures } from "../CapturedPieces";
 import Abort from "../icons/Abort";
 import Back from "../icons/Back";
@@ -59,7 +59,6 @@ const Movelist: FCICC<IMovelistProps> = ({
   onRequestReject = noop,
 }) => {
   const [confirmResign, setConfirmResign] = useState(false);
-  const classes = useAppSelector(({ theming }) => theming.classes);
   const { width } = useWindowSize();
 
   const onRequestRejectHandler = () => {
@@ -74,24 +73,24 @@ const Movelist: FCICC<IMovelistProps> = ({
     (request || confirmResign) && RequestMapIcons[request || "resign"];
 
   return (
-    <div className={classes.movelistContainer}>
-      <div className={classes.movelistTopActions}>
+    <div className="movelistContainer">
+      <div className="movelistTopActions">
         <PrevEnd />
         <Prev />
         <Next />
         <NextEnd />
       </div>
 
-      <div className={classes.movelistMovesContainer}>
+      <div className="movelistMovesContainer">
         <ScrollBar thumbSize={width >= SCREEN_LARGE ? 48.68 : 31.76}>
-          <div className={classes.movelistMoves}>
+          <div className="movelistMoves">
             {moves.map((move, i) => {
               const WhitePiece = Pieces[move.second.piece as TFigures];
 
               const BlackPiece = Pieces[move.second.piece as TFigures];
 
               return (
-                <div key={`${i}-item`} className={classes.movelistItem}>
+                <div key={`${i}-item`} className="movelistItem">
                   <span>{i + 1}</span>
                   <div>
                     {!!WhitePiece && (
@@ -112,9 +111,9 @@ const Movelist: FCICC<IMovelistProps> = ({
         </ScrollBar>
       </div>
 
-      <div className={classes.movelistOpeningNameContainer}>
+      <div className="movelistOpeningNameContainer">
         <SmallParagraph
-          className={classes.movelistOpeningName}
+          className="movelistOpeningName"
           name="Opening game"
           token={{ token: openingName, args: [] }}
           keyboardFunctions={[]}
@@ -153,7 +152,7 @@ const Movelist: FCICC<IMovelistProps> = ({
           </div>
         </div>
       ) : (
-        <div className={classes.movelistActions}>
+        <div className="movelistActions">
           <ActionButton
             color="red"
             size="small"

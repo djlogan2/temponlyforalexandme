@@ -3,9 +3,8 @@ import React, { FC, FCICC, InputHTMLAttributes, useState } from "react";
 import clsx from "clsx";
 import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";
-import { useAppSelector } from "../../store/hooks";
 import useTranslate from "../../hooks/useTranslate";
-import styles from "./index.m.scss";
+import styles from "./index.scss";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -27,39 +26,36 @@ const Input: FCICC<IInputProps> = ({
   onIconClick = noop,
   ...rest
 }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
   const [inputType, setInputType] = useState(type || "text");
   const labelText = useTranslate(token);
   const inputMsgText = msgText && useTranslate(msgText);
-
-  console.log(styles);
 
   return (
     <div
       className={clsx(
         styles.test,
         className,
-        classes.inputFormControl,
-        error && classes.inputFormControlError,
+        "inputFormControl",
+        error && "inputFormControlError",
       )}
     >
-      <div className={classes.inputContainer}>
+      <div className="inputContainer">
         {!!token && (
-          <label htmlFor={name} className={classes.inputLabel}>
+          <label htmlFor={name} className="inputLabel">
             {labelText}
           </label>
         )}
-        <div className={classes.inputWithIcon}>
+        <div className="inputWithIcon">
           <input
             {...rest}
-            className={classes.input}
+            className="input"
             name={name}
             id={name}
             type={inputType}
           />
           {!!Icon && (
             <div
-              className={classes.inputIcon}
+              className="inputIcon"
               onClick={onIconClick}
               onKeyDown={() => {}}
               role="presentation"
@@ -84,7 +80,7 @@ const Input: FCICC<IInputProps> = ({
           )}
         </div>
       </div>
-      {!!msgText && <p className={classes.inputMsg}>{inputMsgText}</p>}
+      {!!msgText && <p className="inputMsg">{inputMsgText}</p>}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { FCICC } from "react";
-import { useAppSelector } from "../../store/hooks";
+import "./index.scss";
 import ChatIcon from "../icons/Chat";
 import ChessTitle from "../icons/ChessTitle";
 import France from "../icons/France";
@@ -25,50 +25,46 @@ const PlayerInfo: FCICC<IPlayerInfoProps> = ({
   lagLevel,
   flip,
   userStatus,
-}) => {
-  const classes = useAppSelector(({ theming }) => theming.classes);
-
-  return (
+}) => (
+  <div
+    className={clsx(
+      "playerInfoContainer",
+      flip && "playerInfoContainerFlipped",
+    )}
+  >
     <div
       className={clsx(
-        classes.playerInfoContainer,
-        flip && classes.playerInfoContainerFlipped,
+        "playerInfoImgContainer",
+        userStatus === "online" && "playerInfoImgContainerOnline",
+        userStatus === "idle" &&
+          "playerInfoImgContainerIdle" &&
+          "playerInfoImgContainerIdle",
+        userStatus === "unavailable" &&
+          "playerInfoImgContainerUnavailable" &&
+          "playerInfoImgContainerUnavailable",
+        userStatus === "offline" &&
+          "playerInfoImgContainerOffline" &&
+          "playerInfoImgContainerOffline",
       )}
     >
-      <div
-        className={clsx(
-          classes.playerInfoImgContainer,
-          userStatus === "online" && classes.playerInfoImgContainerOnline,
-          userStatus === "idle" &&
-            classes.playerInfoImgContainerIdle &&
-            classes.playerInfoImgContainerIdle,
-          userStatus === "unavailable" &&
-            classes.playerInfoImgContainerUnavailable &&
-            classes.playerInfoImgContainerUnavailable,
-          userStatus === "offline" &&
-            classes.playerInfoImgContainerOffline &&
-            classes.playerInfoImgContainerOffline,
-        )}
-      >
-        <img
-          className={classes.playerInfoImg}
-          src={picture}
-          alt={`${username}'s profile`}
-        />
-      </div>
-      <div className={classes.playerInfoIcons}>
-        <ChatIcon />
-        <WebcamIcon />
-        <LagIcon lagLevel={lagLevel} />
-        <ChessTitle text={title} />
-        <France />
-      </div>
-
-      <p className={classes.playerInfoUsername}>
-        {username} <span>({rank})</span>
-      </p>
+      <img
+        className="playerInfoImg"
+        src={picture}
+        alt={`${username}'s profile`}
+      />
     </div>
-  );
-};
+    <div className="playerInfoIcons">
+      <ChatIcon />
+      <WebcamIcon />
+      <LagIcon lagLevel={lagLevel} />
+      <ChessTitle text={title} />
+      <France />
+    </div>
+
+    <p className="playerInfoUsername">
+      {username} <span>({rank})</span>
+    </p>
+  </div>
+);
 
 export default PlayerInfo;
