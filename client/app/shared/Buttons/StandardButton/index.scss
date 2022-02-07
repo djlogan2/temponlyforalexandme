@@ -1,0 +1,49 @@
+.standardButton {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 1.2rem;
+  line-height: 2.147rem;
+  font-size: 1.8rem;
+  cursor: pointer;
+  border: 0;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:disabled {
+    cursor: initial;
+    background: rgba(85, 88, 106, 0.5);
+    color: #fff;
+  }
+
+  &--big {
+    width: 100%;
+    max-width: 36rem;
+  }
+
+  &--small {
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  &--white {
+    background-color: #fff;
+    color: #131314;
+  }
+
+  &--blue {
+    background-color: #0f5ab6;
+    color: #fff;
+  }
+
+  &:not(:disabled):not(:active):hover {
+    background-color: #131314;
+    color: #fff;
+  }
+
+  &:active {
+    background-color: #55586a;
+    color: #fff;
+  }
+}
