@@ -9,8 +9,6 @@ const Switch: FCICC<ISwitchProps> = ({ name, onChange }) => {
   const [isToggled, setIsToggled] = useState(false);
   const onToggleHandler = () => setIsToggled(!isToggled);
 
-  console.log(isToggled);
-
   return (
     <label className="switchToggle" htmlFor={name}>
       <input
@@ -26,7 +24,7 @@ const Switch: FCICC<ISwitchProps> = ({ name, onChange }) => {
           }
         }}
       />
-      <span className="switchToggle__switch" />
+      <span className="switch" />
     </label>
   );
 };

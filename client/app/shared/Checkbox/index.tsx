@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import React, { FCICC, InputHTMLAttributes, useState } from "react";
-import { useAppSelector } from "../../store/hooks";
 
 interface ICheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -18,7 +17,6 @@ const Checkbox: FCICC<ICheckboxProps> = ({
   onChange,
   ...rest
 }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
   const [isChecked, setIsChecked] = useState(false);
 
   return (
@@ -26,14 +24,14 @@ const Checkbox: FCICC<ICheckboxProps> = ({
       htmlFor={name}
       className={clsx(
         className,
-        classes.checkboxLabel,
-        circled && classes.checkboxCircled,
-        disabled && classes.checkboxDisabled,
+        "checkboxLabel",
+        circled && "checkboxCircled",
+        disabled && "checkboxDisabled",
       )}
     >
       <input
         {...rest}
-        className={classes.checkboxNative}
+        className="checkboxNative"
         type="checkbox"
         name={name}
         id={name}
@@ -46,7 +44,7 @@ const Checkbox: FCICC<ICheckboxProps> = ({
         disabled={disabled}
       />
       <svg
-        className={clsx(classes.checkbox, isChecked && classes.checkboxActive)}
+        className={clsx("checkbox", isChecked && "checkboxActive")}
         aria-hidden="true"
         viewBox="-3 0 18  9"
         fill="none"
