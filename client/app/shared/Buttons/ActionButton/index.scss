@@ -1,0 +1,77 @@
+.activeButton {
+  background-color: #55586a;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.6rem;
+  border-radius: 50%;
+  position: relative;
+  outline: 0;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: initial;
+    background-color: #55586a;
+  }
+
+  &--dark:hover::after,
+  &--red:hover::after,
+  &--grey::after {
+    opacity: 1;
+  }
+
+  &--dark::after,
+  &--red::after,
+  &--grey::after {
+    content: attr(data-hover);
+    opacity: 0;
+    padding: 0.1rem 0.6rem;
+    text-transform: uppercase;
+    position: absolute;
+    bottom: -2px;
+    font-size: 0.8rem;
+    background-color: #fff;
+    border-radius: 6px;
+    min-width: 50%;
+    max-width: 77%;
+  }
+
+  &--dark {
+    background-color: #131314;
+
+    &::after {
+      border: 1px solid #000;
+      color: #131314;
+    }
+  }
+  &--red {
+    background-color: #ff0000;
+
+    &::after {
+      border: 1px solid #ff0000;
+      color: #ff0000;
+    }
+  }
+  &--grey {
+    background-color: #55586a;
+
+    &::after {
+      border: 1px solid #55586a;
+      color: #55586a;
+    }
+  }
+  &--medium {
+    width: 4.8rem;
+    height: 4.8rem;
+  }
+  &--small {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+  &--big {
+    width: 5.2rem;
+    height: 5.2rem;
+  }
+}

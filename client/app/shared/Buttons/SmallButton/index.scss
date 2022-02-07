@@ -1,0 +1,30 @@
+.smallButton {
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 11.72px;
+  padding: 0.4rem 1rem 0.3rem 1rem;
+  text-transform: uppercase;
+  border-radius: 18px;
+  height: 1.9rem;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  outline: 0;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: initial;
+    background-color: #55586a;
+  }
+
+  &--red {
+    background-color: #ff0000;
+  }
+
+  &--dark {
+    background-color: #131314;
+  }
+}

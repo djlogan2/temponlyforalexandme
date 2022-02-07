@@ -1,5 +1,6 @@
 import React, { FCICC } from "react";
 import { useHistory } from "react-router-dom";
+import Movelist from "../components/Movelist";
 import CapturedPieces from "/client/app/components/CapturedPieces";
 import DummyChessboard from "/client/app/components/DummyChessboard";
 import PlayerInfo from "/client/app/components/PlayerInfo";
@@ -40,11 +41,13 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         <CapturedPieces color="black" soliders={{ k: 3, q: 2, p: 4 }} />
         <ActionButton
           name="fakeButton"
-          hoverText="1234"
+          hoverText="report"
           token={{ token: "FAKE_BUTTON", args: [] }}
           keyboardFunctions={[]}
           classes={[]}
-        />
+        >
+          M
+        </ActionButton>
         <DigitalClock
           time="00:00:30"
           keyboardFunctions={[]}
@@ -55,6 +58,25 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           classes={[]}
           status="in"
         />
+        <div>
+          <h2>Movelist</h2>
+          <Movelist
+            openingName="FAKE_TEXT"
+            token={{ token: "FAKE_TEXT", args: [] }}
+            keyboardFunctions={[]}
+            classes={[]}
+            moves={new Array(10).fill(0).map((_, i) => ({
+              first: {
+                move: `c${i}`,
+                piece: "q",
+              },
+              second: {
+                move: `d${i}`,
+                piece: "n",
+              },
+            }))}
+          />
+        </div>
         <GameTitle
           minutes={10}
           instance="game_title_semifinal"
@@ -73,7 +95,9 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           disabled
           keyboardFunctions={[]}
           classes={[]}
-        />
+        >
+          M
+        </ActionButton>
         <Title
           name="test"
           token={{ token: "FAKE_TEXT", args: [] }}

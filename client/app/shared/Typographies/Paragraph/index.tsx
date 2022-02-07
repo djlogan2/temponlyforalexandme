@@ -1,6 +1,6 @@
 import React, { FCICC } from "react";
 import useTranslate from "/client/app/hooks/useTranslate";
-import { useAppSelector } from "/client/app/store/hooks";
+import "./index.scss";
 
 interface ParagraphProps {
   name: string;
@@ -9,15 +9,14 @@ interface ParagraphProps {
 }
 
 const Paragraph: FCICC<ParagraphProps> = ({ name, token, link, ...rest }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
   const translation = useTranslate(token);
 
   return link ? (
-    <a id={name} className={classes.paragraphLink} href={link}>
+    <a id={name} className="paragraphLink" href={link}>
       {translation}
     </a>
   ) : (
-    <div id={name} className={classes.paragraph} {...rest}>
+    <div id={name} className="paragraph" {...rest}>
       {translation}
     </div>
   );

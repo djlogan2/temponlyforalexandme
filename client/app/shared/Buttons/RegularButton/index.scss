@@ -1,0 +1,29 @@
+.regularButton {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  outline: 0;
+  cursor: pointer;
+  padding: 1.1rem 0.8rem;
+  font-weight: 700;
+  font-family: var(--secondary-font);
+  text-transform: uppercase;
+  border-radius: 18px;
+  font-size: 1.2rem;
+  width: 100%;
+
+  &:disabled {
+    cursor: initial;
+    background-color: #55586a;
+  }
+
+  &--blue {
+    background-color: #0f5ab6;
+  }
+
+  &--dark {
+    background-color: #131314;
+  }
+}

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { ButtonHTMLAttributes, FC } from "react";
-import { useAppSelector } from "/client/app/store/hooks";
+import "./index.scss";
 
 interface ISmallButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "red" | "dark";
@@ -9,27 +9,16 @@ interface ISmallButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const SmallButton: FC<ISmallButtonProps> = ({
   children,
   className,
-  type = "button",
   color = "dark",
   ...rest
-}) => {
-  const classes = useAppSelector((state) => state.theming.classes);
-
-  return (
-    <button
-      {...rest}
-      // eslint-disable-next-line react/button-has-type
-      type={type}
-      className={clsx(
-        className,
-        classes.smallButton,
-        color === "red" && classes.smallButtonRed,
-        color === "dark" && classes.smallButtonDark,
-      )}
-    >
-      {children}
-    </button>
-  );
-};
+}) => (
+  <button
+    type="button"
+    {...rest}
+    className={clsx(className, "smallButton", `smallButton--${color}`)}
+  >
+    {children}
+  </button>
+);
 
 export default SmallButton;

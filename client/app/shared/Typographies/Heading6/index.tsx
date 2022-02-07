@@ -1,6 +1,6 @@
 import React, { FCICC } from "react";
 import useTranslate from "/client/app/hooks/useTranslate";
-import { useAppSelector } from "/client/app/store/hooks";
+import "./index.scss";
 
 interface Heading6Props {
   name: string;
@@ -8,11 +8,10 @@ interface Heading6Props {
 }
 
 const Heading6: FCICC<Heading6Props> = ({ name, token, ...rest }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
   const translation = useTranslate(token);
 
   return (
-    <div id={name} className={classes.heading6} {...rest}>
+    <div id={name} className="heading6" {...rest}>
       {translation}
     </div>
   );

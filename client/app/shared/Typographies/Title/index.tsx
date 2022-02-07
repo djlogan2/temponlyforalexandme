@@ -1,6 +1,6 @@
 import React, { FCICC } from "react";
+import "./index.scss";
 import useTranslate from "/client/app/hooks/useTranslate";
-import { useAppSelector } from "/client/app/store/hooks";
 
 interface TitleProps {
   name: string;
@@ -8,11 +8,10 @@ interface TitleProps {
 }
 
 const Title: FCICC<TitleProps> = ({ name, token, ...rest }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
   const translation = useTranslate(token);
 
   return (
-    <div id={name} className={classes.title} {...rest}>
+    <div id={name} className="title" {...rest}>
       {translation}
     </div>
   );

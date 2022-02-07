@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { FCICC } from "react";
 import useTranslate from "/client/app/hooks/useTranslate";
-import { useAppSelector } from "/client/app/store/hooks";
+import "./index.scss";
 
 interface Heading2Props {
   name: string;
@@ -14,11 +14,10 @@ const Heading2: FCICC<Heading2Props> = ({
   className,
   ...rest
 }) => {
-  const classes = useAppSelector((state) => state.theming.classes);
   const translation = useTranslate(token);
 
   return (
-    <div id={name} className={clsx(classes.heading2, className)} {...rest}>
+    <div id={name} className={clsx("heading2", className)} {...rest}>
       {translation}
     </div>
   );

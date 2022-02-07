@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import React, { ButtonHTMLAttributes, FCICC } from "react";
-import useTranslate from "/client/app/hooks/useTranslate";
-import { useAppSelector } from "/client/app/store/hooks";
+import "./index.scss";
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   name: string;
@@ -9,7 +8,7 @@ interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   hoverText?: string;
   onButtonClick?: () => void;
   size?: "small" | "medium" | "big";
-  color?: "red" | "dark" | "dark-light";
+  color?: "red" | "dark" | "grey";
 }
 
 const ActionButton: FCICC<ActionButtonProps> = ({
@@ -22,38 +21,21 @@ const ActionButton: FCICC<ActionButtonProps> = ({
   color = "dark",
   size = "medium",
   ...rest
-}) => {
-  const classes = useAppSelector((state) => state.theming.classes);
-
-  return (
-    <div
-      className={clsx(
-        classes.activeButtonContainer,
-        hoverText && classes.activeButtonContainerHover,
-      )}
-    >
-      {/* eslint-disable-next-line react/button-has-type */}
-      <button
-        name={name}
-        onClick={onButtonClick}
-        className={clsx({
-          [classes.activeButton]: true,
-          [classes.activeButtonRed]: color === "red",
-          [classes.activeButtonDark]: color === "dark",
-          [classes.activeButtonDarkLight]: color === "dark-light",
-          [classes.activeButtonSmall]: size === "small",
-          [classes.activeButtonMedium]: size === "medium",
-          [classes.activeButtonBig]: size === "big",
-        })}
-        {...rest}
-      >
-        {children}
-      </button>
-      {hoverText && (
-        <div className={classes.activeButtonHoverElement}>{hoverText}</div>
-      )}
-    </div>
-  );
-};
+}) => (
+  <button
+    data-hover={hoverText}
+    name={name}
+    onClick={onButtonClick}
+    className={clsx(
+      "activeButton",
+      `activeButton--${color}`,
+      `activeButton--${size}`,
+    )}
+    type="button"
+    {...rest}
+  >
+    {children}
+  </button>
+);
 
 export default ActionButton;
