@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import ThemeContext from './Context';
 
 const useTheme = () => useContext(ThemeContext);
@@ -9,6 +9,11 @@ const Theme = () => {
   console.log('__________________');
   console.log(theme);
   console.log('__________________');
+
+  useEffect(() => {
+    // Here we need to get the current user theme
+    console.log(theme.getTheme());
+  }, [])
 
   // return '';
 
