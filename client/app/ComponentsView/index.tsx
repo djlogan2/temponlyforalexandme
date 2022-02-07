@@ -1,6 +1,7 @@
 import React, { FCICC } from "react";
 import { useHistory } from "react-router-dom";
 import Movelist from "../components/Movelist";
+import StandardButton from "../shared/Buttons/StandardButton";
 import CapturedPieces from "/client/app/components/CapturedPieces";
 import DummyChessboard from "/client/app/components/DummyChessboard";
 import PlayerInfo from "/client/app/components/PlayerInfo";
@@ -38,16 +39,34 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           justifyContent: "space-around",
         }}
       >
+        <div>
+          <h2>Buttons</h2>
+          <ActionButton
+            name="fakeButton"
+            hoverText="report"
+            token={{ token: "FAKE_BUTTON", args: [] }}
+            keyboardFunctions={[]}
+            classes={[]}
+          >
+            M
+          </ActionButton>
+
+          <ActionButton
+            name="fakeButton"
+            hoverText="1234"
+            token={{ token: "FAKE_BUTTON", args: [] }}
+            disabled
+            keyboardFunctions={[]}
+            classes={[]}
+          >
+            M
+          </ActionButton>
+
+          <StandardButton>Button</StandardButton>
+          <StandardButton color="blue">Button</StandardButton>
+          <StandardButton disabled>Button</StandardButton>
+        </div>
         <CapturedPieces color="black" soliders={{ k: 3, q: 2, p: 4 }} />
-        <ActionButton
-          name="fakeButton"
-          hoverText="report"
-          token={{ token: "FAKE_BUTTON", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        >
-          M
-        </ActionButton>
         <DigitalClock
           time="00:00:30"
           keyboardFunctions={[]}
@@ -88,16 +107,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           }}
           classes={[]}
         />
-        <ActionButton
-          name="fakeButton"
-          hoverText="1234"
-          token={{ token: "FAKE_BUTTON", args: [] }}
-          disabled
-          keyboardFunctions={[]}
-          classes={[]}
-        >
-          M
-        </ActionButton>
+
         <Title
           name="test"
           token={{ token: "FAKE_TEXT", args: [] }}
@@ -162,12 +172,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           keyboardFunctions={[]}
           classes={[]}
         />
-        <Heading5
-          name="test5"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
+        <Heading5>Heading 5</Heading5>
         <Heading6
           name="test6"
           token={{ token: "FAKE_TEXT", args: [] }}

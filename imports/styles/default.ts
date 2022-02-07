@@ -3,7 +3,6 @@ import paragraph from "./paragraph";
 import checkbox from "./checkbox";
 import input from "./input";
 import select from "./select";
-import switchComponent from "./switch";
 import textarea from "./textarea";
 import playerInfo from "./playerInfo";
 import movelist from "./movelist";
@@ -24,7 +23,6 @@ export default {
     ...checkbox,
     ...input,
     ...select,
-    ...switchComponent,
     ...textarea,
     ...playerInfo,
     ...digitalClock,
