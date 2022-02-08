@@ -5,7 +5,7 @@ import { ThemeRecord } from "/lib/records/ThemeRecord";
 
 export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
   ThemeRecord,
-  "themechanged" | "ready" | "event"
+  "themechanged" | "ready"
 > {
   constructor(
     parent: Stoppable | null,
