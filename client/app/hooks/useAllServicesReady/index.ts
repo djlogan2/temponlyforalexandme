@@ -8,8 +8,9 @@ const useAllServicesReady = () => {
     let subsReady = 0;
 
     SERVICES.forEach((service) => {
-      service.events.once("ready", () => {
+      service.events.on("ready", () => {
         subsReady += 1;
+        service.events.off("ready");
 
         if (subsReady === SERVICES.length) {
           setIsSubsReady(true);

@@ -22,15 +22,6 @@ export default class ICCEventEmitter<T extends string> {
   }
 
   /**
-   * Standard eventemitter "once"
-   * @param{string} event
-   * @param{function} fn The callback
-   */
-  public once(event: T, fn: (...args: any[]) => void): void {
-    this.emitter.once(event, fn);
-  }
-
-  /**
    * Standard eventemitter "on"
    * @param{string} event
    * @param{function} fn The callback
