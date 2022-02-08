@@ -17,14 +17,14 @@
 
   &:disabled {
     cursor: initial;
-    background-color: #55586a;
+    background-color: var(--colorDarkTwo);
   }
 
   &--red {
-    background-color: #ff0000;
+    background-color: var(--colorDanger);
   }
 
   &--dark {
-    background-color: #131314;
+    background-color: var(--colorDarkOne);
   }
 }

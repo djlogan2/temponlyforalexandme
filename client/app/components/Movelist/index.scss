@@ -17,7 +17,7 @@
 }
 
 .movelistOpeningName {
-  color: #55586a;
+  color: var(--colorDarkTwo);
   parent: system;
 }
 
@@ -74,7 +74,7 @@
 .movelistItem:last-child > div:last-child {
   fill: black;
   color: #fff;
-  background: #131314;
+  background: var(--colorDarkOne);
   border-radius: 2px;
 }
 

@@ -36,7 +36,7 @@
 }
 .checkbox {
   width: 22px;
-  border: 1px #55586A solid;
+  border: 1px var(--colorDarkTwo) solid;
   height: 22px;
   parent: system;
   display: inline-block;
@@ -46,6 +46,6 @@
 }
 .checkboxActive {
   parent: system;
-  background: #0F5AB6;
-  border-color: #0F5AB6;
+  background: var(--colorPrimary);
+  border-color: var(--colorPrimary);
 }

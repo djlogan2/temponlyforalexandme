@@ -211,7 +211,7 @@ class DummyChessboard extends Component {
           styles={{
             wrapper: {},
             boardWrapper: {
-              backgroundColor: "#55586A",
+              backgroundColor: "var(--colorDarkTwo)",
               borderRadius: "15px",
             },
             files: {

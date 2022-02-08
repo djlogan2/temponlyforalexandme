@@ -29,21 +29,20 @@
 
   &--white {
     background-color: #fff;
-    color: #131314;
   }
 
   &--blue {
-    background-color: #0f5ab6;
+    background-color: var(--colorPrimary);
     color: #fff;
   }
 
   &:not(:disabled):not(:active):hover {
-    background-color: #131314;
+    background-color: var(--colorDarkOne);
     color: #fff;
   }
 
   &:active {
-    background-color: #55586a;
+    background-color: var(--colorDarkTwo);
     color: #fff;
   }
 }

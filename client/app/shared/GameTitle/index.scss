@@ -5,7 +5,7 @@
   font-size: 14px;
   margin-left: 10px;
   line-height: 105%;
-  color: #55586a;
+  color: var(--colorDarkTwo);
 }
 .gameTitleInstance {
   font-family: Helvetica Neue;
@@ -13,7 +13,7 @@
   font-weight: normal;
   font-size: 14px;
   line-height: 105%;
-  color: #55586a;
+  color: var(--colorDarkTwo);
 }
 .gameTitleDate {
   font-family: Helvetica Neue;
@@ -21,7 +21,7 @@
   font-weight: normal;
   font-size: 14px;
   line-height: 105%;
-  color: #55586a;
+  color: var(--colorDarkTwo);
 }
 
 .container {

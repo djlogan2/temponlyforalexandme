@@ -29,6 +29,12 @@ export default class I18nService extends Stoppable {
         ...args: any[]
       ) => new I18nPublication(parent, this, sub, connection, user),
     );
+
+    this.dao.insert({
+      token: "TEST_TOKEN",
+      locale: "en",
+      text: "This is a test token with three arguments, arg0={0} arg1={1} arg2={2}",
+    });
   }
 
   public getLocaleSelector(locale: string): Mongo.Selector<i18nRecord> {

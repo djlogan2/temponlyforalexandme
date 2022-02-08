@@ -12,8 +12,8 @@
   transform: translateX(17px);
 }
 .switchToggle input[type='checkbox']:checked + .switch {
-  border: 1px solid #0F5AB6;
-  background-color: #0F5AB6;
+  border: 1px solid var(--colorPrimary);
+  background-color: var(--colorPrimary);
 }
 .switchToggle input[type='checkbox']:checked + .switch:before {
   background-color: #FFF;

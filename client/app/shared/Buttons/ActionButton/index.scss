@@ -1,5 +1,5 @@
 .activeButton {
-  background-color: #55586a;
+  background-color: var(--colorDarkTwo);
   border: none;
   display: flex;
   align-items: center;
@@ -13,7 +13,7 @@
 
   &:disabled {
     cursor: initial;
-    background-color: #55586a;
+    background-color: var(--colorDarkTwo);
   }
 
   &--dark:hover::after,
@@ -39,27 +39,26 @@
   }
 
   &--dark {
-    background-color: #131314;
+    background-color: var(--colorDarkOne);
 
     &::after {
       border: 1px solid #000;
-      color: #131314;
     }
   }
   &--red {
-    background-color: #ff0000;
+    background-color: var(--colorDanger);
 
     &::after {
-      border: 1px solid #ff0000;
-      color: #ff0000;
+      border: 1px solid var(--colorDanger);
+      color: var(--colorDanger);
     }
   }
   &--grey {
-    background-color: #55586a;
+    background-color: var(--colorDarkTwo);
 
     &::after {
-      border: 1px solid #55586a;
-      color: #55586a;
+      border: 1px solid var(--colorDarkTwo);
+      color: var(--colorDarkTwo);
     }
   }
   &--medium {

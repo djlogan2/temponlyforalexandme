@@ -5,19 +5,19 @@
   max-width: 305px;
 }
 .inputFormControlError {
-  color: #ff0000;
+  color: var(--colorDanger);
   parent: system;
 }
 .inputFormControlError .inputContainer {
   color: inherit;
-  outline: 2px solid #ff0000;
+  outline: 2px solid var(--colorDanger);
 }
 .inputFormControlError .inputLabel {
   color: inherit;
 }
 .inputFormControlError .inputContainer:focus-within {
   color: inherit;
-  outline: 2px solid #ff0000;
+  outline: 2px solid var(--colorDanger);
 }
 .inputFormControlError .inputMsg {
   color: inherit;
@@ -36,7 +36,7 @@
   background-color: #f5f5f5;
 }
 .inputContainer:focus-within {
-  color: #0F5AB6;
+  color: var(--colorPrimary);
   outline: 2px solid #d2d2d2;
 }
 .inputContainer:focus-within .inputLabel {
@@ -58,17 +58,17 @@
   background-color: transparent;
 }
 .input:disabled {
-  color: #9698A1;
+  color: #9698a1;
 }
 .input::placeholder {
-  color: #55586a;
+  color: var(--colorDarkTwo);
 }
-.input[type='password'] {
+.input[type="password"] {
   color: #665959;
 }
 .inputMsg {
-  color: #55586a;
-  margin: 1.5px  0 16px;
+  color: var(--colorDarkTwo);
+  margin: 1.5px 0 16px;
   parent: system;
   font-size: 14px;
 }

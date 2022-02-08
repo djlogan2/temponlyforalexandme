@@ -16,14 +16,14 @@
 
   &:disabled {
     cursor: initial;
-    background-color: #55586a;
+    background-color: var(--colorDarkTwo);
   }
 
   &--blue {
-    background-color: #0f5ab6;
+    background-color: var(--colorPrimary);
   }
 
   &--dark {
-    background-color: #131314;
+    background-color: var(--colorDarkOne);
   }
 }

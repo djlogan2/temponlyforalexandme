@@ -1,6 +1,6 @@
 .digitalClock {
   color: #FFFFFF;
-  background-color: #55586A;
+  background-color: var(--colorDarkTwo);
   width: fit-content;
   padding: 6px 10px;
   border-radius: 10px;
@@ -8,7 +8,7 @@
   font-weight: bold;
 }
 .digitalClockInactive {
-  color: #55586A;
+  color: var(--colorDarkTwo);
   background-color: #FFFFFF;
   width: fit-content;
   padding: 6px 10px;
@@ -19,7 +19,7 @@
 
 .digitalClockError {
   color: #FFFFFF;
-  background-color: #FF0000;
+  background-color: var(--colorDanger);
   width: fit-content;
   padding: 6px 10px;
   border-radius: 10px;
