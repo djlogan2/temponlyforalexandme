@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  padding: 5%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.player-info-container {
+  display: flex;
+  height: (576 / 1366) * 100vw;
+  flex-direction: column;
+  margin-right: 3%;
+  justify-content: space-between;
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.game-title-container {
+  margin-bottom: 1%;
+}
+
+.flip-container {
+  text-align: right;
+  margin-top: 1%;
+}
+
+.move-list-container {
+  display: flex;
+  height: (576 / 1366) * 100vw;
+  flex-direction: column;
+  margin-left: 1.5%;
+  justify-content: space-between;
+}

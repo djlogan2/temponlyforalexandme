@@ -1,34 +1,17 @@
+import React, { FCICC } from "react";
+import "./index.scss";
 import DummyChessboard from "/client/app/components/DummyChessboard";
 import Flip from "/client/app/components/icons/Flip";
 import Movelist from "/client/app/components/Movelist";
 import PlayerInfo from "/client/app/components/PlayerInfo";
 import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
 import GameTitle from "/client/app/shared/GameTitle";
-import React, { FCICC } from "react";
 
 interface IGameMarkup {}
 
 const GameMarkup: FCICC<IGameMarkup> = () => (
-  <div
-    style={{
-      display: "flex",
-      padding: "5%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      boxSizing: "border-box",
-      height: "100%",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        height: `${(576 / 1366) * 100}vw`,
-        flexDirection: "column",
-        marginRight: "3%",
-        justifyContent: "space-between",
-      }}
-    >
+  <div className="container">
+    <div className="player-info-container">
       <PlayerInfo
         userStatus="online"
         picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -52,15 +35,8 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
         token={{ token: "FAKE_TEXT", args: [] }}
       />
     </div>
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        height: "100%",
-      }}
-    >
-      <div style={{ marginBottom: "1%" }}>
+    <div className="center-container">
+      <div className="game-title-container">
         <GameTitle
           minutes={15}
           keyboardFunctions={[]}
@@ -72,19 +48,11 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
         />
       </div>
       <DummyChessboard />
-      <div style={{ textAlign: "right", marginTop: "1%" }}>
+      <div className="flip-container">
         <Flip onClick={() => null} />
       </div>
     </div>
-    <div
-      style={{
-        display: "flex",
-        height: `${(576 / 1366) * 100}vw`,
-        flexDirection: "column",
-        marginLeft: "1.5%",
-        justifyContent: "space-between",
-      }}
-    >
+    <div className="move-list-container">
       <DigitalClock
         time="00:00:29"
         status="in"

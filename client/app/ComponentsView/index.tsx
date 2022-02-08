@@ -1,4 +1,5 @@
 import React, { FCICC } from "react";
+import "./index.scss";
 import { useHistory } from "react-router-dom";
 import Movelist from "../components/Movelist";
 import Avatar from "../shared/Avatar";
@@ -30,16 +31,8 @@ const ComponentsView: FCICC<IComponentsView> = () => {
   const history = useHistory();
 
   return (
-    <div style={{ display: "flex", margin: "25px" }}>
-      <div
-        style={{
-          width: "50vw",
-          height: "calc(100% - 60px)",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-        }}
-      >
+    <div className="container">
+      <div className="elements-container">
         <div>
           <Avatar
             picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -137,11 +130,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
               classes={[]}
               token={{ token: "FAKE_TEXT", args: [] }}
             />
-            <div
-              style={{
-                padding: "10px",
-              }}
-            />
+            <div className="player-info-container" />
             <PlayerInfo
               userStatus="online"
               picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -317,14 +306,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           }}
         />
       </div>
-      <div
-        style={{
-          width: "100%",
-          height: "calc(100vh - 60px)",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <div className="board-contaier">
         <ActionButton
           name="redirect-button"
           hoverText="Click on me!"
@@ -335,11 +317,10 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           }}
           classes={[]}
           onButtonClick={() => {
-            console.log("actions");
             history.push("/game");
           }}
         />
-        <div style={{ width: "40%", height: "auto" }}>
+        <div className="board-wrapper">
           <DummyChessboard />
         </div>
       </div>

@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  margin: 25px;
+}
+
+.elements-container {
+  width: 50vw;
+  height: calc(100% - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.board-contaier {
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+}
+
+.board-wrapper {
+  width: 40%;
+  height: auto;
+}
+
+.player-info-container {
+  padding: 10px;
+}

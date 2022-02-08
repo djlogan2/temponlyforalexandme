@@ -10,17 +10,9 @@ interface IGameTitle {
 }
 
 const GameTitle: FCICC<IGameTitle> = ({ minutes, instance, date }) => (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      width: "fit-content",
-      alignItems: "center",
-    }}
-  >
+  <div className="container">
     <RapidIcon />
-    <div className={clsx("gameTitleTitle")} style={{ marginLeft: "10px" }}>
+    <div className={clsx("gameTitleTitle")}>
       {window.i18n.translate("game_title_title", `${minutes}`)}
     </div>
     {instance && (

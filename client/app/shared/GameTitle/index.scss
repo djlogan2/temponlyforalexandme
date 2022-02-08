@@ -23,3 +23,11 @@
   line-height: 105%;
   color: #55586a;
 }
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: fit-content;
+  align-items: center;
+}

@@ -96,13 +96,13 @@ const Movelist: FCICC<IMovelistProps> = ({
                     {!!WhitePiece && (
                       <WhitePiece color="black" width={19} height={15} />
                     )}
-                    <span style={{ marginLeft: 4 }}>{move.first.move}</span>
+                    <span className="span-margin">{move.first.move}</span>
                   </div>
                   <div>
                     {!!BlackPiece && (
                       <BlackPiece color="black" width={19} height={15} />
                     )}
-                    <span style={{ marginLeft: 4 }}>{move.second.move}</span>
+                    <span className="span-margin">{move.second.move}</span>
                   </div>
                 </div>
               );
@@ -124,13 +124,7 @@ const Movelist: FCICC<IMovelistProps> = ({
       {RequestIcon ? (
         <div>
           <RegularButton>
-            <span
-              style={{
-                marginRight: 6,
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
+            <span className="regular-span">
               <RequestIcon width={22} height={22} />
             </span>
             {RequestButtonText[request || "resign"]}
