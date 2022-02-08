@@ -58,56 +58,24 @@
 }
 .playerInfoContainer {
   width: max-content;
-  parent: system;
   display: flex;
   box-sizing: border-box;
   align-items: flex-end;
   flex-direction: column;
 }
 .playerInfoContainerFlipped {
-  parent: system;
   flex-direction: column-reverse;
 }
-.playerInfoImgContainer {
-  width: 48px;
-  height: 48px;
-  parent: system;
-  overflow: hidden;
-  border-radius: 50%;
-}
-.playerInfoImgContainerOnline {
-  parent: system;
-  outline: 2px solid #00B817;
-}
-.playerInfoImgContainerIdle {
-  parent: system;
-  outline: 2px solid #55586A;
-}
-.playerInfoImgContainerUnavailable {
-  parent: system;
-  outline: 2px solid #0F5AB6;
-}
-.playerInfoImgContainerOffline {
-  parent: system;
-  outline: none;
-}
-.playerInfoImg {
-  width: 100%;
-  height: 100%;
-  parent: system;
-  object-fit: cover;
-}
+
 .playerInfoIcons {
   width: 143px;
-  parent: system;
   display: flex;
   margin-top: 8px;
   margin-bottom: 9px;
   justify-content: space-between;
 }
 .playerInfoUsername {
-  color: #55586A;
+  color: #55586a;
   margin: 0;
-  parent: system;
   font-size: 14px;
 }

@@ -6,13 +6,14 @@ import ChessTitle from "../icons/ChessTitle";
 import France from "../icons/France";
 import LagIcon from "../icons/Lag";
 import WebcamIcon from "../icons/Webcam";
+import Avatar, { TUserStatus } from "../../shared/Avatar";
 
 interface IPlayerInfoProps {
   picture: string;
   username: string;
   rank: number;
   title: string;
-  userStatus: "online" | "idle" | "unavailable" | "offline";
+  userStatus: TUserStatus;
   lagLevel: 1 | 2 | 3 | 4 | 5;
   flip?: boolean;
 }
@@ -29,30 +30,17 @@ const PlayerInfo: FCICC<IPlayerInfoProps> = ({
   <div
     className={clsx(
       "playerInfoContainer",
-      flip && "playerInfoContainerFlipped",
+      flip && "playerInfoContainer--flipped",
     )}
   >
-    <div
-      className={clsx(
-        "playerInfoImgContainer",
-        userStatus === "online" && "playerInfoImgContainerOnline",
-        userStatus === "idle" &&
-          "playerInfoImgContainerIdle" &&
-          "playerInfoImgContainerIdle",
-        userStatus === "unavailable" &&
-          "playerInfoImgContainerUnavailable" &&
-          "playerInfoImgContainerUnavailable",
-        userStatus === "offline" &&
-          "playerInfoImgContainerOffline" &&
-          "playerInfoImgContainerOffline",
-      )}
-    >
-      <img
-        className="playerInfoImg"
-        src={picture}
-        alt={`${username}'s profile`}
-      />
-    </div>
+    <Avatar
+      picture={picture}
+      username={username}
+      className="playerInfoImgContainer"
+      status={userStatus}
+      size="bg"
+    />
+
     <div className="playerInfoIcons">
       <ChatIcon />
       <WebcamIcon />

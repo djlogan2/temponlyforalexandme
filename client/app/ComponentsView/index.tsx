@@ -1,6 +1,7 @@
 import React, { FCICC } from "react";
 import { useHistory } from "react-router-dom";
 import Movelist from "../components/Movelist";
+import Avatar from "../shared/Avatar";
 import StandardButton from "../shared/Buttons/StandardButton";
 import CapturedPieces from "/client/app/components/CapturedPieces";
 import DummyChessboard from "/client/app/components/DummyChessboard";
@@ -39,6 +40,13 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           justifyContent: "space-around",
         }}
       >
+        <div>
+          <Avatar
+            picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            username="username"
+            status="online"
+          />
+        </div>
         <div>
           <h2>Buttons</h2>
           <ActionButton

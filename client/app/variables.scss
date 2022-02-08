@@ -7,10 +7,15 @@
   --colorPrimary: #0f5ab6;
   --colorSecondary: blue;
 
-
   --buttonColorDefault: var(--colorPrimary);
 
   --checkboxColorDefault: var(--colorSecondary);
 
-  --logoImage: "http"
+  --logoImage: "http";
+
+  --userAvatarColorOnline: #00b817;
+  --userAvatarColorIdle: #55586a;
+  --userAvatarColorUnavailable: #0f5ab6;
+  --userAvatarColorOffline: transparent;
+  --userAvatarNoPictureBg: 83.87% 83.87% at 100% 100%, #1565c0 0%, #061c36 100%;
 }
