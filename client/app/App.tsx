@@ -23,7 +23,7 @@ const i18nClient = new Clienti18n(i18ndao);
 const theme = new ClientTheme(themedao);
 
 const App: FCICC = ({ classes, ...rest }) => {
-  const isSubsReady = useAllServicesReady();
+  const isSubsReady = true; // useAllServicesReady();
 
   return isSubsReady ? (
     <ThemeProvider themeService={theme}>

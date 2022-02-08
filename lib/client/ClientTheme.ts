@@ -8,6 +8,8 @@ export default class ClientTheme extends CommonTheme {
     return this.dao.events;
   }
 
+  public isReady = false;
+
   //
   // window.theme.on('themechanged', (reactclass) => {});
   //
@@ -20,7 +22,13 @@ export default class ClientTheme extends CommonTheme {
       console.log(`THEME: ${JSON.stringify(reactclass)}`);
     });
 
-    // this.dao.events.on("event", () => {});
+    const readyHandler = () => {
+      console.log("The ClientTheme is ready");
+      this.isReady = true;
+      this.events.off("ready", readyHandler);
+    };
+
+    this.events.on("ready", readyHandler);
   }
 
   public getTheme = () => this.dao.readOne({});

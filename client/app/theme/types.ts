@@ -1,4 +1,5 @@
 export interface IThemeService {
+  isReady: boolean;
   getTheme: () => Object | undefined;
   events: {
     on: (

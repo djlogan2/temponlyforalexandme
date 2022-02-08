@@ -11,15 +11,33 @@ const ThemeProvider: FC<IThemeProvider> = ({ themeService, children }) => {
   const themeValue = useMemo(() => ({ theme, isReady: !!theme }), [theme]);
 
   useEffect(() => {
-    const handleTheme = () => setTheme(themeService.getTheme());
-
-    themeService.events.on("ready", handleTheme);
-    themeService.events.on("themechanged", handleTheme);
-
-    return () => {
-      themeService.events.off("ready", handleTheme);
-      themeService.events.off("themechanged", handleTheme);
+    const handleTheme = (t?: any) => {
+      console.log("Theme changed or initialized", t);
+      setTheme(themeService.getTheme());
     };
+
+    const destroy: Function[] = [];
+
+    if (!themeService.isReady) {
+      const destroyReadyHandler = () =>
+        themeService.events.off("ready", handleThemeReady);
+      const handleThemeReady = () => {
+        handleTheme();
+        destroyReadyHandler();
+        const idx = destroy.indexOf(destroyReadyHandler);
+        if (idx !== -1) destroy.splice(idx, 1);
+      };
+
+      themeService.events.on("ready", handleThemeReady);
+      destroy.push(destroyReadyHandler);
+    } else {
+      handleTheme();
+    }
+    // themeService.events.on("themechanged", handleTheme);
+    themeService.events.on("themechanged", handleTheme);
+    destroy.push(() => themeService.events.off("themechanged", handleTheme));
+
+    return () => destroy.forEach((c) => c());
   }, []);
 
   return (
