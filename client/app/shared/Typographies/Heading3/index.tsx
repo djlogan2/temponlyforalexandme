@@ -1,5 +1,5 @@
 import React, { FCICC } from "react";
-import styles from "./index.m.scss";
+import "./index.scss";
 import useTranslate from "/client/app/hooks/useTranslate";
 
 interface Heading3Props {

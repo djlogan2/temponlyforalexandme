@@ -4,7 +4,7 @@ import clsx from "clsx";
 import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";
 import useTranslate from "../../hooks/useTranslate";
-import styles from "./index.scss";
+import "./index.scss";
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -33,7 +33,6 @@ const Input: FCICC<IInputProps> = ({
   return (
     <div
       className={clsx(
-        styles.test,
         className,
         "inputFormControl",
         error && "inputFormControlError",

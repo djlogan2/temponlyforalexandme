@@ -1,6 +1,6 @@
 import ComponentsView from "/client/app/ComponentsView";
 import GameMarkup from "/client/app/GameMarkup";
-import React, { FCICC, useEffect } from "react";
+import React, { FCICC } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
@@ -11,6 +11,8 @@ import ClientTheme from "/lib/client/ClientTheme";
 import { withTranslations } from "./hocs/withTranslations";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import Theme, { ThemeContext } from "./theme";
+import useAllServicesReady from "./hooks/useAllServicesReady";
+import Spinner from "./shared/Spinner";
 
 const subscriptionservice = new SubscriptionService(null);
 
@@ -21,9 +23,9 @@ const i18nClient = new Clienti18n(i18ndao);
 const theme = new ClientTheme(themedao);
 
 const App: FCICC = ({ classes, ...rest }) => {
-  console.log("Render app");
+  const isSubsReady = useAllServicesReady();
 
-  return (
+  return isSubsReady ? (
     <ThemeContext.Provider value={theme as any}>
       <Theme />
       <Router>
@@ -51,6 +53,8 @@ const App: FCICC = ({ classes, ...rest }) => {
         </Switch>
       </Router>
     </ThemeContext.Provider>
+  ) : (
+    <Spinner />
   );
 };
 
