@@ -10,7 +10,7 @@ import Clienti18n from "/lib/client/Clienti18n";
 import ClientTheme from "/lib/client/ClientTheme";
 import { withTranslations } from "./hocs/withTranslations";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
-import Theme, { ThemeContext } from "./theme";
+import Theme, { ThemeProvider } from "./theme";
 import useAllServicesReady from "./hooks/useAllServicesReady";
 import Spinner from "./shared/Spinner";
 
@@ -26,7 +26,7 @@ const App: FCICC = ({ classes, ...rest }) => {
   const isSubsReady = useAllServicesReady();
 
   return isSubsReady ? (
-    <ThemeContext.Provider value={theme as any}>
+    <ThemeProvider themeService={theme}>
       <Theme />
       <Router>
         <Switch>
@@ -52,7 +52,7 @@ const App: FCICC = ({ classes, ...rest }) => {
           </Route>
         </Switch>
       </Router>
-    </ThemeContext.Provider>
+    </ThemeProvider>
   ) : (
     <Spinner />
   );
