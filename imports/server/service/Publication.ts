@@ -2,11 +2,13 @@ import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReac
 import { CollectionNames } from "/lib/CollectionNames";
 import { Subscription } from "meteor/meteor";
 import Stoppable from "/lib/Stoppable";
+import ServerLogger from "/lib/server/ServerLogger";
+import * as util from "util";
 
 export default abstract class Publication<
   T extends { _id: string },
 > extends DynamicSelectorReactiveReadOnlyDao<T> {
-  private collection: CollectionNames;
+  private logger: ServerLogger;
 
   private nativesubscription: Subscription;
 
@@ -16,34 +18,44 @@ export default abstract class Publication<
     collection: CollectionNames,
   ) {
     super(parent, collection);
+    this.logger = new ServerLogger(this, "Publication_js");
     this.nativesubscription = pub;
-    this.collection = collection;
     this.nativesubscription.onStop(() => {
       this.stopping();
     });
   }
 
   protected add(id: string, record: Partial<T>): void {
+    this.logger.debug(
+      () => `${this.collection} add id=${id} record=${util.inspect(record)}`,
+    );
     this.nativesubscription.added(this.collection, id, record);
   }
 
   protected change(id: string, record: Partial<T>): void {
+    this.logger.debug(
+      () => `${this.collection} change id=${id} record=${util.inspect(record)}`,
+    );
     this.nativesubscription.changed(this.collection, id, record);
   }
 
   protected remove(id: string): void {
+    this.logger.debug(() => `${this.collection} remove id=${id}`);
     this.nativesubscription.removed(this.collection, id);
   }
 
   protected ready(): void {
+    this.logger.debug(() => `${this.collection} ready`);
     this.nativesubscription.ready();
   }
 
   protected stopsub(): void {
+    this.logger.debug(() => `${this.collection} stopsub`);
     this.nativesubscription.stop();
   }
 
   protected substopping(): void {
+    this.logger.debug(() => `${this.collection} substopping`);
     // this.stopping();
   }
 

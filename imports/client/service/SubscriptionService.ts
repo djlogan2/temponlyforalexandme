@@ -12,6 +12,7 @@ export default class SubscriptionService extends Stoppable {
    */
 
   public getSubscriptionEventEmitter<E extends string>(
+    parent: Stoppable | null,
     publication: SubscriptionNames,
   ): ICCEventEmitter<E> {
     if (!globalThis.subscriptions[publication])

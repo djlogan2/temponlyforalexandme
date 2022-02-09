@@ -2,17 +2,11 @@ import { Subscription } from "meteor/meteor";
 import ServerConnection from "/lib/server/ServerConnection";
 import { ThemeRecord } from "/lib/records/ThemeRecord";
 import Stoppable from "/lib/Stoppable";
-import Publication from "/imports/server/service/Publication";
 import ServerUser from "/lib/server/ServerUser";
+import UserChangePublication from "/imports/server/service/UserChangePublication";
 
-export default class ThemePublication extends Publication<ThemeRecord> {
-  private connection?: ServerConnection;
-
+export default class ThemePublication extends UserChangePublication<ThemeRecord> {
   private user?: ServerUser;
-
-  private readonly pUserlogin: (user: ServerUser) => void;
-
-  private readonly pUserlogout: () => void;
 
   private readonly pTheme: (theme: string) => void;
 
@@ -21,22 +15,12 @@ export default class ThemePublication extends Publication<ThemeRecord> {
     connection: ServerConnection | null,
     publishobject: Subscription,
   ) {
-    super(parent, publishobject, "themes");
+    super(parent, publishobject, "themes", connection);
 
-    this.pUserlogin = (user) => this.onLogin(user);
-    this.pUserlogout = () => this.onLogout();
     this.pTheme = (theme) => this.onThemeChange(theme);
-
-    if (!connection) return;
-
-    this.connection = connection;
-    this.connection.events.on("userlogin", this.pUserlogin);
-    this.connection.events.on("userlogout", this.pUserlogout);
-
-    if (this.connection.user) this.onLogin(this.connection.user);
   }
 
-  private onLogin(user: ServerUser): void {
+  protected userLogin(user: ServerUser): void {
     if (this.user) this.user.events.off("theme", this.pTheme);
 
     this.user = user;
@@ -48,14 +32,15 @@ export default class ThemePublication extends Publication<ThemeRecord> {
     this.setSelector({ _id: theme });
   }
 
-  private onLogout(): void {}
+  protected userLogout(): void {
+    if (this.user) {
+      this.user.events.off("theme", this.pTheme);
+      delete this.user;
+    }
+  }
 
   protected stopping(): void {
     super.stopping();
-    if (this.connection) {
-      this.connection.events.off("userlogin", this.pUserlogin);
-      this.connection.events.off("userlogout", this.pUserlogout);
-    }
     if (this.user) this.user.events.off("theme", this.pTheme);
   }
 }

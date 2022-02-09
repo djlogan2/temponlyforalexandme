@@ -4,20 +4,9 @@ import Stoppable from "/lib/Stoppable";
 import ClientUser from "/lib/client/ClientUser";
 
 export default class CommonReadOnlyUserDao extends ReactiveReadOnlyDao<UserRecord> {
-  private userlist: { [id: string]: ClientUser } = {};
-
   constructor(parent: Stoppable | null) {
     super(parent, "users");
     this.start({}, undefined, undefined);
-  }
-
-  public addUser(user: ClientUser): void {
-    if (this.userlist[user.id]) return;
-    this.userlist[user.id] = user;
-  }
-
-  public removeUser(user: ClientUser): void {
-    delete this.userlist[user.id];
   }
 
   private eachField(id: string, record: Partial<UserRecord>): void {

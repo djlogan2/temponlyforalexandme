@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { noop } from "lodash";
-import React, { FC, FCICC, useRef, useState } from "react";
+import React, { FCICC, useRef, useState } from "react";
 import Chevron from "../../components/icons/Chevron";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import useTranslate from "../../hooks/useTranslate";

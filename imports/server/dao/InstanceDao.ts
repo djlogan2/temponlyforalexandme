@@ -7,8 +7,6 @@ export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
 
   private removedcallbacks: ((instanceid: string) => void)[] = [];
 
-  private stopcallbacks: (() => void)[] = [];
-
   constructor(parent: Stoppable | null) {
     super(parent, "instances");
   }
@@ -36,6 +34,5 @@ export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
 
   protected stopping() {
     super.stopping();
-    this.stopcallbacks.forEach((callback) => callback());
   }
 }

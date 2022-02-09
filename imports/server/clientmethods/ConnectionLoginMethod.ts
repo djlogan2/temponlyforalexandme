@@ -3,6 +3,8 @@ import AbstractClientMethod, {
 } from "/lib/server/AbstractClientMethod";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { Meteor } from "meteor/meteor";
+import ServerLogger from "/lib/server/ServerLogger";
+import Stoppable from "/lib/Stoppable";
 
 export interface HttpHeadersICareAbout {
   "user-agent": string;
@@ -15,14 +17,24 @@ interface ConnectionLoginObject extends ClientCallObject {
 export default class ConnectionLoginMethod extends AbstractClientMethod {
   private connectionservice: ConnectionService;
 
-  constructor(connectionservice: ConnectionService) {
-    super("newUserLogin", ["hashtoken"], [], connectionservice);
+  private logger: ServerLogger;
+
+  constructor(parent: Stoppable | null, connectionservice: ConnectionService) {
+    super(parent, "newUserLogin", ["hashtoken"], [], connectionservice);
     this.connectionservice = connectionservice;
+    this.logger = new ServerLogger(
+      connectionservice,
+      "ConnectionLoginObject_js",
+    );
   }
 
   protected validatearguments(obj: ConnectionLoginObject): void {}
 
   protected async called(obj: ConnectionLoginObject): Promise<string> {
+    this.logger.debug(
+      () =>
+        `called, connection= ${obj.connection?._id} hashtoken=${obj.hashtoken}`,
+    );
     if (!obj.connection) throw new Meteor.Error("NULL_CONNECTION");
     const localestring = (obj.httpHeaders as HttpHeadersICareAbout)[
       "accept-language"
@@ -34,4 +46,6 @@ export default class ConnectionLoginMethod extends AbstractClientMethod {
       pieces[0],
     );
   }
+
+  protected stopping() {}
 }

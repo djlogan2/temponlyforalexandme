@@ -3,19 +3,13 @@ import { i18nRecord } from "/lib/records/i18nRecord";
 import ServerConnection from "/lib/server/ServerConnection";
 import I18nService from "/imports/server/service/i18nService";
 import Stoppable from "/lib/Stoppable";
-import Publication from "/imports/server/service/Publication";
 import ServerUser from "/lib/server/ServerUser";
+import UserChangePublication from "/imports/server/service/UserChangePublication";
 
-export default class I18nPublication extends Publication<i18nRecord> {
-  private connection: ServerConnection | null;
-
+export default class I18nPublication extends UserChangePublication<i18nRecord> {
   private user?: ServerUser | null;
 
   private service: I18nService;
-
-  private readonly pUserlogin: (user: ServerUser) => void;
-
-  private readonly pUserlogout: () => void;
 
   private readonly pLocale: (locale: string) => void;
 
@@ -26,24 +20,17 @@ export default class I18nPublication extends Publication<i18nRecord> {
     connection: ServerConnection | null,
     user: ServerUser | null,
   ) {
-    super(parent, pub, "i18n");
+    super(parent, pub, "i18n", connection);
 
-    this.pUserlogin = (user2) => this.onLogin(user2);
-    this.pUserlogout = () => this.onLogout();
     this.pLocale = (locale) => this.onLocaleChange(locale);
 
     this.service = service;
-    this.connection = connection;
     this.user = user;
-    if (this.connection) {
-      this.connection.events.on("userlogin", this.pUserlogin);
-      this.connection.events.on("userlogout", this.pUserlogout);
-      if (this.connection.user) this.onLogin(this.connection.user);
-    }
   }
 
-  private onLogin(user: ServerUser): void {
-    if (this.user) this.user.events.off("locale", this.pLocale);
+  protected userLogin(user: ServerUser): void {
+    this.user = user;
+    this.user.events.off("locale", this.pLocale);
 
     this.user = user;
     this.user.events.on("locale", this.pLocale);
@@ -54,15 +41,12 @@ export default class I18nPublication extends Publication<i18nRecord> {
     this.setSelector(this.service.getLocaleSelector(locale));
   }
 
-  private onLogout(): void {
-    // Don't just go back to the browser, leave it in whatever locale it was in when the user logged out
+  protected userLogout(): void {
+    if (this.user) this.user.events.off("locale", this.pLocale);
+    delete this.user;
   }
 
   protected stopping(): void {
-    if (this.connection) {
-      this.connection.events.off("userlogin", this.pUserlogin);
-      this.connection.events.off("userlogout", this.pUserlogout);
-    }
     if (this.user) this.user.events.off("locale", this.pLocale);
   }
 }

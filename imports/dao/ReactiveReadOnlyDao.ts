@@ -3,12 +3,19 @@ import Stoppable from "/lib/Stoppable";
 import { Mongo } from "meteor/mongo";
 import ReadOnlyDao from "/imports/dao/ReadOnlyDao";
 import { CollectionNames } from "/lib/CollectionNames";
+import CommonLogger from "/lib/CommonLogger";
 
 export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
   protected observehandle?: Meteor.LiveQueryHandle;
 
+  private loggerrrod: CommonLogger;
+
   constructor(parent: Stoppable | null, collection: CollectionNames) {
     super(collection, parent);
+    this.loggerrrod = globalThis.ICCServer.utilities.getLogger(
+      this,
+      "ReactiveReadOnlyDao_js",
+    );
   }
 
   /**
@@ -24,6 +31,12 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
     fields?: (keyof T)[],
   ): void {
     const self = this;
+    this.loggerrrod.debug(
+      () =>
+        `${self.collection} start selector=${JSON.stringify(
+          selector,
+        )} includeOrExclude=${includeOrExclude} fields=${fields}`,
+    );
     const fld = this.fields(includeOrExclude, fields);
 
     let cursor;
@@ -33,12 +46,27 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
 
     this.observehandle = cursor.observeChanges({
       added(id, doc) {
+        self.loggerrrod.debug(
+          () =>
+            `${
+              self.collection
+            } start.observChanges.added id=${id} doc=${JSON.stringify(doc)}`,
+        );
         self.onRecordAdded(id, doc);
       },
       changed(id, doc) {
+        self.loggerrrod.debug(
+          () =>
+            `${
+              self.collection
+            } start.observChanges.changed id=${id} doc=${JSON.stringify(doc)}`,
+        );
         self.onFieldsChanged(id, doc);
       },
       removed(id) {
+        self.loggerrrod.debug(
+          () => `${self.collection} start.observChanges.removed id=${id}`,
+        );
         self.onRecordRemoved(id);
       },
     });
@@ -49,6 +77,7 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
    * @protected
    */
   protected stopping(): void {
+    this.loggerrrod.debug(() => `${this.collection} stopping`);
     super.stopping();
     if (this.observehandle) this.observehandle.stop();
   }

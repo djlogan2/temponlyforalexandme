@@ -17,6 +17,7 @@ export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLogger
   ) {
     super(parent);
     this.pEvents = subscriptionservice.getSubscriptionEventEmitter(
+      this,
       "logger_configuration",
     );
   }

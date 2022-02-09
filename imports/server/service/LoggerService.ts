@@ -37,7 +37,11 @@ export default class LoggerService extends Stoppable {
     this.readableconfigdao = loggerconfigdao;
     this.writeableconfigdao = writableconfigdao;
     this.loggerdao = loggerdao;
-    this.loggerclientmethod = new LoggerClientMethod(this, connectionservice);
+    this.loggerclientmethod = new LoggerClientMethod(
+      this,
+      this,
+      connectionservice,
+    );
 
     this.readLoggerConfiguration();
 

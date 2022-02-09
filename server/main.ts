@@ -1,7 +1,6 @@
 // noinspection JSUnusedLocalSymbols
 
 import "../lib/server/ICCGlobal";
-import LoggerService from "/imports/server/service/LoggerService";
 import InstanceService from "/imports/server/service/InstanceService";
 import InstanceDao from "/imports/server/dao/InstanceDao";
 import ConnectionService from "/imports/server/service/ConnectionService";
@@ -11,11 +10,10 @@ import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerCo
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
-import ThemeService from "/imports/server/service/ThemeService";
 import WritableThemeDao from "/imports/server/dao/WritableThemeDao";
-import I18nService from "/imports/server/service/i18nService";
 import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
-import UserService from "/imports/server/publications/UserPublication";
+import WritableGameDao from "/imports/server/dao/WritableGameDao";
+import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 
 const parent = null;
 
@@ -40,6 +38,9 @@ const i18nwritabledao = new Writablei18nDao(null);
 
 const instanceservice = new InstanceService(parent, instancedao);
 
+const writablegamedao = new WritableGameDao(null);
+const readonlygamedao = new CommonReadOnlyGameDao(null);
+
 const connectionservice = new ConnectionService(
   parent,
   instanceservice,
@@ -51,4 +52,6 @@ const connectionservice = new ConnectionService(
   readableloggerconfigdao,
   writableloggerconfigdao,
   logrecordsdao,
+  writablegamedao,
+  readonlygamedao,
 );

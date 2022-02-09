@@ -4,6 +4,7 @@ import AbstractClientMethod, {
 import { IdleMessage } from "/lib/records/IdleMessage";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { check } from "meteor/check";
+import Stoppable from "/lib/Stoppable";
 
 interface ConnectionIdleFunctionObject extends ClientCallObject {
   msg: IdleMessage;
@@ -12,8 +13,8 @@ interface ConnectionIdleFunctionObject extends ClientCallObject {
 export default class ConnectionIdleMethod extends AbstractClientMethod {
   private connectionservice: ConnectionService;
 
-  constructor(connectionservice: ConnectionService) {
-    super("idleFunction", ["msg"], [], connectionservice);
+  constructor(parent: Stoppable | null, connectionservice: ConnectionService) {
+    super(parent, "idleFunction", ["msg"], [], connectionservice);
     this.connectionservice = connectionservice;
   }
 
@@ -27,4 +28,6 @@ export default class ConnectionIdleMethod extends AbstractClientMethod {
   protected called(obj: ConnectionIdleFunctionObject) {
     if (obj.connection) obj.connection.idleMessage(obj.msg);
   }
+
+  protected stopping() {}
 }

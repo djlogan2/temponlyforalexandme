@@ -1,3 +1,4 @@
+import EventEmitter from "eventemitter3";
 import { Meteor } from "meteor/meteor";
 import AbstractTimestampNode from "/lib/AbstractTimestampNode";
 import Stoppable from "/lib/Stoppable";
@@ -24,7 +25,11 @@ const resetEvents = {
 };
 
 export default class ClientConnection extends AbstractTimestampNode {
-  private pConnectionid: string = "none";
+  // private readonly pConnectionid: string = "none";
+
+  private readonly pEvents = new EventEmitter<
+    "loggedin" | "loggedout" | "disconnected"
+  >();
 
   private userdao: CommonReadOnlyUserDao;
 
@@ -34,12 +39,20 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private logger2 = new ClientLogger(this, "client/ClientConnection");
 
-  private idlehandle?: number;
+  private readonly idlehandle?: number;
 
-  private user?: ClientUser;
+  private pUser?: ClientUser;
+
+  public get events() {
+    return this.pEvents;
+  }
+
+  public get user() {
+    return this.pUser;
+  }
 
   public get connectionid() {
-    return this.pConnectionid;
+    return Meteor.connection._lastSessionId;
   }
 
   constructor(parent: Stoppable | null, userdao: CommonReadOnlyUserDao) {
@@ -48,49 +61,33 @@ export default class ClientConnection extends AbstractTimestampNode {
     globalThis.connection = this;
 
     this.logger2.debug(() => "constructor");
-    Meteor.startup(() => {
-      this.pConnectionid = Meteor.connection._lastSessionId;
+    const hashToken = this.getHashToken();
+    this.logger2.debug(
+      () => `Calling newUserLogin with hashToken=${hashToken}`,
+    );
 
-      const hashToken = this.getHashToken();
-      this.logger2.debug(
-        () => `Calling newUserLogin with hashToken=${hashToken}`,
-      );
-      Meteor.call(
-        "newUserLogin",
-        hashToken,
-        (err: Meteor.Error, id: string) => {
-          if (err) {
-            this.logger2.error(() => `Call returned an error: ${err.message}`);
-          } else {
-            this.logger2.debug(() => `newUserLogin returns ${id}`);
-            this.user = new ClientUser(this, id);
-            globalThis.user = this.user;
-          }
-        },
-      );
+    // @ts-ignore
+    DDP.onReconnect(() => this.newUserLogin(hashToken));
 
-      this.logger2.debug(() => `connection id=${this.pConnectionid}`);
+    window.addEventListener("blur", () => this.isFocused(false));
+    window.addEventListener("focus", () => this.isFocused(true));
+    window.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
+    resetEvents.globalThis.forEach((event) =>
+      window.addEventListener(event, () => this.isActive()),
+    );
+    resetEvents.document.forEach((event) =>
+      document.addEventListener(event, () => this.isActive()),
+    );
 
-      window.addEventListener("blur", () => this.isFocused(false));
-      window.addEventListener("focus", () => this.isFocused(true));
-      window.addEventListener("scroll", () => this.isActive(), true); // 'true' is required for this one!
-      resetEvents.globalThis.forEach((event) =>
-        window.addEventListener(event, () => this.isActive()),
-      );
-      resetEvents.document.forEach((event) =>
-        document.addEventListener(event, () => this.isActive()),
-      );
-
-      this.idlehandle = Meteor.setInterval(() => {
-        const idle: IdleMessage = {
-          type: "idle",
-          idleseconds: this.idle,
-          focused: this.focused,
-        };
-        Meteor.call("idleFunction", idle);
-        this.idle += 1;
-      }, 1000);
-    });
+    this.idlehandle = Meteor.setInterval(() => {
+      const idle: IdleMessage = {
+        type: "idle",
+        idleseconds: this.idle,
+        focused: this.focused,
+      };
+      Meteor.call("idleFunction", idle);
+      this.idle += 1;
+    }, 1000);
 
     const self = this;
 
@@ -111,6 +108,19 @@ export default class ClientConnection extends AbstractTimestampNode {
 
     Meteor.directStream.onMessage(processDirectStreamMessage);
     this.start();
+  }
+
+  private newUserLogin(hashToken: string): void {
+    Meteor.call("newUserLogin", hashToken, (err: Meteor.Error, id: string) => {
+      if (err) {
+        this.logger2.error(() => `Call returned an error: ${err.message}`);
+      } else {
+        this.logger2.debug(() => `newUserLogin returns ${id}`);
+        this.pUser = new ClientUser(this, id);
+        globalThis.user = this.pUser;
+        this.pEvents.emit("loggedin");
+      }
+    });
   }
 
   private isActive(): void {
@@ -149,8 +159,7 @@ export default class ClientConnection extends AbstractTimestampNode {
     Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  public getHashToken(): string | undefined {
+  public getHashToken(): string {
     let hashToken = globalThis.localStorage.getItem("ICCUser.hashToken");
     if (!hashToken) {
       hashToken = Random.secret();

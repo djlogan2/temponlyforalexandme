@@ -26,3 +26,4 @@ jquery
 standard-minifier-js@2.8.0
 lmieulet:meteor-coverage
 fourseven:scss
+lmieulet:meteor-legacy-coverage

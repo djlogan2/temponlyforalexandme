@@ -1,9 +1,10 @@
 import { PingMessage } from "/lib/records/PingMessage";
+import { ClockSettings, PieceColor } from "/lib/records/ChallengeRecord";
 
 type ChessJSFlags = "n" | "b" | "e" | "c" | "p" | "k" | "q" | "pc" | null;
 type ChessJSPiece = "p" | "r" | "n" | "b" | "q" | "k";
 type ChessJSPromotablePeice = "r" | "n" | "b" | "q";
-type PieceColor = "b" | "w";
+export type GameStatus = "1-0" | "0-1" | "1/2-1/2" | "*";
 
 interface OneColorPending {
   draw: boolean;
@@ -27,15 +28,13 @@ interface ChessJSMove {
   promotion?: ChessJSPromotablePeice;
 }
 
-interface Clock {
-  initial: number;
-  inc_or_delay: number;
-  delayinterface: "none" | "inc" | "us" | "bronstein";
+export interface Clock {
+  initial: ClockSettings;
   current: number;
   starttime: number;
 }
 
-interface Clocks {
+export interface Clocks {
   white: Clock;
   black: Clock;
 }
@@ -51,7 +50,7 @@ interface LagObject {
 }
 
 interface PlayerInfo {
-  username: string;
+  username?: string;
   userid: string;
   rating: number;
   titles: string[];
@@ -88,7 +87,7 @@ interface ExaminedGameMoveListNode extends BasicMoveListNode {
 interface VariationsInterface {
   halfmovetakeback: number;
   currentmoveindex: number;
-  movelist: BasicMoveListNode;
+  movelist: BasicMoveListNode[];
 }
 
 export interface BasicGameRecord {
@@ -101,18 +100,20 @@ export interface BasicGameRecord {
   variations: VariationsInterface;
 }
 
-export interface BasicPlayedGameRecord {
+export interface BasicPlayedGameRecord extends BasicGameRecord {
+  tomove: PieceColor;
+  fen: string;
   premove?: ChessJSMove;
   clocks: Clocks;
   pending: Pending;
 }
 
-export interface PlayedGameRecord extends BasicPlayedGameRecord {
+export type GameTypes = "playing" | "analyzing" | "computer";
+
+export interface TwoPlayerPlayedGameRecord extends BasicPlayedGameRecord {
   status: "playing";
   ratinginterface: string;
   rated: boolean;
-  white: PlayerInfo;
-  black: PlayerInfo;
   lag: LagObject;
 }
 
@@ -123,10 +124,13 @@ export interface ComputerPlayGameRecord extends BasicPlayedGameRecord {
   skill_level: number;
 }
 
-export interface ExaminedGameRecord {
-  status: "examining";
+export interface AnalysisGameRecord extends BasicGameRecord {
+  status: "analyzing";
   white: Partial<PlayerInfo>;
   black: Partial<PlayerInfo>;
   ratinginterface?: string;
   rated?: boolean;
+  result: GameStatus;
+  result2?: number;
+  examiners: Observerinterface[];
 }

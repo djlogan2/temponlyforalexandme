@@ -8,6 +8,9 @@ import PublicationService from "/imports/server/service/PublicationService";
 import ServerConnection from "/lib/server/ServerConnection";
 import UserPublication from "/imports/server/publications/UserPublication";
 import { Subscription } from "meteor/meteor";
+import ServerUserClientMethod from "/lib/server/clientmethods/ServerUserClientMethod";
+import ConnectionService from "/imports/server/service/ConnectionService";
+import { DEFAULT_ANONYMOUS_USER_ROLES } from "/lib/enums/Roles";
 
 export default class UserService extends Stoppable {
   private userdao: WritableUserDao;
@@ -16,11 +19,14 @@ export default class UserService extends Stoppable {
 
   private logger;
 
+  private setusermethod: ServerUserClientMethod;
+
   constructor(
     parent: Stoppable | null,
     userdao: WritableUserDao,
     themeservice: ThemeService,
     publicationservice: PublicationService,
+    connectionservice: ConnectionService,
   ) {
     super(parent);
     this.logger = new ServerLogger(this, "UserService_ts");
@@ -33,6 +39,11 @@ export default class UserService extends Stoppable {
         connection: ServerConnection | null,
         ...args: string[]
       ) => new UserPublication(this, sub, connection),
+    );
+    this.setusermethod = new ServerUserClientMethod(
+      this,
+      themeservice,
+      connectionservice,
     );
   }
 
@@ -49,8 +60,14 @@ export default class UserService extends Stoppable {
       isolation_group: "public",
       locale,
       theme: this.themeservice.getDefaultTheme(),
-      roles: ["login"],
+      roles: DEFAULT_ANONYMOUS_USER_ROLES,
       hashTokens: [{ hashtoken: hashToken, lastUsed: new Date() }],
+      ratings: {
+        bullet: { rating: 1600, won: 0, draw: 0, lost: 0 },
+        blitz: { rating: 1600, won: 0, draw: 0, lost: 0 },
+        standard: { rating: 1600, won: 0, draw: 0, lost: 0 },
+        computer: { rating: 1600, won: 0, draw: 0, lost: 0 },
+      },
     };
     userrecord._id = this.userdao.insert(userrecord);
     return userrecord as UserRecord;

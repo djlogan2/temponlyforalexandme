@@ -1,7 +1,6 @@
 /* eslint-disable no-var,vars-on-top */
 // noinspection ES6ConvertVarToLetConst
 
-import { Meteor, Subscription } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import LoggerService from "./imports/server/service/LoggerService";
 import Stoppable from "./lib/Stoppable";
@@ -14,15 +13,9 @@ import { SubscriptionNames } from "/lib/SubscriptionNames";
 import CommonLogger from "/lib/CommonLogger";
 import ClientServer from "/lib/client/ClientServer";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
-import ConnectionService from "/imports/server/service/ConnectionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import Clienti18n from "/lib/client/Clienti18n";
-import ServerConnection from "/lib/server/ServerConnection";
-import ThemeService from "/imports/server/service/ThemeService";
-import I18nService from "/imports/server/service/i18nService";
 import ClientTheme from "/lib/client/ClientTheme";
-import UserService from "/imports/server/publications/UserPublication";
-import ServerUser from "/lib/server/ServerUser";
 
 declare module "meteor/universe:i18n";
 

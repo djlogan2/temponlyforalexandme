@@ -17,6 +17,7 @@ describe("SubscriptionEventEmitter", function () {
     subscribecall.returns(subscription);
     const subscriptionservice = new SubscriptionService(null);
     const see = subscriptionservice.getSubscriptionEventEmitter(
+      null,
       "subscriptioneventemittertest",
     );
     expect(subscribecall.notCalled, "SubscriptionEventEmitter 1").to.be.true;

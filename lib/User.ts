@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
-import UserRecord from "/lib/records/UserRecord";
+import UserRecord, { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import Stoppable from "/lib/Stoppable";
 import { UserRoles } from "./enums/Roles";
 
@@ -19,12 +19,24 @@ export default abstract class User extends Stoppable {
     return me;
   }
 
+  public get username(): string | undefined {
+    return this.me.username;
+  }
+
+  public get titles(): string[] {
+    return this.me.titles || [];
+  }
+
   public get isolation_group(): string {
     return this.me.isolation_group;
   }
 
   public get roles(): UserRoles[] {
     return this.me.roles;
+  }
+
+  public get ratings(): { [R in RatingTypes]: RatingObject } {
+    return this.me.ratings;
   }
 
   public isAuthorized(roles: string[]): boolean {

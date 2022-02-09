@@ -1,5 +1,5 @@
 import { noop } from "lodash";
-import React, { FC, FCICC, InputHTMLAttributes, useState } from "react";
+import React, { FCICC, InputHTMLAttributes, useState } from "react";
 import clsx from "clsx";
 import AttentionIcon from "../../components/icons/Attention";
 import Eye2Icon from "../../components/icons/Eye2";

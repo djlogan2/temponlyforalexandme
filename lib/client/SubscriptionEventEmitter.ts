@@ -2,11 +2,14 @@ import { Meteor } from "meteor/meteor";
 import PooledEventEmitter from "/lib/PooledEventEmitter";
 import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
+import ClientLogger from "/lib/client/ClientLogger";
 
 export default class SubscriptionEventEmitter<
   E extends string,
 > extends PooledEventEmitter<E> {
   private readonly publication: SubscriptionNames;
+
+  private readonly logger2: ClientLogger;
 
   private subscription?: Meteor.SubscriptionHandle;
 
@@ -17,6 +20,7 @@ export default class SubscriptionEventEmitter<
    */
   constructor(publication: SubscriptionNames, parent: Stoppable | null) {
     super(publication, parent);
+    this.logger2 = new ClientLogger(this, "SubscriptionEventEmitter");
     this.publication = publication;
   }
 
@@ -26,6 +30,7 @@ export default class SubscriptionEventEmitter<
    * @protected
    */
   protected onFirstEvent(isready: () => void): void {
+    this.logger2.debug(() => `${this.publication} onFirstEvent`);
     this.subscription = Meteor.subscribe(this.publication, {
       onReady: () => {
         if (isready) isready();
@@ -39,6 +44,7 @@ export default class SubscriptionEventEmitter<
    * @protected
    */
   protected onLastEvent(): void {
+    this.logger2.debug(() => `${this.publication} onLastEvent`);
     if (this.subscription) {
       this.subscription.stop();
       delete this.subscription;
@@ -46,6 +52,7 @@ export default class SubscriptionEventEmitter<
   }
 
   protected stopping(): void {
+    this.logger2.debug(() => `${this.publication} stopping`);
     this.onLastEvent();
   }
 }

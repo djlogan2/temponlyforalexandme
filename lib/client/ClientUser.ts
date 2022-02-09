@@ -4,7 +4,6 @@ import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import EventEmitter from "eventemitter3";
-import { ClientCalls } from "/lib/server/AbstractClientMethod";
 
 type UserEvents = "locale";
 
@@ -31,10 +30,10 @@ export default class ClientUser extends User {
     super(parent, id, globalThis.userdao);
     globalThis.userlist[id] = this;
     if (subscription) {
-      this.pEvents =
-        globalThis.subscriptionservice.getSubscriptionEventEmitter(
-          subscription,
-        );
+      this.pEvents = globalThis.subscriptionservice.getSubscriptionEventEmitter(
+        this,
+        subscription,
+      );
     } else {
       this.pEvents = new EventEmitter();
     }
