@@ -1,81 +1,92 @@
-@media (max-width: 1024px) {
-  .playerInfoContainer {
+.playerInfo {
+  &--flipped {
+    flex-direction: column-reverse;
+
+    @media (max-width: 768px) {
+      align-items: flex-end;
+      flex-direction: row-reverse !important;
+
+      & .playerInfo__username {
+        text-align: end;
+      }
+
+      & .playerInfo__avatar {
+        margin: 0 0 0 0.6rem;
+      }
+    }
+  }
+
+  &__icons {
+    width: 14.3rem;
+    display: flex;
+    margin-top: 0.8rem;
+    margin-bottom: 0.9rem;
+    justify-content: space-between;
+
+    @media (max-width: 1024px) {
+      order: 2;
+      width: 11rem;
+      margin: 0;
+
+      & > :nth-child(2) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      order: 1;
+      width: 8rem;
+      margin: 0;
+      align-self: flex-end;
+
+      & > :nth-child(1) {
+        display: none;
+      }
+
+      & > :nth-child(2) {
+        display: none;
+      }
+    }
+  }
+
+  &__username {
+    color: var(--colorDarkTwo);
+    margin: 0;
+    font-size: 1.4rem;
+
+    @media (max-width: 1024px) {
+      order: 1;
+      margin: 0 0.6rem;
+    }
+
+    @media (max-width: 768px) {
+      order: 2;
+      width: 100%;
+      margin: 0.6rem 0 0 0;
+    }
+  }
+
+  &__avatar {
+    @media (max-width: 1024px) {
+      width: 3rem !important;
+      height: 3rem !important;
+    }
+
+    @media (max-width: 768px) {
+      margin-right: 0.6rem;
+    }
+  }
+
+  &__avatar {
+    align-self: flex-end;
+  }
+
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media (max-width: 1024px) {
     flex-wrap: wrap;
     flex-direction: row;
   }
-  .playerInfoContainerFlipped {
-    align-items: flex-start;
-  }
-  .playerInfoIcons {
-    order: 2;
-    width: 110px;
-    margin: 0;
-  }
-  .playerInfoIcons > :nth-child(2) {
-    display: none;
-  }
-  .playerInfoUsername {
-    order: 1;
-    margin: 0 6px;
-  }
-  .playerInfoImgContainer {
-    width: 27.5px;
-    height: 27.5px;
-  }
-}
-@media (max-width: 768px) {
-  .playerInfoContainerFlipped {
-    align-items: flex-end;
-    flex-direction: row-reverse;
-  }
-  .playerInfoContainerFlipped .playerInfoUsername {
-    text-align: end;
-  }
-  .playerInfoContainerFlipped .playerInfoImgContainer {
-    margin: 0 0 0 6px;
-  }
-  .playerInfoIcons {
-    order: 1;
-    width: 80px;
-    margin: 0;
-  }
-  .playerInfoIcons > :nth-child(2) {
-    display: none;
-  }
-  .playerInfoIcons > :nth-child(1) {
-    display: none;
-  }
-  .playerInfoUsername {
-    order: 2;
-    width: 100%;
-    margin: 6px 0 0 0;
-  }
-  .playerInfoImgContainer {
-    width: 27.5px;
-    height: 27.5px;
-    margin-right: 6px;
-  }
-}
-.playerInfoContainer {
-  width: max-content;
-  display: flex;
-  box-sizing: border-box;
-  align-items: flex-end;
-  flex-direction: column;
-}
-.playerInfoContainerFlipped {
-  flex-direction: column-reverse;
-}
-
-.playerInfoIcons {
-  width: 143px;
-  display: flex;
-  margin-top: 8px;
-  margin-bottom: 9px;
-  justify-content: space-between;
-}
-.playerInfoUsername {
-  color: var(--colorDarkTwo);
-  margin: 0;
-  font-size: 14px;
 }

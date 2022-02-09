@@ -27,21 +27,16 @@ const PlayerInfo: FCICC<IPlayerInfoProps> = ({
   flip,
   userStatus,
 }) => (
-  <div
-    className={clsx(
-      "playerInfoContainer",
-      flip && "playerInfoContainer--flipped",
-    )}
-  >
+  <div className={clsx("playerInfo", flip && "playerInfo--flipped")}>
     <Avatar
       picture={picture}
       username={username}
-      className="playerInfoImgContainer"
+      className="playerInfo__avatar"
       status={userStatus}
       size="bg"
     />
 
-    <div className="playerInfoIcons">
+    <div className="playerInfo__icons">
       <ChatIcon />
       <WebcamIcon />
       <LagIcon lagLevel={lagLevel} />
@@ -49,7 +44,7 @@ const PlayerInfo: FCICC<IPlayerInfoProps> = ({
       <France />
     </div>
 
-    <p className="playerInfoUsername">
+    <p className="playerInfo__username">
       {username} <span>({rank})</span>
     </p>
   </div>
