@@ -12,6 +12,9 @@ export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
     subscriptionservice: SubscriptionService,
   ) {
     super("themes", "themes", parent, subscriptionservice);
+
+    // Start the subscribtion
+    this.start({});
   }
 
   protected onFieldsChanged(id: string, record: Partial<ThemeRecord>): void {

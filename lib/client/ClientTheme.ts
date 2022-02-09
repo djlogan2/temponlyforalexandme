@@ -17,18 +17,6 @@ export default class ClientTheme extends CommonTheme {
     super();
     globalThis.theme = this;
     this.dao = dao;
-
-    this.events.on("themechanged", (reactclass: any) => {
-      console.log(`THEME: ${JSON.stringify(reactclass)}`);
-    });
-
-    const readyHandler = () => {
-      console.log("The ClientTheme is ready");
-      this.isReady = true;
-      this.events.off("ready", readyHandler);
-    };
-
-    this.events.on("ready", readyHandler);
   }
 
   public getTheme = () => this.dao.readOne({});
