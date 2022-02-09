@@ -16,6 +16,7 @@ interface IPlayerInfoProps {
   userStatus: TUserStatus;
   lagLevel: 1 | 2 | 3 | 4 | 5;
   flip?: boolean;
+  className?: string;
 }
 
 const PlayerInfo: FCICC<IPlayerInfoProps> = ({
@@ -26,8 +27,9 @@ const PlayerInfo: FCICC<IPlayerInfoProps> = ({
   lagLevel,
   flip,
   userStatus,
+  className,
 }) => (
-  <div className={clsx("playerInfo", flip && "playerInfo--flipped")}>
+  <div className={clsx("playerInfo", flip && "playerInfo--flipped", className)}>
     <Avatar
       picture={picture}
       username={username}

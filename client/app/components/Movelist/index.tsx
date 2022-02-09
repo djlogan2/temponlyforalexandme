@@ -1,6 +1,6 @@
+import clsx from "clsx";
 import { noop } from "lodash";
 import React, { FC, FCICC, useState } from "react";
-import "./index.scss";
 import { SCREEN_LARGE } from "../../constants/breakpoints";
 import useWindowSize from "../../hooks/userWindowSize";
 import ActionButton from "../../shared/Buttons/ActionButton";
@@ -17,6 +17,7 @@ import NextEnd from "../icons/NextEnd";
 import Prev from "../icons/Prev";
 import PrevEnd from "../icons/PrevEnd";
 import Resign from "../icons/Resign";
+import "./index.scss";
 
 const RequestMapIcons = {
   draw: Draw,
@@ -41,6 +42,7 @@ interface IMovelistProps {
   onRequestAccept?: () => void;
   onRequestReject?: () => void;
   request?: "draw" | "abort" | "back";
+  className?: string;
 }
 
 const Pieces: {
@@ -57,6 +59,7 @@ const Movelist: FCICC<IMovelistProps> = ({
   onDrawClick = noop,
   onRequestAccept = noop,
   onRequestReject = noop,
+  className,
 }) => {
   const [confirmResign, setConfirmResign] = useState(false);
   const { width } = useWindowSize();
@@ -73,7 +76,7 @@ const Movelist: FCICC<IMovelistProps> = ({
     (request || confirmResign) && RequestMapIcons[request || "resign"];
 
   return (
-    <div className="movelistContainer">
+    <div className={clsx("movelistContainer", className)}>
       <div className="movelistTopActions">
         <PrevEnd />
         <Prev />

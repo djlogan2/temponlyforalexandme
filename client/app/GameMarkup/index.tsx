@@ -1,4 +1,5 @@
-import React, { FCICC } from "react";
+import clsx from "clsx";
+import React, { FCICC, useState } from "react";
 import "./index.scss";
 import DummyChessboard from "/client/app/components/DummyChessboard";
 import Flip from "/client/app/components/icons/Flip";
@@ -9,9 +10,11 @@ import GameTitle from "/client/app/shared/GameTitle";
 
 interface IGameMarkup {}
 
-const GameMarkup: FCICC<IGameMarkup> = () => (
-  <div className="container">
-    <div className="player-info-container">
+const GameMarkup: FCICC<IGameMarkup> = () => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  return (
+    <div className="gameContainer">
       <PlayerInfo
         userStatus="online"
         picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -22,6 +25,11 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
         keyboardFunctions={[]}
         classes={[]}
         token={{ token: "FAKE_TEXT", args: [] }}
+        flip={isFlipped}
+        className={clsx(
+          "gameContainer__player-one",
+          isFlipped && "gameContainer__player-one--flipped",
+        )}
       />
       <PlayerInfo
         userStatus="online"
@@ -33,26 +41,27 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
         keyboardFunctions={[]}
         classes={[]}
         token={{ token: "FAKE_TEXT", args: [] }}
+        flip={!isFlipped}
+        className={clsx(
+          "gameContainer__player-two",
+          isFlipped && "gameContainer__player-two--flipped",
+        )}
       />
-    </div>
-    <div className="center-container">
-      <div className="game-title-container">
-        <GameTitle
-          minutes={15}
-          keyboardFunctions={[]}
-          token={{
-            token: "",
-            args: [],
-          }}
-          classes={[]}
-        />
-      </div>
-      <DummyChessboard />
-      <div className="flip-container">
-        <Flip onClick={() => null} />
-      </div>
-    </div>
-    <div className="move-list-container">
+      <GameTitle
+        minutes={15}
+        keyboardFunctions={[]}
+        token={{
+          token: "",
+          args: [],
+        }}
+        classes={[]}
+        className="gameContainer__title"
+      />
+      <DummyChessboard flipped={isFlipped} className="gameContainer__board" />
+      <Flip
+        onClick={() => setIsFlipped((val) => !val)}
+        className="gameContainer__btn-flip"
+      />
       <DigitalClock
         time="00:00:29"
         status="in"
@@ -62,6 +71,10 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
           args: [],
         }}
         classes={[]}
+        className={clsx(
+          "gameContainer__clock-one",
+          isFlipped && "gameContainer__clock-one--flipped",
+        )}
       />
       <Movelist
         openingName="FAKE_TEXT"
@@ -78,6 +91,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
             piece: "n",
           },
         }))}
+        className="gameContainer__movelist"
       />
       <DigitalClock
         time="00:00:30"
@@ -88,9 +102,13 @@ const GameMarkup: FCICC<IGameMarkup> = () => (
           args: [],
         }}
         classes={[]}
+        className={clsx(
+          "gameContainer__clock-two",
+          isFlipped && "gameContainer__clock-two--flipped",
+        )}
       />
     </div>
-  </div>
-);
+  );
+};
 
 export default GameMarkup;

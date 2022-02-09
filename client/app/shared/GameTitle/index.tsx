@@ -7,10 +7,16 @@ interface IGameTitle {
   minutes: number;
   instance?: string;
   date?: string;
+  className?: string;
 }
 
-const GameTitle: FCICC<IGameTitle> = ({ minutes, instance, date }) => (
-  <div className="container">
+const GameTitle: FCICC<IGameTitle> = ({
+  minutes,
+  instance,
+  date,
+  className,
+}) => (
+  <div className={clsx("gameTitle", className)}>
     <RapidIcon />
     <div className={clsx("gameTitleTitle")}>
       {window.i18n.translate("game_title_title", `${minutes}`)}

@@ -1,41 +1,140 @@
-.container {
-  display: flex;
-  padding: 5%;
-  flex-direction: row;
-  align-items: center;
+.gameContainer {
+  display: grid;
+  grid-template-areas:
+    "empty1 top empty2"
+    "player1 board clock1"
+    "empty3 board movelist"
+    "empty4 board movelist"
+    "player2 board clock2"
+    "empty5 bot empty6";
+  grid-column-gap: 2rem;
+  grid-row-gap: 1.8rem;
+  padding: 3rem;
+  align-items: end;
   justify-content: center;
   box-sizing: border-box;
-  height: 100%;
-}
 
-.player-info-container {
-  display: flex;
-  height: (576 / 1366) * 100vw;
-  flex-direction: column;
-  margin-right: 3%;
-  justify-content: space-between;
-}
+  &__player-one {
+    grid-area: player1;
+    align-self: flex-start;
 
-.center-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-}
+    &--flipped {
+      grid-area: player2;
+      align-self: flex-end;
+    }
 
-.game-title-container {
-  margin-bottom: 1%;
-}
+    @media (max-width: 786px) {
+      grid-area: players;
+    }
+  }
 
-.flip-container {
-  text-align: right;
-  margin-top: 1%;
-}
+  &__player-two {
+    grid-area: player2;
 
-.move-list-container {
-  display: flex;
-  height: (576 / 1366) * 100vw;
-  flex-direction: column;
-  margin-left: 1.5%;
-  justify-content: space-between;
+    &--flipped {
+      grid-area: player1;
+      align-self: flex-start;
+    }
+
+    @media (max-width: 786px) {
+      justify-self: end;
+      grid-area: players;
+    }
+  }
+
+  &__title {
+    grid-area: top;
+
+    @media (max-width: 786px) {
+      display: none;
+    }
+  }
+
+  &__board {
+    grid-area: board;
+
+    @media (max-width: 786px) {
+      width: calc(100vw - 6rem) !important;
+      height: calc(100vw - 6rem) !important;
+    }
+
+    @media (max-width: 375px) {
+      width: calc(100vw - 3rem) !important;
+      height: calc(100vw - 3rem) !important;
+    }
+  }
+
+  &__btn-flip {
+    grid-area: bot;
+    margin-left: auto;
+    cursor: pointer;
+    pointer-events: painted;
+
+    @media (max-width: 1366px) {
+      grid-area: player2;
+    }
+
+    @media (max-width: 786px) {
+      display: none;
+    }
+  }
+
+  &__clock-one {
+    grid-area: clock1;
+    align-self: flex-start;
+
+    &--flipped {
+      align-self: flex-end;
+      grid-area: clock2;
+    }
+
+    @media (max-width: 786px) {
+      grid-area: clocks;
+    }
+  }
+
+  &__clock-two {
+    grid-area: clock2;
+
+    &--flipped {
+      grid-area: clock1;
+      align-self: flex-start;
+    }
+
+    @media (max-width: 786px) {
+      justify-self: end;
+      grid-area: clocks;
+    }
+  }
+
+  &__movelist {
+    grid-area: movelist;
+  }
+
+  @media (max-width: 1366px) {
+    grid-template-areas:
+      "top ."
+      "player1 ."
+      "board clock1"
+      "board movelist"
+      "board movelist"
+      "board clock2"
+      "player2 ."
+      "bot .";
+  }
+
+  @media (max-width: 786px) {
+    grid-template-areas:
+      "players"
+      "clocks"
+      "board"
+      "board"
+      "board"
+      "board"
+      "movelist";
+  }
+
+  @media (max-width: 786px) {
+    padding: 1.5rem;
+  }
 }

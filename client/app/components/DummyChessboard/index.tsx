@@ -6,10 +6,15 @@ import "chessboard/dist/index.css";
 
 const Chess = require("chess.js");
 
-class DummyChessboard extends Component {
+interface IDummyChessboardProps {
+  flipped?: boolean;
+  className?: string;
+}
+
+class DummyChessboard extends Component<IDummyChessboardProps> {
   private chess: any;
 
-  constructor(props: any) {
+  constructor(props: IDummyChessboardProps) {
     super(props);
 
     this.chess = new Chess.Chess();
@@ -138,6 +143,8 @@ class DummyChessboard extends Component {
   };
 
   render() {
+    const { flipped, className } = this.props;
+
     const {
       // @ts-ignore
       fen,
@@ -162,6 +169,7 @@ class DummyChessboard extends Component {
           width: `${(576 / 1366) * 100}vw`,
           height: `${(576 / 1366) * 100}vw`,
         }}
+        className={className}
       >
         <ChessBoard
           raf={{
@@ -172,7 +180,7 @@ class DummyChessboard extends Component {
             top: false,
             relay: true,
           }}
-          perspective="white"
+          perspective={flipped ? "black" : "white"}
           fen={fen}
           boardSquares={{
             light: { default: "#A2D1E3", active: "#9c9c9c" },
