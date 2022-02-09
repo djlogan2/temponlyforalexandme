@@ -55,6 +55,7 @@ declare module "meteor/meteor" {
 }
 
 declare global {
+  var DDP: { onReconnect: (fn: () => void) => void };
   /* The client stuff that will be in 'window' */
   var icc: ClientServer;
   var i18n: Clienti18n;

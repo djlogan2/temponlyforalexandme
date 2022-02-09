@@ -66,7 +66,6 @@ export default class ClientConnection extends AbstractTimestampNode {
       () => `Calling newUserLogin with hashToken=${hashToken}`,
     );
 
-    // @ts-ignore
     DDP.onReconnect(() => this.newUserLogin(hashToken));
 
     window.addEventListener("blur", () => this.isFocused(false));
