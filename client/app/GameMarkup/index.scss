@@ -22,10 +22,6 @@
       grid-area: player2;
       align-self: flex-end;
     }
-
-    @media (max-width: 786px) {
-      grid-area: players;
-    }
   }
 
   &__player-two {
@@ -35,33 +31,14 @@
       grid-area: player1;
       align-self: flex-start;
     }
-
-    @media (max-width: 786px) {
-      justify-self: end;
-      grid-area: players;
-    }
   }
 
   &__title {
     grid-area: top;
-
-    @media (max-width: 786px) {
-      display: none;
-    }
   }
 
   &__board {
     grid-area: board;
-
-    @media (max-width: 786px) {
-      width: calc(100vw - 6rem) !important;
-      height: calc(100vw - 6rem) !important;
-    }
-
-    @media (max-width: 375px) {
-      width: calc(100vw - 3rem) !important;
-      height: calc(100vw - 3rem) !important;
-    }
   }
 
   &__btn-flip {
@@ -69,14 +46,6 @@
     margin-left: auto;
     cursor: pointer;
     pointer-events: painted;
-
-    @media (max-width: 1366px) {
-      grid-area: player2;
-    }
-
-    @media (max-width: 786px) {
-      display: none;
-    }
   }
 
   &__clock-one {
@@ -87,10 +56,6 @@
       align-self: flex-end;
       grid-area: clock2;
     }
-
-    @media (max-width: 786px) {
-      grid-area: clocks;
-    }
   }
 
   &__clock-two {
@@ -100,18 +65,13 @@
       grid-area: clock1;
       align-self: flex-start;
     }
-
-    @media (max-width: 786px) {
-      justify-self: end;
-      grid-area: clocks;
-    }
   }
 
   &__movelist {
     grid-area: movelist;
   }
 
-  @media (max-width: 1366px) {
+  @media (max-width: 1365px) {
     grid-template-areas:
       "top ."
       "player1 ."
@@ -121,9 +81,13 @@
       "board clock2"
       "player2 ."
       "bot .";
+
+    &__btn-flip {
+      grid-area: player2;
+    }
   }
 
-  @media (max-width: 786px) {
+  @media (max-width: 785px) {
     grid-template-areas:
       "players"
       "clocks"
@@ -132,9 +96,44 @@
       "board"
       "board"
       "movelist";
+    padding: 1.5rem;
+
+    &__player-one {
+      grid-area: players;
+    }
+
+    &__player-two {
+      justify-self: end;
+      grid-area: players;
+    }
+
+    &__title {
+      display: none;
+    }
+
+    &__board {
+      width: calc(100vw - 6rem) !important;
+      height: calc(100vw - 6rem) !important;
+    }
+
+    &__btn-flip {
+      display: none;
+    }
+
+    &__clock-one {
+      grid-area: clocks;
+    }
+
+    &__clock-two {
+      justify-self: end;
+      grid-area: clocks;
+    }
   }
 
-  @media (max-width: 786px) {
-    padding: 1.5rem;
+  @media (max-width: 375px) {
+    &__board {
+      width: calc(100vw - 3rem) !important;
+      height: calc(100vw - 3rem) !important;
+    }
   }
 }
