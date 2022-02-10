@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { render } from "react-dom";
 import * as React from "react";
 import { Provider } from "react-redux";
-import App from "./app/App";
+import Root from "./app/Root";
 
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
@@ -33,7 +33,7 @@ globalThis.icc = new ClientServer(userdao);
 Meteor.startup(() => {
   render(
     <Provider store={store}>
-      <App
+      <Root
         token={{
           token: "",
           args: [],

@@ -9,3 +9,8 @@ html {
   font-family: var(--fontPrimary);
   color: var(--colorDarkOne);
 }
+
+html, body, #root{
+  min-height: 100%;
+  height: 100%;
+}
