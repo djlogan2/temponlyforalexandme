@@ -1,10 +1,11 @@
 export type CollectionNames =
   | "connections"
-  | "themes"
+  | "games"
   | "i18n"
   | "instances"
   | "log_records"
   | "logger_configuration"
+  | "themes"
   | "users"
   /* tests */
   | "dynamicselectorreactivereadonlytest"

@@ -4,10 +4,12 @@ import ServerConnection from "./ServerConnection";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { HttpHeadersICareAbout } from "/imports/server/clientmethods/ConnectionLoginMethod";
 import ServerUser from "/lib/server/ServerUser";
+import Stoppable from "/lib/Stoppable";
 
 export type ClientCalls =
   | "idleFunction"
   | "newUserLogin"
+  | "startComputerGame"
   | "user_set"
   | "writeToLog";
 type InternalMethodType = (...args: any[]) => Promise<any | undefined>;
@@ -18,7 +20,7 @@ export interface ClientCallObject {
   httpHeaders: HttpHeadersICareAbout;
 }
 
-export default abstract class AbstractClientMethod {
+export default abstract class AbstractClientMethod extends Stoppable {
   protected abstract validatearguments(obj: any): void;
 
   protected abstract called(obj: any): any;
@@ -34,11 +36,13 @@ export default abstract class AbstractClientMethod {
   }
 
   protected constructor(
+    parent: Stoppable | null,
     callname: ClientCalls,
     argumentnames: string[],
     roles: UserRoles[],
     connectionservice: ConnectionService,
   ) {
+    super(parent);
     const self = this;
     const methodobject: { [n in ClientCalls]?: InternalMethodType } = {};
     methodobject[callname] = async function (

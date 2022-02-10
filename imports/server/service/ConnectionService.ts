@@ -23,6 +23,9 @@ import ConnectionIdleMethod from "/imports/server/clientmethods/ConnectionIdleMe
 import PublicationService from "/imports/server/service/PublicationService";
 import UserService from "/imports/server/service/UserService";
 import EventEmitter from "eventemitter3";
+import GameService from "/imports/server/service/GameService";
+import WritableGameDao from "/imports/server/dao/WritableGameDao";
+import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 
 export default class ConnectionService extends Stoppable {
   private readonly connectiondao: ConnectionDao;
@@ -32,6 +35,8 @@ export default class ConnectionService extends Stoppable {
   private readonly userservice: UserService;
 
   private readonly publicationservice: PublicationService;
+
+  private readonly gameservice: GameService;
 
   private readonly userdao: CommonReadOnlyUserDao;
 
@@ -64,14 +69,16 @@ export default class ConnectionService extends Stoppable {
     readableloggerconfigdao: ReadOnlyLoggerConfigurationDao,
     writableloggerconfigdao: WritableLoggerConfigurationDao,
     logrecordsdao: LogRecordsDao,
+    writablegamedao: WritableGameDao,
+    commongamedao: CommonReadOnlyGameDao,
   ) {
     super(parent);
     this.userdao = readonlyuserdao;
     this.writableuserdao = writableuserdao;
     this.connectiondao = connectiondao;
     this.instanceservice = instanceservice;
-    this.connectionLoginMethod = new ConnectionLoginMethod(this);
-    this.connectionIdleMethod = new ConnectionIdleMethod(this);
+    this.connectionLoginMethod = new ConnectionLoginMethod(this, this);
+    this.connectionIdleMethod = new ConnectionIdleMethod(this, this);
     this.publicationservice = new PublicationService(this, this);
     this.i18nservice = new I18nService(
       this,
@@ -89,6 +96,7 @@ export default class ConnectionService extends Stoppable {
       writableuserdao,
       this.themeservice,
       this.publicationservice,
+      this,
     );
     this.loggerservice = new LoggerService(
       this,
@@ -97,6 +105,13 @@ export default class ConnectionService extends Stoppable {
       logrecordsdao,
       this,
       this.publicationservice,
+    );
+    this.gameservice = new GameService(
+      parent,
+      writablegamedao,
+      commongamedao,
+      this.publicationservice,
+      this,
     );
 
     Meteor.onConnection((connection) => this.onConnection(connection));

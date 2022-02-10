@@ -4,6 +4,7 @@ import AbstractClientMethod, {
 import ThemeService from "/imports/server/service/ThemeService";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { Meteor } from "meteor/meteor";
+import Stoppable from "/lib/Stoppable";
 
 interface ServerUserClientObject extends ClientCallObject {
   field: string;
@@ -14,10 +15,17 @@ export default class ServerUserClientMethod extends AbstractClientMethod {
   private themeservice: ThemeService;
 
   constructor(
+    parent: Stoppable | null,
     themeservice: ThemeService,
     connectionservice: ConnectionService,
   ) {
-    super("user_set", ["field", "value"], ["user_set"], connectionservice);
+    super(
+      parent,
+      "user_set",
+      ["field", "value"],
+      ["user_set"],
+      connectionservice,
+    );
     this.themeservice = themeservice;
   }
 
@@ -56,4 +64,6 @@ export default class ServerUserClientMethod extends AbstractClientMethod {
     extendedroles.push(`user_set_${obj.field}`);
     return super.isAuthorized(extendedroles, obj);
   }
+
+  protected stopping() {}
 }

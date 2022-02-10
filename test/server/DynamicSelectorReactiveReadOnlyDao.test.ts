@@ -1,5 +1,4 @@
 import * as chai from "chai";
-import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import EventEmitter from "eventemitter3";
 import { expect } from "chai";
 import "../../lib/server/ICCGlobal";
@@ -45,7 +44,7 @@ class TestReactiveReadOnlyDao extends DynamicSelectorReactiveReadOnlyDao<TestRec
   }
 }
 
-describe("ReactiveReadOnlyDao", function () {
+describe("DynamicSelectorReactiveReadOnlyDao", function () {
   beforeEach(function (done) {
     if (!global.ICCServer.collections.dynamicselectorreactivereadonlytest)
       global.ICCServer.collections.dynamicselectorreactivereadonlytest =

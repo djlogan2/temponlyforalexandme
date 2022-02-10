@@ -1,11 +1,14 @@
 import ICCEventEmitter from "/lib/ICCEventEmitter";
 import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
+import ClientLogger from "/lib/client/ClientLogger";
 
 export default abstract class PooledEventEmitter<
   T extends string,
 > extends Stoppable {
   private count: number = 0;
+
+  private logger: ClientLogger;
 
   protected poolname: SubscriptionNames;
 
@@ -17,6 +20,7 @@ export default abstract class PooledEventEmitter<
    */
   protected constructor(poolname: SubscriptionNames, parent: Stoppable | null) {
     super(parent);
+    this.logger = new ClientLogger(this, "PooledEventEmitter");
     this.poolname = poolname;
   }
 
@@ -25,6 +29,7 @@ export default abstract class PooledEventEmitter<
    * @return{ICCEventEmitter} ICCEventEmitter
    */
   public newEmitter(): ICCEventEmitter<T | "ready"> {
+    this.logger.debug(() => `${this.poolname} newEmitter`);
     return ICCEventEmitter.getNew(this);
   }
 
@@ -32,6 +37,7 @@ export default abstract class PooledEventEmitter<
    * This is not for public use. The emitters will call this.
    */
   public addActiveEmitter(emitter: ICCEventEmitter<T | "ready">): void {
+    this.logger.debug(() => `${this.poolname} addActiveEmitter`);
     if (!this.count) this.onFirstEvent(() => emitter.emit("ready"));
     else emitter.emit("ready");
     this.count += 1;
@@ -41,6 +47,7 @@ export default abstract class PooledEventEmitter<
    * This is not for public use. The emitters will call this.
    */
   public removeActiveEmitter(): void {
+    this.logger.debug(() => `${this.poolname} removeActiveEmitter`);
     this.count -= 1;
     if (!this.count) this.onLastEvent();
   }

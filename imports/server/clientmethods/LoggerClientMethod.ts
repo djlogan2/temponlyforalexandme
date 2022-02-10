@@ -5,6 +5,7 @@ import AbstractClientMethod, {
 } from "../../../lib/server/AbstractClientMethod";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
+import Stoppable from "/lib/Stoppable";
 
 interface LoggerClientCall extends ClientCallObject {
   module: string;
@@ -16,10 +17,17 @@ export default class LoggerClientMethod extends AbstractClientMethod {
   private loggerservice: LoggerService;
 
   constructor(
+    parent: Stoppable | null,
     loggerservice: LoggerService,
     connectionservice: ConnectionService,
   ) {
-    super("writeToLog", ["module", "level", "message"], [], connectionservice);
+    super(
+      parent,
+      "writeToLog",
+      ["module", "level", "message"],
+      [],
+      connectionservice,
+    );
     this.loggerservice = loggerservice;
   }
 
@@ -39,4 +47,6 @@ export default class LoggerClientMethod extends AbstractClientMethod {
       obj.connection?._id || undefined,
     );
   }
+
+  protected stopping() {}
 }
