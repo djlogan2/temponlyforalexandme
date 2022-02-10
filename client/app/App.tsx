@@ -18,6 +18,7 @@ import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import ClientServer from "/lib/client/ClientServer";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
+import ResponsiveBreakpoints from "/client/app/ResponsiveBreakpoints";
 
 const userdao = new CommonReadOnlyUserDao(null);
 const clientserver = new ClientServer(userdao);
@@ -93,6 +94,9 @@ const App: FCICC = ({ classes, ...rest }) => {
               }}
               classes={[]}
             />
+          </Route>
+          <Route exact path="/responsive-breakpoints">
+            <ResponsiveBreakpoints />
           </Route>
         </Switch>
       </Router>
