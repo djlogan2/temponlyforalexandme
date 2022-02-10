@@ -5,12 +5,7 @@
 }
 
 html {
-  font-size: 62.5%;
-  --primary-font: "Helvetica Neue";
-  --secondary-font: Roboto;
-}
-
-body {
-  font-family: var(--primary-font);
+  font-size: var(--fontSize);
+  font-family: var(--fontPrimary);
   color: var(--colorDarkOne);
 }

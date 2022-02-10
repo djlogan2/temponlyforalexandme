@@ -12,10 +12,19 @@ const themeToStr = (theme) => {
 
     const cssStr = theme.css || '';
 
-    return {
-      variablesStr,
+    const staticResourcesStr = theme.staticResources ? Object.keys(theme.staticResources).map(
+      key => `--resource_${key}: url('${theme.staticResources[key]}');`
+    ).join('\n') : '';
+
+    return [
+      '/* THEME OVERRIDE */',
+      '/* VARIABLES */',
+      `:root {\n${variablesStr}\n}`,
+      '/* STATIC RESOURCES */',
+      `:root {\n${staticResourcesStr}\n}`,
+      '/* CUSTOM CSS */',
       cssStr,
-    };
+    ].join('\n\n');
   }
 
   return '';
@@ -28,9 +37,7 @@ const Theme = () => {
 
   return (
     <style>
-      {themeStrings ? (
-        `/* THEME OVERRIDE */\n\n:root {\n${themeStrings.variablesStr}\n}\n${themeStrings.cssStr}`
-      ) : null}
+      {themeStrings || null}
     </style>
   );
 };
