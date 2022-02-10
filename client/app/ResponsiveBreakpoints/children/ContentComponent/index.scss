@@ -1,0 +1,27 @@
+.content-component {
+  background-color: white;
+  outline: black 1px solid;
+  margin-left: -43px;
+  margin-right: -43px;
+}
+
+@media (max-width: 1365px) {
+  .content-component {
+    margin-left: -42px;
+    margin-right: -42px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .content-component {
+    margin-left: -32px;
+    margin-right: -32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .content-component {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+}
