@@ -1,5 +1,17 @@
-import React from "react";
+import React, { FC } from "react";
+import clsx from "clsx";
 
-const Spinner = () => <div>Loading...</div>;
+interface ISpinner {
+  className?: string;
+}
+
+const Spinner: FC<ISpinner> = ({ className }) => (
+  <div className={clsx("Spinner", className)}>
+    <div />
+    <div />
+    <div />
+    <div />
+  </div>
+);
 
 export default Spinner;
