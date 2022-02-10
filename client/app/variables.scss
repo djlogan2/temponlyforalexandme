@@ -1,6 +1,7 @@
 :root {
   --fontPrimary: "Helvetica Neue";
   --fontSecondary: Roboto;
+  --fontSize: 16px;
 
   --borderRadius: 15px;
 
@@ -20,8 +21,6 @@
   --buttonColorDefault: var(--colorPrimary);
 
   --checkboxColorDefault: var(--colorSecondary);
-
-  --logoImage: "http";
 
   --userAvatarColorOnline: #00b817;
   --userAvatarColorIdle: #55586a;
