@@ -11,13 +11,9 @@ interface IDigitalClock {
 }
 
 const DigitalClock: FCICC<IDigitalClock> = ({ time, status, className }) => (
-  <Heading2
-    name="digitalClock"
-    token={{ token: time, args: [] }}
-    classes={[]}
-    keyboardFunctions={[]}
-    className={clsx(getStyleOnStatusClock(status), className)}
-  />
+  <Heading2 className={clsx(getStyleOnStatusClock(status), className)}>
+    {time}
+  </Heading2>
 );
 
 export default DigitalClock;

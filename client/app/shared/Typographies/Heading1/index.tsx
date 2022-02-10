@@ -1,20 +1,15 @@
-import React, { FCICC } from "react";
-import useTranslate from "/client/app/hooks/useTranslate";
+import clsx from "clsx";
+import React, { FC } from "react";
 import "./index.scss";
 
 interface Heading1Props {
-  name: string;
   className?: string;
 }
 
-const Heading1: FCICC<Heading1Props> = ({ name, token, ...rest }) => {
-  const translation = useTranslate(token);
-
-  return (
-    <div id={name} className="heading1" {...rest}>
-      {translation}
-    </div>
-  );
-};
+const Heading1: FC<Heading1Props> = ({ className, children, ...rest }) => (
+  <h1 className={clsx("heading1", className)} {...rest}>
+    {children}
+  </h1>
+);
 
 export default Heading1;

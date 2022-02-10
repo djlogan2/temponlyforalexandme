@@ -144,37 +144,12 @@ const ComponentsView: FCICC<IComponentsView> = () => {
             />
           </div>
         </div>
-        <Heading1
-          name="test1"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
-        <Heading2
-          name="test2"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
-        <Heading3
-          name="test3"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
-        <Heading4
-          name="test4"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
+        <Heading1>Heading 1</Heading1>
+        <Heading2>Heading 2</Heading2>
+        <Heading3>Heading 3</Heading3>
+        <Heading4>Heading 4</Heading4>
         <Heading5>Heading 5</Heading5>
-        <Heading6
-          name="test6"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
+        <Heading6>Heading 6</Heading6>
         <Paragraph
           name="testPar"
           token={{ token: "FAKE_TEXT", args: [] }}
