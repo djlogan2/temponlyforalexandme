@@ -75,12 +75,15 @@ interface ECOObject {
   code: string;
 }
 
-export interface BasicMoveListNode {
+export interface MoveZero {
+  variations?: number[];
+}
+
+export interface BasicMoveListNode extends MoveZero {
   prev: number;
   move: string;
   smith: ChessJSMove;
   eco: ECOObject;
-  variations?: number[];
 }
 
 export interface PlayedGameMoveListNode extends BasicMoveListNode {
@@ -96,7 +99,7 @@ interface ExaminedGameMoveListNode extends BasicMoveListNode {
 interface VariationsInterface {
   halfmovetakeback: number;
   currentmoveindex: number;
-  movelist: BasicMoveListNode[];
+  movelist: (BasicMoveListNode | MoveZero)[];
 }
 
 export type GameTypes = "playing" | "analyzing" | "computer";

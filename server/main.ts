@@ -39,7 +39,7 @@ const i18nwritabledao = new Writablei18nDao(null);
 const instanceservice = new InstanceService(parent, instancedao);
 
 const writablegamedao = new WritableGameDao(null);
-const readonlygamedao = new ServerReadOnlyGameDao(null);
+const readonlygamedao = new ServerReadOnlyGameDao(null, writablegamedao);
 
 const connectionservice = new ConnectionService(
   parent,

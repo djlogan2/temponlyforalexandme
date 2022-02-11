@@ -4,10 +4,7 @@ import {
   ComputerChallengeRecord,
   PieceColor,
 } from "/lib/records/ChallengeRecord";
-import {
-  BasicGameRecord,
-  ComputerPlayGameRecord,
-} from "/lib/records/GameRecord";
+import { ComputerPlayGameRecord } from "/lib/records/GameRecord";
 import ServerUser from "/lib/server/ServerUser";
 import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import { Mongo } from "meteor/mongo";
@@ -23,9 +20,7 @@ import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
 import CommonGameService from "/lib/CommonGameService";
-import CommonAnalysisGame from "/lib/CommonAnalysisGame";
-import CommonComputerPlayedGame from "/lib/CommonComputerPlayedGame";
-import ServerAnalysisGame from "/lib/server/ServerAnalysisGame";
+import GameMakeMoveMethod from "/imports/server/clientmethods/GameMakeMoveMethod";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -38,6 +33,8 @@ export default class GameService extends CommonGameService {
   private readonly readonlydao: CommonReadOnlyGameDao;
 
   private readonly startcomputergamemethod: StartComputerGameClientMethod;
+
+  private readonly makemovemethod: GameMakeMoveMethod;
 
   private gamelist: { [id: string]: ServerComputerPlayedGame } = {};
 
@@ -64,6 +61,12 @@ export default class GameService extends CommonGameService {
       this,
       connectionservice,
       this,
+    );
+
+    this.makemovemethod = new GameMakeMoveMethod(
+      this,
+      connectionservice,
+      readonlydao,
     );
   }
 
@@ -138,7 +141,11 @@ export default class GameService extends CommonGameService {
       skill_level: computerchallenge.skill_level,
       clocks: { w: white, b: black },
       observers: [],
-      variations: { halfmovetakeback: 0, currentmoveindex: 0, movelist: [] },
+      variations: {
+        halfmovetakeback: 0,
+        currentmoveindex: 0,
+        movelist: [{ variations: [] }],
+      },
     };
     const id = this.writabledao.insert(gamerecord);
     gamerecord._id = id;
@@ -252,26 +259,4 @@ export default class GameService extends CommonGameService {
   }
 
   protected stopping(): void {}
-
-  protected getClassFromType(
-    game: BasicGameRecord,
-  ): CommonComputerPlayedGame | CommonAnalysisGame {
-    switch (game.status) {
-      case "playing":
-        throw new Meteor.Error("NOT_IMPLEMENTED");
-      case "analyzing":
-        return new ServerAnalysisGame(this, game, this.readonlydao);
-      case "computer":
-        return new ServerComputerPlayedGame(
-          this,
-          game as ComputerPlayGameRecord,
-          this.readonlydao,
-          this.writabledao,
-        );
-      default: {
-        const checkme: never = game.status;
-        throw new Error(`UNKNOWN_GAME_RECORD_TYPE: ${checkme}`);
-      }
-    }
-  }
 }

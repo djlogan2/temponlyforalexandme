@@ -1,5 +1,6 @@
 import { Move } from "chess.js";
 import {
+  BasicMoveListNode,
   ChessJSFlags,
   ComputerPlayGameRecord,
   GameStatus,
@@ -134,7 +135,10 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     const existingmove: number =
       variations?.findIndex((idx) => {
         const existingcmi = variations[idx];
-        return this.me.variations.movelist[existingcmi].move === move.san;
+        return (
+          (this.me.variations.movelist[existingcmi] as BasicMoveListNode)
+            .move === move.san
+        );
       }) || -1;
 
     if (existingmove !== -1) {
