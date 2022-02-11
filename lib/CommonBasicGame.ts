@@ -1,30 +1,27 @@
-import { Meteor } from "meteor/meteor";
 import Stoppable from "/lib/Stoppable";
-import { BasicGameRecord } from "/lib/records/GameRecord";
+import { BasicGameRecord, GameTypes } from "/lib/records/GameRecord";
 import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 
 export default abstract class CommonBasicGame extends Stoppable {
-  private readonly pId: string;
+  protected game: BasicGameRecord;
 
-  private readonlydao: CommonReadOnlyGameDao;
+  protected readonlydao: CommonReadOnlyGameDao;
 
   public get id(): string {
-    return this.pId;
+    return this.game._id;
   }
 
-  protected get me(): BasicGameRecord {
-    const me = this.readonlydao.get(this.pId);
-    if (!me) throw new Meteor.Error("UNABLE_TO_FIND_GAME");
-    return me;
+  public get type(): GameTypes {
+    return this.game.status;
   }
 
   constructor(
     parent: Stoppable | null,
-    id: string,
+    game: BasicGameRecord,
     readonlydao: CommonReadOnlyGameDao,
   ) {
     super(parent);
-    this.pId = id;
+    this.game = game;
     this.readonlydao = readonlydao;
   }
 }

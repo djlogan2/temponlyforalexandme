@@ -1,24 +1,17 @@
 import CommonAnalysisGame from "/lib/CommonAnalysisGame";
-import { GameReadOnlyDao } from "/imports/client/dao/GameReadOnlyDao";
-import Stoppable from "/lib/Stoppable";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 
 export default class ClientAnalysisGame extends CommonAnalysisGame {
-  private dao: GameReadOnlyDao;
-
   public get events() {
-    return this.dao.events;
+    return this.readonlydao.events;
   }
 
-  constructor(
-    parent: Stoppable | null,
-    id: string,
-    readonlydao: CommonReadOnlyGameDao,
-    gamereadonlydao: GameReadOnlyDao,
-  ) {
-    super(parent, id, readonlydao);
-    this.dao = gamereadonlydao;
-  }
+  // constructor(
+  //   parent: Stoppable | null,
+  //   game: AnalysisGameRecord,
+  //   gamereadonlydao: CommonReadOnlyGameDao,
+  // ) {
+  //   super(parent, game, gamereadonlydao);
+  // }
 
   protected stopping(): void {}
 }

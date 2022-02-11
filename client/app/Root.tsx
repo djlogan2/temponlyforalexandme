@@ -10,12 +10,13 @@ import { withTranslations } from "./hocs/withTranslations";
 import Theme, { ThemeProvider } from "./theme";
 import GameService from "/imports/client/service/GameService";
 import Spinner from "./shared/Spinner";
-import { GameReadOnlyDao } from "/imports/client/dao/GameReadOnlyDao";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import ClientServer from "/lib/client/ClientServer";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import App from "./App";
+import { ClientGameReadOnlyDao } from "/imports/client/dao/ClientGameReadOnlyDao";
+import { ClientComputerPlayedGame } from "/lib/client/ClientComputerPlayedGame";
+import ClientUser from "/lib/client/ClientUser";
 
 const userdao = new CommonReadOnlyUserDao(null);
 const clientserver = new ClientServer(userdao);
@@ -28,9 +29,12 @@ const themedao = new ThemeReadOnlyDao(null, subscriptionservice);
 const i18nClient = new Clienti18n(i18ndao);
 const theme = new ClientTheme(null, themedao);
 
-const commongamedao = new CommonReadOnlyGameDao(null);
-const gamedao = new GameReadOnlyDao(null, subscriptionservice, commongamedao);
-const gameservice = new GameService(null, gamedao);
+const gamedao = new ClientGameReadOnlyDao(
+  null,
+  subscriptionservice,
+  clientserver.connection,
+);
+const gameservice = new GameService(null, gamedao, clientserver.connection);
 
 function loggedin() {
   clientserver.connection.events.off("loggedin", loggedin);
@@ -54,11 +58,13 @@ new Promise<void>((resolve) => {
     _id: "x",
     type: "computer",
     skill_level: 1,
+    color: "w",
     clock: { minutes: 15 },
   };
 
-  gameservice.events.on("started", () => {
+  gameservice.events.on("started", (game: ClientComputerPlayedGame) => {
     console.log("The computer game has started");
+    game.makeMove(connection.user as ClientUser, "e4");
   });
 
   gameservice.startComputerGame(computerchallenge);

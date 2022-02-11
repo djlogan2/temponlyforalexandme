@@ -13,7 +13,7 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import WritableThemeDao from "/imports/server/dao/WritableThemeDao";
 import Writablei18nDao from "/imports/server/dao/Writablei18nDao";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
+import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 
 const parent = null;
 
@@ -39,7 +39,7 @@ const i18nwritabledao = new Writablei18nDao(null);
 const instanceservice = new InstanceService(parent, instancedao);
 
 const writablegamedao = new WritableGameDao(null);
-const readonlygamedao = new CommonReadOnlyGameDao(null);
+const readonlygamedao = new ServerReadOnlyGameDao(null, writablegamedao);
 
 const connectionservice = new ConnectionService(
   parent,

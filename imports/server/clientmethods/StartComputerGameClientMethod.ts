@@ -36,14 +36,17 @@ export default class StartComputerGameClientMethod extends AbstractClientMethod 
 
   protected validatearguments(obj: StartComputerGameClientMethodObject): void {}
 
-  protected called(obj: StartComputerGameClientMethodObject) {
+  protected called(obj: StartComputerGameClientMethodObject): string {
     this.logger.debug(
       () =>
         `StartComputerGameClientMethodObject challenge=${util.inspect(
           obj.challenge,
         )}`,
     );
-    this.gameservice.startComputerGame(obj.user as ServerUser, obj.challenge);
+    return this.gameservice.startComputerGame(
+      obj.user as ServerUser,
+      obj.challenge,
+    );
   }
 
   protected stopping() {}

@@ -11,7 +11,7 @@ import { Mongo } from "meteor/mongo";
 import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import Stoppable from "/lib/Stoppable";
 import ServerComputerPlayedGame from "/lib/server/ServerComputerPlayedGame";
-import { Subscription } from "meteor/meteor";
+import { Meteor, Subscription } from "meteor/meteor";
 import PublicationService from "/imports/server/service/PublicationService";
 import ServerConnection from "/lib/server/ServerConnection";
 import GamePublication from "/imports/server/publications/GamePublication";
@@ -19,11 +19,13 @@ import StartComputerGameClientMethod from "/imports/server/clientmethods/StartCo
 import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
+import CommonGameService from "/lib/CommonGameService";
+import GameMakeMoveMethod from "/imports/server/clientmethods/GameMakeMoveMethod";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-export default class GameService extends Stoppable {
+export default class GameService extends CommonGameService {
   private readonly logger: ServerLogger;
 
   private readonly writabledao: WritableGameDao;
@@ -31,6 +33,8 @@ export default class GameService extends Stoppable {
   private readonly readonlydao: CommonReadOnlyGameDao;
 
   private readonly startcomputergamemethod: StartComputerGameClientMethod;
+
+  private readonly makemovemethod: GameMakeMoveMethod;
 
   private gamelist: { [id: string]: ServerComputerPlayedGame } = {};
 
@@ -43,7 +47,7 @@ export default class GameService extends Stoppable {
     publicationservice: PublicationService,
     connectionservice: ConnectionService,
   ) {
-    super(parent);
+    super(parent, readonlydao);
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
     this.readonlydao = readonlydao;
@@ -57,6 +61,12 @@ export default class GameService extends Stoppable {
       this,
       connectionservice,
       this,
+    );
+
+    this.makemovemethod = new GameMakeMoveMethod(
+      this,
+      connectionservice,
+      readonlydao,
     );
   }
 
@@ -125,18 +135,23 @@ export default class GameService extends Stoppable {
       tomove: "w",
       fen: STARTING_POSITION,
       pending: {
-        white: { draw: false, abort: false, adjourn: false, takeback: 0 },
-        black: { draw: false, abort: false, adjourn: false, takeback: 0 },
+        w: { draw: false, abort: false, adjourn: false, takeback: 0 },
+        b: { draw: false, abort: false, adjourn: false, takeback: 0 },
       },
       skill_level: computerchallenge.skill_level,
-      clocks: { white, black },
+      clocks: { w: white, b: black },
       observers: [],
-      variations: { halfmovetakeback: 0, currentmoveindex: 0, movelist: [] },
+      variations: {
+        halfmovetakeback: 0,
+        currentmoveindex: 0,
+        movelist: [{ variations: [] }],
+      },
     };
     const id = this.writabledao.insert(gamerecord);
+    gamerecord._id = id;
     const game = new ServerComputerPlayedGame(
       this,
-      id,
+      gamerecord as ComputerPlayGameRecord,
       this.readonlydao,
       this.writabledao,
     );
@@ -200,8 +215,10 @@ export default class GameService extends Stoppable {
   }
 
   private determineColor(
-    id1: string,
-    id2: string,
+    // Don't delete these, we are going to need them when we do eventually get
+    // a game history.
+    _id1: string,
+    _id2: string,
     rating1: number,
     rating2: number,
   ): PieceColor {

@@ -1,7 +1,16 @@
 import { PingMessage } from "/lib/records/PingMessage";
 import { ClockSettings, PieceColor } from "/lib/records/ChallengeRecord";
 
-type ChessJSFlags = "n" | "b" | "e" | "c" | "p" | "k" | "q" | "pc" | null;
+export type ChessJSFlags =
+  | "n"
+  | "b"
+  | "e"
+  | "c"
+  | "p"
+  | "k"
+  | "q"
+  | "pc"
+  | null;
 type ChessJSPiece = "p" | "r" | "n" | "b" | "q" | "k";
 type ChessJSPromotablePeice = "r" | "n" | "b" | "q";
 export type GameStatus = "1-0" | "0-1" | "1/2-1/2" | "*";
@@ -14,8 +23,8 @@ interface OneColorPending {
 }
 
 interface Pending {
-  white: OneColorPending;
-  black: OneColorPending;
+  w: OneColorPending;
+  b: OneColorPending;
 }
 
 interface ChessJSMove {
@@ -35,8 +44,8 @@ export interface Clock {
 }
 
 export interface Clocks {
-  white: Clock;
-  black: Clock;
+  w: Clock;
+  b: Clock;
 }
 
 interface OneLagObject {
@@ -45,8 +54,8 @@ interface OneLagObject {
 }
 
 interface LagObject {
-  white: OneLagObject;
-  black: OneLagObject;
+  w: OneLagObject;
+  b: OneLagObject;
 }
 
 interface PlayerInfo {
@@ -66,15 +75,18 @@ interface ECOObject {
   code: string;
 }
 
-interface BasicMoveListNode {
+export interface MoveZero {
+  variations?: number[];
+}
+
+export interface BasicMoveListNode extends MoveZero {
   prev: number;
   move: string;
   smith: ChessJSMove;
   eco: ECOObject;
-  variations?: number[];
 }
 
-interface PlayedGameMoveListNode extends BasicMoveListNode {
+export interface PlayedGameMoveListNode extends BasicMoveListNode {
   wcurrent: number;
   bcurrent: number;
 }
@@ -87,13 +99,17 @@ interface ExaminedGameMoveListNode extends BasicMoveListNode {
 interface VariationsInterface {
   halfmovetakeback: number;
   currentmoveindex: number;
-  movelist: BasicMoveListNode[];
+  movelist: (BasicMoveListNode | MoveZero)[];
 }
+
+export type GameTypes = "playing" | "analyzing" | "computer";
 
 export interface BasicGameRecord {
   _id: string;
+  status: GameTypes;
   isolation_group: string;
   startTime: Date;
+  tomove: PieceColor;
   fen: string;
   startingFen?: string;
   observers: Observerinterface[];
@@ -101,14 +117,10 @@ export interface BasicGameRecord {
 }
 
 export interface BasicPlayedGameRecord extends BasicGameRecord {
-  tomove: PieceColor;
-  fen: string;
   premove?: ChessJSMove;
   clocks: Clocks;
   pending: Pending;
 }
-
-export type GameTypes = "playing" | "analyzing" | "computer";
 
 export interface TwoPlayerPlayedGameRecord extends BasicPlayedGameRecord {
   status: "playing";
@@ -126,8 +138,8 @@ export interface ComputerPlayGameRecord extends BasicPlayedGameRecord {
 
 export interface AnalysisGameRecord extends BasicGameRecord {
   status: "analyzing";
-  white: Partial<PlayerInfo>;
-  black: Partial<PlayerInfo>;
+  w: Partial<PlayerInfo>;
+  b: Partial<PlayerInfo>;
   ratinginterface?: string;
   rated?: boolean;
   result: GameStatus;
