@@ -1,53 +1,41 @@
-import { GameReadOnlyDao } from "/imports/client/dao/GameReadOnlyDao";
-import EventEmitter from "eventemitter3";
-import { ClientComputerPlayedGame } from "/lib/client/ClientComputerPlayedGame";
-import ClientAnalysisGame from "/lib/client/ClientAnalysisGame";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import { Meteor } from "meteor/meteor";
 import ClientLogger from "/lib/client/ClientLogger";
 import Stoppable from "/lib/Stoppable";
 import * as util from "util";
+import { ClientGameReadOnlyDao } from "/imports/client/dao/ClientGameReadOnlyDao";
+import CommonGameService from "/lib/CommonGameService";
+import {
+  AnalysisGameRecord,
+  BasicGameRecord,
+  ComputerPlayGameRecord,
+} from "/lib/records/GameRecord";
+import { ClientComputerPlayedGame } from "/lib/client/ClientComputerPlayedGame";
+import ClientAnalysisGame from "/lib/client/ClientAnalysisGame";
+import ClientConnection from "/lib/client/ClientConnection";
+import ClientUser from "/lib/client/ClientUser";
 
-export default class GameService extends Stoppable {
-  private dao: GameReadOnlyDao;
-
+export default class GameService extends CommonGameService {
   private readonly logger: ClientLogger;
 
-  // private readonly pOnStarted: (game: ClientComputerPlayedGame | ClientAnalysisGame) => void;
-
-  // private pEvents = new EventEmitter<"started" | "newListener" | "removeListener">();
+  private readonly connection: ClientConnection;
 
   public get events() {
     return this.dao.events;
   }
 
-  // private onStarted(game: ClientComputerPlayedGame | ClientAnalysisGame): void {
-  //     this.pEvents.emit("started", game);
-  // }
-
-  constructor(parent: Stoppable | null, gamedao: GameReadOnlyDao) {
-    super(parent);
+  constructor(
+    parent: Stoppable | null,
+    gamedao: ClientGameReadOnlyDao,
+    connection: ClientConnection,
+  ) {
+    super(parent, gamedao);
 
     this.logger = new ClientLogger(this, "GameService_js");
 
+    this.connection = connection;
+
     this.dao = gamedao;
-
-    // this.pOnStarted = (game: ClientComputerPlayedGame | ClientAnalysisGame) => this.onStarted(game);
-
-    // this.pEvents.on('newListener', (event) => {
-    //     this.logger.debug(() => `newListener is being called because somebody is starting to listen to event ${event}`);
-    //     if (event === "started" && !this.pEvents.listenerCount("started")) {
-    //         this.logger.debug(() => `Somebody is listening for the start of a game, so we are listening to our dao`);
-    //         this.dao.events.on("started", this.pOnStarted);
-    //     }
-    // });
-    // this.pEvents.on('removeListener', (event) => {
-    //     this.logger.debug(() => `removeListener is being called because somebody has stopped listening to event ${event}`);
-    //     if (event === "started" && this.pEvents.listenerCount("started") === 1) {
-    //         this.logger.debug(() => `Last listener for started games has left, so we are quitting on our dao`);
-    //         this.dao.events.off("started", this.pOnStarted);
-    //     }
-    // });
   }
 
   public startComputerGame(
@@ -63,7 +51,7 @@ export default class GameService extends Stoppable {
       Meteor.call(
         "startComputerGame",
         computerchallenge,
-        (err: Meteor.Error, id: string) => {
+        (err: Meteor.Error) => {
           if (err) reject(err);
           else {
             resolve();
@@ -74,4 +62,35 @@ export default class GameService extends Stoppable {
   }
 
   protected stopping(): void {}
+
+  protected getClassFromType(
+    game: BasicGameRecord,
+  ): ClientComputerPlayedGame | ClientAnalysisGame {
+    let stupid;
+
+    switch (game.status) {
+      case "computer":
+        stupid = new ClientComputerPlayedGame(
+          this,
+          game as ComputerPlayGameRecord,
+          this.dao,
+          this.connection.user as ClientUser,
+        );
+        break;
+      case "analyzing":
+        stupid = new ClientAnalysisGame(
+          this,
+          game as AnalysisGameRecord,
+          this.dao,
+        );
+        break;
+      case "playing":
+        throw new Meteor.Error("Not yet supported");
+      default: {
+        const check: never = game.status;
+        throw new Meteor.Error(`UNKNOWN_GAME_RECORD_TYPE: ${check}`);
+      }
+    }
+    return stupid;
+  }
 }

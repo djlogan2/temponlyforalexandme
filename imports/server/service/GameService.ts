@@ -4,14 +4,17 @@ import {
   ComputerChallengeRecord,
   PieceColor,
 } from "/lib/records/ChallengeRecord";
-import { ComputerPlayGameRecord } from "/lib/records/GameRecord";
+import {
+  BasicGameRecord,
+  ComputerPlayGameRecord,
+} from "/lib/records/GameRecord";
 import ServerUser from "/lib/server/ServerUser";
 import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import { Mongo } from "meteor/mongo";
 import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import Stoppable from "/lib/Stoppable";
 import ServerComputerPlayedGame from "/lib/server/ServerComputerPlayedGame";
-import { Subscription } from "meteor/meteor";
+import { Meteor, Subscription } from "meteor/meteor";
 import PublicationService from "/imports/server/service/PublicationService";
 import ServerConnection from "/lib/server/ServerConnection";
 import GamePublication from "/imports/server/publications/GamePublication";
@@ -19,11 +22,15 @@ import StartComputerGameClientMethod from "/imports/server/clientmethods/StartCo
 import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
+import CommonGameService from "/lib/CommonGameService";
+import CommonAnalysisGame from "/lib/CommonAnalysisGame";
+import CommonComputerPlayedGame from "/lib/CommonComputerPlayedGame";
+import ServerAnalysisGame from "/lib/server/ServerAnalysisGame";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-export default class GameService extends Stoppable {
+export default class GameService extends CommonGameService {
   private readonly logger: ServerLogger;
 
   private readonly writabledao: WritableGameDao;
@@ -43,7 +50,7 @@ export default class GameService extends Stoppable {
     publicationservice: PublicationService,
     connectionservice: ConnectionService,
   ) {
-    super(parent);
+    super(parent, readonlydao);
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
     this.readonlydao = readonlydao;
@@ -125,18 +132,19 @@ export default class GameService extends Stoppable {
       tomove: "w",
       fen: STARTING_POSITION,
       pending: {
-        white: { draw: false, abort: false, adjourn: false, takeback: 0 },
-        black: { draw: false, abort: false, adjourn: false, takeback: 0 },
+        w: { draw: false, abort: false, adjourn: false, takeback: 0 },
+        b: { draw: false, abort: false, adjourn: false, takeback: 0 },
       },
       skill_level: computerchallenge.skill_level,
-      clocks: { white, black },
+      clocks: { w: white, b: black },
       observers: [],
       variations: { halfmovetakeback: 0, currentmoveindex: 0, movelist: [] },
     };
     const id = this.writabledao.insert(gamerecord);
+    gamerecord._id = id;
     const game = new ServerComputerPlayedGame(
       this,
-      id,
+      gamerecord as ComputerPlayGameRecord,
       this.readonlydao,
       this.writabledao,
     );
@@ -200,8 +208,10 @@ export default class GameService extends Stoppable {
   }
 
   private determineColor(
-    id1: string,
-    id2: string,
+    // Don't delete these, we are going to need them when we do eventually get
+    // a game history.
+    _id1: string,
+    _id2: string,
     rating1: number,
     rating2: number,
   ): PieceColor {
@@ -242,4 +252,26 @@ export default class GameService extends Stoppable {
   }
 
   protected stopping(): void {}
+
+  protected getClassFromType(
+    game: BasicGameRecord,
+  ): CommonComputerPlayedGame | CommonAnalysisGame {
+    switch (game.status) {
+      case "playing":
+        throw new Meteor.Error("NOT_IMPLEMENTED");
+      case "analyzing":
+        return new ServerAnalysisGame(this, game, this.readonlydao);
+      case "computer":
+        return new ServerComputerPlayedGame(
+          this,
+          game as ComputerPlayGameRecord,
+          this.readonlydao,
+          this.writabledao,
+        );
+      default: {
+        const checkme: never = game.status;
+        throw new Error(`UNKNOWN_GAME_RECORD_TYPE: ${checkme}`);
+      }
+    }
+  }
 }

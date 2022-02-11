@@ -8,6 +8,7 @@ import Stoppable from "/lib/Stoppable";
 
 export type ClientCalls =
   | "idleFunction"
+  | "makeMove"
   | "newUserLogin"
   | "startComputerGame"
   | "user_set"
