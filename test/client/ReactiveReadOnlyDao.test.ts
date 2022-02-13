@@ -68,7 +68,7 @@ describe("ReactiveReadOnlyDao", function () {
     resetDatabase(null, () => done());
   });
 
-  it("should call onRecordAdded when a record is added", function (done) {
+  it("should call onRecordAdded when a record is added", function (this: Mocha.Context, done) {
     // eslint-disable-next-line no-invalid-this
     this.timeout(10000);
     const dao = new TestReactiveReadOnlyDao();

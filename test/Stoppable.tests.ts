@@ -28,7 +28,7 @@ class TestStoppable extends Stoppable {
 }
 
 describe("Stoppable", function () {
-  it("should call all it's internal 'stopping' and all of its childrens 'stopping' methods when stop() is called", function (done) {
+  it("should call all it's internal 'stopping' and all of its childrens 'stopping' methods when stop() is called", function (this: Mocha.Context, done) {
     this.timeout(50000000);
     let active = [0, 1, 2, 3, 4, 5];
     const testme = new TestStoppable(null, 0, (depth) => {

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    /* Basic Options */
     "target": "es2018",
     "module": "esNext",
     "lib": ["esnext", "dom"],
@@ -18,17 +17,15 @@
     "noFallthroughCasesInSwitch": false,
     "baseUrl": ".",
     "paths": {
-      /* Support absolute /imports/* with a leading '/' */
       "/*": ["*"]
     },
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "types": ["node", "mocha"],
+    "types": ["node", "mocha", "jest"],
     "esModuleInterop": true,
     "preserveSymlinks": true,
-    "inlineSourceMap": true
-    //    "sourceMap": true,
-    //    "sourceRoot": "http://localhost:3000/debug/source",
+    "inlineSourceMap": true,
+    "skipLibCheck": true
   },
   "exclude": ["./.meteor/**", "./packages/**"]
 }
