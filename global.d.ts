@@ -7,7 +7,7 @@ import Stoppable from "./lib/Stoppable";
 import ClientUser from "/lib/client/ClientUser";
 import ClientConnection from "/lib/client/ClientConnection";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
-import PooledEventEmitter from "/lib/PooledEventEmitter";
+import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 import { CollectionNames } from "/lib/CollectionNames";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import CommonLogger from "/lib/CommonLogger";

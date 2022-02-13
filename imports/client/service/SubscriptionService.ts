@@ -1,8 +1,8 @@
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import SubscriptionEventEmitter from "/lib/client/SubscriptionEventEmitter";
 import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
-import PooledEventEmitter from "/lib/PooledEventEmitter";
+import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 
 export default class SubscriptionService extends Stoppable {
   /**

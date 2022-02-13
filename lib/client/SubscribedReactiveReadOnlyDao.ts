@@ -1,5 +1,5 @@
 import Stoppable from "/lib/Stoppable";
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import { SubscriptionNames } from "/lib/SubscriptionNames";

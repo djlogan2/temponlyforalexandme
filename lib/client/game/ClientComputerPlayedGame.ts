@@ -1,10 +1,11 @@
 import { Move } from "chess.js";
 import { Meteor } from "meteor/meteor";
-import { ComputerPlayGameRecord, GameStatus } from "../records/GameRecord";
-import CommonComputerPlayedGame from "/lib/CommonComputerPlayedGame";
+import { ComputerPlayGameRecord, GameStatus } from "/lib/records/GameRecord";
+import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
 import Stoppable from "/lib/Stoppable";
 import ClientUser from "/lib/client/ClientUser";
 import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
+import User from "/lib/User";
 
 export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
   private user: ClientUser;
@@ -30,5 +31,9 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     _result: GameStatus,
   ): void {
     Meteor.call("makeMove", this.me._id, move.san);
+  }
+
+  protected isAuthorizedToMove(who: User): boolean {
+    return user.id === this.me.opponent.userid;
   }
 }

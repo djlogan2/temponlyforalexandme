@@ -1,5 +1,5 @@
 import EventEmitter from "eventemitter3";
-import PooledEventEmitter from "/lib/PooledEventEmitter";
+import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 
 export default class ICCEventEmitter<T extends string> {
   private pool: PooledEventEmitter<T>;

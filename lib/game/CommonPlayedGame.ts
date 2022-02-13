@@ -1,5 +1,5 @@
 import { Meteor } from "meteor/meteor";
-import CommonBasicGame from "/lib/CommonBasicGame";
+import CommonBasicGame from "/lib/game/CommonBasicGame";
 import {
   BasicPlayedGameRecord,
   Clock,
@@ -15,15 +15,9 @@ import Stoppable from "/lib/Stoppable";
 export default abstract class CommonPlayedGame extends CommonBasicGame {
   private timerHandle?: number;
 
-  private logger: CommonLogger;
+  private logger2: CommonLogger;
 
   protected abstract endGame(status: GameStatus, status2: number): void;
-
-  protected abstract internalMakeMove(
-    move: Move,
-    fen: string,
-    result: GameStatus,
-  ): void;
 
   protected abstract playerColor(who: User): PieceColor | null;
 
@@ -37,7 +31,7 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
     dao: CommonReadOnlyGameDao,
   ) {
     super(parent, game, dao);
-    this.logger = globalThis.ICCServer.utilities.getLogger(
+    this.logger2 = globalThis.ICCServer.utilities.getLogger(
       this,
       "CommonPlayedGame_js",
     );
@@ -89,32 +83,11 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
     this.stopTimer();
   }
 
-  public makeMove(who: User, move: string): void {
-    const playercolor = this.playerColor(who);
-    if (playercolor === this.me.tomove) {
-      // One of the players is moving in turn
-      const chess = new Chess(this.game.fen);
-      const chessmove = chess.move(move);
-      if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
-      this.stopTimer();
-      let gameresult: GameStatus = "*";
-      if (chess.game_over()) {
-        if (chess.in_stalemate() || chess.in_draw()) {
-          gameresult = "1/2-1/2";
-        } else if (chess.in_checkmate()) {
-          gameresult = chess.turn() === "w" ? "0-1" : "1-0";
-        } else {
-          this.logger.error(() => "Unknown status in chess engine");
-        }
-      }
-      this.internalMakeMove(chessmove, chess.fen(), gameresult);
-      this.startClock();
-    } else if (!playercolor) {
-      // The player is not playing in this game
-      throw new Meteor.Error("NOT_A_PLAYER");
-    } else {
-      // The player is moving out of turn
-      throw new Meteor.Error("NOT_YOUR_MOVE");
-    }
+  protected postmoveTasks(): void {
+    this.stopTimer();
+  }
+
+  protected premoveTasks(): void {
+    this.startClock();
   }
 }

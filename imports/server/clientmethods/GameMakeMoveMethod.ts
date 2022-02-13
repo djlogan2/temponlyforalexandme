@@ -4,7 +4,7 @@ import AbstractClientMethod, {
 import ServerLogger from "/lib/server/ServerLogger";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import Stoppable from "/lib/Stoppable";
-import CommonPlayedGame from "/lib/CommonPlayedGame";
+import CommonPlayedGame from "/lib/game/CommonPlayedGame";
 import { Meteor } from "meteor/meteor";
 import ServerUser from "/lib/server/ServerUser";
 import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";

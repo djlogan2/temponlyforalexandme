@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import User from "/lib/User";
 import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import EventEmitter from "eventemitter3";
 
 type UserEvents = "locale";
