@@ -61,7 +61,6 @@ describe("CommonReadOnlyLoggerConfigurationDao", function () {
   });
 
   it("should emit a default 'debug' loglevel when a record is deleted from the database, and it should emit the correct module", function (this: Mocha.Context, done) {
-    this.timeout(50000000);
     let expected: LOGLEVEL = "trace";
     let fin = false;
     const rolcd = new TestCommonReadOnlyLoggerConfigurationDao(

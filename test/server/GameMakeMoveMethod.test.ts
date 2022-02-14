@@ -25,7 +25,6 @@ describe.only("GameMakeMoveMethod", function () {
     sandbox.restore();
   });
   it("should work if called is passed a ServerAnalysisGame", function () {
-    this.timeout(5000000);
     const connectionservice = sandbox.createStubInstance(ConnectionService);
     const readonlydao = sandbox.createStubInstance(CommonReadOnlyGameDao);
     const game = sandbox.createStubInstance(ServerAnalysisGame);
