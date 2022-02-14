@@ -4,10 +4,10 @@ import CommonReadOnlyGameDao, {
   GameEvents,
 } from "/imports/dao/CommonReadOnlyGameDao";
 import ClientLogger from "/lib/client/ClientLogger";
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
-import { ClientComputerPlayedGame } from "/lib/client/ClientComputerPlayedGame";
-import ClientAnalysisGame from "/lib/client/ClientAnalysisGame";
+import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
+import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 import {
   AnalysisGameRecord,
   BasicGameRecord,

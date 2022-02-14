@@ -1,4 +1,4 @@
-import PooledEventEmitter from "/lib/PooledEventEmitter";
+import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import { expect } from "chai";
 import { SubscriptionNames } from "/lib/SubscriptionNames";

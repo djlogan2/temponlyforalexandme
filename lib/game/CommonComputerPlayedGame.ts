@@ -1,4 +1,4 @@
-import CommonPlayedGame from "/lib/CommonPlayedGame";
+import CommonPlayedGame from "/lib/game/CommonPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import User from "/lib/User";
 import { ComputerPlayGameRecord } from "/lib/records/GameRecord";

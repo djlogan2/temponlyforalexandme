@@ -1,5 +1,5 @@
 import CommonReadOnlyLoggerConfigurationDao from "/imports/dao/CommonReadOnlyLoggerConfigurationDao";
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import Stoppable from "/lib/Stoppable";
 import { LOGLEVEL } from "/lib/records/LoggerConfigurationRecord";
 import SubscriptionService from "/imports/client/service/SubscriptionService";

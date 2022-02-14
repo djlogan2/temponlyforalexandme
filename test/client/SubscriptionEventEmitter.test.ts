@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import { expect } from "chai";
-import PooledEventEmitter from "/lib/PooledEventEmitter";
+import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 import { Meteor } from "meteor/meteor";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 

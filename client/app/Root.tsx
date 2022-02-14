@@ -15,7 +15,7 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import App from "./App";
 import { ClientGameReadOnlyDao } from "/imports/client/dao/ClientGameReadOnlyDao";
-import { ClientComputerPlayedGame } from "/lib/client/ClientComputerPlayedGame";
+import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import ClientUser from "/lib/client/ClientUser";
 
 const userdao = new CommonReadOnlyUserDao(null);

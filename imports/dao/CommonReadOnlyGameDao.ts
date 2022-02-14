@@ -5,8 +5,8 @@ import {
 import Stoppable from "/lib/Stoppable";
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
-import CommonComputerPlayedGame from "/lib/CommonComputerPlayedGame";
-import CommonAnalysisGame from "/lib/CommonAnalysisGame";
+import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
+import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
 
 export type GameEvents =
   | "started"

@@ -1,5 +1,5 @@
 import Stoppable from "/lib/Stoppable";
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import { CollectionNames } from "/lib/CollectionNames";

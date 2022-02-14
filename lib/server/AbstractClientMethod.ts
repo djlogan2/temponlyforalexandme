@@ -26,6 +26,12 @@ export default abstract class AbstractClientMethod extends Stoppable {
 
   protected abstract called(obj: any): any;
 
+  protected connectionservice: ConnectionService;
+
+  private argumentnames: string[];
+
+  private roles: UserRoles[];
+
   protected isAuthorized(roles: string[], obj: ClientCallObject): boolean {
     return (
       !roles.length ||
@@ -44,51 +50,61 @@ export default abstract class AbstractClientMethod extends Stoppable {
     connectionservice: ConnectionService,
   ) {
     super(parent);
-    const self = this;
+
+    this.connectionservice = connectionservice;
+    this.argumentnames = argumentnames;
+    this.roles = roles;
+
     const methodobject: { [n in ClientCalls]?: InternalMethodType } = {};
+    const self = this;
     methodobject[callname] = async function (
       this: Meteor.MethodThisType,
       ...args: any[]
     ) {
-      let serverConnection: ServerConnection | undefined;
-      if (this.connection)
-        serverConnection = await connectionservice.getConnection(
-          this.connection.id,
-        );
-      const serverUser = serverConnection?.user || undefined;
-      const httpHeaders = this.connection?.httpHeaders as HttpHeadersICareAbout;
-      // const simulation = this.isSimulation;
-      return new Promise<any>((resolve, reject) => {
-        try {
-          if (args.length !== argumentnames.length) {
-            reject(new Meteor.Error("INCORRECT_NUMBER_OF_ARGUMENTS"));
-            return;
-          }
-          const obj: any = {
-            connection: serverConnection,
-            user: serverUser,
-            httpHeaders,
-          };
-
-          if (args) {
-            for (let argv = 0; argv < args.length; argv += 1) {
-              obj[argumentnames[argv]] = args[argv];
-            }
-          }
-
-          const isAuthorized = self.isAuthorized(roles, obj);
-          if (!isAuthorized) {
-            reject(new Meteor.Error("INSUFFICIENT_AUTHORITY"));
-            return;
-          }
-          self.validatearguments(obj);
-          const retvalue = self.called(obj);
-          resolve(retvalue);
-        } catch (e) {
-          reject(e);
-        }
-      });
+      self.methodCall(this, args);
     };
     Meteor.methods(methodobject);
+  }
+
+  private async methodCall(methodthis: Meteor.MethodThisType, ...args: any[]) {
+    let serverConnection: ServerConnection | undefined;
+    if (methodthis.connection)
+      serverConnection = await this.connectionservice.getConnection(
+        methodthis.connection.id,
+      );
+    const serverUser = serverConnection?.user || undefined;
+    const httpHeaders = methodthis.connection
+      ?.httpHeaders as HttpHeadersICareAbout;
+    // const simulation = methodthis.isSimulation;
+    return new Promise<any>((resolve, reject) => {
+      try {
+        if (args.length !== this.argumentnames.length) {
+          reject(new Meteor.Error("INCORRECT_NUMBER_OF_ARGUMENTS"));
+          return;
+        }
+        const obj: any = {
+          connection: serverConnection,
+          user: serverUser,
+          httpHeaders,
+        };
+
+        if (args) {
+          for (let argv = 0; argv < args.length; argv += 1) {
+            obj[this.argumentnames[argv]] = args[argv];
+          }
+        }
+
+        const isAuthorized = this.isAuthorized(this.roles, obj);
+        if (!isAuthorized) {
+          reject(new Meteor.Error("INSUFFICIENT_AUTHORITY"));
+          return;
+        }
+        this.validatearguments(obj);
+        const retvalue = this.called(obj);
+        resolve(retvalue);
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 }

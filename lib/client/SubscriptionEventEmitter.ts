@@ -1,5 +1,5 @@
 import { Meteor } from "meteor/meteor";
-import PooledEventEmitter from "/lib/PooledEventEmitter";
+import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import ClientLogger from "/lib/client/ClientLogger";

@@ -7,10 +7,10 @@ import {
   BasicGameRecord,
   ComputerPlayGameRecord,
 } from "/lib/records/GameRecord";
-import CommonComputerPlayedGame from "/lib/CommonComputerPlayedGame";
-import CommonAnalysisGame from "/lib/CommonAnalysisGame";
-import ServerAnalysisGame from "/lib/server/ServerAnalysisGame";
-import ServerComputerPlayedGame from "/lib/server/ServerComputerPlayedGame";
+import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
+import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
+import ServerAnalysisGame from "/lib/server/game/ServerAnalysisGame";
+import ServerComputerPlayedGame from "/lib/server/game/ServerComputerPlayedGame";
 import { Meteor } from "meteor/meteor";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import Stoppable from "/lib/Stoppable";

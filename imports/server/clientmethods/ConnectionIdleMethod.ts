@@ -11,11 +11,8 @@ interface ConnectionIdleFunctionObject extends ClientCallObject {
 }
 
 export default class ConnectionIdleMethod extends AbstractClientMethod {
-  private connectionservice: ConnectionService;
-
   constructor(parent: Stoppable | null, connectionservice: ConnectionService) {
     super(parent, "idleFunction", ["msg"], [], connectionservice);
-    this.connectionservice = connectionservice;
   }
 
   protected validatearguments(obj: ConnectionIdleFunctionObject): void {

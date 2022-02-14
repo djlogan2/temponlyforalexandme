@@ -1,3 +1,3 @@
-import CommonPlayedGame from "/lib/CommonPlayedGame";
+import CommonPlayedGame from "/lib/game/CommonPlayedGame";
 
 export abstract class CommonPlayedComputerGame extends CommonPlayedGame {}

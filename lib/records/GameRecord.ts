@@ -70,7 +70,7 @@ interface Observerinterface {
   username: string;
 }
 
-interface ECOObject {
+export interface ECOObject {
   name: string;
   code: string;
 }

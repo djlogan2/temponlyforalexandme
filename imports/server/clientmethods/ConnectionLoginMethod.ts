@@ -15,13 +15,10 @@ interface ConnectionLoginObject extends ClientCallObject {
   hashtoken: string;
 }
 export default class ConnectionLoginMethod extends AbstractClientMethod {
-  private connectionservice: ConnectionService;
-
   private logger: ServerLogger;
 
   constructor(parent: Stoppable | null, connectionservice: ConnectionService) {
     super(parent, "newUserLogin", ["hashtoken"], [], connectionservice);
-    this.connectionservice = connectionservice;
     this.logger = new ServerLogger(
       connectionservice,
       "ConnectionLoginObject_js",

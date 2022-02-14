@@ -1,6 +1,6 @@
 /* eslint-disable no-console,max-classes-per-file */
-import PooledEventEmitter from "/lib/PooledEventEmitter";
-import ICCEventEmitter from "/lib/ICCEventEmitter";
+import PooledEventEmitter from "/lib/client/PooledEventEmitter";
+import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import { expect } from "chai";
 import Stoppable from "/lib/Stoppable";
 

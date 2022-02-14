@@ -10,7 +10,7 @@ import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import { Mongo } from "meteor/mongo";
 import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import Stoppable from "/lib/Stoppable";
-import ServerComputerPlayedGame from "/lib/server/ServerComputerPlayedGame";
+import ServerComputerPlayedGame from "/lib/server/game/ServerComputerPlayedGame";
 import { Meteor, Subscription } from "meteor/meteor";
 import PublicationService from "/imports/server/service/PublicationService";
 import ServerConnection from "/lib/server/ServerConnection";
