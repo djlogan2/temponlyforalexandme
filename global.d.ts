@@ -63,7 +63,7 @@ declare global {
   var subscriptionservice: SubscriptionService;
   var loggerdao: ReadOnlyLoggerConfigurationDao;
   var Assets: any;
-  var user: ClientUser;
+  var cuser: ClientUser;
   var userlist: { [id: string]: ClientUser };
   var connection: ClientConnection;
   var subscriptions: { [K in SubscriptionNames]?: PooledEventEmitter<any> };

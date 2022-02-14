@@ -48,9 +48,11 @@ export default class GameService extends CommonGameService {
     connectionservice: ConnectionService,
   ) {
     super(parent, readonlydao);
+
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
     this.readonlydao = readonlydao;
+
     publicationservice.publishDao(
       "games",
       (sub: Subscription, connection: ServerConnection, ...args: any[]) =>
@@ -70,6 +72,8 @@ export default class GameService extends CommonGameService {
     );
   }
 
+  protected startMethods(): void {}
+
   public startComputerGame(
     challenger: ServerUser,
     computerchallenge: ComputerChallengeRecord,
@@ -80,6 +84,29 @@ export default class GameService extends CommonGameService {
           challenger.id
         } computerchallenge=${util.inspect(computerchallenge)}`,
     );
+
+    // It has to be a positive integer or zero
+    if (
+      computerchallenge.clock.minutes < 0 ||
+      !Number.isInteger(computerchallenge.clock.minutes)
+    )
+      throw new Meteor.Error("ILLEGAL_TIME");
+
+    // If it's zero, we have to have a non-zero increment/delay
+    if (computerchallenge.clock.minutes === 0) {
+      if (!computerchallenge.clock.adjust?.incseconds)
+        throw new Meteor.Error("ILLEGAL_TIME");
+    }
+
+    // If inc/delay exists, it must be a positive integer
+    if (computerchallenge.clock.adjust) {
+      if (
+        computerchallenge.clock.adjust.incseconds < 1 ||
+        !Number.isInteger(computerchallenge.clock.adjust.incseconds)
+      )
+        throw new Meteor.Error("ILLEGAL_TIME");
+    }
+
     // TODO: How do we handle the computers rating?
     const opponentcolor: PieceColor =
       computerchallenge.color ||

@@ -143,7 +143,9 @@ export default class ServerConnection extends AbstractTimestampNode {
     const id = this.userservice.logon(hashtoken, locale);
     this.pUser = new ServerUser(this, id, this.userdao, this.writableuserdao);
     this.events.emit("userlogin", this.pUser);
-    this.logger2.debug(() => `${this.connectionid} login emitted "userlogin"`);
+    this.logger2.debug(
+      () => `${this.connectionid} login emitted "userlogin", userid=${id}`,
+    );
     return id;
   }
 }

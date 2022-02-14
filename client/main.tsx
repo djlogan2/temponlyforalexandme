@@ -10,15 +10,6 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import ClientServer from "/lib/client/ClientServer";
 import { store } from "./app/store";
 
-globalThis.subscriptionservice = new SubscriptionService(null);
-globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
-  null,
-  window.subscriptionservice,
-);
-const userdao = new CommonReadOnlyUserDao(null);
-
-globalThis.icc = new ClientServer(userdao);
-
 // window.onerror = function myErrorHandler(
 //     message: Event | string,
 //     source: string | undefined,

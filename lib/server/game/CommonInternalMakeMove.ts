@@ -157,6 +157,5 @@ function updateVariations(
     modifier.$push["variations.movelist"] = newnode;
     modifier.$set["variations.currentmoveindex"] =
       game.variations.movelist.length - 1;
-    game.tomove = game.tomove === "w" ? "b" : "w";
   }
 }

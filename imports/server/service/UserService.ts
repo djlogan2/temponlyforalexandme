@@ -37,7 +37,7 @@ export default class UserService extends Stoppable {
       (
         sub: Subscription,
         connection: ServerConnection | null,
-        ...args: string[]
+        ..._args: string[]
       ) => new UserPublication(this, sub, connection),
     );
     this.setusermethod = new ServerUserClientMethod(
@@ -50,6 +50,7 @@ export default class UserService extends Stoppable {
   public logon(hashtoken: string, locale: string): string {
     this.logger.debug(() => `logon hashtoken=${hashtoken}`);
     const userdb = this.getUserFromHashToken(hashtoken, locale);
+    this.logger.debug(() => `logon id=${userdb._id}`);
     return userdb._id;
   }
 

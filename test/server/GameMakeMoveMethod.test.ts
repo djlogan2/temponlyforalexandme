@@ -10,7 +10,7 @@ import { Meteor } from "meteor/meteor";
 
 const sandbox = sinon.createSandbox();
 
-describe.only("GameMakeMoveMethod", function () {
+describe("GameMakeMoveMethod", function () {
   afterEach(() => {
     sandbox.restore();
   });
