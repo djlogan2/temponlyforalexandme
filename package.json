@@ -5,11 +5,12 @@
   "scripts": {
     "front-test": "jest",
     "front-test:watch": "jest --watch",
+    "front-test-coverage": "jest --coverage",
     "start": "meteor run",
     "test": "meteor test --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "prepare": "husky install",
+    "prepare": "husky insta ll",
     "lint": "eslint --ignore-path .gitignore .",
     "prettier": "prettier --ignore-path .gitignore \"**/*.(js|ts|tsx|json)\"",
     "check-types": "tsc",
@@ -108,6 +109,7 @@
     ],
     "**/*.(js|ts|tsx|json)": [
       "prettier --write",
+      "jest --findRelatedTests",
       "git add"
     ]
   }
