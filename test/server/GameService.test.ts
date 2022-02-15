@@ -16,8 +16,9 @@ import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import StartComputerGameClientMethod from "/imports/server/clientmethods/StartComputerGameClientMethod";
 import GameMakeMoveMethod from "/imports/server/clientmethods/GameMakeMoveMethod";
+import ServerComputerPlayedGame from "/lib/server/game/ServerComputerPlayedGame";
 
-describe.only("GameService", function () {
+describe("GameService", function () {
   describe("startComputerGame", function () {
     // play_computer
     // already playing
@@ -29,6 +30,7 @@ describe.only("GameService", function () {
     let connectionservice: SinonStubbedInstance<ConnectionService>;
     let user: SinonStubbedInstance<ServerUser>;
     let gameservice: GameService;
+    let origClock: any;
 
     beforeEach(function () {
       sandbox = sinon.createSandbox();
@@ -41,6 +43,8 @@ describe.only("GameService", function () {
       sandbox.stub(user, "isolation_group").get(() => "myisogroup");
       sandbox.stub(user, "username").get(() => "yyusernameyy");
       sandbox.stub(user, "titles").get(() => ["GM", "C"]);
+      origClock = ServerComputerPlayedGame.prototype.startClock;
+      ServerComputerPlayedGame.prototype.startClock = sandbox.stub();
       const ratings: { [R in RatingTypes]: RatingObject } = {
         bullet: { rating: 1600, won: 0, draw: 0, lost: 0 },
         blitz: { rating: 1600, won: 0, draw: 0, lost: 0 },
@@ -60,11 +64,11 @@ describe.only("GameService", function () {
 
     afterEach(function () {
       sandbox.restore();
+      // @ts-ignore
+      ServerComputerPlayedGame.prototype.startClock = origClock;
     });
 
     it("should fail 0 increment with ILLEGAL_TIME", function () {
-      // @ts-ignore
-      this.timeout(5000000);
       const challenge: ComputerChallengeRecord = {
         _id: "x",
         type: "computer",
@@ -277,9 +281,9 @@ describe.only("GameService", function () {
     });
 
     it("should fail challenge is not 'computer'", function () {
-      // @ts-ignore
       const challenge: ComputerChallengeRecord = {
         _id: "x",
+        // @ts-ignore
         type: "notcomputer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: -60 } },
@@ -290,8 +294,6 @@ describe.only("GameService", function () {
     });
 
     it("should succeed in storing a game record (min)", function () {
-      // @ts-ignore
-      this.timeout(500000000);
       const expectedgamerecord: Mongo.OptionalId<ComputerPlayGameRecord> = {
         _id: undefined,
         isolation_group: "myisogroup",
@@ -327,6 +329,7 @@ describe.only("GameService", function () {
         type: "computer",
         skill_level: 1,
         clock: { minutes: 15 },
+        color: "w",
       };
 
       gameservice.startComputerGame(user, challenge);
