@@ -129,9 +129,6 @@ const ComponentsView: FCICC<IComponentsView> = () => {
               username="Grand_Master01"
               title="WGM"
               lagLevel={3}
-              keyboardFunctions={[]}
-              classes={[]}
-              token={{ token: "FAKE_TEXT", args: [] }}
             />
             <PlayerInfo
               userStatus="online"
@@ -140,9 +137,6 @@ const ComponentsView: FCICC<IComponentsView> = () => {
               username="Grand_Master01"
               title="GM"
               lagLevel={1}
-              keyboardFunctions={[]}
-              classes={[]}
-              token={{ token: "FAKE_TEXT", args: [] }}
               flip
             />
           </div>
@@ -298,6 +292,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           }}
         />
         <div className="board-wrapper">
+          {/* @ts-ignore */}
           <DummyChessboard />
         </div>
       </div>

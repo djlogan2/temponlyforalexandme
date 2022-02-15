@@ -9,6 +9,8 @@ const Chess = require("chess.js");
 interface IDummyChessboardProps {
   flipped?: boolean;
   className?: string;
+  fen: string;
+  onMoveHandler: (move: string) => void;
 }
 
 class DummyChessboard extends Component<IDummyChessboardProps> {
@@ -17,11 +19,13 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
   constructor(props: IDummyChessboardProps) {
     super(props);
 
+    const { fen } = this.props;
+
     this.chess = new Chess.Chess();
 
     this.state = {
       legalMoves: this.getLegalMoves(),
-      fen: this.chess.fen(),
+      fen,
       circles: [],
       arrows: [],
       smartMoves: false,
@@ -79,32 +83,31 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
   };
 
   handleMove = (move: any[], promotion: any) => {
+    const { onMoveHandler, fen } = this.props;
+    onMoveHandler(move[move.length - 1]);
     this.chess.move(move[0] + move[1] + promotion, { sloppy: true });
 
-    this.setState(
-      { legalMoves: this.getLegalMoves(), fen: this.chess.fen() },
-      () => {
-        const turn = this.chess.turn();
+    this.setState({ legalMoves: this.getLegalMoves(), fen }, () => {
+      const turn = this.chess.turn();
 
-        if (turn === "b") {
-          const moves = this.getLegalMoves();
-          const movesKeys = Object.keys(moves);
-          // eslint-disable-next-line @typescript-eslint/no-shadow
-          const move = this.getRandomInt(movesKeys.length);
+      if (turn === "b") {
+        const moves = this.getLegalMoves();
+        const movesKeys = Object.keys(moves);
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        const move = this.getRandomInt(movesKeys.length);
 
-          setTimeout(() => {
-            // @ts-ignore
-            this.chess.move(movesKeys[move] + moves[movesKeys[move]][0], {
-              sloppy: true,
-            });
-            this.setState({
-              legalMoves: this.getLegalMoves(),
-              fen: this.chess.fen(),
-            });
-          }, 10000);
-        }
-      },
-    );
+        setTimeout(() => {
+          // @ts-ignore
+          this.chess.move(movesKeys[move] + moves[movesKeys[move]][0], {
+            sloppy: true,
+          });
+          this.setState({
+            legalMoves: this.getLegalMoves(),
+            fen,
+          });
+        }, 10000);
+      }
+    });
   };
 
   handleUpdateArrows = (arrow: {
