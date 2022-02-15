@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   outline: 2px solid currentColor;
+  background: radial-gradient(var(--userAvatarNoPictureBg));
 
   &--online {
     color: var(--userAvatarColorOnline);
@@ -20,7 +21,6 @@
 
   &--offline {
     color: var(--userAvatarColorOffline);
-    background: radial-gradient(var(--userAvatarNoPictureBg));
   }
 
   &__img {

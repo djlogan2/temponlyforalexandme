@@ -1,0 +1,112 @@
+.gameSetup {
+  width: 67.6rem;
+  background: #eceff5;
+  height: 100vh;
+  padding: 1.8rem 2.2rem;
+
+  &__pointer {
+    cursor: pointer;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__container {
+    width: 36rem;
+    margin: 0 auto;
+    margin-top: 4.4rem;
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 2.4rem;
+    line-height: 2.93rem;
+    color: var(--colorDarkOne);
+    text-align: center;
+    margin-bottom: 2.65rem;
+  }
+
+  &__options {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__subtitle {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+    font-weight: 500;
+    color: var(--colorDarkOne);
+    margin: 2.4rem 0;
+  }
+
+  &__timeOptions {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  &__challengeTime {
+    height: 6rem;
+    width: 8.3rem;
+    padding: 1.2rem;
+    &:nth-child(1) {
+      margin-bottom: 0.8rem;
+    }
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1.703rem;
+    color: var(--colorDarkOne);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    &--active {
+      background-color: var(--colorPrimary);
+      color: #fff;
+    }
+  }
+
+  &__more--active {
+    > * {
+      fill: #fff !important;
+    }
+  }
+
+  &__challenge-item {
+    &:not(:last-child) {
+      margin-bottom: 0.8rem;
+    }
+  }
+  &__challenge-types {
+    display: flex;
+    margin-bottom: 1.7rem;
+  }
+
+  &__challenge-type {
+    margin-right: 2.4rem;
+    color: var(--colorGreyOne);
+    cursor: pointer;
+
+    &--active {
+      color: var(--colorPrimary);
+    }
+  }
+
+  &__btn-more {
+    padding: 0.95rem;
+    height: 4rem;
+  }
+
+  &__show-more {
+    font-size: 1.6rem;
+    color: var(--colorPrimary);
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 1.6rem;
+    margin-bottom: 1.8rem;
+  }
+}

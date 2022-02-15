@@ -1,12 +1,12 @@
 import clsx from "clsx";
-import React, { FCICC } from "react";
-import "./index.scss";
+import React, { FC } from "react";
+import Avatar, { TUserStatus } from "../../shared/Avatar";
 import ChatIcon from "../icons/Chat";
 import ChessTitle from "../icons/ChessTitle";
 import France from "../icons/France";
 import LagIcon from "../icons/Lag";
 import WebcamIcon from "../icons/Webcam";
-import Avatar, { TUserStatus } from "../../shared/Avatar";
+import "./index.scss";
 
 interface IPlayerInfoProps {
   picture: string;
@@ -19,7 +19,7 @@ interface IPlayerInfoProps {
   className?: string;
 }
 
-const PlayerInfo: FCICC<IPlayerInfoProps> = ({
+const PlayerInfo: FC<IPlayerInfoProps> = ({
   picture,
   username,
   rank,

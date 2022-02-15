@@ -4,6 +4,7 @@ import React, { FCICC } from "react";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import LoadingPlaceholder from "./shared/LoadingPlaceholder";
 import ResponsiveBreakpoints from "/client/app/ResponsiveBreakpoints";
+import { useTheme } from "./theme";
 
 // const userdao = new CommonReadOnlyUserDao(null);
 // const clientserver = new ClientServer(userdao);
@@ -52,10 +53,9 @@ import ResponsiveBreakpoints from "/client/app/ResponsiveBreakpoints";
 // });
 
 const App: FCICC = ({ classes, ...rest }) => {
-  // const theme = useTheme(); It seems "theme" is a global variable, so yea, seems like a bug waiting to happen?
-  const isSubsReady = true; // useAllServicesReady();
+  const customTheme = useTheme();
 
-  return theme?.isReady ? (
+  return customTheme?.isReady ? (
     <Router>
       <Switch>
         <Route exact path="/">
