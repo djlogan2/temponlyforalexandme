@@ -11,6 +11,7 @@ import GameTitle from "/client/app/shared/GameTitle";
 import ClientUser from "/lib/client/ClientUser";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
+import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 
 interface IGameMarkup {}
 
@@ -47,9 +48,15 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
     });
   }, []);
 
-  const handleMove = (move: string) => {
-    console.log(move);
-    myGames[0].makeMove(connection.user as ClientUser, move);
+  const handleMove = (move: string[], promotion?: string) => {
+    if (promotion) {
+      console.log(move.join("") + promotion)
+      myGames[0].makeMove(connection.user as ClientUser, move.join("") + promotion);
+    } else {
+      console.log(move.join(""))
+      myGames[0].makeMove(connection.user as ClientUser, move.join(""));
+    }
+
   };
 
   return (
@@ -98,11 +105,16 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             classes={[]}
             className="gameContainer__title"
           />
-          <DummyChessboard
+          <EnhancedChessboard
+            fen={fen}
             flipped={isFlipped}
             className="gameContainer__board"
+            circles={[]}
+            arrows={[]}
+            showLegalMoves={false}
+            smartMoves={false}
+            smallSize={500}
             onMoveHandler={handleMove}
-            fen={fen || activeGame.fen}
           />
           <Flip
             onClick={() => setIsFlipped((val) => !val)}

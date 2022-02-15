@@ -65,6 +65,14 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
     this.setState({ circles: [...circles] });
   };
 
+  componentDidUpdate() {
+    const { fen } = this.props;
+
+    if (this.chess.fen() !== fen) {
+      this.chess.load(fen);
+    }
+  }
+
   getLegalMoves = () => {
     const moves = {};
     ["a", "b", "c", "d", "e", "f", "g", "h"].forEach((rank) => {
