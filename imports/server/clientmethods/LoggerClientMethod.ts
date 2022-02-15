@@ -37,7 +37,7 @@ export default class LoggerClientMethod extends AbstractClientMethod {
     check(obj.message, String);
   }
 
-  protected called(obj: LoggerClientCall) {
+  protected called(obj: LoggerClientCall): Promise<any> {
     this.loggerservice.writeToLog(
       obj.level,
       obj.module,
@@ -46,6 +46,7 @@ export default class LoggerClientMethod extends AbstractClientMethod {
       obj.user?.id || null,
       obj.connection?._id || undefined,
     );
+    return Promise.resolve();
   }
 
   protected stopping() {}

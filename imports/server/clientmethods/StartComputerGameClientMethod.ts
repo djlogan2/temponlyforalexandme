@@ -16,7 +16,7 @@ interface StartComputerGameClientMethodObject extends ClientCallObject {
 export default class StartComputerGameClientMethod extends AbstractClientMethod {
   private gameservice: GameService;
 
-  private logger: ServerLogger;
+  private logger1: ServerLogger;
 
   constructor(
     parent: Stoppable | null,
@@ -30,22 +30,21 @@ export default class StartComputerGameClientMethod extends AbstractClientMethod 
       ["play_computer_games"],
       connectionservice,
     );
-    this.logger = new ServerLogger(this, "StartComputerGameClientMethod_js");
+    this.logger1 = new ServerLogger(this, "StartComputerGameClientMethod_js");
     this.gameservice = gameservice;
   }
 
   protected validatearguments(obj: StartComputerGameClientMethodObject): void {}
 
-  protected called(obj: StartComputerGameClientMethodObject): string {
-    this.logger.debug(
+  protected called(obj: StartComputerGameClientMethodObject): Promise<string> {
+    this.logger1.debug(
       () =>
         `StartComputerGameClientMethodObject challenge=${util.inspect(
           obj.challenge,
         )}`,
     );
-    return this.gameservice.startComputerGame(
-      obj.user as ServerUser,
-      obj.challenge,
+    return Promise.resolve(
+      this.gameservice.startComputerGame(obj.user as ServerUser, obj.challenge),
     );
   }
 

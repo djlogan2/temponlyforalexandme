@@ -205,6 +205,7 @@ export default class ConnectionService extends Stoppable {
     const connection = await this.getConnection(connectionid);
     const userid = connection.login(hashtoken, locale);
     this.connectiondao.update({ connectionid }, { $set: { userid } });
+    this.logger.debug(() => `login returning id=${userid}`);
     return userid;
   }
 

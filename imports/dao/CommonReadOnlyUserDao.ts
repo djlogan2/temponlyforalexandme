@@ -15,11 +15,11 @@ export default class CommonReadOnlyUserDao extends ReactiveReadOnlyDao<UserRecor
     //       that are also spread out in other places, like "chatroomusers", "gameusers",
     //       "students", or who knows what else, that are also in this list, so that we
     //       can map them. But, we can worry about THAT later.
-    if (globalThis.user?.id !== id) return;
+    if (globalThis.cuser?.id !== id) return;
     Object.entries(record).forEach(([key, value]) => {
       switch (key) {
         case "locale":
-          globalThis.user.localeUpdated(value as string);
+          globalThis.cuser.localeUpdated(value as string);
           break;
         default:
           break;

@@ -17,9 +17,18 @@ import App from "./App";
 import { ClientGameReadOnlyDao } from "/imports/client/dao/ClientGameReadOnlyDao";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import ClientUser from "/lib/client/ClientUser";
+import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 
+//---
+globalThis.subscriptionservice = new SubscriptionService(null);
+globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
+  null,
+  window.subscriptionservice,
+);
 const userdao = new CommonReadOnlyUserDao(null);
-const clientserver = new ClientServer(userdao);
+
+globalThis.icc = new ClientServer(userdao);
+//---
 
 const subscriptionservice = new SubscriptionService(null);
 
@@ -32,12 +41,12 @@ const theme = new ClientTheme(null, themedao);
 const gamedao = new ClientGameReadOnlyDao(
   null,
   subscriptionservice,
-  clientserver.connection,
+  globalThis.icc.connection,
 );
-const gameservice = new GameService(null, gamedao, clientserver.connection);
+const gameservice = new GameService(null, gamedao, globalThis.icc.connection);
 
 function loggedin() {
-  clientserver.connection.events.off("loggedin", loggedin);
+  globalThis.icc.connection.events.off("loggedin", loggedin);
 }
 
 //
@@ -45,11 +54,11 @@ function loggedin() {
 //   This ALL needs to come out and be better architected!
 //
 new Promise<void>((resolve) => {
-  if (clientserver.connection.user) {
+  if (globalThis.icc.connection.user) {
     resolve();
     return;
   }
-  clientserver.connection.events.on("loggedin", () => {
+  globalThis.icc.connection.events.on("loggedin", () => {
     loggedin();
     resolve();
   });

@@ -22,8 +22,9 @@ export default class ConnectionIdleMethod extends AbstractClientMethod {
     check(obj.msg.focused, Boolean);
   }
 
-  protected called(obj: ConnectionIdleFunctionObject) {
+  protected async called(obj: ConnectionIdleFunctionObject): Promise<any> {
     if (obj.connection) obj.connection.idleMessage(obj.msg);
+    return Promise.resolve();
   }
 
   protected stopping() {}

@@ -116,7 +116,7 @@ export default class ClientConnection extends AbstractTimestampNode {
       } else {
         this.logger2.debug(() => `newUserLogin returns ${id}`);
         this.pUser = new ClientUser(this, id);
-        globalThis.user = this.pUser;
+        globalThis.cuser = this.pUser;
         this.pEvents.emit("loggedin");
       }
     });

@@ -44,7 +44,7 @@ export default class ServerUserClientMethod extends AbstractClientMethod {
     }
   }
 
-  protected called(obj: ServerUserClientObject) {
+  protected called(obj: ServerUserClientObject): Promise<any> {
     if (!obj.user) throw new Meteor.Error("UNABLE_TO_FIND_USER");
 
     switch (obj.field) {
@@ -55,8 +55,9 @@ export default class ServerUserClientMethod extends AbstractClientMethod {
         obj.user.setTheme(obj.value);
         break;
       default:
-        throw new Meteor.Error("INVALID_USER_FIELD");
+        return Promise.reject(new Meteor.Error("INVALID_USER_FIELD"));
     }
+    return Promise.resolve();
   }
 
   public isAuthorized(roles: string[], obj: ServerUserClientObject): boolean {

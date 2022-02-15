@@ -40,7 +40,7 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   }
 
   protected isAuthorizedToMove(who: User): boolean {
-    return user.id === this.me.opponent.userid;
+    return who.id === this.me.opponent.userid;
   }
 
   protected internalMakeMove(

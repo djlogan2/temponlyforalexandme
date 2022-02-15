@@ -15,11 +15,11 @@ interface ConnectionLoginObject extends ClientCallObject {
   hashtoken: string;
 }
 export default class ConnectionLoginMethod extends AbstractClientMethod {
-  private logger: ServerLogger;
+  private logger1: ServerLogger;
 
   constructor(parent: Stoppable | null, connectionservice: ConnectionService) {
     super(parent, "newUserLogin", ["hashtoken"], [], connectionservice);
-    this.logger = new ServerLogger(
+    this.logger1 = new ServerLogger(
       connectionservice,
       "ConnectionLoginObject_js",
     );
@@ -28,7 +28,7 @@ export default class ConnectionLoginMethod extends AbstractClientMethod {
   protected validatearguments(obj: ConnectionLoginObject): void {}
 
   protected async called(obj: ConnectionLoginObject): Promise<string> {
-    this.logger.debug(
+    this.logger1.debug(
       () =>
         `called, connection= ${obj.connection?._id} hashtoken=${obj.hashtoken}`,
     );

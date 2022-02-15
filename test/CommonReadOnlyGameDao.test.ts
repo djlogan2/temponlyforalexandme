@@ -14,6 +14,7 @@ import {
 import sinon from "sinon";
 import { Move } from "chess.js";
 import User from "/lib/User";
+import chai from "chai";
 
 class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
   protected endGame(status: GameStatus, status2: number): void {}

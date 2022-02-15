@@ -18,7 +18,7 @@ interface GameMakeMoveMethodObject extends ClientCallObject {
 export default class GameMakeMoveMethod extends AbstractClientMethod {
   private dao: CommonReadOnlyGameDao;
 
-  private logger: ServerLogger;
+  private logger1: ServerLogger;
 
   constructor(
     parent: Stoppable | null,
@@ -26,18 +26,19 @@ export default class GameMakeMoveMethod extends AbstractClientMethod {
     dao: CommonReadOnlyGameDao,
   ) {
     super(parent, "makeMove", ["id", "move"], [], connectionservice);
-    this.logger = new ServerLogger(this, "StartComputerGameClientMethod_js");
+    this.logger1 = new ServerLogger(this, "StartComputerGameClientMethod_js");
     this.dao = dao;
   }
 
   protected validatearguments(obj: GameMakeMoveMethodObject): void {}
 
-  protected called(obj: GameMakeMoveMethodObject) {
-    this.logger.debug(() => `GameMakeMoveMethod move=${obj.move}`);
+  protected called(obj: GameMakeMoveMethodObject): Promise<any> {
+    this.logger1.debug(() => `GameMakeMoveMethod move=${obj.move}`);
     const game = this.dao.getTyped(obj.id);
     if (game) {
       game.makeMove(obj.user as ServerUser, obj.move);
-    } else throw new Meteor.Error("UNKNOWN_GAME");
+    } else return Promise.reject(new Meteor.Error("UNKNOWN_GAME"));
+    return Promise.resolve();
   }
 
   protected stopping() {}
