@@ -22,7 +22,9 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   protected abstract playerColor(who: User): PieceColor | null;
 
   protected get me(): BasicPlayedGameRecord {
-    return this.game as BasicPlayedGameRecord;
+    if (super.me.status === "playing" || super.me.status === "computer")
+      return super.me as BasicPlayedGameRecord;
+    throw new Meteor.Error("INVALID_TYPE");
   }
 
   constructor(
@@ -84,10 +86,10 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   }
 
   protected postmoveTasks(): void {
-    this.stopTimer();
+    this.startClock();
   }
 
   protected premoveTasks(): void {
-    this.startClock();
+    this.stopTimer();
   }
 }

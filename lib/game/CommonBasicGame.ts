@@ -14,7 +14,7 @@ import CommonLogger from "/lib/CommonLogger";
 export default abstract class CommonBasicGame extends Stoppable {
   private logger: CommonLogger;
 
-  protected game: BasicGameRecord;
+  private gameRecord: BasicGameRecord;
 
   protected readonlydao: CommonReadOnlyGameDao;
 
@@ -31,12 +31,16 @@ export default abstract class CommonBasicGame extends Stoppable {
     eco: ECOObject,
   ): void;
 
+  protected get me(): BasicGameRecord {
+    return this.gameRecord;
+  }
+
   public get id(): string {
-    return this.game._id;
+    return this.gameRecord._id;
   }
 
   public get type(): GameTypes {
-    return this.game.status;
+    return this.gameRecord.status;
   }
 
   constructor(
@@ -49,7 +53,7 @@ export default abstract class CommonBasicGame extends Stoppable {
       this,
       "CommonBasicGame_ts",
     );
-    this.game = game;
+    this.gameRecord = game;
     this.readonlydao = readonlydao;
   }
 
@@ -63,8 +67,17 @@ export default abstract class CommonBasicGame extends Stoppable {
   public makeMove(who: User, move: string): void {
     if (!this.isAuthorizedToMove(who))
       throw new Meteor.Error("CANNOT_MAKE_MOVE");
-    // One of the players is moving in turn
-    const chess = new Chess(this.game.fen);
+    this.makeMoveAuth(move);
+  }
+
+  public refresh(): void {
+    const newGameRecord = this.readonlydao.get(this.gameRecord._id);
+    if (!newGameRecord) throw new Meteor.Error("GAME_LOST");
+    this.gameRecord = newGameRecord;
+  }
+
+  protected makeMoveAuth(move: string): void {
+    const chess = new Chess(this.gameRecord.fen);
     const chessmove = chess.move(move);
     if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
     this.premoveTasks();

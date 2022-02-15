@@ -1,4 +1,4 @@
-import { Move } from "chess.js";
+import { Chess, Move } from "chess.js";
 import {
   ComputerPlayGameRecord,
   ECOObject,
@@ -10,6 +10,7 @@ import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import User from "/lib/User";
 import internalMakeMove from "/lib/server/game/CommonInternalMakeMove";
+import { Meteor } from "meteor/meteor";
 
 export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   private dao: WritableGameDao;
@@ -24,12 +25,17 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     this.dao = writabledao;
   }
 
-  protected get me(): ComputerPlayGameRecord {
-    return this.game as ComputerPlayGameRecord;
-  }
-
   protected stopping() {
     super.stopping();
+  }
+
+  public startClock() {
+    super.startClock();
+    if (this.me.tomove === this.me.opponentcolor) return;
+    const chess = new Chess(this.me.fen);
+    const moves = chess.moves();
+    const which = Math.round(Math.random() * (moves.length - 1));
+    this.makeMoveAuth(moves[which]);
   }
 
   public endGame(status: GameStatus, status2: number): void {
@@ -40,7 +46,10 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   }
 
   protected isAuthorizedToMove(who: User): boolean {
-    return who.id === this.me.opponent.userid;
+    return (
+      who.id === this.me.opponent.userid &&
+      this.me.tomove === this.me.opponentcolor
+    );
   }
 
   protected internalMakeMove(
@@ -51,5 +60,6 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   ): void {
     const modifier = internalMakeMove(this.me, move, fen, result, eco);
     this.dao.update({ _id: this.me._id }, modifier);
+    if (result === "*") this.refresh();
   }
 }
