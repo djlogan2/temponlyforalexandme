@@ -19,10 +19,10 @@ const StandardButton: FC<IStandardButtonProps> = ({
     type="button"
     {...rest}
     className={clsx(
-      className,
       "standardButton",
       `standardButton--${size}`,
       `standardButton--${color}`,
+      className,
     )}
   >
     <Heading5>{children}</Heading5>

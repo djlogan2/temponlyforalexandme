@@ -24,6 +24,8 @@ import Heading6 from "/client/app/shared/Typographies/Heading6";
 import Paragraph from "/client/app/shared/Typographies/Paragraph";
 import SmallParagraph from "/client/app/shared/Typographies/SmallParagraph";
 import Title from "/client/app/shared/Typographies/Title";
+import Backdrop from "../shared/Backdrop";
+import GameSetup from "../components/GameSetup";
 
 interface IComponentsView {}
 
@@ -78,6 +80,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           classes={[]}
           status="in"
         />
+        <GameSetup />
         <div>
           <h2>Movelist</h2>
           <Movelist

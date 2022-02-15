@@ -2,10 +2,12 @@ import React from "react";
 
 interface IChessTitleProps {
   text: string;
+  className?: string;
 }
 
-const ChessTitle = ({ text }: IChessTitleProps) => (
+const ChessTitle = ({ text, className }: IChessTitleProps) => (
   <svg
+    className={className}
     width="36"
     height="17"
     viewBox="0 0 36 17"

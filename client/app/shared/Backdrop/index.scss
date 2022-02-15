@@ -1,0 +1,17 @@
+.backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.408) 100%
+  );
+  z-index: 9999;
+}
+
+.hide-scroll {
+  overflow: hidden;
+}
