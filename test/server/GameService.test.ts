@@ -6,7 +6,6 @@ import sinon, { SinonSandbox, SinonStubbedInstance } from "sinon";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import PublicationService from "/imports/server/service/PublicationService";
 import ConnectionService from "/imports/server/service/ConnectionService";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import ServerUser from "/lib/server/ServerUser";
 import chai, { expect } from "chai";
 import { Meteor } from "meteor/meteor";
@@ -14,9 +13,8 @@ import { ComputerPlayGameRecord } from "/lib/records/GameRecord";
 import { Mongo } from "meteor/mongo";
 import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
-import StartComputerGameClientMethod from "/imports/server/clientmethods/StartComputerGameClientMethod";
-import GameMakeMoveMethod from "/imports/server/clientmethods/GameMakeMoveMethod";
 import ServerComputerPlayedGame from "/lib/server/game/ServerComputerPlayedGame";
+import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 describe("GameService", function () {
   describe("startComputerGame", function () {
@@ -25,7 +23,7 @@ describe("GameService", function () {
     //
     let sandbox: SinonSandbox;
     let writabledao: SinonStubbedInstance<WritableGameDao>;
-    let readonlydao: SinonStubbedInstance<CommonReadOnlyGameDao>;
+    let readonlydao: SinonStubbedInstance<CommonSingleGameReadOnlyGameDao>;
     let publicationservice: SinonStubbedInstance<PublicationService>;
     let connectionservice: SinonStubbedInstance<ConnectionService>;
     let user: SinonStubbedInstance<ServerUser>;
@@ -56,7 +54,6 @@ describe("GameService", function () {
       gameservice = new GameService(
         null,
         writabledao,
-        readonlydao,
         publicationservice,
         connectionservice,
       );

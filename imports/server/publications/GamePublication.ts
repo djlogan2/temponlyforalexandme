@@ -5,7 +5,6 @@ import {
 } from "/lib/records/GameRecord";
 import { Subscription } from "meteor/meteor";
 import ServerConnection from "/lib/server/ServerConnection";
-import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import ServerUser from "/lib/server/ServerUser";
 import GameService from "/imports/server/service/GameService";
 import UserChangePublication from "/imports/server/service/UserChangePublication";

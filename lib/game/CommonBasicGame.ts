@@ -3,26 +3,30 @@ import {
   BasicGameRecord,
   ECOObject,
   GameStatus,
-  GameTypes,
 } from "/lib/records/GameRecord";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import User from "/lib/User";
 import { Chess, Move } from "chess.js";
 import { Meteor } from "meteor/meteor";
 import CommonLogger from "/lib/CommonLogger";
+import { BasicEventEmitter } from "/lib/BasicEventEmitter";
+import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 export default abstract class CommonBasicGame extends Stoppable {
   private logger: CommonLogger;
 
-  private gameRecord: BasicGameRecord;
+  protected pId: string;
 
-  protected readonlydao: CommonReadOnlyGameDao;
+  protected readonlydao: CommonSingleGameReadOnlyGameDao;
 
   protected abstract isAuthorizedToMove(who: User): boolean;
 
   protected abstract premoveTasks(): void;
 
   protected abstract postmoveTasks(): void;
+
+  public get events(): BasicEventEmitter<"move"> {
+    return this.readonlydao.events;
+  }
 
   protected abstract internalMakeMove(
     move: Move,
@@ -32,28 +36,22 @@ export default abstract class CommonBasicGame extends Stoppable {
   ): void;
 
   protected get me(): BasicGameRecord {
-    return this.gameRecord;
-  }
-
-  public get id(): string {
-    return this.gameRecord._id;
-  }
-
-  public get type(): GameTypes {
-    return this.gameRecord.status;
+    const record = this.readonlydao.get(this.pId);
+    if (!record) throw new Meteor.Error("UNABLE_TO_FIND_GAME");
+    return record;
   }
 
   constructor(
     parent: Stoppable | null,
-    game: BasicGameRecord,
-    readonlydao: CommonReadOnlyGameDao,
+    id: string,
+    readonlydao: CommonSingleGameReadOnlyGameDao,
   ) {
     super(parent);
     this.logger = globalThis.ICCServer.utilities.getLogger(
       this,
       "CommonBasicGame_ts",
     );
-    this.gameRecord = game;
+    this.pId = id;
     this.readonlydao = readonlydao;
   }
 
@@ -70,14 +68,8 @@ export default abstract class CommonBasicGame extends Stoppable {
     this.makeMoveAuth(move);
   }
 
-  public refresh(): void {
-    const newGameRecord = this.readonlydao.get(this.gameRecord._id);
-    if (!newGameRecord) throw new Meteor.Error("GAME_LOST");
-    this.gameRecord = newGameRecord;
-  }
-
   protected makeMoveAuth(move: string): void {
-    const chess = new Chess(this.gameRecord.fen);
+    const chess = new Chess(this.me.fen);
     const chessmove = chess.move(move);
     if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
     this.premoveTasks();

@@ -3,14 +3,16 @@ import { Meteor } from "meteor/meteor";
 import ClientLogger from "/lib/client/ClientLogger";
 import Stoppable from "/lib/Stoppable";
 import * as util from "util";
-import { ClientGameReadOnlyDao } from "/imports/client/dao/ClientGameReadOnlyDao";
 import CommonGameService from "/lib/CommonGameService";
 import ClientConnection from "/lib/client/ClientConnection";
+import ClientStartedGameReadOnlyDao from "../dao/ClientStartedGameReadOnlyDao";
 
 export default class GameService extends CommonGameService {
   private readonly logger: ClientLogger;
 
   private readonly connection: ClientConnection;
+
+  private readonly dao: ClientStartedGameReadOnlyDao;
 
   public get events() {
     return this.dao.events;
@@ -18,10 +20,10 @@ export default class GameService extends CommonGameService {
 
   constructor(
     parent: Stoppable | null,
-    gamedao: ClientGameReadOnlyDao,
+    gamedao: ClientStartedGameReadOnlyDao,
     connection: ClientConnection,
   ) {
-    super(parent, gamedao);
+    super(parent);
 
     this.logger = new ClientLogger(this, "GameService_js");
 

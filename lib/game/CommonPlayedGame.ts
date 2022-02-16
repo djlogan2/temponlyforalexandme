@@ -5,12 +5,9 @@ import {
   Clock,
   GameStatus,
 } from "/lib/records/GameRecord";
-import { PieceColor } from "/lib/records/ChallengeRecord";
-import { Chess, Move } from "chess.js";
-import User from "/lib/User";
 import CommonLogger from "/lib/CommonLogger";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import Stoppable from "/lib/Stoppable";
+import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 export default abstract class CommonPlayedGame extends CommonBasicGame {
   private timerHandle?: number;
@@ -18,8 +15,6 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   private logger2: CommonLogger;
 
   protected abstract endGame(status: GameStatus, status2: number): void;
-
-  protected abstract playerColor(who: User): PieceColor | null;
 
   protected get me(): BasicPlayedGameRecord {
     if (super.me.status === "playing" || super.me.status === "computer")
@@ -29,10 +24,10 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
 
   constructor(
     parent: Stoppable | null,
-    game: BasicPlayedGameRecord,
-    dao: CommonReadOnlyGameDao,
+    id: string,
+    dao: CommonSingleGameReadOnlyGameDao,
   ) {
-    super(parent, game, dao);
+    super(parent, id, dao);
     this.logger2 = globalThis.ICCServer.utilities.getLogger(
       this,
       "CommonPlayedGame_js",

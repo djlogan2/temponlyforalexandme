@@ -11,13 +11,10 @@ import Theme, { ThemeProvider } from "./theme";
 import GameService from "/imports/client/service/GameService";
 import ClientServer from "/lib/client/ClientServer";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
-import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import App from "./App";
-import { ClientGameReadOnlyDao } from "/imports/client/dao/ClientGameReadOnlyDao";
-import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
-import ClientUser from "/lib/client/ClientUser";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import LoadingPlaceholder from "./shared/LoadingPlaceholder";
+import ClientStartedGameReadOnlyDao from "/imports/client/dao/ClientStartedGameReadOnlyDao";
 
 //---
 globalThis.subscriptionservice = new SubscriptionService(null);
@@ -38,11 +35,8 @@ const themedao = new ThemeReadOnlyDao(null, subscriptionservice);
 const i18nClient = new Clienti18n(i18ndao);
 const theme = new ClientTheme(null, themedao);
 
-const gamedao = new ClientGameReadOnlyDao(
-  null,
-  subscriptionservice,
-  globalThis.icc.connection,
-);
+const gamedao = new ClientStartedGameReadOnlyDao(null, subscriptionservice);
+
 export const gameservice = new GameService(
   null,
   gamedao,

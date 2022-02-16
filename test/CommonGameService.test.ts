@@ -1,6 +1,6 @@
 import CommonGameService from "/lib/CommonGameService";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import sinon from "sinon";
+import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 class CommonGameServiceTest extends CommonGameService {
   protected stopping(): void {}
@@ -8,7 +8,7 @@ class CommonGameServiceTest extends CommonGameService {
 
 describe("CommonGameService", function () {
   it("works because there isn't anything in it yet", function () {
-    const dao = sinon.createStubInstance(CommonReadOnlyGameDao);
-    const service = new CommonGameServiceTest(null, dao);
+    const dao = sinon.createStubInstance(CommonSingleGameReadOnlyGameDao);
+    const service = new CommonGameServiceTest(null);
   });
 });

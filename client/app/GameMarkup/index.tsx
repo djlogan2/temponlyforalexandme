@@ -41,22 +41,25 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       // game.makeMove(connection.user as ClientUser, "e4");
     });
 
-    gameservice.events.on("movemade", (data) => {
-      console.log("______________");
-      console.log(data);
-      console.log("______________");
-    });
+    // TODO: This now has to be "game.events.on("movemade")
+    // gameservice.events.on("movemade", (data) => {
+    //   console.log("______________");
+    //   console.log(data);
+    //   console.log("______________");
+    // });
   }, []);
 
   const handleMove = (move: string[], promotion?: string) => {
     if (promotion) {
-      console.log(move.join("") + promotion)
-      myGames[0].makeMove(connection.user as ClientUser, move.join("") + promotion);
+      console.log(move.join("") + promotion);
+      myGames[0].makeMove(
+        connection.user as ClientUser,
+        move.join("") + promotion,
+      );
     } else {
-      console.log(move.join(""))
+      console.log(move.join(""));
       myGames[0].makeMove(connection.user as ClientUser, move.join(""));
     }
-
   };
 
   return (

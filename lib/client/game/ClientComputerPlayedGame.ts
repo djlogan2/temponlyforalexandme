@@ -1,22 +1,22 @@
 import { Move } from "chess.js";
 import { Meteor } from "meteor/meteor";
-import { ComputerPlayGameRecord, GameStatus } from "/lib/records/GameRecord";
+import { GameStatus } from "/lib/records/GameRecord";
 import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
 import Stoppable from "/lib/Stoppable";
 import ClientUser from "/lib/client/ClientUser";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import User from "/lib/User";
+import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
   private user: ClientUser;
 
   constructor(
     parent: Stoppable | null,
-    game: ComputerPlayGameRecord,
-    readonlydao: CommonReadOnlyGameDao,
+    id: string,
+    readonlydao: CommonSingleGameReadOnlyGameDao,
     user: ClientUser,
   ) {
-    super(parent, game, readonlydao);
+    super(parent, id, readonlydao);
     this.user = user;
   }
 

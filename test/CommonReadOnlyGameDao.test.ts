@@ -1,20 +1,16 @@
 // eslint-disable-next-line max-classes-per-file
-import CommonReadOnlyGameDao, {
-  GameEvents,
-} from "/imports/dao/CommonReadOnlyGameDao";
 import EventEmitter from "eventemitter3";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
 import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
 import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
-import {
-  BasicGameRecord,
-  ComputerPlayGameRecord,
-  GameStatus,
-} from "/lib/records/GameRecord";
+import { BasicGameRecord, GameStatus } from "/lib/records/GameRecord";
 import sinon from "sinon";
 import { Move } from "chess.js";
 import User from "/lib/User";
 import chai from "chai";
+import CommonSingleGameReadOnlyGameDao, {
+  GameEvents,
+} from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
   protected endGame(status: GameStatus, status2: number): void {}
@@ -30,7 +26,7 @@ class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
   }
 }
 
-class CommonReadOnlyGameDaoTest extends CommonReadOnlyGameDao {
+class CommonReadOnlyGameDaoTest extends CommonSingleGameReadOnlyGameDao {
   public pEvents = new EventEmitter<GameEvents>();
 
   get events(): BasicEventEmitter<GameEvents> {
@@ -40,12 +36,8 @@ class CommonReadOnlyGameDaoTest extends CommonReadOnlyGameDao {
   protected getClassFromType(
     game: BasicGameRecord,
   ): CommonComputerPlayedGame | CommonAnalysisGame {
-    const dao = sinon.createStubInstance(CommonReadOnlyGameDao);
-    return new CommonComputerPlayedGameTest(
-      this,
-      game as ComputerPlayGameRecord,
-      dao,
-    );
+    const dao = sinon.createStubInstance(CommonSingleGameReadOnlyGameDao);
+    return new CommonComputerPlayedGameTest(this, game._id, dao);
   }
 }
 

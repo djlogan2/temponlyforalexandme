@@ -1,27 +1,21 @@
 import { Chess, Move } from "chess.js";
-import {
-  ComputerPlayGameRecord,
-  ECOObject,
-  GameStatus,
-} from "/lib/records/GameRecord";
+import { ECOObject, GameStatus } from "/lib/records/GameRecord";
 import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
 import Stoppable from "/lib/Stoppable";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import User from "/lib/User";
 import internalMakeMove from "/lib/server/game/CommonInternalMakeMove";
-import { Meteor } from "meteor/meteor";
+import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 
 export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   private dao: WritableGameDao;
 
   constructor(
     parent: Stoppable | null,
-    game: ComputerPlayGameRecord,
-    readonlydao: CommonReadOnlyGameDao,
+    id: string,
     writabledao: WritableGameDao,
   ) {
-    super(parent, game, readonlydao);
+    super(parent, id, new ServerReadOnlyGameDao(parent, id, writabledao));
     this.dao = writabledao;
   }
 
@@ -40,7 +34,7 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
 
   public endGame(status: GameStatus, status2: number): void {
     this.dao.update(
-      { _id: this.id },
+      { _id: this.me._id },
       { $set: { status: "analyzing", result: status, result2: status2 } },
     );
   }
@@ -60,6 +54,5 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   ): void {
     const modifier = internalMakeMove(this.me, move, fen, result, eco);
     this.dao.update({ _id: this.me._id }, modifier);
-    if (result === "*") this.refresh();
   }
 }
