@@ -42,4 +42,8 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     if (who.id === this.me.opponent.userid) return this.me.opponentcolor;
     return null;
   }
+
+  protected internalSetDraw(color: PieceColor, draw: boolean): void {
+    Meteor.call("draw", this.me._id);
+  }
 }

@@ -6,8 +6,15 @@ import Stoppable from "/lib/Stoppable";
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
 import { Meteor } from "meteor/meteor";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
 export type GameEvents =
+  | "abortrequested"
+  | "abortremoved"
+  | "adjournrequested"
+  | "adjournremoved"
+  | "drawrequested"
+  | "drawremoved"
   | "move"
   | "fen"
   | "clockchanged"
@@ -48,6 +55,24 @@ export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveRe
           this.events.emit("clockchanged", "b", record.clocks.b.current);
         }
       }
+    }
+
+    if (record.pending) {
+      const argh = record.pending;
+      ["w", "b"].forEach((color) => {
+        const flags = argh[color as PieceColor];
+        ["draw"].forEach((type) => {
+          if (type in flags) {
+            this.events.emit(
+              (type +
+                (flags[type as "draw" | "abort" | "adjourn"]
+                  ? "requested"
+                  : "removed")) as GameEvents,
+              color,
+            );
+          }
+        });
+      });
     }
 
     if (record.variations) {

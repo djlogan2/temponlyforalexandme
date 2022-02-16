@@ -29,6 +29,8 @@ class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
   protected playerColor(who: User): PieceColor | null {
     return null;
   }
+
+  protected internalSetDraw(color: PieceColor, draw: boolean): void {}
 }
 
 class CommonReadOnlyGameDaoTest extends CommonSingleGameReadOnlyGameDao {

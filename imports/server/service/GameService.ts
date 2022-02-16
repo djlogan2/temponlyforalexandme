@@ -22,6 +22,7 @@ import CommonGameService from "/lib/CommonGameService";
 import GameMakeMoveMethod from "/imports/server/clientmethods/game/GameMakeMoveMethod";
 import ServerAnalysisGame from "/lib/server/game/ServerAnalysisGame";
 import GameResignMethod from "/imports/server/clientmethods/game/GameResignMethod";
+import GameDrawMethod from "/imports/server/clientmethods/game/GameDrawMethod";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -34,6 +35,8 @@ export default class GameService extends CommonGameService {
   private readonly startcomputergamemethod: StartComputerGameClientMethod;
 
   private readonly makemovemethod: GameMakeMoveMethod;
+
+  private readonly drawmethod: GameDrawMethod;
 
   private readonly resignmethod: GameResignMethod;
 
@@ -65,6 +68,7 @@ export default class GameService extends CommonGameService {
     );
     this.makemovemethod = new GameMakeMoveMethod(this, connectionservice, this);
     this.resignmethod = new GameResignMethod(this, connectionservice, this);
+    this.drawmethod = new GameDrawMethod(this, connectionservice, this);
   }
 
   protected startMethods(): void {}

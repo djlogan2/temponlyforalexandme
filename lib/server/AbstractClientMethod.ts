@@ -9,6 +9,7 @@ import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
 
 export type ClientCalls =
+  | "draw"
   | "idleFunction"
   | "makeMove"
   | "newUserLogin"

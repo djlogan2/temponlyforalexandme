@@ -61,6 +61,12 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     this.dao.update({ _id: this.me._id }, modifier);
   }
 
+  protected internalSetDraw(color: PieceColor, draw: boolean): void {
+    const modifier: any = { $set: {} };
+    modifier.$set[`pending.${color}.draw`] = draw;
+    this.dao.update({ _id: this.me._id }, modifier);
+  }
+
   protected playerColor(who: User): PieceColor | null {
     return who.id === this.me.opponent.userid ? this.me.opponentcolor : null;
   }
