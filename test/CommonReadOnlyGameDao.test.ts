@@ -31,6 +31,10 @@ class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
   }
 
   protected internalSetDraw(color: PieceColor, draw: boolean): void {}
+
+  protected isClosing(): void {
+    throw new Error("Method not implemented.");
+  }
 }
 
 class CommonReadOnlyGameDaoTest extends CommonSingleGameReadOnlyGameDao {

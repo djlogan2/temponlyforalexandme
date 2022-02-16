@@ -15,6 +15,7 @@ import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import ServerComputerPlayedGame from "/lib/server/game/ServerComputerPlayedGame";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
+import InstanceService from "/imports/server/service/InstanceService";
 
 describe("GameService", function () {
   describe("startComputerGame", function () {
@@ -22,6 +23,7 @@ describe("GameService", function () {
     // already playing
     //
     let sandbox: SinonSandbox;
+    let instanceservice: InstanceService;
     let writabledao: SinonStubbedInstance<WritableGameDao>;
     let readonlydao: SinonStubbedInstance<CommonSingleGameReadOnlyGameDao>;
     let publicationservice: SinonStubbedInstance<PublicationService>;
@@ -32,6 +34,7 @@ describe("GameService", function () {
 
     beforeEach(function () {
       sandbox = sinon.createSandbox();
+      instanceservice = sandbox.createStubInstance(InstanceService);
       writabledao = sandbox.createStubInstance(WritableGameDao);
       readonlydao = sandbox.createStubInstance(ServerReadOnlyGameDao);
       publicationservice = sandbox.createStubInstance(PublicationService);
@@ -56,6 +59,7 @@ describe("GameService", function () {
         writabledao,
         publicationservice,
         connectionservice,
+        instanceservice,
       );
     });
 
@@ -72,9 +76,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: 0 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail 0 us with ILLEGAL_TIME", function () {
@@ -84,9 +88,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "us", incseconds: 0 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail 0 bronstein with ILLEGAL_TIME", function () {
@@ -96,9 +100,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "bronstein", incseconds: 0 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail 0 minutes if there is no increment or delay", function () {
@@ -108,9 +112,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 0 },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should succeed with 0 minutes if there is increment or delay (bronstein)", function () {
@@ -120,9 +124,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 0, adjust: { type: "bronstein", incseconds: 60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should succeed with 0 minutes if there is increment or delay (us)", function () {
@@ -132,9 +136,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 0, adjust: { type: "us", incseconds: 60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should succeed with 0 minutes if there is increment or delay (inc)", function () {
@@ -144,7 +148,7 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 0, adjust: { type: "inc", incseconds: 60 } },
       };
-      gameservice.startComputerGame(user, challenge);
+      gameservice.startComputerGame(user, challenge, "x");
       chai.assert.fail("check user");
     });
 
@@ -155,9 +159,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15.78, adjust: { type: "inc", incseconds: 60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if minutes is negative", function () {
@@ -167,9 +171,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: -15, adjust: { type: "inc", incseconds: 60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is not an integer (inc)", function () {
@@ -179,9 +183,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: 60.86 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is not an integer (us)", function () {
@@ -191,9 +195,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "us", incseconds: 60.86 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is not an integer (bronestein)", function () {
@@ -206,9 +210,9 @@ describe("GameService", function () {
           adjust: { type: "bronstein", incseconds: 60.86 },
         },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is negative (bronestein)", function () {
@@ -218,9 +222,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "bronstein", incseconds: -60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is negative (us)", function () {
@@ -230,9 +234,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "us", incseconds: -60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is negative (inc)", function () {
@@ -242,9 +246,9 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: -60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("ILLEGAL_TIME"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail skill level is not within 1 and 10", function () {
@@ -266,15 +270,15 @@ describe("GameService", function () {
         skill_level: -1,
         clock: { minutes: 15 },
       };
-      expect(() => gameservice.startComputerGame(user, challengeneg)).to.throw(
-        new Meteor.Error("ILLEGAL_SKILL_LEVEL"),
-      );
-      expect(() => gameservice.startComputerGame(user, challengezro)).to.throw(
-        new Meteor.Error("ILLEGAL_SKILL_LEVEL"),
-      );
-      expect(() => gameservice.startComputerGame(user, challengepos)).to.throw(
-        new Meteor.Error("ILLEGAL_SKILL_LEVEL"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challengeneg, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_SKILL_LEVEL"));
+      expect(() =>
+        gameservice.startComputerGame(user, challengezro, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_SKILL_LEVEL"));
+      expect(() =>
+        gameservice.startComputerGame(user, challengepos, "x"),
+      ).to.throw(new Meteor.Error("ILLEGAL_SKILL_LEVEL"));
     });
 
     it("should fail challenge is not 'computer'", function () {
@@ -285,14 +289,16 @@ describe("GameService", function () {
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: -60 } },
       };
-      expect(() => gameservice.startComputerGame(user, challenge)).to.throw(
-        new Meteor.Error("INCORRECT_CHALLENGE"),
-      );
+      expect(() =>
+        gameservice.startComputerGame(user, challenge, "x"),
+      ).to.throw(new Meteor.Error("INCORRECT_CHALLENGE"));
     });
 
     it("should succeed in storing a game record (min)", function () {
       const expectedgamerecord: Mongo.OptionalId<ComputerPlayGameRecord> = {
         _id: undefined,
+        instance_id: "x",
+        connection_id: "x",
         isolation_group: "myisogroup",
         fen: STARTING_POSITION,
         startTime: new Date(),
@@ -329,7 +335,7 @@ describe("GameService", function () {
         color: "w",
       };
 
-      gameservice.startComputerGame(user, challenge);
+      gameservice.startComputerGame(user, challenge, "x");
       expect(writabledao.insert.calledOnce).to.be.true;
       const generatedgamerecord = writabledao.insert.getCall(0)
         .args[0] as ComputerPlayGameRecord;

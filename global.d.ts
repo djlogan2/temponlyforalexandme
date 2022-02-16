@@ -16,6 +16,7 @@ import SubscriptionService from "/imports/client/service/SubscriptionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import Clienti18n from "/lib/client/Clienti18n";
 import ClientTheme from "/lib/client/ClientTheme";
+import GlobalGame from "/lib/server/game/GlobalGame";
 
 declare module "meteor/universe:i18n";
 
@@ -72,6 +73,7 @@ declare global {
   /* Most of this is really server only, but some of it is used by both, most notably collections and utilities.getLogger */
   var ICCServer: {
     collections: { [K in CollectionNames]?: Mongo.Collection<any> };
+    games: { [id: string]: GlobalGame };
     services: {
       loggerservice?: LoggerService;
     };

@@ -23,6 +23,7 @@ import GameMakeMoveMethod from "/imports/server/clientmethods/game/GameMakeMoveM
 import ServerAnalysisGame from "/lib/server/game/ServerAnalysisGame";
 import GameResignMethod from "/imports/server/clientmethods/game/GameResignMethod";
 import GameDrawMethod from "/imports/server/clientmethods/game/GameDrawMethod";
+import InstanceService from "/imports/server/service/InstanceService";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -42,6 +43,8 @@ export default class GameService extends CommonGameService {
 
   private gamelist: { [id: string]: ServerComputerPlayedGame } = {};
 
+  private readonly instanceservice: InstanceService;
+
   // private gamehistoryservice: someday_over_the_rainbow;
 
   constructor(
@@ -49,11 +52,14 @@ export default class GameService extends CommonGameService {
     writabledao: WritableGameDao,
     publicationservice: PublicationService,
     connectionservice: ConnectionService,
+    instanceservice: InstanceService,
   ) {
     super(parent);
 
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
+
+    this.instanceservice = instanceservice;
 
     publicationservice.publishDao(
       "games",
@@ -92,6 +98,7 @@ export default class GameService extends CommonGameService {
   public startComputerGame(
     challenger: ServerUser,
     computerchallenge: ComputerChallengeRecord,
+    connectionid: string,
   ): string {
     this.logger.debug(
       () =>
@@ -165,6 +172,8 @@ export default class GameService extends CommonGameService {
 
     const gamerecord: Mongo.OptionalId<ComputerPlayGameRecord> = {
       startTime: new Date(),
+      instance_id: this.instanceservice.instanceid,
+      connection_id: connectionid,
       isolation_group: challenger.isolation_group,
       status: "computer",
       opponent: {

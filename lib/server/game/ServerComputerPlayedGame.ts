@@ -27,14 +27,13 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   public startClock() {
     super.startClock();
     if (this.me.tomove === this.me.opponentcolor) return;
-    const chess = new Chess(this.me.fen);
-    const moves = chess.moves();
+    // const chess = new Chess(this.me.fen);
+    const moves = this.global.chessObject.moves();
     const which = Math.round(Math.random() * (moves.length - 1));
     this.makeMoveAuth(moves[which]);
   }
 
   public endGame(status: GameStatus, status2: number): void {
-    this.dao.remove(this.me._id);
     // TODO: Update ratings and whatnot
     // Maybe we will change this to analyzing someday, but for now, DELETE!
     // this.dao.update(
@@ -59,6 +58,10 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   ): void {
     const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
     this.dao.update({ _id: this.me._id }, modifier);
+  }
+
+  protected isClosing(): void {
+    this.dao.remove(this.me._id);
   }
 
   protected internalSetDraw(color: PieceColor, draw: boolean): void {

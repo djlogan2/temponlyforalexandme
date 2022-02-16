@@ -39,4 +39,6 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
   // }
 
   protected stopping(): void {}
+
+  protected isClosing(): void {}
 }

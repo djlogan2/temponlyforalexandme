@@ -46,4 +46,6 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
   protected internalSetDraw(color: PieceColor, draw: boolean): void {
     Meteor.call("draw", this.me._id);
   }
+
+  protected isClosing(): void {}
 }

@@ -10,14 +10,9 @@ import Stoppable from "/lib/Stoppable";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import User from "/lib/User";
 import { PieceColor } from "/lib/records/ChallengeRecord";
-import { Chess } from "chess.js";
 
 export default abstract class CommonPlayedGame extends CommonBasicGame {
-  private timerHandle?: number;
-
   private logger2: CommonLogger;
-
-  protected abstract endGame(status: GameStatus, status2: number): void;
 
   protected abstract playerColor(who: User): PieceColor | null;
 
@@ -73,14 +68,14 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   }
 
   private startTimer(milliseconds: number, fn: () => void): void {
-    this.timerHandle = Meteor.setInterval(() => {
+    this.global.timerHandle = Meteor.setInterval(() => {
       this.stopTimer();
       fn();
     }, milliseconds);
   }
 
   private stopTimer(): void {
-    if (this.timerHandle) Meteor.clearInterval(this.timerHandle);
+    if (this.global.timerHandle) Meteor.clearInterval(this.global.timerHandle);
   }
 
   protected stopping(): void {
@@ -102,18 +97,18 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   }
 
   public draw(who: User): void {
-    const chess = new Chess(this.me.fen);
+    // const chess = new Chess(this.me.fen);
 
     let result: GameStatus;
     let result2;
 
-    if (chess.insufficient_material()) {
+    if (this.global.chessObject.insufficient_material()) {
       throw new Meteor.Error(
         "I don't know what to do about this. Can this happen? If you get this crash, figure out how to set result2",
       );
-    } else if (chess.in_threefold_repetition()) {
+    } else if (this.global.chessObject.in_threefold_repetition()) {
       result2 = 15;
-    } else if (chess.in_draw()) {
+    } else if (this.global.chessObject.in_draw()) {
       // Now can only be "50-move rule"
       result2 = 16;
     }

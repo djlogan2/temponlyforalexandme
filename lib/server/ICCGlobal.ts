@@ -7,6 +7,7 @@ import { CollectionNames } from "/lib/CollectionNames";
 
 globalThis.ICCServer = {
   collections: {},
+  games: {},
   services: {},
   utilities: {
     getLogger: (parent: Stoppable, identifier: string) =>
