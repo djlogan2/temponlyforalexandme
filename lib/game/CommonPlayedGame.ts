@@ -8,6 +8,8 @@ import {
 import CommonLogger from "/lib/CommonLogger";
 import Stoppable from "/lib/Stoppable";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
+import User from "/lib/User";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
 export default abstract class CommonPlayedGame extends CommonBasicGame {
   private timerHandle?: number;
@@ -15,6 +17,8 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   private logger2: CommonLogger;
 
   protected abstract endGame(status: GameStatus, status2: number): void;
+
+  protected abstract playerColor(who: User): PieceColor | null;
 
   protected get me(): BasicPlayedGameRecord {
     if (super.me.status === "playing" || super.me.status === "computer")
@@ -86,5 +90,18 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
 
   protected premoveTasks(): void {
     this.stopTimer();
+  }
+
+  public resign(who: User): void {
+    const color = this.playerColor(who);
+    if (!color) throw new Meteor.Error("INSUFFICIENT_AUTHORITY");
+    this.resignColor(color);
+  }
+
+  public draw(who: User): void {}
+
+  protected resignColor(color: PieceColor): void {
+    const result = color === "w" ? "0-1" : "1-0";
+    this.endGame(result, 0);
   }
 }

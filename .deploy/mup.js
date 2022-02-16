@@ -26,11 +26,12 @@ module.exports = {
       ROOT_URL: "https://v2a.chessclub.com",
       MONGO_URL: "mongodb://mongodb/meteor",
       MONGO_OPLOG_URL: "mongodb://mongodb/local",
-      SLACK_CHANNEL_LINK:
-        "https://hooks.slack.com/services/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",
-      SLACK_CHANNEL_NAME: "#notifications",
-      PUBLICASSETS_S3_BUCKET: "chessclub-com-v2-staging",
-      MUGSHOTS_S3_BUCKET: "chessclub-com-v2-staging",
+      NODE_ENV: "development",
+      // SLACK_CHANNEL_LINK:
+      //   "https://hooks.slack.com/services/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",
+      // SLACK_CHANNEL_NAME: "#notifications",
+      // PUBLICASSETS_S3_BUCKET: "chessclub-com-v2-staging",
+      // MUGSHOTS_S3_BUCKET: "chessclub-com-v2-staging",
     },
 
     docker: {

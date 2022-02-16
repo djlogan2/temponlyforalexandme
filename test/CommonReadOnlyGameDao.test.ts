@@ -11,6 +11,7 @@ import chai from "chai";
 import CommonSingleGameReadOnlyGameDao, {
   GameEvents,
 } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
 class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
   protected endGame(status: GameStatus, status2: number): void {}
@@ -23,6 +24,10 @@ class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
 
   protected isAuthorizedToMove(who: User): boolean {
     return true;
+  }
+
+  protected playerColor(who: User): PieceColor | null {
+    return null;
   }
 }
 

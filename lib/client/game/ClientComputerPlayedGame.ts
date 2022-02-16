@@ -6,6 +6,7 @@ import Stoppable from "/lib/Stoppable";
 import ClientUser from "/lib/client/ClientUser";
 import User from "/lib/User";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
 export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
   private user: ClientUser;
@@ -35,5 +36,10 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
 
   protected isAuthorizedToMove(who: User): boolean {
     return who.id === this.me.opponent.userid;
+  }
+
+  protected playerColor(who: User): PieceColor | null {
+    if (who.id === this.me.opponent.userid) return this.me.opponentcolor;
+    return null;
   }
 }

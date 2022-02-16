@@ -23,6 +23,7 @@ export default class ServerAnalysisGame extends CommonAnalysisGame {
     move: Move,
     fen: string,
     result: GameStatus,
+    result2: number,
     eco: ECOObject,
   ): void {
     throw new Error("Method not implemented.");

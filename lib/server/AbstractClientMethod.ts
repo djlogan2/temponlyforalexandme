@@ -12,6 +12,7 @@ export type ClientCalls =
   | "idleFunction"
   | "makeMove"
   | "newUserLogin"
+  | "resign"
   | "startComputerGame"
   | "user_set"
   | "writeToLog";

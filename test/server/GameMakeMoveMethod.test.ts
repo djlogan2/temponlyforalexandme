@@ -1,4 +1,4 @@
-import GameMakeMoveMethod from "/imports/server/clientmethods/GameMakeMoveMethod";
+import GameMakeMoveMethod from "/imports/server/clientmethods/game/GameMakeMoveMethod";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import sinon from "sinon";
 import { expect } from "chai";

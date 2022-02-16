@@ -32,6 +32,7 @@ export default abstract class CommonBasicGame extends Stoppable {
     move: Move,
     fen: string,
     result: GameStatus,
+    result2: number,
     eco: ECOObject,
   ): void;
 
@@ -74,19 +75,32 @@ export default abstract class CommonBasicGame extends Stoppable {
     if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
     this.premoveTasks();
     let gameresult: GameStatus = "*";
+    let result2;
     if (chess.game_over()) {
-      if (chess.in_stalemate() || chess.in_draw()) {
+      if (chess.in_stalemate()) {
         gameresult = "1/2-1/2";
+        result2 = 14;
+      } else if (chess.in_draw()) {
+        gameresult = "1/2-1/2";
+        if (chess.insufficient_material()) result2 = 18;
+        else result2 = 16;
+      } else if (chess.in_threefold_repetition()) {
+        gameresult = "1/2-1/2";
+        result2 = 15;
       } else if (chess.in_checkmate()) {
         gameresult = chess.turn() === "w" ? "0-1" : "1-0";
+        result2 = 1;
       } else {
         this.logger.error(() => "Unknown status in chess engine");
+        result2 = 0;
       }
-    }
+    } else result2 = 0;
+
     this.internalMakeMove(
       chessmove,
       chess.fen(),
       gameresult,
+      result2,
       this.getECO(chess.fen()),
     );
     this.postmoveTasks();
