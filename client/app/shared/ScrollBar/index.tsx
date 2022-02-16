@@ -18,6 +18,7 @@ const ScrollBar: FC<IScrollBarProps> = ({
 }) => (
   <Scrollbars
     autoHeight
+    hideTracksWhenNotNeeded
     className={clsx("scrollBar")}
     renderThumbVertical={(props) => (
       <div

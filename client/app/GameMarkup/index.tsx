@@ -4,7 +4,7 @@ import { gameservice } from "../Root";
 import "./index.scss";
 import DummyChessboard from "/client/app/components/DummyChessboard";
 import Flip from "/client/app/components/icons/Flip";
-import Movelist from "/client/app/components/Movelist";
+import Movelist, { IMoveItem } from "/client/app/components/Movelist";
 import PlayerInfo from "/client/app/components/PlayerInfo";
 import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
 import GameTitle from "/client/app/shared/GameTitle";
@@ -28,28 +28,45 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [activeGame, setActiveGame] = useState<any>();
   const [fen, setFen] = useState<string>();
+  const [movelist, setMovelist] = useState<IMoveItem[]>();
 
   useEffect(() => {
-    gameservice.events.on("started", (game: ClientComputerPlayedGame) => {
+    const onGameStartedListener = (game: ClientComputerPlayedGame) => {
       const currentGame = (game as any).game;
+      console.log(currentGame);
       setActiveGame(currentGame);
       setFen(currentGame.fen);
-      console.log("STARTED FEN", currentGame.fen);
+      setMovelist(currentGame.variations.movelist.slice(1));
 
       myGames.push(game);
-      // game.makeMove(connection.user as ClientUser, "e4");
-    });
+    };
 
-    gameservice.events.on("movemade", (data) => {
-      console.log("______________");
-      console.log(data);
-      console.log("______________");
-    });
+    gameservice.events.on("started", onGameStartedListener);
+
+    return () => gameservice.events.off("started", onGameStartedListener);
   }, []);
 
-  const handleMove = (move: string) => {
-    console.log(move);
-    myGames[0].makeMove(connection.user as ClientUser, move);
+  useEffect(() => {
+    if (!movelist) {
+      return;
+    }
+
+    const onMoveMadeListener = (move: IMoveItem) => {
+      const moves = [...movelist];
+      moves.push(move);
+      setMovelist(moves);
+    };
+
+    gameservice.events.on("movemade", onMoveMadeListener);
+
+    return () => gameservice.events.off("movemade", onMoveMadeListener);
+  }, [movelist]);
+
+  const handleMove = (move: string[], promotion: string | undefined) => {
+    myGames[0].makeMove(
+      connection.user as ClientUser,
+      move.join("") + promotion,
+    );
   };
 
   return (
@@ -60,7 +77,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       >
         Start a game
       </button>
-      {activeGame && fen ? (
+      {activeGame && fen && movelist ? (
         <div className="gameContainer">
           <PlayerInfo
             userStatus="online"
@@ -127,16 +144,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             token={{ token: "FAKE_TEXT", args: [] }}
             keyboardFunctions={[]}
             classes={[]}
-            moves={new Array(10).fill(0).map((_, i) => ({
-              first: {
-                move: `c${i}`,
-                piece: "q",
-              },
-              second: {
-                move: `d${i}`,
-                piece: "n",
-              },
-            }))}
+            moves={movelist}
             className="gameContainer__movelist"
           />
           <DigitalClock

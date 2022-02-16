@@ -65,7 +65,8 @@ export default abstract class CommonBasicGame extends Stoppable {
       throw new Meteor.Error("CANNOT_MAKE_MOVE");
     // One of the players is moving in turn
     const chess = new Chess(this.game.fen);
-    const chessmove = chess.move(move);
+    console.log(move);
+    const chessmove = chess.move(move, { sloppy: true });
     if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
     this.premoveTasks();
     let gameresult: GameStatus = "*";

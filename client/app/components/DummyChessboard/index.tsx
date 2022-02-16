@@ -10,7 +10,7 @@ interface IDummyChessboardProps {
   flipped?: boolean;
   className?: string;
   fen: string;
-  onMoveHandler: (move: string) => void;
+  onMoveHandler: (move: string[], promotion: string | undefined) => void;
 }
 
 class DummyChessboard extends Component<IDummyChessboardProps> {
@@ -84,7 +84,7 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
 
   handleMove = (move: any[], promotion: any) => {
     const { onMoveHandler, fen } = this.props;
-    onMoveHandler(move[move.length - 1]);
+    onMoveHandler(move, promotion);
     this.chess.move(move[0] + move[1] + promotion, { sloppy: true });
 
     this.setState({ legalMoves: this.getLegalMoves(), fen }, () => {

@@ -81,7 +81,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           status="in"
         />
         <GameSetup />
-        <div>
+        {/* <div>
           <h2>Movelist</h2>
           <Movelist
             openingName="FAKE_TEXT"
@@ -99,7 +99,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
               },
             }))}
           />
-        </div>
+        </div> */}
         <GameTitle
           minutes={10}
           instance="game_title_semifinal"
