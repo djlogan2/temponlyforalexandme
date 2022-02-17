@@ -16,9 +16,10 @@ import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import ServerComputerPlayedGame from "/lib/server/game/ServerComputerPlayedGame";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import InstanceService from "/imports/server/service/InstanceService";
+import WritableUserDao from "/imports/server/dao/WritableUserDao";
 
 describe("GameService", function () {
-  describe("startComputerGame", function () {
+  describe("startGameFromChallenge", function () {
     // play_computer
     // already playing
     //
@@ -28,6 +29,7 @@ describe("GameService", function () {
     let readonlydao: SinonStubbedInstance<CommonSingleGameReadOnlyGameDao>;
     let publicationservice: SinonStubbedInstance<PublicationService>;
     let connectionservice: SinonStubbedInstance<ConnectionService>;
+    let userdao: SinonStubbedInstance<WritableUserDao>;
     let user: SinonStubbedInstance<ServerUser>;
     let gameservice: GameService;
     let origClock: any;
@@ -60,6 +62,7 @@ describe("GameService", function () {
         publicationservice,
         connectionservice,
         instanceservice,
+        userdao,
       );
     });
 
@@ -71,139 +74,115 @@ describe("GameService", function () {
 
     it("should fail 0 increment with ILLEGAL_TIME", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: 0 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail 0 us with ILLEGAL_TIME", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "us", incseconds: 0 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail 0 bronstein with ILLEGAL_TIME", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "bronstein", incseconds: 0 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail 0 minutes if there is no increment or delay", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 0 },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should succeed with 0 minutes if there is increment or delay (bronstein)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 0, adjust: { type: "bronstein", incseconds: 60 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should succeed with 0 minutes if there is increment or delay (us)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 0, adjust: { type: "us", incseconds: 60 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should succeed with 0 minutes if there is increment or delay (inc)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 0, adjust: { type: "inc", incseconds: 60 } },
       };
-      gameservice.startComputerGame(user, challenge, "x");
+      gameservice.startGameFromChallenge(user, challenge, "x");
       chai.assert.fail("check user");
     });
 
     it("should fail if minutes is not an integer", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15.78, adjust: { type: "inc", incseconds: 60 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if minutes is negative", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: -15, adjust: { type: "inc", incseconds: 60 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is not an integer (inc)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: 60.86 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is not an integer (us)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "us", incseconds: 60.86 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is not an integer (bronestein)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: {
           minutes: 15,
@@ -211,87 +190,62 @@ describe("GameService", function () {
         },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is negative (bronestein)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "bronstein", incseconds: -60 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is negative (us)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "us", incseconds: -60 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail if inc or delay is negative (inc)", function () {
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15, adjust: { type: "inc", incseconds: -60 } },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
+        gameservice.startGameFromChallenge(user, challenge, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_TIME"));
     });
 
     it("should fail skill level is not within 1 and 10", function () {
       const challengeneg: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: -1,
         clock: { minutes: 15 },
       };
       const challengezro: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: -1,
         clock: { minutes: 15 },
       };
       const challengepos: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: -1,
         clock: { minutes: 15 },
       };
       expect(() =>
-        gameservice.startComputerGame(user, challengeneg, "x"),
+        gameservice.startGameFromChallenge(user, challengeneg, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_SKILL_LEVEL"));
       expect(() =>
-        gameservice.startComputerGame(user, challengezro, "x"),
+        gameservice.startGameFromChallenge(user, challengezro, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_SKILL_LEVEL"));
       expect(() =>
-        gameservice.startComputerGame(user, challengepos, "x"),
+        gameservice.startGameFromChallenge(user, challengepos, "x"),
       ).to.throw(new Meteor.Error("ILLEGAL_SKILL_LEVEL"));
-    });
-
-    it("should fail challenge is not 'computer'", function () {
-      const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        // @ts-ignore
-        type: "notcomputer",
-        skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "inc", incseconds: -60 } },
-      };
-      expect(() =>
-        gameservice.startComputerGame(user, challenge, "x"),
-      ).to.throw(new Meteor.Error("INCORRECT_CHALLENGE"));
     });
 
     it("should succeed in storing a game record (min)", function () {
@@ -328,14 +282,12 @@ describe("GameService", function () {
         },
       };
       const challenge: ComputerChallengeRecord = {
-        _id: "x",
-        type: "computer",
         skill_level: 1,
         clock: { minutes: 15 },
         color: "w",
       };
 
-      gameservice.startComputerGame(user, challenge, "x");
+      gameservice.startGameFromChallenge(user, challenge, "x");
       expect(writabledao.insert.calledOnce).to.be.true;
       const generatedgamerecord = writabledao.insert.getCall(0)
         .args[0] as ComputerPlayGameRecord;

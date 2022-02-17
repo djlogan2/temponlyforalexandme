@@ -50,7 +50,7 @@ export default class StartComputerGameClientMethod extends AbstractClientMethod 
     }
 
     return Promise.resolve(
-      this.gameservice.startComputerGame(
+      this.gameservice.startGameFromChallenge(
         obj.user as ServerUser,
         obj.challenge,
         obj.connection.connectionid,

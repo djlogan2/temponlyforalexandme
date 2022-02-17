@@ -110,6 +110,7 @@ export default class ConnectionService extends Stoppable {
       this.publicationservice,
       this,
       this.instanceservice,
+      this.writableuserdao,
     );
 
     Meteor.onConnection((connection) => this.onConnection(connection));

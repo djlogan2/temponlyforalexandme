@@ -31,7 +31,7 @@ export default abstract class User extends Stoppable {
     return this.me.isolation_group;
   }
 
-  public get roles(): UserRoles[] {
+  private get roles(): UserRoles[] {
     return this.me.roles;
   }
 
@@ -39,9 +39,12 @@ export default abstract class User extends Stoppable {
     return this.me.ratings;
   }
 
-  public isAuthorized(roles: string[]): boolean {
+  public isAuthorized(roles: UserRoles | UserRoles[]): boolean {
     if (this.me.isdeveloper) return true;
-    return roles.some((requestedrole) =>
+
+    const vRoles = Array.isArray(roles) ? roles : [roles];
+
+    return vRoles.some((requestedrole) =>
       this.roles.some((userrole) => userrole === requestedrole),
     );
   }

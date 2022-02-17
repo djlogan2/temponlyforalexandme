@@ -58,7 +58,7 @@ interface LagObject {
   b: OneLagObject;
 }
 
-interface PlayerInfo {
+export interface PlayerInfo {
   username?: string;
   userid: string;
   rating: number;
@@ -125,8 +125,9 @@ export interface BasicPlayedGameRecord extends BasicGameRecord {
 }
 
 export interface TwoPlayerPlayedGameRecord extends BasicPlayedGameRecord {
+  white: PlayerInfo;
+  black: PlayerInfo;
   status: "playing";
-  ratinginterface: string;
   rated: boolean;
   lag: LagObject;
 }

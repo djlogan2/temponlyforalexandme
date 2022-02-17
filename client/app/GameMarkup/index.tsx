@@ -16,8 +16,6 @@ import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 interface IGameMarkup {}
 
 const computerchallenge: ComputerChallengeRecord = {
-  _id: "x",
-  type: "computer",
   skill_level: 1,
   color: "w",
   clock: { minutes: 15 },

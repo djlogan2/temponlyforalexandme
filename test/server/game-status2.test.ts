@@ -55,7 +55,7 @@ class TestCommonPlayedGame extends CommonPlayedGame {
   protected isClosing(): void {}
 }
 
-describe.only("status2 values", function () {
+describe("status2 values", function () {
   let sandbox: SinonSandbox;
   let readonlydao: SinonStubbedInstance<CommonSingleGameReadOnlyGameDao>;
   let user: User;

@@ -6,24 +6,23 @@ export type ClockSettings = { minutes: number; adjust?: IncrementType };
 export type PieceColor = "b" | "w";
 
 export interface BasicChallengeRecord {
-  _id: string;
   clock: ClockSettings;
   opponentclocks?: ClockSettings;
   color?: PieceColor;
 }
 
 export interface ComputerChallengeRecord extends BasicChallengeRecord {
-  type: "computer";
   skill_level: number;
 }
 
-export interface AnyoneChallengeRecord {
-  type: "seek";
+export interface UserChallengeRecord extends BasicChallengeRecord {
+  _id: string;
+  owner: string;
+  isolation_group: string;
+  instance_id: string;
+  connection_id: string;
+  who: string[];
   rated: boolean;
-}
-
-export interface SpecificChallengeRecord {
-  type: "match";
-  who: string;
-  rated: boolean;
+  qualifies: string[];
+  declined: string[];
 }

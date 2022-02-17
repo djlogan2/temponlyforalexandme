@@ -11,14 +11,22 @@ describe("GameMakeMoveMethod", function () {
   afterEach(() => {
     sandbox.restore();
   });
-  it("should fail with UNKNOWN_GAME if called is passed an invalid id", function () {
+  it.only("should fail with UNKNOWN_GAME if called is passed an invalid id", function (done) {
     const connectionservice = sandbox.createStubInstance(ConnectionService);
     const gameservice = sandbox.createStubInstance(GameService);
     gameservice.getTyped.returns(undefined); // .alwaysReturned(game);
     sandbox.stub(Meteor, "methods");
     const method = new GameMakeMoveMethod(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
     // @ts-ignore
-    expect(() => method.called("x", "x")).to.throw("UNKNOWN_GAME");
+    method
+      .called("x", "x")
+      .then(() => {
+        done(new Error("Expected an exception"));
+      })
+      .catch((err) => {
+        done(expect(err.message).to.equal("UNKNOWN_GAME"));
+      });
+    // expect(() => method.called("x", "x")).to.throw("UNKNOWN_GAME");
     sandbox.restore();
   });
   it("should work if called is passed a ServerAnalysisGame", function () {
