@@ -9,9 +9,11 @@ import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
 
 export type ClientCalls =
+  | "draw"
   | "idleFunction"
   | "makeMove"
   | "newUserLogin"
+  | "resign"
   | "startComputerGame"
   | "user_set"
   | "writeToLog";
@@ -32,9 +34,9 @@ export default abstract class AbstractClientMethod extends Stoppable {
 
   private logger: ServerLogger;
 
-  private argumentnames: string[];
+  private readonly argumentnames: string[];
 
-  private roles: UserRoles[];
+  private readonly roles: UserRoles[];
 
   protected isAuthorized(roles: string[], obj: ClientCallObject): boolean {
     return (

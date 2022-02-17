@@ -5,32 +5,31 @@ import {
   Clock,
   GameStatus,
 } from "/lib/records/GameRecord";
-import { PieceColor } from "/lib/records/ChallengeRecord";
-import { Chess, Move } from "chess.js";
-import User from "/lib/User";
 import CommonLogger from "/lib/CommonLogger";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import Stoppable from "/lib/Stoppable";
+import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
+import User from "/lib/User";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
 export default abstract class CommonPlayedGame extends CommonBasicGame {
-  private timerHandle?: number;
-
   private logger2: CommonLogger;
-
-  protected abstract endGame(status: GameStatus, status2: number): void;
 
   protected abstract playerColor(who: User): PieceColor | null;
 
+  protected abstract internalSetDraw(color: PieceColor, draw: boolean): void;
+
   protected get me(): BasicPlayedGameRecord {
-    return this.game as BasicPlayedGameRecord;
+    if (super.me.status === "playing" || super.me.status === "computer")
+      return super.me as BasicPlayedGameRecord;
+    throw new Meteor.Error("INVALID_TYPE");
   }
 
   constructor(
     parent: Stoppable | null,
-    game: BasicPlayedGameRecord,
-    dao: CommonReadOnlyGameDao,
+    id: string,
+    dao: CommonSingleGameReadOnlyGameDao,
   ) {
-    super(parent, game, dao);
+    super(parent, id, dao);
     this.logger2 = globalThis.ICCServer.utilities.getLogger(
       this,
       "CommonPlayedGame_js",
@@ -69,14 +68,14 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   }
 
   private startTimer(milliseconds: number, fn: () => void): void {
-    this.timerHandle = Meteor.setInterval(() => {
+    this.global.timerHandle = Meteor.setInterval(() => {
       this.stopTimer();
       fn();
     }, milliseconds);
   }
 
   private stopTimer(): void {
-    if (this.timerHandle) Meteor.clearInterval(this.timerHandle);
+    if (this.global.timerHandle) Meteor.clearInterval(this.global.timerHandle);
   }
 
   protected stopping(): void {
@@ -84,10 +83,60 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   }
 
   protected postmoveTasks(): void {
-    this.stopTimer();
+    this.startClock();
   }
 
   protected premoveTasks(): void {
-    this.startClock();
+    this.stopTimer();
+  }
+
+  public resign(who: User): void {
+    const color = this.playerColor(who);
+    if (!color) throw new Meteor.Error("INSUFFICIENT_AUTHORITY");
+    this.resignColor(color);
+  }
+
+  public draw(who: User): void {
+    // const chess = new Chess(this.me.fen);
+
+    let result: GameStatus;
+    let result2;
+
+    if (this.global.chessObject.insufficient_material()) {
+      throw new Meteor.Error(
+        "I don't know what to do about this. Can this happen? If you get this crash, figure out how to set result2",
+      );
+    } else if (this.global.chessObject.in_threefold_repetition()) {
+      result2 = 15;
+    } else if (this.global.chessObject.in_draw()) {
+      // Now can only be "50-move rule"
+      result2 = 16;
+    }
+
+    if (result2) {
+      this.stopTimer();
+      this.endGame("1/2-1/2", result2);
+      return;
+    }
+
+    const color = this.playerColor(who);
+    if (!color) throw new Meteor.Error("INSUFFICIENT_AUTHORITY");
+
+    if (this.me.pending[color].draw) return;
+    this.internalSetDraw(color, true);
+  }
+
+  public declineDraw(who: User): void {
+    const decliner = this.playerColor(who);
+    if (!decliner) throw new Meteor.Error("INSUFFICIENT_AUTHORITY");
+    const othercolor = decliner === "w" ? "b" : "w";
+    if (!this.me.pending[othercolor].draw) return;
+    this.internalSetDraw(othercolor, false);
+  }
+
+  protected resignColor(color: PieceColor): void {
+    const result = color === "w" ? "0-1" : "1-0";
+    this.stopTimer();
+    this.endGame(result, 0);
   }
 }

@@ -1,7 +1,6 @@
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import UserRecord from "/lib/records/UserRecord";
 import Stoppable from "/lib/Stoppable";
-import ClientUser from "/lib/client/ClientUser";
 
 export default class CommonReadOnlyUserDao extends ReactiveReadOnlyDao<UserRecord> {
   constructor(parent: Stoppable | null) {

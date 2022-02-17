@@ -25,7 +25,6 @@ import UserService from "/imports/server/service/UserService";
 import EventEmitter from "eventemitter3";
 import GameService from "/imports/server/service/GameService";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 
 export default class ConnectionService extends Stoppable {
   private readonly connectiondao: ConnectionDao;
@@ -70,7 +69,6 @@ export default class ConnectionService extends Stoppable {
     writableloggerconfigdao: WritableLoggerConfigurationDao,
     logrecordsdao: LogRecordsDao,
     writablegamedao: WritableGameDao,
-    commongamedao: CommonReadOnlyGameDao,
   ) {
     super(parent);
     this.userdao = readonlyuserdao;
@@ -109,9 +107,9 @@ export default class ConnectionService extends Stoppable {
     this.gameservice = new GameService(
       parent,
       writablegamedao,
-      commongamedao,
       this.publicationservice,
       this,
+      this.instanceservice,
     );
 
     Meteor.onConnection((connection) => this.onConnection(connection));

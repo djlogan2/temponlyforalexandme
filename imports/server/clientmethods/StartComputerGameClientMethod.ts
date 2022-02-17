@@ -8,6 +8,7 @@ import ServerUser from "/lib/server/ServerUser";
 import ServerLogger from "/lib/server/ServerLogger";
 import Stoppable from "/lib/Stoppable";
 import * as util from "util";
+import { Meteor } from "meteor/meteor";
 
 interface StartComputerGameClientMethodObject extends ClientCallObject {
   challenge: ComputerChallengeRecord;
@@ -43,8 +44,17 @@ export default class StartComputerGameClientMethod extends AbstractClientMethod 
           obj.challenge,
         )}`,
     );
+
+    if (!obj.connection) {
+      return Promise.reject(new Meteor.Error("NO_CONNECTION"));
+    }
+
     return Promise.resolve(
-      this.gameservice.startComputerGame(obj.user as ServerUser, obj.challenge),
+      this.gameservice.startComputerGame(
+        obj.user as ServerUser,
+        obj.challenge,
+        obj.connection.connectionid,
+      ),
     );
   }
 

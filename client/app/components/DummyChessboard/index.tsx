@@ -34,9 +34,13 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
     };
   }
 
-  getColorFromEvent = (event: any) => "#fafafa";
+  componentDidUpdate() {
+    const { fen } = this.props;
 
-  getRandomInt = (max: number) => Math.floor(Math.random() * max);
+    if (this.chess.fen() !== fen) {
+      this.chess.load(fen);
+    }
+  }
 
   handleUpdateCircles = (circle: { color: string; event: any; piece: any }) => {
     // @ts-ignore
@@ -64,6 +68,10 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
 
     this.setState({ circles: [...circles] });
   };
+
+  getRandomInt = (max: number) => Math.floor(Math.random() * max);
+
+  getColorFromEvent = (event: any) => "#fafafa";
 
   getLegalMoves = () => {
     const moves = {};

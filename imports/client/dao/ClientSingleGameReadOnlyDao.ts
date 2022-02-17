@@ -1,23 +1,19 @@
 import Stoppable from "/lib/Stoppable";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
-import CommonReadOnlyGameDao, {
-  GameEvents,
-} from "/imports/dao/CommonReadOnlyGameDao";
 import ClientLogger from "/lib/client/ClientLogger";
 import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
-import {
-  AnalysisGameRecord,
-  BasicGameRecord,
-  ComputerPlayGameRecord,
-} from "/lib/records/GameRecord";
 import ClientUser from "/lib/client/ClientUser";
 import { Meteor } from "meteor/meteor";
 import ClientConnection from "/lib/client/ClientConnection";
+import CommonSingleGameReadOnlyGameDao, {
+  GameEvents,
+} from "/imports/dao/CommonSingleGameReadOnlyGameDao";
+import { BasicGameRecord } from "/lib/records/GameRecord";
 
-export class ClientGameReadOnlyDao extends CommonReadOnlyGameDao {
+export default class ClientSingleGameReadOnlyDao extends CommonSingleGameReadOnlyGameDao {
   private readonly pEvents: ICCEventEmitter<"move">;
 
   private readonly logger: ClientLogger;
@@ -26,10 +22,11 @@ export class ClientGameReadOnlyDao extends CommonReadOnlyGameDao {
 
   constructor(
     parent: Stoppable | null,
+    id: string,
     subscriptionservice: SubscriptionService,
     connection: ClientConnection,
   ) {
-    super(parent);
+    super(parent, id);
     this.logger = new ClientLogger(this, "GameReadOnlyDao_js");
     this.pEvents = subscriptionservice.getSubscriptionEventEmitter(
       this,
@@ -52,13 +49,13 @@ export class ClientGameReadOnlyDao extends CommonReadOnlyGameDao {
       case "computer":
         stupid = new ClientComputerPlayedGame(
           this,
-          game as ComputerPlayGameRecord,
+          game._id,
           this,
           this.connection.user as ClientUser,
         );
         break;
       case "analyzing":
-        stupid = new ClientAnalysisGame(this, game as AnalysisGameRecord, this);
+        stupid = new ClientAnalysisGame(this, game._id, this);
         break;
       case "playing":
         throw new Meteor.Error("Not yet supported");

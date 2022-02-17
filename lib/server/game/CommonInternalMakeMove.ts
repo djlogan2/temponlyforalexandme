@@ -19,6 +19,7 @@ export default function internalMakeMove(
   move: Move,
   fen: string,
   result: GameStatus,
+  result2: number,
   eco: ECOObject,
 ): Modifier {
   const modifier: Modifier = { $set: {} };
@@ -31,7 +32,7 @@ export default function internalMakeMove(
     updateClocks(game, modifier, 0);
     updatePending(game, modifier);
   }
-  updateStatus(game, modifier, result);
+  updateStatus(game, modifier, result, result2);
   return modifier;
 }
 
@@ -60,23 +61,11 @@ function updateStatus(
   game: BasicPlayedGameRecord | AnalysisGameRecord,
   modifier: Modifier,
   result: GameStatus,
+  result2: number,
 ): void {
-  switch (result) {
-    case "1-0":
-      modifier.$set.result = result;
-      modifier.$set.result2 = 0;
-      break;
-    case "0-1":
-      modifier.$set.result = result;
-      modifier.$set.result2 = 0;
-      break;
-    case "1/2-1/2":
-      modifier.$set.result = result;
-      modifier.$set.result2 = 0;
-      break;
-    case "*":
-    default:
-      break;
+  if (result !== "*") {
+    modifier.$set.result = result;
+    modifier.$set.result2 = result2;
   }
 }
 

@@ -10,6 +10,7 @@ globalThis.userlist = {};
 
 globalThis.ICCServer = {
   collections: {},
+  games: {},
   services: {},
   utilities: {
     getLogger: (parent: Stoppable, identifier: string) =>

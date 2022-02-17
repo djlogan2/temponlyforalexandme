@@ -7,6 +7,7 @@ import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 export default class SubscriptionService extends Stoppable {
   /**
    * Get an event emitter that automatically subscribes and subscribes when events are listened to
+   * @param{Stoppable | null} Stoppable parent or null
    * @param{SubscriptionNames} publication
    * @return{ICCEventEmitter} Basically an event emitter (on/off/removeAllListeners)
    */

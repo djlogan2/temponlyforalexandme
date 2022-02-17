@@ -20,6 +20,7 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     move: Move,
     fen: string,
     result: GameStatus,
+    result2: number,
     eco: ECOObject,
   ): void {
     throw new Error("Method not implemented.");
@@ -38,4 +39,6 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
   // }
 
   protected stopping(): void {}
+
+  protected isClosing(): void {}
 }

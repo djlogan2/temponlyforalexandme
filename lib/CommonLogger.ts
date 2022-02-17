@@ -98,6 +98,7 @@ export default abstract class CommonLogger extends Stoppable {
     this.log("error", message, userid);
   }
 
+  // noinspection JSUnusedGlobalSymbols
   /**
    * A warning
    * @param{string} message A function that results in a message if the log record is written

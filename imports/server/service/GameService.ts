@@ -8,7 +8,6 @@ import { ComputerPlayGameRecord } from "/lib/records/GameRecord";
 import ServerUser from "/lib/server/ServerUser";
 import { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import { Mongo } from "meteor/mongo";
-import CommonReadOnlyGameDao from "/imports/dao/CommonReadOnlyGameDao";
 import Stoppable from "/lib/Stoppable";
 import ServerComputerPlayedGame from "/lib/server/game/ServerComputerPlayedGame";
 import { Meteor, Subscription } from "meteor/meteor";
@@ -20,7 +19,11 @@ import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
 import CommonGameService from "/lib/CommonGameService";
-import GameMakeMoveMethod from "/imports/server/clientmethods/GameMakeMoveMethod";
+import GameMakeMoveMethod from "/imports/server/clientmethods/game/GameMakeMoveMethod";
+import ServerAnalysisGame from "/lib/server/game/ServerAnalysisGame";
+import GameResignMethod from "/imports/server/clientmethods/game/GameResignMethod";
+import GameDrawMethod from "/imports/server/clientmethods/game/GameDrawMethod";
+import InstanceService from "/imports/server/service/InstanceService";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -30,28 +33,33 @@ export default class GameService extends CommonGameService {
 
   private readonly writabledao: WritableGameDao;
 
-  private readonly readonlydao: CommonReadOnlyGameDao;
-
   private readonly startcomputergamemethod: StartComputerGameClientMethod;
 
   private readonly makemovemethod: GameMakeMoveMethod;
 
+  private readonly drawmethod: GameDrawMethod;
+
+  private readonly resignmethod: GameResignMethod;
+
   private gamelist: { [id: string]: ServerComputerPlayedGame } = {};
+
+  private readonly instanceservice: InstanceService;
 
   // private gamehistoryservice: someday_over_the_rainbow;
 
   constructor(
     parent: Stoppable | null,
     writabledao: WritableGameDao,
-    readonlydao: CommonReadOnlyGameDao,
     publicationservice: PublicationService,
     connectionservice: ConnectionService,
+    instanceservice: InstanceService,
   ) {
-    super(parent, readonlydao);
+    super(parent);
 
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
-    this.readonlydao = readonlydao;
+
+    this.instanceservice = instanceservice;
 
     publicationservice.publishDao(
       "games",
@@ -64,19 +72,33 @@ export default class GameService extends CommonGameService {
       connectionservice,
       this,
     );
-
-    this.makemovemethod = new GameMakeMoveMethod(
-      this,
-      connectionservice,
-      readonlydao,
-    );
+    this.makemovemethod = new GameMakeMoveMethod(this, connectionservice, this);
+    this.resignmethod = new GameResignMethod(this, connectionservice, this);
+    this.drawmethod = new GameDrawMethod(this, connectionservice, this);
   }
 
   protected startMethods(): void {}
 
+  public getTyped(
+    id: string,
+  ): ServerComputerPlayedGame | ServerAnalysisGame | undefined {
+    const game = this.writabledao.get(id);
+    if (!game) return undefined;
+    switch (game.status) {
+      case "computer":
+        return new ServerComputerPlayedGame(this, id, this.writabledao);
+      case "analyzing":
+        return new ServerAnalysisGame(this, id, this.writabledao);
+      default: {
+        throw new Meteor.Error("UNKNOWN_GAME_TYPE");
+      }
+    }
+  }
+
   public startComputerGame(
     challenger: ServerUser,
     computerchallenge: ComputerChallengeRecord,
+    connectionid: string,
   ): string {
     this.logger.debug(
       () =>
@@ -150,6 +172,8 @@ export default class GameService extends CommonGameService {
 
     const gamerecord: Mongo.OptionalId<ComputerPlayGameRecord> = {
       startTime: new Date(),
+      instance_id: this.instanceservice.instanceid,
+      connection_id: connectionid,
       isolation_group: challenger.isolation_group,
       status: "computer",
       opponent: {
@@ -176,12 +200,7 @@ export default class GameService extends CommonGameService {
     };
     const id = this.writabledao.insert(gamerecord);
     gamerecord._id = id;
-    const game = new ServerComputerPlayedGame(
-      this,
-      gamerecord as ComputerPlayGameRecord,
-      this.readonlydao,
-      this.writabledao,
-    );
+    const game = new ServerComputerPlayedGame(this, id, this.writabledao);
     this.gamelist[id] = game;
     game.startClock();
     return id;

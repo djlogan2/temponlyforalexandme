@@ -5,26 +5,41 @@ import {
 import Stoppable from "/lib/Stoppable";
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
-import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
-import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
+import { Meteor } from "meteor/meteor";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
 export type GameEvents =
-  | "started"
+  | "abortrequested"
+  | "abortremoved"
+  | "adjournrequested"
+  | "adjournremoved"
+  | "drawrequested"
+  | "drawremoved"
   | "move"
   | "fen"
   | "clockchanged"
-  | "movemade";
-export default abstract class CommonReadOnlyGameDao extends ReactiveReadOnlyDao<BasicGameRecord> {
+  | "converted"
+  | "movemade"
+  | "ended";
+export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveReadOnlyDao<BasicGameRecord> {
+  protected id: string;
+
   public abstract get events(): BasicEventEmitter<GameEvents>;
 
-  constructor(parent: Stoppable | null) {
+  constructor(parent: Stoppable | null, id: string) {
     super(parent, "games");
+    this.id = id;
+    this.start({ _id: id });
   }
 
   protected onFieldsChanged(
     id: string,
     record: Partial<ComputerPlayGameRecord>,
   ): void {
+    if (record.status) {
+      this.events.emit("converted");
+    }
+
     if (record.fen) {
       this.events.emit("fen", record.fen);
     }
@@ -42,6 +57,24 @@ export default abstract class CommonReadOnlyGameDao extends ReactiveReadOnlyDao<
       }
     }
 
+    if (record.pending) {
+      const argh = record.pending;
+      ["w", "b"].forEach((color) => {
+        const flags = argh[color as PieceColor];
+        ["draw"].forEach((type) => {
+          if (type in flags) {
+            this.events.emit(
+              (type +
+                (flags[type as "draw" | "abort" | "adjourn"]
+                  ? "requested"
+                  : "removed")) as GameEvents,
+              color,
+            );
+          }
+        });
+      });
+    }
+
     if (record.variations) {
       if (record.variations.movelist) {
         this.events.emit(
@@ -49,7 +82,8 @@ export default abstract class CommonReadOnlyGameDao extends ReactiveReadOnlyDao<
           record.variations.movelist[record.variations.currentmoveindex],
         );
       } else {
-        const game = this.getTyped(id) as unknown as ComputerPlayGameRecord;
+        const game = this.get(id);
+        if (!game) throw new Meteor.Error("UNABLE_TO_FIND_GAME");
         this.events.emit(
           "movemade",
           game.variations.movelist[record.variations.currentmoveindex],
@@ -58,21 +92,9 @@ export default abstract class CommonReadOnlyGameDao extends ReactiveReadOnlyDao<
     }
   }
 
-  protected onRecordAdded(id: string, record: Partial<BasicGameRecord>): void {
-    this.events.emit("started", this.getTyped(id));
-  }
+  protected onRecordAdded(id: string, record: Partial<BasicGameRecord>): void {}
 
-  protected onRecordRemoved(id: string): void {}
-
-  protected abstract getClassFromType(
-    game: BasicGameRecord,
-  ): CommonComputerPlayedGame | CommonAnalysisGame;
-
-  public getTyped(
-    id: string,
-  ): CommonComputerPlayedGame | CommonAnalysisGame | undefined {
-    const game = this.get(id);
-    if (!game) return undefined;
-    return this.getClassFromType(game);
+  protected onRecordRemoved(id: string): void {
+    this.events.emit("ended");
   }
 }

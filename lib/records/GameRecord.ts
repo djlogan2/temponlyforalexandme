@@ -106,6 +106,8 @@ export type GameTypes = "playing" | "analyzing" | "computer";
 
 export interface BasicGameRecord {
   _id: string;
+  instance_id: string;
+  connection_id: string;
   status: GameTypes;
   isolation_group: string;
   startTime: Date;
