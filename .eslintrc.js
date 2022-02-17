@@ -60,6 +60,7 @@ module.exports = {
     "react/display-name": 0,
     "no-param-reassign": 0,
     "react/no-array-index-key": 0,
+    "consistent-return": 0,
   },
   settings: {
     "import/resolver": {

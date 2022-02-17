@@ -2,7 +2,6 @@ import clsx from "clsx";
 import React, { FCICC, useEffect, useState } from "react";
 import { gameservice } from "../Root";
 import "./index.scss";
-import DummyChessboard from "/client/app/components/DummyChessboard";
 import Flip from "/client/app/components/icons/Flip";
 import Movelist from "/client/app/components/Movelist";
 import PlayerInfo from "/client/app/components/PlayerInfo";
@@ -29,34 +28,45 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [activeGame, setActiveGame] = useState<any>();
   const [fen, setFen] = useState<string>();
+  const [movelist, setMovelist] = useState<any>();
+  const [moveToMake, setMoveToMake] = useState("");
 
   useEffect(() => {
     gameservice.events.on("started", (game: ClientComputerPlayedGame) => {
       const currentGame = (game as any).game;
+      console.log(currentGame);
       setActiveGame(currentGame);
       setFen(currentGame.fen);
-      console.log("STARTED FEN", currentGame.fen);
+      setMovelist(currentGame.variations.movelist.slice(1));
+      setMoveToMake(currentGame.tomove);
 
       myGames.push(game);
       // game.makeMove(connection.user as ClientUser, "e4");
     });
-
-    gameservice.events.on("movemade", (data) => {
-      console.log("______________");
-      console.log(data);
-      console.log("______________");
-    });
   }, []);
+
+  useEffect(() => {
+    const onMoveMadeListener = (move: any) => {
+      const moves = [...movelist];
+      moves.push(move);
+      setMoveToMake(move.smith.color === "w" ? "b" : "w");
+      setMovelist(moves);
+    };
+
+    gameservice.events.on("movemade", onMoveMadeListener);
+
+    return () => gameservice.events.off("movemade", onMoveMadeListener);
+  }, [movelist]);
 
   const handleMove = (move: string[], promotion?: string) => {
     if (promotion) {
-      console.log(move.join("") + promotion)
-      myGames[0].makeMove(connection.user as ClientUser, move.join("") + promotion);
+      myGames[0].makeMove(
+        connection.user as ClientUser,
+        move.join("") + promotion,
+      );
     } else {
-      console.log(move.join(""))
       myGames[0].makeMove(connection.user as ClientUser, move.join(""));
     }
-
   };
 
   return (
@@ -67,7 +77,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       >
         Start a game
       </button>
-      {activeGame && fen ? (
+      {activeGame && fen && moveToMake ? (
         <div className="gameContainer">
           <PlayerInfo
             userStatus="online"
@@ -121,18 +131,14 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             className="gameContainer__btn-flip"
           />
           <DigitalClock
-            time="00:00:29"
-            status="in"
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
+            time={activeGame.clocks.b.current}
             className={clsx(
               "gameContainer__clock-one",
               isFlipped && "gameContainer__clock-one--flipped",
             )}
+            isMyTurn={moveToMake === "b"}
+            initial={activeGame.clocks.b.initial}
+            startTime={activeGame.clocks.b.starttime}
           />
           <Movelist
             openingName="FAKE_TEXT"
@@ -152,18 +158,14 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             className="gameContainer__movelist"
           />
           <DigitalClock
-            time="00:00:30"
-            status="inactive"
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
+            time={activeGame.clocks.w.current}
             className={clsx(
               "gameContainer__clock-two",
               isFlipped && "gameContainer__clock-two--flipped",
             )}
+            isMyTurn={moveToMake === "w"}
+            initial={activeGame.clocks.w.initial}
+            startTime={activeGame.clocks.w.starttime}
           />
         </div>
       ) : null}
