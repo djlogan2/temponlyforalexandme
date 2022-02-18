@@ -10,7 +10,7 @@ interface IDummyChessboardProps {
   flipped?: boolean;
   className?: string;
   fen: string;
-  onMoveHandler: (move: string) => void;
+  onMoveHandler: (move: string[], promotion: string | undefined) => void;
 }
 
 class DummyChessboard extends Component<IDummyChessboardProps> {
@@ -34,9 +34,13 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
     };
   }
 
-  getColorFromEvent = (event: any) => "#fafafa";
+  componentDidUpdate() {
+    const { fen } = this.props;
 
-  getRandomInt = (max: number) => Math.floor(Math.random() * max);
+    if (this.chess.fen() !== fen) {
+      this.chess.load(fen);
+    }
+  }
 
   handleUpdateCircles = (circle: { color: string; event: any; piece: any }) => {
     // @ts-ignore
@@ -65,13 +69,9 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
     this.setState({ circles: [...circles] });
   };
 
-  componentDidUpdate() {
-    const { fen } = this.props;
+  getRandomInt = (max: number) => Math.floor(Math.random() * max);
 
-    if (this.chess.fen() !== fen) {
-      this.chess.load(fen);
-    }
-  }
+  getColorFromEvent = (event: any) => "#fafafa";
 
   getLegalMoves = () => {
     const moves = {};
@@ -92,7 +92,7 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
 
   handleMove = (move: any[], promotion: any) => {
     const { onMoveHandler, fen } = this.props;
-    onMoveHandler(move[move.length - 1]);
+    onMoveHandler(move, promotion);
     this.chess.move(move[0] + move[1] + promotion, { sloppy: true });
 
     this.setState({ legalMoves: this.getLegalMoves(), fen }, () => {

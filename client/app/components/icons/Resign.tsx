@@ -3,10 +3,12 @@ import React, { FC } from "react";
 interface IResignProps {
   width?: number;
   height?: number;
+  className?: string;
 }
 
-const Resign: FC<IResignProps> = ({ width = 22, height = 22 }) => (
+const Resign: FC<IResignProps> = ({ width = 22, height = 22, className }) => (
   <svg
+    className={className}
     width={width}
     height={height}
     viewBox="0 0 22 22"

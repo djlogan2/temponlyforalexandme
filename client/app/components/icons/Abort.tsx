@@ -3,10 +3,12 @@ import React, { FC } from "react";
 interface IAbortProps {
   width?: number;
   height?: number;
+  className?: string;
 }
 
-const Abort: FC<IAbortProps> = ({ width = 23, height = 23 }) => (
+const Abort: FC<IAbortProps> = ({ width = 23, height = 23, className }) => (
   <svg
+    className={className}
     width={width}
     height={height}
     viewBox="0 0 23 23"

@@ -4,10 +4,12 @@ import React, { FC } from "react";
 interface IDrawProps {
   width?: number;
   height?: number;
+  className?: string;
 }
 
-const Draw: FC<IDrawProps> = ({ width = 30, height = 30 }) => (
+const Draw: FC<IDrawProps> = ({ width = 30, height = 30, className }) => (
   <svg
+    className={className}
     width={width}
     height={height}
     viewBox="0 0 30 30"
