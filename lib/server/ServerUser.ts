@@ -1,8 +1,9 @@
-import User from "/lib/User";
+import User, { UserEvents } from "/lib/User";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import Stoppable from "/lib/Stoppable";
 import EventEmitter from "eventemitter3";
+import { UserRoles } from "/lib/enums/Roles";
 
 export default class ServerUser extends User {
   private isidle: boolean = false;
@@ -11,7 +12,7 @@ export default class ServerUser extends User {
 
   private writableuserdao: WritableUserDao;
 
-  private pEvents = new EventEmitter<"locale" | "theme">();
+  private pEvents = new EventEmitter<UserEvents>();
 
   public get events() {
     return this.pEvents;
@@ -28,6 +29,21 @@ export default class ServerUser extends User {
   public setLocale(locale: string): void {
     this.writableuserdao.update({ _id: this.id }, { $set: { locale } });
     this.pEvents.emit("locale", locale);
+  }
+
+  public removeRole(role: UserRoles): void {
+    this.writableuserdao.update({ _id: this.id }, { $pull: { roles: role } });
+    this.pEvents.emit("roleremoved", role);
+  }
+
+  public addRole(role: UserRoles): void {
+    if (
+      this.writableuserdao.update(
+        { _id: this.id },
+        { $addToSet: { roles: role } },
+      ) > 0
+    )
+      this.pEvents.emit("roleadded", role);
   }
 
   constructor(

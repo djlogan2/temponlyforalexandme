@@ -1,4 +1,5 @@
 export type SubscriptionNames =
+  | "challenges"
   | "games"
   | "i18n"
   | "logger_configuration"

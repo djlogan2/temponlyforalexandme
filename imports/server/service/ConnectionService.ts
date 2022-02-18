@@ -25,6 +25,7 @@ import UserService from "/imports/server/service/UserService";
 import EventEmitter from "eventemitter3";
 import GameService from "/imports/server/service/GameService";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
+import ServerUser from "/lib/server/ServerUser";
 
 export default class ConnectionService extends Stoppable {
   private readonly connectiondao: ConnectionDao;
@@ -160,6 +161,7 @@ export default class ConnectionService extends Stoppable {
 
   private onClose(ourconnection: ServerConnection): void {
     this.logger.debug(() => `${ourconnection.connectionid} onClose`);
+    if (ourconnection.user) this.events.emit("userlogout", connection.user);
     ourconnection.stop();
     delete this.connections[ourconnection.connectionid];
     this.connectiondao.remove(ourconnection._id);
@@ -204,6 +206,12 @@ export default class ConnectionService extends Stoppable {
     const connection = await this.getConnection(connectionid);
     const userid = connection.login(hashtoken, locale);
     this.connectiondao.update({ connectionid }, { $set: { userid } });
+    if (this.events.listenerCount("userlogin")) {
+      this.events.emit(
+        "userlogin",
+        new ServerUser(this, userid, this.userdao, this.writableuserdao),
+      );
+    }
     this.logger.debug(() => `login returning id=${userid}`);
     return userid;
   }

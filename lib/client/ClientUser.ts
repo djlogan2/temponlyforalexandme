@@ -1,11 +1,9 @@
 import { Meteor } from "meteor/meteor";
-import User from "/lib/User";
+import User, { UserEvents } from "/lib/User";
 import Stoppable from "/lib/Stoppable";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
 import ICCEventEmitter from "/lib/client/ICCEventEmitter";
 import EventEmitter from "eventemitter3";
-
-type UserEvents = "locale";
 
 export default class ClientUser extends User {
   private readonly pEvents:

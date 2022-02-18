@@ -4,7 +4,7 @@ import ServerConnection from "/lib/server/ServerConnection";
 import I18nService from "/imports/server/service/i18nService";
 import Stoppable from "/lib/Stoppable";
 import ServerUser from "/lib/server/ServerUser";
-import UserChangePublication from "/imports/server/service/UserChangePublication";
+import UserChangePublication from "/imports/server/publications/UserChangePublication";
 
 export default class I18nPublication extends UserChangePublication<i18nRecord> {
   private user?: ServerUser | null;

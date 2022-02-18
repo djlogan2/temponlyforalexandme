@@ -11,6 +11,8 @@ import WritableChallengeDao from "/imports/server/dao/WritableChallengeDao";
 import GameService from "/imports/server/service/GameService";
 import { Meteor } from "meteor/meteor";
 import ServerChallenge from "/lib/server/ServerChallenge";
+import ConnectionService from "/imports/server/service/ConnectionService";
+import ServerUser from "/lib/server/ServerUser";
 
 export default class ChallengeService extends Stoppable {
   private instanceservice: InstanceService;
@@ -21,6 +23,10 @@ export default class ChallengeService extends Stoppable {
 
   private gameservice: GameService;
 
+  private pUserLogin: (user: ServerUser) => void;
+
+  private pUserLogout: (user: ServerUser) => void;
+
   protected stopping(): void {}
 
   constructor(
@@ -29,12 +35,24 @@ export default class ChallengeService extends Stoppable {
     readonlydao: CommonReadOnlyChallengeDao,
     dao: WritableChallengeDao,
     gameservice: GameService,
+    connectionservice: ConnectionService,
   ) {
     super(parent);
     this.instanceservice = instanceservice;
     this.readonlydao = readonlydao;
     this.dao = dao;
     this.gameservice = gameservice;
+
+    this.pUserLogin = (user) => this.userLogin(user);
+    this.pUserLogout = (user) => this.userLogout(user);
+  }
+
+  private userLogin(user: ServerUser): void {
+    /// update challenges
+  }
+
+  private userLogout(user: ServerUser): void {
+    /// update and delete challenges
   }
 
   public addChallenge(

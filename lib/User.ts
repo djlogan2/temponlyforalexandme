@@ -4,6 +4,8 @@ import UserRecord, { RatingObject, RatingTypes } from "/lib/records/UserRecord";
 import Stoppable from "/lib/Stoppable";
 import { UserRoles } from "./enums/Roles";
 
+export type UserEvents = "locale" | "theme" | "roleadded" | "roleremoved";
+
 export default abstract class User extends Stoppable {
   protected userdao: CommonReadOnlyUserDao;
 

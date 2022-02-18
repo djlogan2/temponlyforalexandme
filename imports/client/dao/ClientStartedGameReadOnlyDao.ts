@@ -16,6 +16,7 @@ export default class ClientSingleGameReadOnlyDao extends SubscribedReactiveReadO
   ) {
     super("games", "games", parent, subscriptionservice);
     this.logger = new ClientLogger(this, "GameReadOnlyDao_js");
+    this.start({});
   }
 
   protected onFieldsChanged(

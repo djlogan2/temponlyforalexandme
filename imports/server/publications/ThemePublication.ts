@@ -3,7 +3,7 @@ import ServerConnection from "/lib/server/ServerConnection";
 import { ThemeRecord } from "/lib/records/ThemeRecord";
 import Stoppable from "/lib/Stoppable";
 import ServerUser from "/lib/server/ServerUser";
-import UserChangePublication from "/imports/server/service/UserChangePublication";
+import UserChangePublication from "/imports/server/publications/UserChangePublication";
 
 export default class ThemePublication extends UserChangePublication<ThemeRecord> {
   private user?: ServerUser;

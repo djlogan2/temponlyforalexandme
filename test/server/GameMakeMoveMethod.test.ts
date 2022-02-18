@@ -17,8 +17,8 @@ describe("GameMakeMoveMethod", function () {
     gameservice.getTyped.returns(undefined); // .alwaysReturned(game);
     sandbox.stub(Meteor, "methods");
     const method = new GameMakeMoveMethod(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
-    // @ts-ignore
     method
+      // @ts-ignore
       .called("x", "x")
       .then(() => {
         done(new Error("Expected an exception"));
