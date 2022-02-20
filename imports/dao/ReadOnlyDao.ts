@@ -63,4 +63,8 @@ export default class ReadOnlyDao<T> extends MongoCollection<T> {
   protected stopping(): void {
     // Nothing for us to stop here
   }
+
+  public count(selector: Mongo.Selector<T>) {
+    return this.mongocollection.find(selector).count();
+  }
 }

@@ -2,6 +2,7 @@ import Stoppable from "/lib/Stoppable";
 import User from "/lib/User";
 import { UserChallengeRecord } from "/lib/records/ChallengeRecord";
 import { Meteor } from "meteor/meteor";
+import CommonChallengeService from "/lib/CommonChallengeService";
 
 export default abstract class CommonChallenge extends Stoppable {
   protected record: UserChallengeRecord;
@@ -20,7 +21,7 @@ export default abstract class CommonChallenge extends Stoppable {
     this.record = record;
   }
 
-  public accept(who: User, connectionid: string): void {
+  public accept(who: User, connection: string): void {
     if (!this.record) throw new Meteor.Error("UNABLE_TO_FIND_CHALLENGE");
 
     if (this.record.isolation_group !== who.isolation_group)
@@ -40,7 +41,7 @@ export default abstract class CommonChallenge extends Stoppable {
     if (!who.isAuthorized([role]))
       throw new Meteor.Error("CANNOT_ACCEPT_CHALLENGE");
 
-    this.internalAcceptChallenge(who, connectionid);
+    this.internalAcceptChallenge(who, connection);
   }
 
   public qualifies(who: User): boolean {
@@ -78,5 +79,11 @@ export default abstract class CommonChallenge extends Stoppable {
     if (this.record.owner !== who.id)
       throw new Meteor.Error("CANNOT_REMOVE_CHALLENGE");
     this.internalRemoveChallenge();
+  }
+
+  public validateChallenge(challenge: UserChallengeRecord): void {
+    CommonChallengeService.valiateChallengeClock(challenge.clock);
+    if (challenge.opponentclocks)
+      CommonChallengeService.valiateChallengeClock(challenge.opponentclocks);
   }
 }
