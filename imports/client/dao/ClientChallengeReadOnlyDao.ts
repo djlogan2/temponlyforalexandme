@@ -21,7 +21,7 @@ export default class ClientChallengeReadOnlyDao extends CommonReadOnlyChallengeD
     this.start({});
   }
 
-  protected get events(): BasicEventEmitter<
+  public get events(): BasicEventEmitter<
     "challengeadded" | "challengeremoved" | "challengemodified"
   > {
     return this.pEvents;

@@ -7,6 +7,10 @@ import { ClockSettings, PieceColor } from "/lib/records/ChallengeRecord";
 export default class ChallengeService extends CommonChallengeService {
   private dao: ClientChallengeReadOnlyDao;
 
+  public get events() {
+    return this.dao.events;
+  }
+
   constructor(parent: Stoppable | null, dao: ClientChallengeReadOnlyDao) {
     super(parent);
     this.dao = dao;
