@@ -67,7 +67,7 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
     this.stopTimer();
   }
 
-  private startTimer(milliseconds: number, fn: () => void): void {
+  protected startTimer(milliseconds: number, fn: () => void): void {
     this.global.timerHandle = Meteor.setInterval(() => {
       this.stopTimer();
       fn();

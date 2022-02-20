@@ -3,7 +3,7 @@ import { Meteor } from "meteor/meteor";
 import { UserRoles } from "../enums/Roles";
 import ServerConnection from "./ServerConnection";
 import ConnectionService from "/imports/server/service/ConnectionService";
-import { HttpHeadersICareAbout } from "/imports/server/clientmethods/ConnectionLoginMethod";
+import { HttpHeadersICareAbout } from "/imports/server/clientmethods/connection/ConnectionLoginMethod";
 import ServerUser from "/lib/server/ServerUser";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";

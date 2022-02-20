@@ -11,13 +11,13 @@ export const ALL_USER_ROLES = [
   "user_set_username",
 ] as const;
 
-export const DEFAULT_ANONYMOUS_USER_ROLES = [
+export type UserRoles = typeof ALL_USER_ROLES[number];
+
+export const DEFAULT_ANONYMOUS_USER_ROLES: UserRoles[] = [
   "login",
-  "chat",
   "play_computer_games",
   "play_rated_games",
   "play_unrated_games",
-  "user_set",
   "user_set_locale",
   "user_set_theme",
 ];

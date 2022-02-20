@@ -13,7 +13,7 @@ interface ChallengeObject extends ClientCallObject {
   id: string;
 }
 
-export default class ChallegeClientMethod extends AbstractClientMethod {
+export default class ChallengeClientMethod extends AbstractClientMethod {
   private challengeservice: ChallengeService;
 
   constructor(
@@ -65,7 +65,5 @@ export default class ChallegeClientMethod extends AbstractClientMethod {
     });
   }
 
-  protected stopping(): void {
-    throw new Error("Method not implemented.");
-  }
+  protected stopping(): void {}
 }
