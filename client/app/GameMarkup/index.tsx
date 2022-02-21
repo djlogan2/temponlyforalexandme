@@ -1,8 +1,9 @@
 import clsx from "clsx";
-import React, { FCICC, useCallback, useEffect, useState } from "react";
+import React, { FCICC, useEffect, useState } from "react";
 import { calcTime } from "../data/utils";
 import { gameservice } from "../Root";
 import "./index.scss";
+import { Chess } from "chess.js";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 import Flip from "/client/app/components/icons/Flip";
 import Movelist, { IMoveItem } from "/client/app/components/Movelist";
@@ -31,6 +32,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
     ClientComputerPlayedGame | ClientAnalysisGame
   >();
   const [moveToMake, setMoveToMake] = useState<"w" | "b" | undefined>();
+  const [legalMoves, updateLegalMoves] = useState<any>();
 
   useEffect(() => {
     const onGameStartedListener = (id: string) => {
@@ -42,10 +44,19 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       setMoveToMake(currentGame.tomove);
 
       setGameInstance(gInstance);
+
+      // @ts-ignore
+      gInstance.events.on("movemade", (data) => {
+        const gameUpdatedInstance = gameservice.getTyped(
+          id,
+          connection.user as ClientUser,
+        );
+        const currentUpdatedGame = (gameUpdatedInstance as any).me;
+        setFen(currentUpdatedGame.fen);
+      });
     };
 
     gameservice.events.on("started", onGameStartedListener);
-
     return () => gameservice.events.off("started", onGameStartedListener);
   }, []);
 
@@ -64,15 +75,36 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
     return () => gameInstance?.events.off("move", onMoveMadeListener);
   }, [movelist, gameInstance]);
 
-  const handleMove = useCallback(
-    (move: string[], promotion?: string) => {
-      gameInstance?.makeMove(
-        connection.user as ClientUser,
-        move.join("") + (promotion || ""),
-      );
-    },
-    [gameInstance],
-  );
+  const handleMove = (move: string[], promotion?: string) => {
+    gameInstance?.makeMove(
+      connection.user as ClientUser,
+      move.join("") + (promotion || ""),
+    );
+  };
+
+  useEffect(() => {
+    const getLegalMoves = () => {
+      const chess = Chess(fen || "");
+      const moves = {};
+      // @ts-ignore
+      ["a", "b", "c", "d", "e", "f", "g", "h"].forEach((rank) => {
+        // eslint-disable-next-line no-plusplus
+        for (let file = 1; file <= 8; file++) {
+          const legal = chess
+            .moves({ square: rank + file, verbose: true })
+            .map((verbose: { to: any }) => verbose.to);
+          if (!!legal && !!legal.length) {
+            // @ts-ignore
+            moves[rank + file] = legal;
+          }
+        }
+      });
+      return moves;
+    };
+
+    const currentLegalMoves = getLegalMoves();
+    updateLegalMoves(currentLegalMoves);
+  }, [fen]);
 
   return (
     <>
@@ -126,6 +158,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             className="gameContainer__board"
             circles={[]}
             arrows={[]}
+            legalMoves={legalMoves}
             showLegalMoves={false}
             smartMoves={false}
             smallSize={500}
