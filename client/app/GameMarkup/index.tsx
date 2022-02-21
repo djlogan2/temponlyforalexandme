@@ -1,17 +1,17 @@
 import clsx from "clsx";
-import React, { FCICC, useEffect, useState } from "react";
+import React, { FCICC, useCallback, useEffect, useState } from "react";
 import { gameservice } from "../Root";
 import "./index.scss";
-import DummyChessboard from "/client/app/components/DummyChessboard";
+import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 import Flip from "/client/app/components/icons/Flip";
 import Movelist, { IMoveItem } from "/client/app/components/Movelist";
 import PlayerInfo from "/client/app/components/PlayerInfo";
 import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
 import GameTitle from "/client/app/shared/GameTitle";
 import ClientUser from "/lib/client/ClientUser";
+import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
-import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 
 interface IGameMarkup {}
 
@@ -21,23 +21,23 @@ const computerchallenge: ComputerChallengeRecord = {
   clock: { minutes: 15 },
 };
 
-const myGames: ClientComputerPlayedGame[] = [];
-
 const GameMarkup: FCICC<IGameMarkup> = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [activeGame, setActiveGame] = useState<any>();
   const [fen, setFen] = useState<string>();
   const [movelist, setMovelist] = useState<IMoveItem[]>();
+  const [gameInstance, setGameInstance] = useState<
+    ClientComputerPlayedGame | ClientAnalysisGame
+  >();
 
   useEffect(() => {
-    const onGameStartedListener = (game: ClientComputerPlayedGame) => {
-      const currentGame = (game as any).game;
-      console.log(currentGame);
+    const onGameStartedListener = (id: string) => {
+      const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
+      const currentGame = (gInstance as any).me;
       setActiveGame(currentGame);
       setFen(currentGame.fen);
       setMovelist(currentGame.variations.movelist.slice(1));
-
-      myGames.push(game);
+      setGameInstance(gInstance);
     };
 
     gameservice.events.on("started", onGameStartedListener);
@@ -45,32 +45,29 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
     return () => gameservice.events.off("started", onGameStartedListener);
   }, []);
 
-  // useEffect(() => {
-  //   if (!movelist) {
-  //     return;
-  //   }
-
-  //   const onMoveMadeListener = (move: IMoveItem) => {
-  //     const moves = [...movelist];
-  //     moves.push(move);
-  //     setMovelist(moves);
-  //   };
-
-  //   gameservice.events.on("movemade", onMoveMadeListener);
-
-  //   return () => gameservice.events.off("movemade", onMoveMadeListener);
-  // }, [movelist]);
-
-  const handleMove = (move: string[], promotion?: string) => {
-    if (promotion) {
-      myGames[0].makeMove(
-        connection.user as ClientUser,
-        move.join("") + promotion,
-      );
-    } else {
-      myGames[0].makeMove(connection.user as ClientUser, move.join(""));
+  useEffect(() => {
+    if (!movelist || !gameInstance) {
+      return;
     }
-  };
+
+    const onMoveMadeListener = (move: IMoveItem) => {
+      setMovelist((moves) => [...(moves || []), move]);
+    };
+
+    gameInstance?.events.on("move", onMoveMadeListener);
+
+    return () => gameInstance?.events.off("move", onMoveMadeListener);
+  }, [movelist, gameInstance]);
+
+  const handleMove = useCallback(
+    (move: string[], promotion?: string) => {
+      gameInstance?.makeMove(
+        connection.user as ClientUser,
+        move.join("") + (promotion || ""),
+      );
+    },
+    [gameInstance],
+  );
 
   return (
     <>

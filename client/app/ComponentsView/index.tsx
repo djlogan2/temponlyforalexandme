@@ -293,7 +293,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         />
         <div className="board-wrapper">
           {/* @ts-ignore */}
-          <DummyChessboard />
+          {/* <DummyChessboard /> */}
         </div>
       </div>
     </div>
