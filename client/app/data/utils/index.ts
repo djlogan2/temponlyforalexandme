@@ -1,3 +1,5 @@
+import { intervalToDuration } from "date-fns";
+
 import {
   CLOCK_STATUS_FINISHING,
   CLOCK_STATUS_IN,
@@ -15,4 +17,35 @@ export const getStyleOnStatusClock = (status: string) => {
     default:
       return "digitalClock";
   }
+};
+
+export const calculateTimeLeft = (timePassed: number) => {
+  const { hours, minutes, seconds } = intervalToDuration({
+    start: 0,
+    end: timePassed,
+  });
+
+  const durationLeft = [hours, minutes, seconds]
+    .map((t) => (`${t}`.length === 1 ? `0${t}` : t))
+    .join(":");
+
+  // console.log(timePassed);
+
+  return durationLeft;
+};
+
+export const calcTime = (
+  time: number,
+  isMyTurn: boolean,
+  initial: number,
+  startTime: number,
+) => {
+  const t1 = calculateTimeLeft(time);
+  const t2 = calculateTimeLeft((initial || 0) * 60 * 1000);
+
+  if (isMyTurn && t1 === t2) {
+    return startTime + time - Date.now();
+  }
+
+  return time;
 };

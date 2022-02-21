@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React, { FCICC, useCallback, useEffect, useState } from "react";
+import { calcTime } from "../data/utils";
 import { gameservice } from "../Root";
 import "./index.scss";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
@@ -29,6 +30,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   const [gameInstance, setGameInstance] = useState<
     ClientComputerPlayedGame | ClientAnalysisGame
   >();
+  const [moveToMake, setMoveToMake] = useState<"w" | "b" | undefined>();
 
   useEffect(() => {
     const onGameStartedListener = (id: string) => {
@@ -37,6 +39,8 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       setActiveGame(currentGame);
       setFen(currentGame.fen);
       setMovelist(currentGame.variations.movelist.slice(1));
+      setMoveToMake(currentGame.tomove);
+
       setGameInstance(gInstance);
     };
 
@@ -51,6 +55,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
     }
 
     const onMoveMadeListener = (move: IMoveItem) => {
+      setMoveToMake(move.smith.color === "w" ? "b" : "w");
       setMovelist((moves) => [...(moves || []), move]);
     };
 
@@ -77,7 +82,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       >
         Start a game
       </button>
-      {activeGame && fen && movelist ? (
+      {activeGame && fen && movelist && moveToMake ? (
         <div className="gameContainer">
           <PlayerInfo
             userStatus="online"
@@ -131,18 +136,17 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             className="gameContainer__btn-flip"
           />
           <DigitalClock
-            time="00:00:29"
-            status="in"
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
+            time={calcTime(
+              activeGame.clocks.b.current,
+              moveToMake === "b",
+              activeGame.clocks.b.initial.minutes,
+              activeGame.clocks.b.starttime,
+            )}
             className={clsx(
               "gameContainer__clock-one",
               isFlipped && "gameContainer__clock-one--flipped",
             )}
+            isMyTurn={moveToMake === "b"}
           />
           <Movelist
             openingName="FAKE_TEXT"
@@ -153,18 +157,17 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             className="gameContainer__movelist"
           />
           <DigitalClock
-            time="00:00:30"
-            status="inactive"
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
+            time={calcTime(
+              activeGame.clocks.w.current,
+              moveToMake === "w",
+              activeGame.clocks.w.initial.minutes,
+              activeGame.clocks.w.starttime,
+            )}
             className={clsx(
               "gameContainer__clock-two",
               isFlipped && "gameContainer__clock-two--flipped",
             )}
+            isMyTurn={moveToMake === "w"}
           />
         </div>
       ) : null}

@@ -8,9 +8,12 @@ html {
   font-size: var(--fontSize);
   font-family: var(--fontPrimary);
   color: var(--colorDarkOne);
+  background: radial-gradient(var(--app-background-color));
 }
 
-html, body, #root{
+html,
+body,
+#root {
   min-height: 100%;
   height: 100%;
 }

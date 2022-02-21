@@ -70,7 +70,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           <StandardButton disabled>Button</StandardButton>
         </div>
         <CapturedPieces color="black" soliders={{ k: 3, q: 2, p: 4 }} />
-        <DigitalClock
+        {/* <DigitalClock
           time="00:00:30"
           keyboardFunctions={[]}
           token={{
@@ -79,7 +79,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           }}
           classes={[]}
           status="in"
-        />
+        /> */}
         <GameSetup />
         {/* <div>
           <h2>Movelist</h2>
