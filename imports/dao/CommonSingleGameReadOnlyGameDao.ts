@@ -18,6 +18,8 @@ export type GameEvents =
   | "move"
   | "fen"
   | "clockchanged"
+  | "clockstarted"
+  | "clockstopped"
   | "converted"
   | "movemade"
   | "ended";

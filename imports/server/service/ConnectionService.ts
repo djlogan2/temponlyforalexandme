@@ -14,12 +14,12 @@ import ThemeService from "/imports/server/service/ThemeService";
 import WritableThemeDao from "/imports/server/dao/WritableThemeDao";
 import ConnectionLoginMethod, {
   HttpHeadersICareAbout,
-} from "/imports/server/clientmethods/ConnectionLoginMethod";
+} from "/imports/server/clientmethods/connection/ConnectionLoginMethod";
 import LoggerService from "/imports/server/service/LoggerService";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
-import ConnectionIdleMethod from "/imports/server/clientmethods/ConnectionIdleMethod";
+import ConnectionIdleMethod from "/imports/server/clientmethods/connection/ConnectionIdleMethod";
 import PublicationService from "/imports/server/service/PublicationService";
 import UserService from "/imports/server/service/UserService";
 import EventEmitter from "eventemitter3";

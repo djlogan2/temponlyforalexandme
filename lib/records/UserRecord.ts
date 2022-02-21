@@ -26,6 +26,7 @@ export default interface UserRecord {
   isdeveloper?: boolean;
   roles: UserRoles[];
   titles?: string[];
+  online: boolean;
   ratings: {
     bullet: RatingObject;
     blitz: RatingObject;
@@ -33,6 +34,11 @@ export default interface UserRecord {
     computer: RatingObject;
   };
 }
+
+export type ModifiableUserRecordFields = keyof Pick<
+  UserRecord,
+  "username" | "isolation_group" | "locale" | "theme" | "isdeveloper" | "titles"
+>;
 
 export const STANDARD_MEMBER_FIELDS: Array<keyof UserRecord> = [
   "_id",

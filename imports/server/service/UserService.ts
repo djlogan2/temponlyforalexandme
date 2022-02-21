@@ -8,7 +8,7 @@ import PublicationService from "/imports/server/service/PublicationService";
 import ServerConnection from "/lib/server/ServerConnection";
 import UserPublication from "/imports/server/publications/UserPublication";
 import { Subscription } from "meteor/meteor";
-import ServerUserClientMethod from "/lib/server/clientmethods/ServerUserClientMethod";
+import ServerUserClientMethod from "/imports/server/clientmethods/ServerUserClientMethod";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { DEFAULT_ANONYMOUS_USER_ROLES } from "/lib/enums/Roles";
 
@@ -63,6 +63,7 @@ export default class UserService extends Stoppable {
       theme: this.themeservice.getDefaultTheme(),
       roles: DEFAULT_ANONYMOUS_USER_ROLES,
       hashTokens: [{ hashtoken: hashToken, lastUsed: new Date() }],
+      online: true,
       ratings: {
         bullet: { rating: 1600, won: 0, draw: 0, lost: 0 },
         blitz: { rating: 1600, won: 0, draw: 0, lost: 0 },

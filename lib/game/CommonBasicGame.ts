@@ -9,7 +9,9 @@ import { Chess, Move } from "chess.js";
 import { Meteor } from "meteor/meteor";
 import CommonLogger from "/lib/CommonLogger";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
-import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
+import CommonSingleGameReadOnlyGameDao, {
+  GameEvents,
+} from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import GlobalGame from "/lib/server/game/GlobalGame";
 
 export default abstract class CommonBasicGame extends Stoppable {
@@ -27,7 +29,7 @@ export default abstract class CommonBasicGame extends Stoppable {
 
   protected abstract endGame(status: GameStatus, status2: number): void;
 
-  public get events(): BasicEventEmitter<"move"> {
+  public get events(): BasicEventEmitter<GameEvents> {
     return this.readonlydao.events;
   }
 

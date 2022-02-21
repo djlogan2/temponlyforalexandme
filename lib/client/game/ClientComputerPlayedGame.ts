@@ -21,6 +21,16 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     this.user = user;
   }
 
+  protected startTimer(milliseconds: number, fn: () => void) {
+    super.startTimer(milliseconds, fn);
+    this.events.emit("clockstarted", milliseconds);
+  }
+
+  protected stopClock() {
+    super.stopClock();
+    this.events.emit("clockstopped");
+  }
+
   protected endGame(status: GameStatus, status2: number): void {
     throw new Error("Method not implemented.");
   }

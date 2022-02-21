@@ -3,12 +3,13 @@ import { Meteor } from "meteor/meteor";
 import { UserRoles } from "../enums/Roles";
 import ServerConnection from "./ServerConnection";
 import ConnectionService from "/imports/server/service/ConnectionService";
-import { HttpHeadersICareAbout } from "/imports/server/clientmethods/ConnectionLoginMethod";
+import { HttpHeadersICareAbout } from "/imports/server/clientmethods/connection/ConnectionLoginMethod";
 import ServerUser from "/lib/server/ServerUser";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
 
 export type ClientCalls =
+  | "addchallenge"
   | "challenge"
   | "draw"
   | "idleFunction"
@@ -39,14 +40,12 @@ export default abstract class AbstractClientMethod extends Stoppable {
 
   private readonly roles: UserRoles[];
 
-  protected isAuthorized(roles: string[], obj: ClientCallObject): boolean {
-    return (
-      !roles.length ||
-      !roles ||
-      (roles.length === 1 && roles[0] === "public") ||
-      obj.user?.isAuthorized(roles) ||
-      false
-    );
+  protected isAuthorized(
+    roles: UserRoles | UserRoles[],
+    obj: ClientCallObject,
+  ): boolean {
+    const pRoles = Array.isArray(roles) ? roles : [roles];
+    return !pRoles.length || !pRoles || obj.user?.isAuthorized(pRoles) || false;
   }
 
   protected constructor(

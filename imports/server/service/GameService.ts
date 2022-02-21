@@ -18,7 +18,7 @@ import { Meteor, Subscription } from "meteor/meteor";
 import PublicationService from "/imports/server/service/PublicationService";
 import ServerConnection from "/lib/server/ServerConnection";
 import GamePublication from "/imports/server/publications/GamePublication";
-import StartComputerGameClientMethod from "/imports/server/clientmethods/StartComputerGameClientMethod";
+import StartComputerGameClientMethod from "/imports/server/clientmethods/game/StartComputerGameClientMethod";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";

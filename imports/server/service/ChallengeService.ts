@@ -1,6 +1,7 @@
 import Stoppable from "/lib/Stoppable";
 import {
   ClockSettings,
+  PieceColor,
   UserChallengeRecord,
 } from "/lib/records/ChallengeRecord";
 import { Mongo } from "meteor/mongo";
@@ -13,8 +14,13 @@ import { Meteor } from "meteor/meteor";
 import ServerChallenge from "/lib/server/ServerChallenge";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerUser from "/lib/server/ServerUser";
+import { UserRoles } from "/lib/enums/Roles";
+import ChallengeClientMethod from "/imports/server/clientmethods/challenge/ChallegeClientMethod";
+import WritableUserDao from "/imports/server/dao/WritableUserDao";
+import UserRecord from "/lib/records/UserRecord";
+import CommonChallengeService from "/lib/CommonChallengeService";
 
-export default class ChallengeService extends Stoppable {
+export default class ChallengeService extends CommonChallengeService {
   private instanceservice: InstanceService;
 
   private readonlydao: CommonReadOnlyChallengeDao;
@@ -23,9 +29,19 @@ export default class ChallengeService extends Stoppable {
 
   private gameservice: GameService;
 
+  private userdao: WritableUserDao;
+
+  private challengemethod: ChallengeClientMethod;
+
   private pUserLogin: (user: ServerUser) => void;
 
   private pUserLogout: (user: ServerUser) => void;
+
+  private pRoleAdded: (user: ServerUser, role: UserRoles) => void;
+
+  private pRoleRemoved: (user: ServerUser, role: UserRoles) => void;
+
+  private pChallengeAdded: (challenge: UserChallengeRecord) => void;
 
   protected stopping(): void {}
 
@@ -36,32 +52,157 @@ export default class ChallengeService extends Stoppable {
     dao: WritableChallengeDao,
     gameservice: GameService,
     connectionservice: ConnectionService,
+    userdao: WritableUserDao,
   ) {
     super(parent);
     this.instanceservice = instanceservice;
     this.readonlydao = readonlydao;
     this.dao = dao;
     this.gameservice = gameservice;
+    this.userdao = userdao;
+
+    this.challengemethod = new ChallengeClientMethod(
+      this,
+      connectionservice,
+      this,
+    );
 
     this.pUserLogin = (user) => this.userLogin(user);
     this.pUserLogout = (user) => this.userLogout(user);
+
+    this.pRoleAdded = (user, role: UserRoles) => this.userRoleAdded(user, role);
+    this.pRoleRemoved = (user, role: UserRoles) =>
+      this.userRoleRemoved(user, role);
+
+    this.pChallengeAdded = (challenge: UserChallengeRecord) =>
+      this.challengeAdded(challenge);
+    this.dao.events.on("added", (challenge) => this.pChallengeAdded(challenge));
+  }
+
+  private challengeAdded(challenge: UserChallengeRecord): void {
+    const owner = this.userdao.get(challenge.owner);
+    if (!owner) {
+      throw new Meteor.Error("UNABLE_TO_FIND_USER");
+    }
+
+    const selector: Mongo.Selector<UserRecord> = { online: true };
+
+    if (challenge.who && challenge.who.length) {
+      selector._id = { $in: challenge.who };
+    } else {
+      selector.isolation_group = owner.isolation_group;
+      selector.instance_id = this.instanceservice.instanceid;
+    }
+
+    const qualified = this.userdao.readMany(selector);
+    if (!qualified) return;
+
+    const qualifiedIds = qualified
+      .filter(
+        (q) =>
+          (challenge.rated && q.roles.some((r) => r === "play_rated_games")) ||
+          (challenge.rated && q.roles.some((r) => r === "play_unrated_games")),
+      )
+      .map((q) => q._id);
+
+    this.dao.update({ _id: challenge._id }, { $addToSet: qualifiedIds });
   }
 
   private userLogin(user: ServerUser): void {
-    /// update challenges
+    user.events.on("roleadded", (role: UserRoles) =>
+      this.pRoleAdded(user, role),
+    );
+    user.events.on("roleremoved", (role: UserRoles) =>
+      this.pRoleRemoved(user, role),
+    );
+    this.addToExistingChallenges(user);
   }
 
   private userLogout(user: ServerUser): void {
-    /// update and delete challenges
+    user.events.off("roleadded", this.pRoleAdded);
+    user.events.off("roleremoved", this.pRoleRemoved);
+    this.dao.update({ qualifies: user.id }, { $pull: { qualifies: user.id } });
+    this.dao.removeMany({ owner: user.id });
+  }
+
+  private userRoleRemoved(user: ServerUser, role: UserRoles): void {
+    if (role !== "play_rated_games" && role !== "play_unrated_games") return;
+    this.dao.update(
+      {
+        qualifies: user.id,
+        rated: role !== "play_rated_games",
+      },
+      { $pull: { qualifies: user.id } },
+    );
+  }
+
+  private userRoleAdded(user: ServerUser, role: UserRoles): void {
+    if (role !== "play_rated_games" && role !== "play_unrated_games") return;
+    this.addToExistingChallenges(user);
+  }
+
+  private addToExistingChallenges(user: ServerUser): void {
+    if (
+      !user.isAuthorized("play_rated_games") &&
+      !user.isAuthorized("play_unrated_games")
+    )
+      return;
+
+    let rated = null;
+
+    if (!user.isAuthorized("play_rated_games")) rated = false;
+    else if (!user.isAuthorized("play_unrated_games")) rated = true;
+
+    const selector: Mongo.Selector<UserChallengeRecord> = {
+      $and: [
+        { isolation_group: user.isolation_group },
+        { declined: { $ne: user.id } },
+        { qualifies: { $ne: user.id } },
+        {
+          $or: [
+            { who: { $exists: false } },
+            { who: { $size: 0 } },
+            { who: user.id },
+          ],
+        },
+      ],
+    };
+
+    if (rated !== null) {
+      // @ts-ignore
+      selector.$and.push({ rated });
+    }
+
+    const ids = this.dao.readMany(selector)?.map((c) => c._id);
+    if (ids && ids.length)
+      this.dao.update(
+        { _id: { $in: ids } },
+        { $addToSet: { qualifies: user.id } },
+      );
   }
 
   public addChallenge(
     connection: ServerConnection,
     rated: boolean,
     clock: ClockSettings,
+    color?: PieceColor,
     who?: string[],
+    opponentclock?: ClockSettings,
   ): void {
     if (!connection.user) throw new Meteor.Error("INVALID_USER");
+
+    if (who && who.length) {
+      if (who.indexOf(connection.user.id) !== -1)
+        throw new Meteor.Error("INVALID_USERID");
+      if (
+        this.userdao.count({
+          isolation_group: connection.user.isolation_group,
+          _id: { $in: who },
+        }) !== who.length
+      )
+        throw new Meteor.Error("INVALID_USERID");
+    }
+
     const challengerecord: Mongo.OptionalId<UserChallengeRecord> = {
       owner: connection.user.id,
       isolation_group: connection.user.isolation_group,
@@ -73,6 +214,8 @@ export default class ChallengeService extends Stoppable {
       qualifies: [],
       declined: [],
     };
+
+    if (color) challengerecord.color = color;
 
     let matchingChallenge;
     //
@@ -122,6 +265,14 @@ export default class ChallengeService extends Stoppable {
       ],
     };
 
+    // TODO: What do we wnat to do if one user picks a color and another does not?
+    //   Right now, a challenge will only match if neither does or both do, and if
+    //   both do, they have to pick opposite colors.
+    if (challenge.color) {
+      // @ts-ignore
+      selector.$and.push({ color: challenge.color === "w" ? "b" : "w" });
+    }
+
     const challenges = this.dao.readMany(selector);
     if (!challenges || !challenges.length) return null;
     return challenges[0];
@@ -138,5 +289,31 @@ export default class ChallengeService extends Stoppable {
       this.dao,
       this.gameservice,
     );
+  }
+
+  protected internalAddChallenge(
+    connectionId: string,
+    ownerid: string,
+    isolationGroup: string,
+    clock: ClockSettings,
+    rated: boolean,
+    color: PieceColor | null,
+    who: string[] | null,
+    opponentclocks: ClockSettings | null,
+  ): void {
+    const userchallenge: Mongo.OptionalId<UserChallengeRecord> = {
+      clock,
+      connection_id: connectionId,
+      declined: [],
+      instance_id: this.instanceservice.instanceid,
+      isolation_group: isolationGroup,
+      owner: ownerid,
+      qualifies: [],
+      rated,
+      who: who || [],
+    };
+    if (color) userchallenge.color = color;
+    if (opponentclocks) userchallenge.opponentclocks = opponentclocks;
+    this.dao.insert(userchallenge);
   }
 }
