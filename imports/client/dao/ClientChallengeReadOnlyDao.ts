@@ -13,7 +13,7 @@ export default class ClientChallengeReadOnlyDao extends CommonReadOnlyChallengeD
     parent: Stoppable | null,
     subscriptionservice: SubscriptionService,
   ) {
-    super(parent, "challenges");
+    super(parent);
     this.pEvents = subscriptionservice.getSubscriptionEventEmitter(
       this,
       "challenges",

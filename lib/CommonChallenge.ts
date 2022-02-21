@@ -80,10 +80,4 @@ export default abstract class CommonChallenge extends Stoppable {
       throw new Meteor.Error("CANNOT_REMOVE_CHALLENGE");
     this.internalRemoveChallenge();
   }
-
-  public validateChallenge(challenge: UserChallengeRecord): void {
-    CommonChallengeService.valiateChallengeClock(challenge.clock);
-    if (challenge.opponentclocks)
-      CommonChallengeService.valiateChallengeClock(challenge.opponentclocks);
-  }
 }

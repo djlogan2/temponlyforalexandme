@@ -1,7 +1,6 @@
 import UserChangePublication from "/imports/server/publications/UserChangePublication";
 import { UserChallengeRecord } from "/lib/records/ChallengeRecord";
 import ServerUser from "/lib/server/ServerUser";
-import CommonReadOnlyChallengeDao from "/imports/dao/CommonReadOnlyChallengeDao";
 import { UserRoles } from "/lib/enums/Roles";
 import ServerConnection from "/lib/server/ServerConnection";
 import Stoppable from "/lib/Stoppable";
@@ -9,23 +8,19 @@ import { Mongo } from "meteor/mongo";
 import { Subscription } from "meteor/meteor";
 
 export default class ChallengePublication extends UserChangePublication<UserChallengeRecord> {
-  private dao: CommonReadOnlyChallengeDao;
-
   private user?: ServerUser;
 
-  private pRoleAdded: (role: UserRoles) => void;
+  private readonly pRoleAdded: (role: UserRoles) => void;
 
-  private pRoleRemoved: (role: UserRoles) => void;
+  private readonly pRoleRemoved: (role: UserRoles) => void;
 
   constructor(
     parent: Stoppable | null,
     sub: Subscription,
     connection: ServerConnection,
-    dao: CommonReadOnlyChallengeDao,
   ) {
     super(parent, sub, "challenges", connection);
 
-    this.dao = dao;
     this.pRoleRemoved = (role) => this.roleremoved(role);
     this.pRoleAdded = (role) => this.roleadded(role);
     if (connection.user) {

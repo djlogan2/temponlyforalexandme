@@ -1,4 +1,4 @@
-import { Chess, Move } from "chess.js";
+import { Move } from "chess.js";
 import { ECOObject, GameStatus } from "/lib/records/GameRecord";
 import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
 import Stoppable from "/lib/Stoppable";

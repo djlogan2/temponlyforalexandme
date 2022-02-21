@@ -1,4 +1,5 @@
 export type SubscriptionNames =
+  | "challengebuttons"
   | "challenges"
   | "games"
   | "i18n"

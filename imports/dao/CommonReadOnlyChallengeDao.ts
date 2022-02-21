@@ -1,11 +1,16 @@
 import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import { UserChallengeRecord } from "/lib/records/ChallengeRecord";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
+import Stoppable from "/lib/Stoppable";
 
 export default abstract class CommonReadOnlyChallengeDao extends ReactiveReadOnlyDao<UserChallengeRecord> {
   protected abstract get events(): BasicEventEmitter<
     "challengeadded" | "challengeremoved" | "challengemodified"
   >;
+
+  protected constructor(parent: Stoppable | null) {
+    super(parent, "challenges");
+  }
 
   protected onFieldsChanged(
     id: string,

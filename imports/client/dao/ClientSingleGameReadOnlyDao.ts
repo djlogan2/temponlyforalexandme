@@ -39,31 +39,4 @@ export default class ClientSingleGameReadOnlyDao extends CommonSingleGameReadOnl
   public get events(): BasicEventEmitter<GameEvents> {
     return this.pEvents;
   }
-
-  protected getClassFromType(
-    game: BasicGameRecord,
-  ): ClientComputerPlayedGame | ClientAnalysisGame {
-    let stupid;
-
-    switch (game.status) {
-      case "computer":
-        stupid = new ClientComputerPlayedGame(
-          this,
-          game._id,
-          this,
-          this.connection.user as ClientUser,
-        );
-        break;
-      case "analyzing":
-        stupid = new ClientAnalysisGame(this, game._id, this);
-        break;
-      case "playing":
-        throw new Meteor.Error("Not yet supported");
-      default: {
-        const check: never = game.status;
-        throw new Meteor.Error(`UNKNOWN_GAME_RECORD_TYPE: ${check}`);
-      }
-    }
-    return stupid;
-  }
 }

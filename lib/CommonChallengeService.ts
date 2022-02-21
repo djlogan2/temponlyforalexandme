@@ -1,8 +1,34 @@
 import Stoppable from "/lib/Stoppable";
 import { ClockSettings, PieceColor } from "/lib/records/ChallengeRecord";
 import { Meteor } from "meteor/meteor";
+import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonChallengeDao";
 
 export default abstract class CommonChallengeService extends Stoppable {
+  public abstract internalAddChallengeButton(): void;
+
+  public abstract internalUpdateChallengeButton(): void;
+
+  public abstract internalRemoveChallengebutton(): void;
+
+  public addChallengeButton(): void {
+    throw new Meteor.Error("NOT_IMPLEMENTED");
+  }
+
+  public updateChallengeButton(): void {
+    throw new Meteor.Error("NOT_IMPLEMENTED");
+  }
+
+  public removeChallengebutton(): void {
+    throw new Meteor.Error("NOT_IMPLEMENTED");
+  }
+
+  protected constructor(
+    parent: Stoppable | null,
+    dao: CommonReadOnlyButtonChallengeDao,
+  ) {
+    super(parent);
+  }
+
   protected abstract internalAddChallenge(
     connection_id: string,
     ownerid: string,

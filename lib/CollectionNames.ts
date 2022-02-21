@@ -1,4 +1,5 @@
 export type CollectionNames =
+  | "challengebuttons"
   | "challenges"
   | "connections"
   | "games"

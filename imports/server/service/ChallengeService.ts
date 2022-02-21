@@ -10,7 +10,7 @@ import ServerConnection from "/lib/server/ServerConnection";
 import CommonReadOnlyChallengeDao from "/imports/dao/CommonReadOnlyChallengeDao";
 import WritableChallengeDao from "/imports/server/dao/WritableChallengeDao";
 import GameService from "/imports/server/service/GameService";
-import { Meteor } from "meteor/meteor";
+import { Meteor, Subscription } from "meteor/meteor";
 import ServerChallenge from "/lib/server/ServerChallenge";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerUser from "/lib/server/ServerUser";
@@ -19,29 +19,33 @@ import ChallengeClientMethod from "/imports/server/clientmethods/challenge/Chall
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import UserRecord from "/lib/records/UserRecord";
 import CommonChallengeService from "/lib/CommonChallengeService";
+import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonChallengeDao";
+import ChallengeButtonPublication from "/imports/server/publications/ChallengeButtonPublication";
+import ChallengePublication from "/imports/server/publications/ChallengePublication";
+import PublicationService from "/imports/server/service/PublicationService";
 
 export default class ChallengeService extends CommonChallengeService {
   private instanceservice: InstanceService;
 
-  private readonlydao: CommonReadOnlyChallengeDao;
+  private readonly readonlydao: CommonReadOnlyChallengeDao;
 
-  private dao: WritableChallengeDao;
+  private readonly dao: WritableChallengeDao;
 
-  private gameservice: GameService;
+  private readonly gameservice: GameService;
 
-  private userdao: WritableUserDao;
+  private readonly userdao: WritableUserDao;
 
-  private challengemethod: ChallengeClientMethod;
+  private readonly challengemethod: ChallengeClientMethod;
 
-  private pUserLogin: (user: ServerUser) => void;
+  private readonly pUserLogin: (user: ServerUser) => void;
 
-  private pUserLogout: (user: ServerUser) => void;
+  private readonly pUserLogout: (user: ServerUser) => void;
 
-  private pRoleAdded: (user: ServerUser, role: UserRoles) => void;
+  private readonly pRoleAdded: (user: ServerUser, role: UserRoles) => void;
 
-  private pRoleRemoved: (user: ServerUser, role: UserRoles) => void;
+  private readonly pRoleRemoved: (user: ServerUser, role: UserRoles) => void;
 
-  private pChallengeAdded: (challenge: UserChallengeRecord) => void;
+  private readonly pChallengeAdded: (challenge: UserChallengeRecord) => void;
 
   protected stopping(): void {}
 
@@ -53,8 +57,10 @@ export default class ChallengeService extends CommonChallengeService {
     gameservice: GameService,
     connectionservice: ConnectionService,
     userdao: WritableUserDao,
+    buttondao: CommonReadOnlyButtonChallengeDao,
+    publicationservice: PublicationService,
   ) {
-    super(parent);
+    super(parent, buttondao);
     this.instanceservice = instanceservice;
     this.readonlydao = readonlydao;
     this.dao = dao;
@@ -65,6 +71,17 @@ export default class ChallengeService extends CommonChallengeService {
       this,
       connectionservice,
       this,
+    );
+
+    publicationservice.publishDao(
+      "challenges",
+      (sub: Subscription, connection: ServerConnection) =>
+        new ChallengePublication(this, sub, connection),
+    );
+    publicationservice.publishDao(
+      "challengebuttons",
+      (sub: Subscription, connection: ServerConnection) =>
+        new ChallengeButtonPublication(this, sub, connection),
     );
 
     this.pUserLogin = (user) => this.userLogin(user);
@@ -315,5 +332,17 @@ export default class ChallengeService extends CommonChallengeService {
     if (color) userchallenge.color = color;
     if (opponentclocks) userchallenge.opponentclocks = opponentclocks;
     this.dao.insert(userchallenge);
+  }
+
+  public internalAddChallengeButton(): void {
+    throw new Error("Method not implemented.");
+  }
+
+  public internalUpdateChallengeButton(): void {
+    throw new Error("Method not implemented.");
+  }
+
+  public internalRemoveChallengebutton(): void {
+    throw new Error("Method not implemented.");
   }
 }
