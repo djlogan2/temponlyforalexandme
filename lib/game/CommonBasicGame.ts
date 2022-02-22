@@ -77,6 +77,7 @@ export default abstract class CommonBasicGame extends Stoppable {
   }
 
   public makeMove(who: User, move: string): void {
+    this.logger.debug(() => `makeMove move=${move} user=${who.id}`);
     if (!this.isAuthorizedToMove(who))
       throw new Meteor.Error("CANNOT_MAKE_MOVE");
     this.makeMoveAuth(move);
@@ -90,7 +91,7 @@ export default abstract class CommonBasicGame extends Stoppable {
   }
 
   protected makeMoveAuth(move: string): void {
-    // const chess = new Chess(this.me.fen);
+    this.logger.debug(() => `makeMoveAuth move=${move}`);
     const chessmove = this.global.chessObject.move(move, { sloppy: true });
     if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
     this.premoveTasks();
@@ -128,4 +129,6 @@ export default abstract class CommonBasicGame extends Stoppable {
       this.isClosing();
     }
   }
+
+  protected stopping() {}
 }
