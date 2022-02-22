@@ -1,25 +1,26 @@
-import React, { FCICC } from "react";
-import useTranslate from "/client/app/hooks/useTranslate";
+import clsx from "clsx";
+import React, { FC } from "react";
 import "./index.scss";
 
 interface ParagraphProps {
-  name: string;
   className?: string;
   link?: string;
 }
 
-const Paragraph: FCICC<ParagraphProps> = ({ name, token, link, ...rest }) => {
-  const translation = useTranslate(token);
-
-  return link ? (
-    <a id={name} className="paragraphLink" href={link}>
-      {translation}
+const Paragraph: FC<ParagraphProps> = ({
+  children,
+  link,
+  className,
+  ...rest
+}) =>
+  link ? (
+    <a className={clsx("paragraph paragraph--link", className)} href={link}>
+      {children}
     </a>
   ) : (
-    <div id={name} className="paragraph" {...rest}>
-      {translation}
-    </div>
+    <p className={clsx("paragraph", className)} {...rest}>
+      {children}
+    </p>
   );
-};
 
 export default Paragraph;

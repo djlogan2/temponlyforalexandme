@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { FC } from "react";
-import Avatar, { TUserStatus } from "../../shared/Avatar";
+import Avatar from "../../shared/Avatar";
+import { TUserStatus } from "../../types";
 import ChatIcon from "../icons/Chat";
 import ChessTitle from "../icons/ChessTitle";
 import France from "../icons/France";
@@ -36,6 +37,7 @@ const PlayerInfo: FC<IPlayerInfoProps> = ({
       className="playerInfo__avatar"
       status={userStatus}
       size="bg"
+      alt={`${username}'s profile`}
     />
 
     <div className="playerInfo__icons">

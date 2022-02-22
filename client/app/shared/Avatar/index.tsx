@@ -1,14 +1,14 @@
 import clsx from "clsx";
 import React, { FC } from "react";
+import { TUserStatus } from "../../types";
 import "./index.scss";
-
-export type TUserStatus = "online" | "idle" | "unavailable" | "offline";
 
 interface IAvatarProps {
   status: TUserStatus;
+  alt: string;
   size?: "bg" | "md" | "sm" | "xs";
   picture?: string;
-  username: string;
+  username?: string;
   className?: string;
 }
 
@@ -17,6 +17,8 @@ const Avatar: FC<IAvatarProps> = ({
   picture,
   username,
   className,
+  alt,
+  children,
   size = "bg",
 }) => (
   <div
@@ -27,13 +29,11 @@ const Avatar: FC<IAvatarProps> = ({
       className,
     )}
   >
-    {picture ? (
-      <img
-        className="avatarContainer__img"
-        src={picture}
-        alt={`${username}'s profile`}
-      />
-    ) : (
+    {children}
+    {picture && (
+      <img className="avatarContainer__img" src={picture} alt={alt} />
+    )}
+    {username && (
       <span className="avatarContainer__initials">
         {username.slice(0, 2).toUpperCase()}
       </span>

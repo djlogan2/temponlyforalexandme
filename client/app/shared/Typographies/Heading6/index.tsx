@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { FC } from "react";
 import "./index.scss";
 
@@ -6,7 +7,7 @@ interface Heading6Props {
 }
 
 const Heading6: FC<Heading6Props> = ({ className, children, ...rest }) => (
-  <h6 className="heading6" {...rest}>
+  <h6 className={clsx("heading6", className)} {...rest}>
     {children}
   </h6>
 );

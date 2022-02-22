@@ -7,6 +7,7 @@ import Heading5 from "../../shared/Typographies/Heading5";
 import ArrowLeft from "../icons/ArrowLeft";
 import Close from "../icons/Close";
 import More from "../icons/More";
+import OpenChallengeItem from "../OpenChallengeItem";
 import UserItem from "../UserItem";
 import { options, timeOptions, challengeTypes } from "./constants";
 
@@ -85,15 +86,27 @@ const GameSetup = () => {
             ))}
           </div>
           {new Array(4).fill(0).map((_, i) => (
-            <UserItem
-              className="gameSetup__challenge-item"
+            <OpenChallengeItem
               key={i}
-              text="User name (1600)"
-              chessTitle="WGM"
-              status="online"
+              size="small"
+              className="gameSetup__challenge-item"
               flag="IT"
-              size="sm"
+              chessTitle="WGM"
+              gameTime={15}
+              userRating={1600}
+              username="Test"
+              userPic="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              userStatus="online"
             />
+            // <UserItem
+            //   key={i}
+            // className="gameSetup__challenge-item"
+            //   text="User name (1600)"
+            //   chessTitle="WGM"
+            //   status="online"
+            //   flag="IT"
+            //   size="sm"
+            // />
           ))}
 
           <p className="gameSetup__show-more">Show more</p>

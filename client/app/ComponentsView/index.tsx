@@ -40,6 +40,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
             picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             username="username"
             status="online"
+            alt="test picture"
           />
         </div>
         <div>
@@ -147,19 +148,8 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         <Heading4>Heading 4</Heading4>
         <Heading5>Heading 5</Heading5>
         <Heading6>Heading 6</Heading6>
-        <Paragraph
-          name="testPar"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
-        <Paragraph
-          name="testParLink"
-          link="https://www.google.com"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
+        <Paragraph>Paragraph</Paragraph>
+        <Paragraph link="https://www.google.com">Link</Paragraph>
         <SmallParagraph
           name="testSmallPar"
           token={{ token: "FAKE_TEXT", args: [] }}

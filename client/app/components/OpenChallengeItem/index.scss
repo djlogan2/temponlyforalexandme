@@ -1,0 +1,53 @@
+.openChangeItem {
+  box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--colorDarkTwo);
+
+  &--big {
+    padding: 1rem 1.6rem;
+    width: 34rem;
+    height: 5rem;
+  }
+
+  &--small {
+    padding: 0.8rem 1.729rem;
+    width: 36rem;
+    height: 4rem;
+  }
+
+  &__title {
+    margin-left: auto;
+    margin-right: 1rem;
+  }
+
+  &__delimiter {
+    margin: 0 0.5rem;
+  }
+
+  &__challengePic {
+    margin-right: 0.9rem;
+    background: var(--colorPrimary) !important;
+  }
+
+  &__userPic {
+    margin-right: 1rem;
+  }
+
+  &:active {
+    background-color: var(--colorPrimary);
+    color: #fff;
+
+    &__challengePic {
+      background: #fff;
+    }
+  }
+
+  &:hover {
+    background-color: var(--colorDarkOne);
+    color: #fff;
+  }
+}

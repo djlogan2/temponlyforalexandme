@@ -1,14 +1,9 @@
 .paragraph {
   font-style: normal;
-  font-weight: normal;
   font-size: 1.6rem;
-  line-height: 1.9rem;
-   ;
-}
-.paragraphLink {
-  color: var(--colorPrimary);
-  font-style: normal;
-  font-weight: normal;
-  font-size: 1.6rem;
-  line-height: 1.9rem;
+  line-height: 1.909rem;
+
+  &--link {
+    color: var(--colorPrimary);
+  }
 }

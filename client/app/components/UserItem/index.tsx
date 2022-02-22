@@ -1,18 +1,15 @@
 import clsx from "clsx";
-import Flags from "country-flag-icons/react/3x2";
 import React, { FC } from "react";
-import Avatar, { TUserStatus } from "../../shared/Avatar";
+import Avatar from "../../shared/Avatar";
+import Flag, { TFlags } from "../../shared/Flag";
+import { TUserStatus } from "../../types";
 import ChessTitle from "../icons/ChessTitle";
 import "./index.scss";
-
-const { ...flags } = Flags;
-
-type Flag = keyof typeof flags;
 
 interface IUserItemProps {
   text: string;
   chessTitle: string;
-  flag: Flag;
+  flag: TFlags;
   status?: TUserStatus;
   picture?: string;
   size?: "md" | "sm";
@@ -27,18 +24,20 @@ const UserItem: FC<IUserItemProps> = ({
   className,
   status = "offline",
   size = "md",
-}) => {
-  const FlagComponent = Flags[flag];
+}) => (
+  <div className={clsx("userItem", `userItem--${size}`, className)}>
+    <Avatar
+      size={size}
+      status={status}
+      picture={picture}
+      username={text}
+      alt={`${text}'s profile`}
+    />
+    <p className="userItem__username">{text}</p>
 
-  return (
-    <div className={clsx("userItem", `userItem--${size}`, className)}>
-      <Avatar size={size} status={status} picture={picture} username={text} />
-      <p className="userItem__username">{text}</p>
-
-      <ChessTitle text={chessTitle} className="userItem__right" />
-      <FlagComponent className="userItem__flag" />
-    </div>
-  );
-};
+    <ChessTitle text={chessTitle} className="userItem__right" />
+    <Flag className="userItem__flag" flag={flag} />
+  </div>
+);
 
 export default UserItem;
