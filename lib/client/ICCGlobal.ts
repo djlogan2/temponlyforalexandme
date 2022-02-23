@@ -9,6 +9,7 @@ globalThis.subscriptions = {};
 globalThis.userlist = {};
 
 globalThis.ICCServer = {
+  connections: {},
   collections: {},
   games: {},
   services: {},

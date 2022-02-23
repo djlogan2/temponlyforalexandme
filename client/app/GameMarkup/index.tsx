@@ -45,8 +45,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
 
       setGameInstance(gInstance);
 
-      // @ts-ignore
-      gInstance.events.on("movemade", (data) => {
+      gInstance.events.on("move", (data) => {
         const gameUpdatedInstance = gameservice.getTyped(
           id,
           connection.user as ClientUser,

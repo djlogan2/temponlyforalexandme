@@ -38,7 +38,7 @@ export default class StartComputerGameClientMethod extends AbstractClientMethod 
   protected validatearguments(obj: StartComputerGameClientMethodObject): void {}
 
   protected called(obj: StartComputerGameClientMethodObject): Promise<string> {
-    this.logger1.debug(
+    this.logger1.trace(
       () =>
         `StartComputerGameClientMethodObject challenge=${util.inspect(
           obj.challenge,

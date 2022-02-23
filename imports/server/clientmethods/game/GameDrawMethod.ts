@@ -30,7 +30,7 @@ export default class GameDrawMethod extends AbstractClientMethod {
   protected validatearguments(obj: GameDrawMethodObject): void {}
 
   protected called(obj: GameDrawMethodObject): Promise<any> {
-    this.logger1.debug(() => `GameDrawMethodObject`);
+    this.logger1.trace(() => `GameDrawMethodObject`);
     const game = this.gameservice.getTyped(obj.id);
     if (game && "draw" in game) {
       game.draw(obj.user as ServerUser);

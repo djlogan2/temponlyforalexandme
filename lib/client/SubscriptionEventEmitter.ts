@@ -30,7 +30,7 @@ export default class SubscriptionEventEmitter<
    * @protected
    */
   protected onFirstEvent(isready: () => void): void {
-    this.logger2.debug(() => `${this.publication} onFirstEvent`);
+    this.logger2.trace(() => `${this.publication} onFirstEvent`);
     this.subscription = Meteor.subscribe(this.publication, {
       onReady: () => {
         if (isready) isready();
@@ -44,7 +44,7 @@ export default class SubscriptionEventEmitter<
    * @protected
    */
   protected onLastEvent(): void {
-    this.logger2.debug(() => `${this.publication} onLastEvent`);
+    this.logger2.trace(() => `${this.publication} onLastEvent`);
     if (this.subscription) {
       this.subscription.stop();
       delete this.subscription;
@@ -52,7 +52,7 @@ export default class SubscriptionEventEmitter<
   }
 
   protected stopping(): void {
-    this.logger2.debug(() => `${this.publication} stopping`);
+    this.logger2.trace(() => `${this.publication} stopping`);
     this.onLastEvent();
   }
 }

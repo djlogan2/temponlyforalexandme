@@ -79,6 +79,7 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   }
 
   protected stopping(): void {
+    super.stopping();
     this.stopTimer();
   }
 
@@ -99,7 +100,6 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   public draw(who: User): void {
     // const chess = new Chess(this.me.fen);
 
-    let result: GameStatus;
     let result2;
 
     if (this.global.chessObject.insufficient_material()) {

@@ -31,6 +31,7 @@ import InstanceService from "/imports/server/service/InstanceService";
 import ServerUserPlayedGame from "/lib/server/game/ServerUserPlayedGame";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import User from "/lib/User";
+import { Mongo } from "meteor/mongo";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -135,7 +136,7 @@ export default class GameService extends CommonGameService {
     challenge: ComputerChallengeRecord | UserChallengeRecord,
     connectionid: string,
   ): string {
-    this.logger.debug(
+    this.logger.trace(
       () =>
         `startComputerGame challenger=${
           challenger.id
@@ -244,8 +245,7 @@ export default class GameService extends CommonGameService {
       starttime: now,
     };
 
-    let gamerecord: BasicPlayedGameRecord = {
-      _id: "x",
+    let gamerecord: Mongo.OptionalId<BasicPlayedGameRecord> = {
       startTime: new Date(),
       instance_id: this.instanceservice.instanceid,
       connection_id: connectionid,
@@ -267,7 +267,7 @@ export default class GameService extends CommonGameService {
     };
 
     if ("skill_level" in challenge) {
-      (gamerecord as ComputerPlayGameRecord) = {
+      (gamerecord as Mongo.OptionalId<ComputerPlayGameRecord>) = {
         ...gamerecord,
         status: "computer",
         opponent: {
@@ -282,7 +282,7 @@ export default class GameService extends CommonGameService {
     } else {
       if (!whiteplayer || !blackplayer)
         throw new Meteor.Error("UNABLE_TO_FIND_USER");
-      (gamerecord as TwoPlayerPlayedGameRecord) = {
+      (gamerecord as Mongo.OptionalId<TwoPlayerPlayedGameRecord>) = {
         ...gamerecord,
         white: whiteplayer,
         black: blackplayer,

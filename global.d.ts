@@ -72,6 +72,7 @@ declare global {
   var userdao: CommonReadOnlyUserDao;
   /* Most of this is really server only, but some of it is used by both, most notably collections and utilities.getLogger */
   var ICCServer: {
+    connections: { [key: string]: ServerConnection };
     collections: { [K in CollectionNames]?: Mongo.Collection<any> };
     games: { [id: string]: GlobalGame };
     services: {

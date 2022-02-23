@@ -19,26 +19,26 @@ export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
       this,
       "ThemeReadOnlyDao",
     );
-    this.logger.debug(() => `ThemeReadOnlyDao constructor`);
+    this.logger.trace(() => `ThemeReadOnlyDao constructor`);
     this.start({});
   }
 
   protected onFieldsChanged(id: string, record: Partial<ThemeRecord>): void {
-    this.logger.debug(
+    this.logger.trace(
       () => `onFieldsChanged id=${id} record=${JSON.stringify(record)}`,
     );
     this.events.emit("themechanged", this.readOne({}));
   }
 
   protected onRecordAdded(id: string, record: Partial<ThemeRecord>): void {
-    this.logger.debug(
+    this.logger.trace(
       () => `onRecordAdded id=${id} record=${JSON.stringify(record)}`,
     );
     this.events.emit("themechanged", this.readOne({}));
   }
 
   protected onRecordRemoved(id: string): void {
-    this.logger.debug(() => `onRecordRemoved id=${id}`);
+    this.logger.trace(() => `onRecordRemoved id=${id}`);
     this.events.emit("themechanged", null);
   }
 }
