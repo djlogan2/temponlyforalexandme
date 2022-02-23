@@ -24,8 +24,6 @@ import Heading6 from "/client/app/shared/Typographies/Heading6";
 import Paragraph from "/client/app/shared/Typographies/Paragraph";
 import SmallParagraph from "/client/app/shared/Typographies/SmallParagraph";
 import Title from "/client/app/shared/Typographies/Title";
-import Backdrop from "../shared/Backdrop";
-import GameSetup from "../components/GameSetup";
 
 interface IComponentsView {}
 
@@ -70,36 +68,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           <StandardButton disabled>Button</StandardButton>
         </div>
         <CapturedPieces color="black" soliders={{ k: 3, q: 2, p: 4 }} />
-        {/* <DigitalClock
-          time="00:00:30"
-          keyboardFunctions={[]}
-          token={{
-            token: "",
-            args: [],
-          }}
-          classes={[]}
-          status="in"
-        /> */}
-        <GameSetup />
-        {/* <div>
-          <h2>Movelist</h2>
-          <Movelist
-            openingName="FAKE_TEXT"
-            token={{ token: "FAKE_TEXT", args: [] }}
-            keyboardFunctions={[]}
-            classes={[]}
-            moves={new Array(10).fill(0).map((_, i) => ({
-              first: {
-                move: `c${i}`,
-                piece: "q",
-              },
-              second: {
-                move: `d${i}`,
-                piece: "n",
-              },
-            }))}
-          />
-        </div> */}
+        <DigitalClock time={3000} isMyTurn />
         <GameTitle
           minutes={10}
           instance="game_title_semifinal"
@@ -278,22 +247,9 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         />
       </div>
       <div className="board-contaier">
-        <ActionButton
-          name="redirect-button"
-          hoverText="Click on me!"
-          keyboardFunctions={[]}
-          token={{
-            token: "Play page",
-            args: [],
-          }}
-          classes={[]}
-          onButtonClick={() => {
-            history.push("/game");
-          }}
-        />
         <div className="board-wrapper">
           {/* @ts-ignore */}
-          {/* <DummyChessboard /> */}
+          <DummyChessboard />
         </div>
       </div>
     </div>
