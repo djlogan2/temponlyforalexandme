@@ -37,9 +37,15 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   useEffect(() => {
     const onGameStartedListener = (id: string) => {
       const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
-      const currentGame = (gInstance as any).me;
+      const currentGame = gameservice.getGameEntity(id);
+
+      if (!currentGame) {
+        return;
+      }
+
       setActiveGame(currentGame);
       setFen(currentGame.fen);
+      // @ts-ignore
       setMovelist(currentGame.variations.movelist.slice(1));
       setMoveToMake(currentGame.tomove);
 
@@ -47,11 +53,10 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
 
       // @ts-ignore
       gInstance.events.on("move", (data) => {
-        const gameUpdatedInstance = gameservice.getTyped(
-          id,
-          connection.user as ClientUser,
-        );
-        const currentUpdatedGame = (gameUpdatedInstance as any).me;
+        const currentUpdatedGame = gameservice.getGameEntity(id);
+        if (!currentUpdatedGame) {
+          return;
+        }
         setFen(currentUpdatedGame.fen);
       });
     };
