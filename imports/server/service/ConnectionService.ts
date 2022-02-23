@@ -46,8 +46,6 @@ export default class ConnectionService extends Stoppable {
 
   private connectionIdleMethod: ConnectionIdleMethod;
 
-  private connections: { [key: string]: ServerConnection } = {};
-
   private events = new EventEmitter();
 
   private logger = new ServerLogger(this, "server/ConnectionService_ts");
@@ -125,10 +123,10 @@ export default class ConnectionService extends Stoppable {
       sessionId: string,
     ) {
       try {
-        self.logger.debug(() => `processDirectMessage/1: ${message}`);
+        self.logger.trace(() => `processDirectMessage/1: ${message}`);
         const msg = JSON.parse(message);
         if (typeof msg !== "object" || !("iccdm" in msg)) return;
-        self.logger.debug(() => `processDirectMessage: ${message}`);
+        self.logger.trace(() => `processDirectMessage: ${message}`);
 
         this.preventCallingMeteorHandler();
         self.onDirectMessage(sessionId, msg.iccdm, msg.iccmsg);
@@ -143,14 +141,14 @@ export default class ConnectionService extends Stoppable {
     messagetype: string,
     msgobject: any,
   ): void {
-    this.logger.debug(
+    this.logger.trace(
       () =>
         `onDirectMessage session=${session} messagetype=${messagetype} message=${JSON.stringify(
           msgobject,
         )}`,
     );
-    const connection = this.connections[session];
-    this.logger.debug(() => `onDirectMessage connection=${connection}`);
+    const connection = globalThis.ICCServer.connections[session];
+    this.logger.trace(() => `onDirectMessage connection=${connection}`);
     if (!connection) {
       // TODO: Handle this error
       return;
@@ -160,15 +158,15 @@ export default class ConnectionService extends Stoppable {
   }
 
   private onClose(ourconnection: ServerConnection): void {
-    this.logger.debug(() => `${ourconnection.connectionid} onClose`);
+    this.logger.trace(() => `${ourconnection.connectionid} onClose`);
     if (ourconnection.user) this.events.emit("userlogout", connection.user);
     ourconnection.stop();
-    delete this.connections[ourconnection.connectionid];
+    delete globalThis.ICCServer.connections[ourconnection.connectionid];
     this.connectiondao.remove(ourconnection._id);
   }
 
   private onConnection(connection: Meteor.Connection): void {
-    this.logger.debug(() => `onConnection connection=${connection.id}`);
+    this.logger.trace(() => `onConnection connection=${connection.id}`);
     const connrecord: Mongo.OptionalId<ConnectionRecord> = {
       connectionid: connection.id,
       instanceid: this.instanceservice.instanceid,
@@ -189,7 +187,7 @@ export default class ConnectionService extends Stoppable {
       this.userdao,
       this.writableuserdao,
     );
-    this.connections[connection.id] = ourconnection;
+    globalThis.ICCServer.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
     this.events.emit(connection.id, ourconnection);
   }
@@ -199,7 +197,7 @@ export default class ConnectionService extends Stoppable {
     hashtoken: string,
     locale: string,
   ): Promise<string> {
-    this.logger.debug(
+    this.logger.trace(
       () =>
         `login connection=${connectionid} hashtoken=${hashtoken} locale=${locale}`,
     );
@@ -212,7 +210,7 @@ export default class ConnectionService extends Stoppable {
         new ServerUser(this, userid, this.userdao, this.writableuserdao),
       );
     }
-    this.logger.debug(() => `login returning id=${userid}`);
+    this.logger.trace(() => `login returning id=${userid}`);
     return userid;
   }
 
@@ -227,22 +225,22 @@ export default class ConnectionService extends Stoppable {
   }
 
   public async getConnection(connection: string): Promise<ServerConnection> {
-    this.logger.debug(() => `getConnection conn=${connection}`);
+    this.logger.trace(() => `getConnection conn=${connection}`);
     return new Promise<ServerConnection>((resolve) => {
-      if (this.connections[connection]) {
-        this.logger.debug(
+      if (globalThis.ICCServer.connections[connection]) {
+        this.logger.trace(
           () => `getConnection conn=${connection} resolving valid connection`,
         );
-        resolve(this.connections[connection]);
+        resolve(globalThis.ICCServer.connections[connection]);
         return;
       }
-      this.logger.debug(
+      this.logger.trace(
         () => `getConnection conn=${connection} not ready, listening for event`,
       );
       const func = (ourconnection: ServerConnection) => {
         resolve(ourconnection);
         this.events.off(connection, func);
-        this.logger.debug(
+        this.logger.trace(
           () =>
             `getConnection conn=${connection} finally ready, resolving event`,
         );

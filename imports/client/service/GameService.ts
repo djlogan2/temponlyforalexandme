@@ -39,7 +39,7 @@ export default class GameService extends CommonGameService {
   public startComputerGame(
     computerchallenge: ComputerChallengeRecord,
   ): Promise<void> {
-    this.logger.debug(
+    this.logger.trace(
       () =>
         `startComputerGame computerchallenge=${util.inspect(
           computerchallenge,
@@ -50,7 +50,7 @@ export default class GameService extends CommonGameService {
       Meteor.call(
         "startComputerGame",
         computerchallenge,
-        (err: Meteor.Error, id: string) => {
+        (err: Meteor.Error, _id: string) => {
           if (err) reject(err);
           else resolve();
         },

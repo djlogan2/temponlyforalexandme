@@ -16,6 +16,7 @@ interface TestRecord {
 }
 
 globalThis.ICCServer = {
+  connections: {},
   collections: {},
   games: {},
   services: {},

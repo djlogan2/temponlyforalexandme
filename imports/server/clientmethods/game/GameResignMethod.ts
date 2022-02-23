@@ -30,7 +30,7 @@ export default class GameResignMethod extends AbstractClientMethod {
   protected validatearguments(obj: GameResignMethodObject): void {}
 
   protected called(obj: GameResignMethodObject): Promise<any> {
-    this.logger1.debug(() => `GameResignMethod`);
+    this.logger1.trace(() => `GameResignMethod`);
     const game = this.gameservice.getTyped(obj.id);
     if (game && "resign" in game) {
       game.resign(obj.user as ServerUser);

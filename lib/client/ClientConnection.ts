@@ -60,9 +60,9 @@ export default class ClientConnection extends AbstractTimestampNode {
     this.userdao = userdao;
     globalThis.connection = this;
 
-    this.logger2.debug(() => "constructor");
+    this.logger2.trace(() => "constructor");
     const hashToken = this.getHashToken();
-    this.logger2.debug(
+    this.logger2.trace(
       () => `Calling newUserLogin with hashToken=${hashToken}`,
     );
 
@@ -97,7 +97,7 @@ export default class ClientConnection extends AbstractTimestampNode {
       try {
         const msg = JSON.parse(message);
         if (typeof msg !== "object" || !("iccdm" in msg)) return;
-        self.logger2.debug(() => `processDirectStreamMessage: ${message}`);
+        self.logger2.trace(() => `processDirectStreamMessage: ${message}`);
         this.preventCallingMeteorHandler();
         self.onDirectMessage(msg.iccdm, msg.iccmsg);
       } catch (e) {
@@ -114,7 +114,7 @@ export default class ClientConnection extends AbstractTimestampNode {
       if (err) {
         this.logger2.error(() => `Call returned an error: ${err.message}`);
       } else {
-        this.logger2.debug(() => `newUserLogin returns ${id}`);
+        this.logger2.trace(() => `newUserLogin returns ${id}`);
         this.pUser = new ClientUser(this, id);
         globalThis.cuser = this.pUser;
         this.pEvents.emit("loggedin");
@@ -136,7 +136,7 @@ export default class ClientConnection extends AbstractTimestampNode {
   }
 
   private onDirectMessage(messagetype: string, message: any) {
-    this.logger2.debug(
+    this.logger2.trace(
       () => `onDirectMessage: ${messagetype}, ${JSON.stringify(message)}`,
     );
     switch (messagetype) {
@@ -154,7 +154,7 @@ export default class ClientConnection extends AbstractTimestampNode {
   protected sendFunction(
     msg: PingMessage | PongMessage | PongResponse | IdleMessage,
   ): void {
-    this.logger2.debug(() => `sendFunction msg=${JSON.stringify(msg)}`);
+    this.logger2.trace(() => `sendFunction msg=${JSON.stringify(msg)}`);
     Meteor.directStream.send(JSON.stringify({ iccdm: msg.type, iccmsg: msg }));
   }
 

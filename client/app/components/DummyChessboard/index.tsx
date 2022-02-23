@@ -3,29 +3,21 @@ import React, { Component } from "react";
 // @ts-ignore
 import ChessBoard from "chessboard";
 import "chessboard/dist/index.css";
+import Flip from "../icons/Flip";
 
 const Chess = require("chess.js");
 
-interface IDummyChessboardProps {
-  flipped?: boolean;
-  className?: string;
-  fen: string;
-  onMoveHandler: (move: string[], promotion: string | undefined) => void;
-}
-
-class DummyChessboard extends Component<IDummyChessboardProps> {
+class DummyChessboard extends Component {
   private chess: any;
 
-  constructor(props: IDummyChessboardProps) {
+  constructor(props: any) {
     super(props);
-
-    const { fen } = this.props;
 
     this.chess = new Chess.Chess();
 
     this.state = {
       legalMoves: this.getLegalMoves(),
-      fen,
+      fen: this.chess.fen(),
       circles: [],
       arrows: [],
       smartMoves: false,
@@ -34,13 +26,9 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
     };
   }
 
-  componentDidUpdate() {
-    const { fen } = this.props;
+  getColorFromEvent = (event: any) => "#fafafa";
 
-    if (this.chess.fen() !== fen) {
-      this.chess.load(fen);
-    }
-  }
+  getRandomInt = (max: number) => Math.floor(Math.random() * max);
 
   handleUpdateCircles = (circle: { color: string; event: any; piece: any }) => {
     // @ts-ignore
@@ -69,10 +57,6 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
     this.setState({ circles: [...circles] });
   };
 
-  getRandomInt = (max: number) => Math.floor(Math.random() * max);
-
-  getColorFromEvent = (event: any) => "#fafafa";
-
   getLegalMoves = () => {
     const moves = {};
     ["a", "b", "c", "d", "e", "f", "g", "h"].forEach((rank) => {
@@ -91,31 +75,32 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
   };
 
   handleMove = (move: any[], promotion: any) => {
-    const { onMoveHandler, fen } = this.props;
-    onMoveHandler(move, promotion);
     this.chess.move(move[0] + move[1] + promotion, { sloppy: true });
 
-    this.setState({ legalMoves: this.getLegalMoves(), fen }, () => {
-      const turn = this.chess.turn();
+    this.setState(
+      { legalMoves: this.getLegalMoves(), fen: this.chess.fen() },
+      () => {
+        const turn = this.chess.turn();
 
-      if (turn === "b") {
-        const moves = this.getLegalMoves();
-        const movesKeys = Object.keys(moves);
-        // eslint-disable-next-line @typescript-eslint/no-shadow
-        const move = this.getRandomInt(movesKeys.length);
+        if (turn === "b") {
+          const moves = this.getLegalMoves();
+          const movesKeys = Object.keys(moves);
+          // eslint-disable-next-line @typescript-eslint/no-shadow
+          const move = this.getRandomInt(movesKeys.length);
 
-        setTimeout(() => {
-          // @ts-ignore
-          this.chess.move(movesKeys[move] + moves[movesKeys[move]][0], {
-            sloppy: true,
-          });
-          this.setState({
-            legalMoves: this.getLegalMoves(),
-            fen,
-          });
-        }, 10000);
-      }
-    });
+          setTimeout(() => {
+            // @ts-ignore
+            this.chess.move(movesKeys[move] + moves[movesKeys[move]][0], {
+              sloppy: true,
+            });
+            this.setState({
+              legalMoves: this.getLegalMoves(),
+              fen: this.chess.fen(),
+            });
+          }, 10000);
+        }
+      },
+    );
   };
 
   handleUpdateArrows = (arrow: {
@@ -154,8 +139,6 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
   };
 
   render() {
-    const { flipped, className } = this.props;
-
     const {
       // @ts-ignore
       fen,
@@ -180,18 +163,17 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
           width: `${(576 / 1366) * 100}vw`,
           height: `${(576 / 1366) * 100}vw`,
         }}
-        className={className}
       >
         <ChessBoard
           raf={{
-            inside: true,
+            inside: false,
             bottom: false,
             right: false,
             left: false,
             top: false,
             relay: true,
           }}
-          perspective={flipped ? "black" : "white"}
+          perspective="white"
           fen={fen}
           boardSquares={{
             light: { default: "#A2D1E3", active: "#9c9c9c" },
@@ -230,7 +212,7 @@ class DummyChessboard extends Component<IDummyChessboardProps> {
           styles={{
             wrapper: {},
             boardWrapper: {
-              backgroundColor: "var(--colorDarkTwo)",
+              backgroundColor: "#55586A",
               borderRadius: "15px",
             },
             files: {

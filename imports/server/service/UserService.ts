@@ -48,14 +48,14 @@ export default class UserService extends Stoppable {
   }
 
   public logon(hashtoken: string, locale: string): string {
-    this.logger.debug(() => `logon hashtoken=${hashtoken}`);
+    this.logger.trace(() => `logon hashtoken=${hashtoken}`);
     const userdb = this.getUserFromHashToken(hashtoken, locale);
-    this.logger.debug(() => `logon id=${userdb._id}`);
+    this.logger.trace(() => `logon id=${userdb._id}`);
     return userdb._id;
   }
 
   private createAnonymousUser(hashToken: string, locale: string): UserRecord {
-    this.logger.debug(() => "creating anonymous user");
+    this.logger.trace(() => "creating anonymous user");
     const userrecord: Mongo.OptionalId<UserRecord> = {
       createdAt: new Date(),
       isolation_group: "public",
@@ -76,11 +76,11 @@ export default class UserService extends Stoppable {
   }
 
   private getUserFromHashToken(hashtoken: string, locale: string): UserRecord {
-    this.logger.debug(() => `getUserFromHashToken hashtoken=${hashtoken}`);
+    this.logger.trace(() => `getUserFromHashToken hashtoken=${hashtoken}`);
     const userrecord = this.userdao.readOne({
       "hashTokens.hashtoken": hashtoken,
     });
-    this.logger.debug(
+    this.logger.trace(
       () => `userrecord=${userrecord?._id || "NO RECORD FOUND IN DATABASE"}`,
     );
 

@@ -7,6 +7,9 @@ import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
 import { Meteor } from "meteor/meteor";
 import { PieceColor } from "/lib/records/ChallengeRecord";
+import CommonLogger from "/lib/CommonLogger";
+import * as util from "util";
+import { Random } from "meteor/random";
 
 export type GameEvents =
   | "abortrequested"
@@ -21,16 +24,25 @@ export type GameEvents =
   | "clockstarted"
   | "clockstopped"
   | "converted"
-  | "movemade"
   | "ended";
 export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveReadOnlyDao<BasicGameRecord> {
   protected id: string;
+
+  private logger: CommonLogger;
+
+  private hash: string;
 
   public abstract get events(): BasicEventEmitter<GameEvents>;
 
   constructor(parent: Stoppable | null, id: string) {
     super(parent, "games");
+    this.logger = globalThis.ICCServer.utilities.getLogger(
+      this,
+      "CommonSingleGameReadOnlyDao_ts",
+    );
     this.id = id;
+    this.hash = Random.hexString(16);
+    this.logger.debug(() => `constructor [${this.hash}]`);
     this.start({ _id: id });
   }
 
@@ -38,6 +50,12 @@ export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveRe
     id: string,
     record: Partial<ComputerPlayGameRecord>,
   ): void {
+    this.logger.debug(
+      () =>
+        `[${this.hash}] onFieldsChanged id=${id} record=${util.inspect(
+          record,
+        )}`,
+    );
     if (record.status) {
       this.events.emit("converted");
     }
@@ -80,23 +98,29 @@ export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveRe
     if (record.variations) {
       if (record.variations.movelist) {
         this.events.emit(
-          "movemade",
+          "move",
           record.variations.movelist[record.variations.currentmoveindex],
         );
       } else {
         const game = this.get(id);
         if (!game) throw new Meteor.Error("UNABLE_TO_FIND_GAME");
         this.events.emit(
-          "movemade",
+          "move",
           game.variations.movelist[record.variations.currentmoveindex],
         );
       }
     }
   }
 
-  protected onRecordAdded(id: string, record: Partial<BasicGameRecord>): void {}
+  protected onRecordAdded(id: string, record: Partial<BasicGameRecord>): void {
+    this.logger.debug(
+      () =>
+        `[${this.hash}] onRecordAdded id=${id} record=${util.inspect(record)}`,
+    );
+  }
 
   protected onRecordRemoved(id: string): void {
+    this.logger.debug(() => `[${this.hash}] onRecordRemoved id=${id}`);
     this.events.emit("ended");
   }
 }

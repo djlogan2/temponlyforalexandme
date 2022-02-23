@@ -31,7 +31,7 @@ export default class GameMakeMoveMethod extends AbstractClientMethod {
   protected validatearguments(obj: GameMakeMoveMethodObject): void {}
 
   protected called(obj: GameMakeMoveMethodObject): Promise<any> {
-    this.logger1.debug(() => `GameMakeMoveMethod move=${obj.move}`);
+    this.logger1.trace(() => `GameMakeMoveMethod move=${obj.move}`);
     const game = this.gameservice.getTyped(obj.id);
     if (game) {
       game.makeMove(obj.user as ServerUser, obj.move);
