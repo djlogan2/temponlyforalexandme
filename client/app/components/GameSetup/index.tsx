@@ -3,28 +3,30 @@ import React, { useState } from "react";
 import Backdrop from "../../shared/Backdrop";
 import StandardButton from "../../shared/Buttons/StandardButton";
 import TabButton from "../../shared/Buttons/TabButton";
+import TabButtonSquared from "../../shared/Buttons/TabButtonSquared";
 import Heading5 from "../../shared/Typographies/Heading5";
-import ArrowLeft from "../icons/ArrowLeft";
+import Paragraph from "../../shared/Typographies/Paragraph";
+import Arrow from "../icons/Arrow";
 import Close from "../icons/Close";
+import LongArrow from "../icons/LongArrow";
 import More from "../icons/More";
 import OpenChallengeItem from "../OpenChallengeItem";
-import UserItem from "../UserItem";
-import { options, timeOptions, challengeTypes } from "./constants";
+import { challengeTypes, options, timeOptions } from "./constants";
 
 const GameSetup = () => {
   const [gameOption, setGameOption] =
     useState<typeof options[number]>("Anyone");
-
   const [timeOption, setTimeOption] = useState<typeof timeOptions[number]>(15);
-
   const [activeChallenge, setActiveChallenge] =
     useState<typeof challengeTypes[number]>("Challenge");
+
+  const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
 
   return (
     <Backdrop>
       <div className="gameSetup">
         <div className="gameSetup__actions">
-          <ArrowLeft className="gameSetup__pointer" />
+          <Arrow className="gameSetup__pointer gameSetup__arrowLeft" />
           <Close className="gameSetup__pointer" />
         </div>
         <div className="gameSetup__container">
@@ -32,6 +34,7 @@ const GameSetup = () => {
           <div className="gameSetup__options">
             {options.map((tab) => (
               <TabButton
+                isColorless={gameOption !== tab}
                 key={tab}
                 onClick={() => setGameOption(tab)}
                 color={gameOption === tab ? "primary" : undefined}
@@ -41,34 +44,36 @@ const GameSetup = () => {
             ))}
           </div>
           <div className="gameSetup__subtitle">Launch a new challenge</div>
-          <div className="gameSetup__timeOptions">
+          <div
+            className={clsx(
+              "gameSetup__timeOptions",
+              showMoreChallengeTimes && "gameSetup__timeOptions--seenAll",
+            )}
+          >
             {timeOptions.map((time) => (
-              <TabButton
+              <TabButtonSquared
+                color={timeOption === time ? "primary" : undefined}
                 key={time}
-                className={clsx(
-                  "gameSetup__challengeTime",
-                  time === timeOption && "gameSetup__challengeTime--active",
-                )}
                 onClick={() => setTimeOption(time)}
+                iconTop={time === "custom" ? <More /> : undefined}
               >
-                {time !== "custom" ? (
-                  <>
-                    <p>{time}</p>
-                    <p>minute</p>
-                  </>
-                ) : (
-                  <>
-                    <More
-                      className={clsx(
-                        time === timeOption && "gameSetup__more--active",
-                      )}
-                    />
-                    <p>{time}</p>
-                  </>
-                )}
-              </TabButton>
+                <p>{time}</p>
+                {time !== "custom" && <p>minute</p>}
+              </TabButtonSquared>
             ))}
           </div>
+          <Paragraph
+            className="gameSetup__showMore"
+            onClick={() => setShowMoreChallengeTimes((prev) => !prev)}
+          >
+            Show more{" "}
+            <Arrow
+              className={clsx(
+                "gameSetup__arrowDown",
+                showMoreChallengeTimes && "gameSetup__arrowUp",
+              )}
+            />
+          </Paragraph>
           <div className="gameSetup__subtitle">Join an Open challenge</div>
           <div className="gameSetup__challenge-types">
             {challengeTypes.map((type) => (
@@ -98,21 +103,16 @@ const GameSetup = () => {
               userPic="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               userStatus="online"
             />
-            // <UserItem
-            //   key={i}
-            // className="gameSetup__challenge-item"
-            //   text="User name (1600)"
-            //   chessTitle="WGM"
-            //   status="online"
-            //   flag="IT"
-            //   size="sm"
-            // />
           ))}
 
-          <p className="gameSetup__show-more">Show more</p>
+          <Paragraph className="gameSetup__showMore">
+            Show more
+            <LongArrow className="gameSetup__longArrowRight" />
+            <Arrow className="gameSetup__arrowDown" />
+          </Paragraph>
 
-          <StandardButton className="gameSetup__btn-more">
-            More Options
+          <StandardButton className="gameSetup__customChallenge">
+            Custom Challenge
           </StandardButton>
         </div>
       </div>
