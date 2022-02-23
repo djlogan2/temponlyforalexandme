@@ -25,8 +25,8 @@ const computerchallenge: ComputerChallengeRecord = {
 
 const GameMarkup: FCICC<IGameMarkup> = () => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [activeGame, setActiveGame] = useState<any>();
   const [fen, setFen] = useState<string>();
+  const [clocks, updateClocks] = useState<any>();
   const [movelist, setMovelist] = useState<IMoveItem[]>();
   const [gameInstance, setGameInstance] = useState<
     ClientComputerPlayedGame | ClientAnalysisGame
@@ -37,48 +37,48 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   useEffect(() => {
     const onGameStartedListener = (id: string) => {
       const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
-      const currentGame = gameservice.getGameEntity(id);
-
-      if (!currentGame) {
-        return;
-      }
-
-      setActiveGame(currentGame);
-      setFen(currentGame.fen);
       // @ts-ignore
-      setMovelist(currentGame.variations.movelist.slice(1));
-      setMoveToMake(currentGame.tomove);
-
-      setGameInstance(gInstance);
-
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const { tomove, variations, fen, clocks } =
+        gInstance.getDefaultProperties();
+      setFen(fen);
+      setMoveToMake(tomove);
+      updateClocks(clocks);
+      setMovelist(variations.movelist.slice(1));
       // @ts-ignore
-      gInstance.events.on("move", (data) => {
-        const currentUpdatedGame = gameservice.getGameEntity(id);
-        if (!currentUpdatedGame) {
-          return;
-        }
-        setFen(currentUpdatedGame.fen);
+      gInstance.events.on("fen", (data) => {
+        setFen(data);
       });
+
+      // @ts-ignore
+      gInstance.events.on("movelist", (data) => {
+        setMovelist(data.movelist.slice(1));
+      });
+
+      // @ts-ignore
+      gInstance.events.on("clocks", (data) => {
+        updateClocks(data);
+      });
+
+      // @ts-ignore
+      gInstance.events.on("tomove", (data) => {
+        setMoveToMake(data);
+      });
+      setGameInstance(gInstance);
+    };
+
+    const onGameRemovedListener = () => {
+      setFen("");
+      updateClocks(null);
+      setMovelist([]);
+      // @ts-ignore
+      setGameInstance(null);
     };
 
     gameservice.events.on("started", onGameStartedListener);
+    gameservice.events.on("removed", onGameRemovedListener);
     return () => gameservice.events.off("started", onGameStartedListener);
   }, []);
-
-  useEffect(() => {
-    if (!movelist || !gameInstance) {
-      return;
-    }
-
-    const onMoveMadeListener = (move: IMoveItem) => {
-      setMoveToMake(move.smith.color === "w" ? "b" : "w");
-      setMovelist((moves) => [...(moves || []), move]);
-    };
-
-    gameInstance?.events.on("move", onMoveMadeListener);
-
-    return () => gameInstance?.events.off("move", onMoveMadeListener);
-  }, [movelist, gameInstance]);
 
   const handleMove = (move: string[], promotion?: string) => {
     gameInstance?.makeMove(
@@ -111,6 +111,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
     updateLegalMoves(currentLegalMoves);
   }, [fen]);
 
+  console.log(fen, movelist, moveToMake);
   return (
     <>
       <button
@@ -119,7 +120,7 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       >
         Start a game
       </button>
-      {activeGame && fen && movelist && moveToMake ? (
+      {fen && clocks && moveToMake ? (
         <div className="gameContainer">
           <PlayerInfo
             userStatus="online"
@@ -175,10 +176,10 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
           />
           <DigitalClock
             time={calcTime(
-              activeGame.clocks.b.current,
+              clocks.b.current,
               moveToMake === "b",
-              activeGame.clocks.b.initial.minutes,
-              activeGame.clocks.b.starttime,
+              clocks.b.initial.minutes,
+              clocks.b.starttime,
             )}
             className={clsx(
               "gameContainer__clock-one",
@@ -186,20 +187,22 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
             )}
             isMyTurn={moveToMake === "b"}
           />
-          <Movelist
-            openingName="FAKE_TEXT"
-            token={{ token: "FAKE_TEXT", args: [] }}
-            keyboardFunctions={[]}
-            classes={[]}
-            moves={movelist}
-            className="gameContainer__movelist"
-          />
+          {movelist && movelist.length && (
+            <Movelist
+              openingName="FAKE_TEXT"
+              token={{ token: "FAKE_TEXT", args: [] }}
+              keyboardFunctions={[]}
+              classes={[]}
+              moves={movelist}
+              className="gameContainer__movelist"
+            />
+          )}
           <DigitalClock
             time={calcTime(
-              activeGame.clocks.w.current,
+              clocks.w.current,
               moveToMake === "w",
-              activeGame.clocks.w.initial.minutes,
-              activeGame.clocks.w.starttime,
+              clocks.w.initial.minutes,
+              clocks.w.starttime,
             )}
             className={clsx(
               "gameContainer__clock-two",
