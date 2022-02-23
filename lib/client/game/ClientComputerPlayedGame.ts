@@ -37,6 +37,15 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     this.readonlydao.events.on("move", this.pMove);
   }
 
+  public getDefaultProperties() {
+    return {
+      tomove: this.me.tomove,
+      fen: this.me.fen,
+      variations: this.me.variations,
+      clocks: this.me.clocks,
+    };
+  }
+
   protected updateMoveFromEvent(move: BasicMoveListNode): void {
     this.logger1.debug(
       () =>

@@ -19,7 +19,10 @@ export type GameEvents =
   | "drawrequested"
   | "drawremoved"
   | "move"
+  | "movelist"
   | "fen"
+  | "clocks"
+  | "tomove"
   | "clockchanged"
   | "clockstarted"
   | "clockstopped"
@@ -64,6 +67,10 @@ export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveRe
       this.events.emit("fen", record.fen);
     }
 
+    if (record.tomove) {
+      this.events.emit("tomove", record.tomove);
+    }
+
     if (record.clocks) {
       if (record.clocks.w) {
         if (record.clocks.w.current) {
@@ -74,6 +81,10 @@ export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveRe
         if (record.clocks.b.current) {
           this.events.emit("clockchanged", "b", record.clocks.b.current);
         }
+      }
+
+      if (record.clocks) {
+        this.events.emit("clocks", record.clocks);
       }
     }
 
@@ -109,6 +120,10 @@ export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveRe
           game.variations.movelist[record.variations.currentmoveindex],
         );
       }
+    }
+
+    if (record.variations) {
+      this.events.emit("movelist", record.variations);
     }
   }
 
