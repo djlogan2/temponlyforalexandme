@@ -1,5 +1,11 @@
 import { Move } from "chess.js";
-import { ECOObject, GameStatus } from "/lib/records/GameRecord";
+import {
+  ECOObject,
+  GameAuditDrawRecord,
+  GameAuditMoveRecord,
+  GameAuditRecord,
+  GameStatus,
+} from "/lib/records/GameRecord";
 import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
 import Stoppable from "/lib/Stoppable";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
@@ -30,7 +36,7 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     // const chess = new Chess(this.me.fen);
     const moves = this.global.chessObject.moves();
     const which = Math.round(Math.random() * (moves.length - 1));
-    this.makeMoveAuth(moves[which]);
+    this.makeMoveAuth("computer", moves[which]);
   }
 
   public endGame(status: GameStatus, status2: number): void {
@@ -50,13 +56,22 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   }
 
   protected internalMakeMove(
+    who: string,
     move: Move,
     fen: string,
     result: GameStatus,
     result2: number,
     eco: ECOObject,
   ): void {
+    const audit: GameAuditMoveRecord = {
+      type: "move",
+      move: move.san,
+      when: new Date(),
+      who,
+    };
+
     const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
+    modifier.$set.action = { $push: audit };
     this.dao.update({ _id: this.me._id }, modifier);
   }
 
@@ -64,8 +79,14 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     this.dao.remove(this.me._id);
   }
 
-  protected internalSetDraw(color: PieceColor, draw: boolean): void {
-    const modifier: any = { $set: {} };
+  protected internalSetDraw(
+    who: string,
+    color: PieceColor,
+    draw: boolean,
+    type: "drawdecline" | "drawrevoke" | "drawrequest",
+  ): void {
+    const audit: GameAuditDrawRecord = { type, when: new Date(), who };
+    const modifier: any = { $set: { actions: { $push: audit } } };
     modifier.$set[`pending.${color}.draw`] = draw;
     this.dao.update({ _id: this.me._id }, modifier);
   }

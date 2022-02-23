@@ -1,9 +1,9 @@
-import GameMakeMoveMethod from "/imports/server/clientmethods/game/GameMakeMoveMethod";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import sinon from "sinon";
 import { expect } from "chai";
 import { Meteor } from "meteor/meteor";
 import GameService from "/imports/server/service/GameService";
+import GameMethods from "/imports/server/clientmethods/game/GameMethods";
 
 const sandbox = sinon.createSandbox();
 
@@ -16,7 +16,7 @@ describe("GameMakeMoveMethod", function () {
     const gameservice = sandbox.createStubInstance(GameService);
     gameservice.getTyped.returns(undefined); // .alwaysReturned(game);
     sandbox.stub(Meteor, "methods");
-    const method = new GameMakeMoveMethod(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
+    const method = new GameMethods(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
     method
       // @ts-ignore
       .called("x", "x")
@@ -34,11 +34,14 @@ describe("GameMakeMoveMethod", function () {
     const gameservice = sandbox.createStubInstance(GameService);
     gameservice.getTyped.returns(undefined); // .alwaysReturned(game);
     sandbox.stub(Meteor, "methods");
-    const method = new GameMakeMoveMethod(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
+    const method = new GameMethods(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
     // @ts-ignore
     method.called({
       id: "x",
-      move: "x",
+      data: {
+        type: "move",
+        move: "x",
+      },
       httpHeaders: { "user-agent": "x", "accept-language": "x" },
     });
     // @ts-ignore
@@ -50,11 +53,14 @@ describe("GameMakeMoveMethod", function () {
     const gameservice = sandbox.createStubInstance(GameService);
     gameservice.getTyped.returns(undefined); // .alwaysReturned(game);
     sandbox.stub(Meteor, "methods");
-    const method = new GameMakeMoveMethod(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
+    const method = new GameMethods(null, connectionservice, gameservice); // sandbox.createStubInstance(GameMakeMoveMethod);
     // @ts-ignore
     method.called({
       id: "x",
-      move: "x",
+      data: {
+        type: "move",
+        move: "x",
+      },
       httpHeaders: { "user-agent": "x", "accept-language": "x" },
     });
     // @ts-ignore

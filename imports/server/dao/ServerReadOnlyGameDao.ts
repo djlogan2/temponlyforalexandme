@@ -9,7 +9,7 @@ import CommonSingleGameReadOnlyGameDao, {
 export default class ServerReadOnlyGameDao extends CommonSingleGameReadOnlyGameDao {
   private pEvents = new EventEmitter<GameEvents>();
 
-  private writabledao: WritableGameDao;
+  protected dao: WritableGameDao;
 
   constructor(
     parent: Stoppable | null,
@@ -17,7 +17,7 @@ export default class ServerReadOnlyGameDao extends CommonSingleGameReadOnlyGameD
     writabledao: WritableGameDao,
   ) {
     super(parent, id);
-    this.writabledao = writabledao;
+    this.dao = writabledao;
   }
 
   public get events(): BasicEventEmitter<GameEvents> {

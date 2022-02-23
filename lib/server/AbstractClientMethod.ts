@@ -11,11 +11,9 @@ import ServerLogger from "/lib/server/ServerLogger";
 export type ClientCalls =
   | "addchallenge"
   | "challenge"
-  | "draw"
+  | "gamecommand"
   | "idleFunction"
-  | "makeMove"
   | "newUserLogin"
-  | "resign"
   | "startComputerGame"
   | "user_set"
   | "writeToLog";

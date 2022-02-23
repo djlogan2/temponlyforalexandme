@@ -42,7 +42,7 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
       () =>
         `[${this.hash}] updateMoveFromEvent move=${move.move} color=${move.smith.color} tomove=${this.me.tomove}`,
     );
-    if (move.smith.color !== this.me.tomove) this.makeMoveAuth(move.move);
+    if (move.smith.color !== this.me.tomove) this.makeMoveAuth("", move.move);
   }
 
   protected startTimer(milliseconds: number, fn: () => void) {
@@ -61,11 +61,12 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
 
   // fen and result are not currently used on the client, but feel free to use them if you find a reason
   protected internalMakeMove(
+    _who: string,
     move: Move,
     _fen: string,
     _result: GameStatus,
   ): void {
-    Meteor.call("makeMove", this.me._id, move.san);
+    Meteor.call("gamecommand", "move", this.me._id, { move: move.san });
   }
 
   protected isAuthorizedToMove(who: User): boolean {
@@ -77,8 +78,12 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     return null;
   }
 
-  protected internalSetDraw(color: PieceColor, draw: boolean): void {
-    Meteor.call("draw", this.me._id);
+  protected internalSetDraw(
+    _who: string,
+    color: PieceColor,
+    draw: boolean,
+  ): void {
+    Meteor.call("gamecommand", "draw", this.me._id);
   }
 
   protected isClosing(): void {}

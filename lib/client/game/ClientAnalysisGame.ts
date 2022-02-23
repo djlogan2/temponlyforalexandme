@@ -4,6 +4,10 @@ import { GameStatus, ECOObject } from "/lib/records/GameRecord";
 import User from "/lib/User";
 
 export default class ClientAnalysisGame extends CommonAnalysisGame {
+  protected internalSetFen(who: string, fen: string): void {
+    throw new Error("Method not implemented.");
+  }
+
   protected isAuthorizedToMove(who: User): boolean {
     throw new Error("Method not implemented.");
   }
@@ -17,6 +21,7 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
   }
 
   protected internalMakeMove(
+    who: string,
     move: Move,
     fen: string,
     result: GameStatus,
