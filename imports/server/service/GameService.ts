@@ -30,6 +30,7 @@ import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import User from "/lib/User";
 import { Mongo } from "meteor/mongo";
 import GameMethods from "/imports/server/clientmethods/game/GameMethods";
+import ChessEngineService from "/imports/server/service/ChessEngineService";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -45,6 +46,8 @@ export default class GameService extends CommonGameService {
 
   private readonly instanceservice: InstanceService;
 
+  private readonly engineservice: ChessEngineService;
+
   private readonly userdao: WritableUserDao;
 
   // private gamehistoryservice: someday_over_the_rainbow;
@@ -56,6 +59,7 @@ export default class GameService extends CommonGameService {
     connectionservice: ConnectionService,
     instanceservice: InstanceService,
     userdao: WritableUserDao,
+    engineservice: ChessEngineService,
   ) {
     super(parent);
 
@@ -64,6 +68,7 @@ export default class GameService extends CommonGameService {
     this.userdao = userdao;
 
     this.instanceservice = instanceservice;
+    this.engineservice = engineservice;
 
     publicationservice.publishDao(
       "games",
@@ -88,7 +93,12 @@ export default class GameService extends CommonGameService {
     if (!game) return undefined;
     switch (game.status) {
       case "computer":
-        return new ServerComputerPlayedGame(this, id, this.writabledao);
+        return new ServerComputerPlayedGame(
+          this,
+          id,
+          this.writabledao,
+          this.engineservice,
+        );
       case "analyzing":
         return new ServerAnalysisGame(this, id, this.writabledao);
       default: {
@@ -288,7 +298,12 @@ export default class GameService extends CommonGameService {
     gamerecord._id = id;
     const game =
       ratingtype === "computer"
-        ? new ServerComputerPlayedGame(this, id, this.writabledao)
+        ? new ServerComputerPlayedGame(
+            this,
+            id,
+            this.writabledao,
+            this.engineservice,
+          )
         : new ServerUserPlayedGame(this, id, this.writabledao);
     game.startClock();
     return id;
