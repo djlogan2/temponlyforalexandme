@@ -4,8 +4,8 @@ import Backdrop from "../../shared/Backdrop";
 import StandardButton from "../../shared/Buttons/StandardButton";
 import TabButton from "../../shared/Buttons/TabButton";
 import TabButtonSquared from "../../shared/Buttons/TabButtonSquared";
+import TextButton from "../../shared/Buttons/TextButton";
 import Heading5 from "../../shared/Typographies/Heading5";
-import Paragraph from "../../shared/Typographies/Paragraph";
 import Arrow from "../icons/Arrow";
 import Close from "../icons/Close";
 import LongArrow from "../icons/LongArrow";
@@ -25,9 +25,9 @@ const GameSetup = () => {
   return (
     <Backdrop>
       <div className="gameSetup">
-        <div className="gameSetup__actions">
-          <Arrow className="gameSetup__pointer gameSetup__arrowLeft" />
-          <Close className="gameSetup__pointer" />
+        <div className="d-flex space-between">
+          <Arrow className="pointer gameSetup__arrowLeft" />
+          <Close className="pointer" />
         </div>
         <div className="gameSetup__container">
           <div className="gameSetup__title">Play</div>
@@ -55,25 +55,28 @@ const GameSetup = () => {
                 color={timeOption === time ? "primary" : undefined}
                 key={time}
                 onClick={() => setTimeOption(time)}
-                iconTop={time === "custom" ? <More /> : undefined}
               >
+                {time === "custom" && (
+                  <More className="gameSetup__customTime" />
+                )}
                 <p>{time}</p>
                 {time !== "custom" && <p>minute</p>}
               </TabButtonSquared>
             ))}
           </div>
-          <Paragraph
-            className="gameSetup__showMore"
+          <TextButton
+            isFullWidth
             onClick={() => setShowMoreChallengeTimes((prev) => !prev)}
+            className="gameSetup__showMore"
           >
-            Show more{" "}
+            Show More
             <Arrow
               className={clsx(
                 "gameSetup__arrowDown",
                 showMoreChallengeTimes && "gameSetup__arrowUp",
               )}
             />
-          </Paragraph>
+          </TextButton>
           <div className="gameSetup__subtitle">Join an Open challenge</div>
           <div className="gameSetup__challenge-types">
             {challengeTypes.map((type) => (
@@ -105,11 +108,11 @@ const GameSetup = () => {
             />
           ))}
 
-          <Paragraph className="gameSetup__showMore">
+          <TextButton className="gameSetup__showMore">
             Show more
             <LongArrow className="gameSetup__longArrowRight" />
             <Arrow className="gameSetup__arrowDown" />
-          </Paragraph>
+          </TextButton>
 
           <StandardButton className="gameSetup__customChallenge">
             Custom Challenge

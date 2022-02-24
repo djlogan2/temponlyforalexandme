@@ -6,14 +6,12 @@ import Heading5 from "../../Typographies/Heading5";
 interface ITabButtonSquaredProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "primary";
-  iconTop?: JSX.Element;
 }
 
 const TabButtonSquared: FC<ITabButtonSquaredProps> = ({
   children,
   className,
   color,
-  iconTop: IconTop,
   ...rest
 }) => (
   <button
@@ -25,8 +23,7 @@ const TabButtonSquared: FC<ITabButtonSquaredProps> = ({
     )}
     {...rest}
   >
-    {IconTop}
-    <Heading5 className="tabButtonSquared__text">{children}</Heading5>
+    <Heading5>{children}</Heading5>
   </button>
 );
 

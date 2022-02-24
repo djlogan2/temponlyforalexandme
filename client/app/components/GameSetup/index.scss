@@ -8,15 +8,6 @@
     fill: var(--colorDarkTwo);
   }
 
-  &__pointer {
-    cursor: pointer;
-  }
-
-  &__actions {
-    display: flex;
-    justify-content: space-between;
-  }
-
   &__container {
     width: 36rem;
     margin: 0 auto;
@@ -86,13 +77,9 @@
   }
 
   &__showMore {
-    color: var(--colorPrimary);
-    fill: currentColor;
-
-    display: flex;
-    align-items: center;
-    cursor: pointer;
     margin-top: 1.6rem;
+    padding-left: 0;
+    justify-content: start;
 
     &:nth-of-type(1) {
       display: none;
@@ -106,6 +93,11 @@
   &__longArrowRight {
     fill: var(--colorPrimary);
     margin-left: 1rem;
+  }
+
+  &__customTime {
+    width: 3rem;
+    height: 1.65rem;
   }
 
   @media (max-width: 1366px) {
@@ -129,7 +121,6 @@
         order: 1;
       }
     }
-
 
     &__arrowDown {
       transform: rotate(-90deg);

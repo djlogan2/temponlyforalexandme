@@ -1,0 +1,41 @@
+.textButton {
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  color: var(--colorPrimary);
+  height: 4rem;
+  max-width: 15.1rem;
+  padding: 1rem 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 1rem;
+    fill: currentColor;
+  }
+
+  &:hover:enabled {
+    color: var(--colorDarkOne);
+    text-decoration: underline;
+  }
+
+  &:active:enabled {
+    color: var(--colorPrimary);
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    color: rgba(85, 88, 106, 0.5);
+    fill: currentColor;
+  }
+
+  &__text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
