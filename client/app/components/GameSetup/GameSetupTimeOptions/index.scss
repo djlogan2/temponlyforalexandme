@@ -1,0 +1,69 @@
+.gameSetupTimeOptions {
+  &__timeOptions {
+    display: grid;
+    grid-template-columns: repeat(4, 8.3rem);
+    grid-template-rows: 6rem 6rem;
+    grid-gap: 0.8rem;
+  }
+
+  &__customTime {
+    width: 3rem;
+    height: 1.65rem;
+  }
+
+  @media (max-width: 1366px) {
+    &__timeOptions {
+      grid-template-rows: 6rem;
+
+      &
+        > button:not(:nth-child(1)):not(:nth-child(2)):not(:nth-child(3)):not(:last-child) {
+        display: none;
+      }
+
+      &--seenAll {
+        & > button {
+          display: block !important;
+        }
+      }
+
+      &:last-child {
+        order: 1;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-right: -((45rem - 36rem) / 2);
+    overflow-x: scroll;
+    position: relative;
+    margin-bottom: -15px;
+
+    &__timeOptions {
+      grid-template-rows: 6rem;
+      grid-template-columns: repeat(auto-fill, 8.3rem);
+      margin-right: calc(-100% + 8.3rem);
+
+      .heading5 {
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+
+      & > button {
+        display: block !important;
+      }
+    }
+  }
+
+  @media (max-width: 375px) {
+    margin-right: -((37.5rem - 24.5rem) / 2);
+
+    button {
+      width: 7.8rem;
+    }
+
+    &__timeOptions {
+      grid-template-columns: repeat(auto-fill, 7.8rem);
+
+    }
+  }
+}

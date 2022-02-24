@@ -1,0 +1,14 @@
+.gameSetupChallengesList {
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: 0.8rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    &__item {
+      width: 34rem !important;
+      height: 5rem !important;
+    }
+  }
+}

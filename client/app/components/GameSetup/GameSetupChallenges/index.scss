@@ -1,0 +1,15 @@
+.gameSetupChallenges {
+  margin-left: 0.8rem;
+  display: flex;
+  margin-bottom: 1.7rem;
+
+  &__item {
+    margin-right: 2.4rem;
+    color: var(--colorGreyOne);
+    cursor: pointer;
+
+    &--active {
+      color: var(--colorBlueOne);
+    }
+  }
+}
