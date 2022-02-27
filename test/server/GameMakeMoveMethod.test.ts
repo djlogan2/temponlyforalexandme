@@ -11,7 +11,7 @@ describe("GameMakeMoveMethod", function () {
   afterEach(() => {
     sandbox.restore();
   });
-  it.only("should fail with UNKNOWN_GAME if called is passed an invalid id", function (done) {
+  it("should fail with UNKNOWN_GAME if called is passed an invalid id", function (done) {
     const connectionservice = sandbox.createStubInstance(ConnectionService);
     const gameservice = sandbox.createStubInstance(GameService);
     gameservice.getTyped.returns(undefined); // .alwaysReturned(game);
