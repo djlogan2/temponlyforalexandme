@@ -1,5 +1,10 @@
 import { Move } from "chess.js";
-import { ECOObject, GameStatus } from "/lib/records/GameRecord";
+import {
+  ECOObject,
+  GameAuditDrawRecord,
+  GameAuditMoveRecord,
+  GameStatus,
+} from "/lib/records/GameRecord";
 import Stoppable from "/lib/Stoppable";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import User from "/lib/User";
@@ -7,6 +12,7 @@ import internalMakeMove from "/lib/server/game/CommonInternalMakeMove";
 import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import CommonUserPlayedGame from "/lib/game/CommonUserPlayedGame";
+import { Meteor } from "meteor/meteor";
 
 export default class ServerUserPlayedGame extends CommonUserPlayedGame {
   private dao: WritableGameDao;
@@ -37,13 +43,22 @@ export default class ServerUserPlayedGame extends CommonUserPlayedGame {
   }
 
   protected internalMakeMove(
+    who: string,
     move: Move,
     fen: string,
     result: GameStatus,
     result2: number,
     eco: ECOObject,
   ): void {
+    const audit: GameAuditMoveRecord = {
+      type: "move",
+      move: move.san,
+      when: new Date(),
+      who,
+    };
+
     const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
+    modifier.$set.action = { $push: audit };
     this.dao.update({ _id: this.me._id }, modifier);
   }
 
@@ -51,8 +66,20 @@ export default class ServerUserPlayedGame extends CommonUserPlayedGame {
     this.dao.remove(this.me._id);
   }
 
-  protected internalSetDraw(color: PieceColor, draw: boolean): void {
-    const modifier: any = { $set: {} };
+  protected internalSetDraw(
+    who: string,
+    color: PieceColor,
+    draw: boolean,
+    type: "drawdecline" | "drawrevoke" | "drawrequest",
+  ): void {
+    if (draw !== (type === "drawrequest"))
+      throw new Meteor.Error("SERVER_ERROR");
+    const audit: GameAuditDrawRecord = {
+      type,
+      when: new Date(),
+      who,
+    };
+    const modifier: any = { $set: { actions: { $push: audit } } };
     modifier.$set[`pending.${color}.draw`] = draw;
     this.dao.update({ _id: this.me._id }, modifier);
   }

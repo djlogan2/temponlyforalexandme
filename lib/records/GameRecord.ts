@@ -15,6 +15,39 @@ type ChessJSPiece = "p" | "r" | "n" | "b" | "q" | "k";
 type ChessJSPromotablePeice = "r" | "n" | "b" | "q";
 export type GameStatus = "1-0" | "0-1" | "1/2-1/2" | "*";
 
+type GameAuditTypes =
+  | "move"
+  | "drawrequest"
+  | "drawrevoke"
+  | "drawaccept"
+  | "drawdecline"
+  | "setfen"
+  | "resign";
+
+export interface GameAuditRecord {
+  who: string;
+  when: Date;
+  type: GameAuditTypes;
+}
+
+export interface GameAuditMoveRecord extends GameAuditRecord {
+  type: "move";
+  move: string;
+}
+
+export interface GameAuditSetFenRecord extends GameAuditRecord {
+  type: "setfen";
+  fen: string;
+}
+
+export interface GameAuditDrawRecord extends GameAuditRecord {
+  type: "drawrequest" | "drawaccept" | "drawdecline" | "drawrevoke";
+}
+
+export interface GameAuditResignRecord extends GameAuditRecord {
+  type: "resign";
+}
+
 interface OneColorPending {
   draw: boolean;
   abort: boolean;

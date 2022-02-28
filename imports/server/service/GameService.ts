@@ -23,14 +23,14 @@ import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
 import CommonGameService from "/lib/CommonGameService";
-import GameMakeMoveMethod from "/imports/server/clientmethods/game/GameMakeMoveMethod";
 import ServerAnalysisGame from "/lib/server/game/ServerAnalysisGame";
-import GameResignMethod from "/imports/server/clientmethods/game/GameResignMethod";
-import GameDrawMethod from "/imports/server/clientmethods/game/GameDrawMethod";
 import InstanceService from "/imports/server/service/InstanceService";
 import ServerUserPlayedGame from "/lib/server/game/ServerUserPlayedGame";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import User from "/lib/User";
+import { Mongo } from "meteor/mongo";
+import GameMethods from "/imports/server/clientmethods/game/GameMethods";
+import ChessEngineService from "/imports/server/service/ChessEngineService";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -42,13 +42,11 @@ export default class GameService extends CommonGameService {
 
   private readonly startcomputergamemethod: StartComputerGameClientMethod;
 
-  private readonly makemovemethod: GameMakeMoveMethod;
-
-  private readonly drawmethod: GameDrawMethod;
-
-  private readonly resignmethod: GameResignMethod;
+  private gamecommandmethod: GameMethods;
 
   private readonly instanceservice: InstanceService;
+
+  private readonly engineservice: ChessEngineService;
 
   private readonly userdao: WritableUserDao;
 
@@ -61,6 +59,7 @@ export default class GameService extends CommonGameService {
     connectionservice: ConnectionService,
     instanceservice: InstanceService,
     userdao: WritableUserDao,
+    engineservice: ChessEngineService,
   ) {
     super(parent);
 
@@ -69,6 +68,7 @@ export default class GameService extends CommonGameService {
     this.userdao = userdao;
 
     this.instanceservice = instanceservice;
+    this.engineservice = engineservice;
 
     publicationservice.publishDao(
       "games",
@@ -81,9 +81,7 @@ export default class GameService extends CommonGameService {
       connectionservice,
       this,
     );
-    this.makemovemethod = new GameMakeMoveMethod(this, connectionservice, this);
-    this.resignmethod = new GameResignMethod(this, connectionservice, this);
-    this.drawmethod = new GameDrawMethod(this, connectionservice, this);
+    this.gamecommandmethod = new GameMethods(this, connectionservice, this);
   }
 
   protected startMethods(): void {}
@@ -95,7 +93,12 @@ export default class GameService extends CommonGameService {
     if (!game) return undefined;
     switch (game.status) {
       case "computer":
-        return new ServerComputerPlayedGame(this, id, this.writabledao);
+        return new ServerComputerPlayedGame(
+          this,
+          id,
+          this.writabledao,
+          this.engineservice,
+        );
       case "analyzing":
         return new ServerAnalysisGame(this, id, this.writabledao);
       default: {
@@ -135,7 +138,7 @@ export default class GameService extends CommonGameService {
     challenge: ComputerChallengeRecord | UserChallengeRecord,
     connectionid: string,
   ): string {
-    this.logger.debug(
+    this.logger.trace(
       () =>
         `startComputerGame challenger=${
           challenger.id
@@ -244,8 +247,7 @@ export default class GameService extends CommonGameService {
       starttime: now,
     };
 
-    let gamerecord: BasicPlayedGameRecord = {
-      _id: "x",
+    let gamerecord: Mongo.OptionalId<BasicPlayedGameRecord> = {
       startTime: new Date(),
       instance_id: this.instanceservice.instanceid,
       connection_id: connectionid,
@@ -267,7 +269,7 @@ export default class GameService extends CommonGameService {
     };
 
     if ("skill_level" in challenge) {
-      (gamerecord as ComputerPlayGameRecord) = {
+      (gamerecord as Mongo.OptionalId<ComputerPlayGameRecord>) = {
         ...gamerecord,
         status: "computer",
         opponent: {
@@ -282,7 +284,7 @@ export default class GameService extends CommonGameService {
     } else {
       if (!whiteplayer || !blackplayer)
         throw new Meteor.Error("UNABLE_TO_FIND_USER");
-      (gamerecord as TwoPlayerPlayedGameRecord) = {
+      (gamerecord as Mongo.OptionalId<TwoPlayerPlayedGameRecord>) = {
         ...gamerecord,
         white: whiteplayer,
         black: blackplayer,
@@ -296,7 +298,12 @@ export default class GameService extends CommonGameService {
     gamerecord._id = id;
     const game =
       ratingtype === "computer"
-        ? new ServerComputerPlayedGame(this, id, this.writabledao)
+        ? new ServerComputerPlayedGame(
+            this,
+            id,
+            this.writabledao,
+            this.engineservice,
+          )
         : new ServerUserPlayedGame(this, id, this.writabledao);
     game.startClock();
     return id;

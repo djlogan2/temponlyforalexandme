@@ -16,7 +16,12 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
 
   protected abstract playerColor(who: User): PieceColor | null;
 
-  protected abstract internalSetDraw(color: PieceColor, draw: boolean): void;
+  protected abstract internalSetDraw(
+    who: string,
+    color: PieceColor,
+    draw: boolean,
+    type: "drawdecline" | "drawrevoke" | "drawrequest",
+  ): void;
 
   protected get me(): BasicPlayedGameRecord {
     if (super.me.status === "playing" || super.me.status === "computer")
@@ -79,6 +84,7 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   }
 
   protected stopping(): void {
+    super.stopping();
     this.stopTimer();
   }
 
@@ -99,7 +105,6 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
   public draw(who: User): void {
     // const chess = new Chess(this.me.fen);
 
-    let result: GameStatus;
     let result2;
 
     if (this.global.chessObject.insufficient_material()) {
@@ -123,7 +128,7 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
     if (!color) throw new Meteor.Error("INSUFFICIENT_AUTHORITY");
 
     if (this.me.pending[color].draw) return;
-    this.internalSetDraw(color, true);
+    this.internalSetDraw(who.id, color, true, "drawrequest");
   }
 
   public declineDraw(who: User): void {
@@ -131,7 +136,7 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
     if (!decliner) throw new Meteor.Error("INSUFFICIENT_AUTHORITY");
     const othercolor = decliner === "w" ? "b" : "w";
     if (!this.me.pending[othercolor].draw) return;
-    this.internalSetDraw(othercolor, false);
+    this.internalSetDraw(who.id, othercolor, false, "drawdecline");
   }
 
   protected resignColor(color: PieceColor): void {

@@ -34,6 +34,7 @@ export default abstract class CommonBasicGame extends Stoppable {
   }
 
   protected abstract internalMakeMove(
+    who: string,
     move: Move,
     fen: string,
     result: GameStatus,
@@ -77,9 +78,10 @@ export default abstract class CommonBasicGame extends Stoppable {
   }
 
   public makeMove(who: User, move: string): void {
+    this.logger.debug(() => `makeMove move=${move} user=${who.id}`);
     if (!this.isAuthorizedToMove(who))
       throw new Meteor.Error("CANNOT_MAKE_MOVE");
-    this.makeMoveAuth(move);
+    this.makeMoveAuth(who.id, move);
   }
 
   protected abstract isClosing(): void;
@@ -89,8 +91,8 @@ export default abstract class CommonBasicGame extends Stoppable {
     delete globalThis.ICCServer.games[this.me._id];
   }
 
-  protected makeMoveAuth(move: string): void {
-    // const chess = new Chess(this.me.fen);
+  protected makeMoveAuth(who: string, move: string): void {
+    this.logger.debug(() => `makeMoveAuth move=${move}`);
     const chessmove = this.global.chessObject.move(move, { sloppy: true });
     if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
     this.premoveTasks();
@@ -116,6 +118,7 @@ export default abstract class CommonBasicGame extends Stoppable {
     } else result2 = 0;
 
     this.internalMakeMove(
+      who,
       chessmove,
       this.global.chessObject.fen(),
       gameresult,
@@ -128,4 +131,6 @@ export default abstract class CommonBasicGame extends Stoppable {
       this.isClosing();
     }
   }
+
+  protected stopping() {}
 }

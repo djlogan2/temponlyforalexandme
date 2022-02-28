@@ -6,6 +6,7 @@ import CommonLogger from "/lib/CommonLogger";
 import { CollectionNames } from "/lib/CollectionNames";
 
 globalThis.ICCServer = {
+  connections: {},
   collections: {},
   games: {},
   services: {},

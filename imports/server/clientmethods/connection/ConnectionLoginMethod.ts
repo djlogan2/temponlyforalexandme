@@ -28,7 +28,7 @@ export default class ConnectionLoginMethod extends AbstractClientMethod {
   protected validatearguments(obj: ConnectionLoginObject): void {}
 
   protected async called(obj: ConnectionLoginObject): Promise<string> {
-    this.logger1.debug(
+    this.logger1.trace(
       () =>
         `called, connection= ${obj.connection?._id} hashtoken=${obj.hashtoken}`,
     );

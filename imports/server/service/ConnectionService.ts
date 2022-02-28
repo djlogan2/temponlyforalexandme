@@ -26,9 +26,29 @@ import EventEmitter from "eventemitter3";
 import GameService from "/imports/server/service/GameService";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import ServerUser from "/lib/server/ServerUser";
+import ChessEngineService from "/imports/server/service/ChessEngineService";
+import InstanceDao from "/imports/server/dao/InstanceDao";
 
 export default class ConnectionService extends Stoppable {
+  private readonly readableloggerconfigdao: ReadOnlyLoggerConfigurationDao;
+
+  private readonly writableloggerconfigdao: WritableLoggerConfigurationDao;
+
+  private readonly logrecordsdao: LogRecordsDao;
+
+  private readonly instancedao: InstanceDao;
+
   private readonly connectiondao: ConnectionDao;
+
+  private readonly readonlyuserdao: CommonReadOnlyUserDao;
+
+  private readonly writableuserdao: WritableUserDao;
+
+  private readonly themedao: WritableThemeDao;
+
+  private readonly i18nwritabledao: Writablei18nDao;
+
+  private readonly writablegamedao: WritableGameDao;
 
   private readonly instanceservice: InstanceService;
 
@@ -38,15 +58,11 @@ export default class ConnectionService extends Stoppable {
 
   private readonly gameservice: GameService;
 
-  private readonly userdao: CommonReadOnlyUserDao;
-
-  private readonly writableuserdao: WritableUserDao;
+  private readonly engineservice: ChessEngineService;
 
   private connectionLoginMethod: ConnectionLoginMethod;
 
   private connectionIdleMethod: ConnectionIdleMethod;
-
-  private connections: { [key: string]: ServerConnection } = {};
 
   private events = new EventEmitter();
 
@@ -58,60 +74,68 @@ export default class ConnectionService extends Stoppable {
 
   private loggerservice: LoggerService;
 
-  constructor(
-    parent: Stoppable | null,
-    instanceservice: InstanceService,
-    connectiondao: ConnectionDao,
-    readonlyuserdao: CommonReadOnlyUserDao,
-    writableuserdao: WritableUserDao,
-    i18nwritabledao: Writablei18nDao,
-    themedao: WritableThemeDao,
-    readableloggerconfigdao: ReadOnlyLoggerConfigurationDao,
-    writableloggerconfigdao: WritableLoggerConfigurationDao,
-    logrecordsdao: LogRecordsDao,
-    writablegamedao: WritableGameDao,
-  ) {
-    super(parent);
-    this.userdao = readonlyuserdao;
-    this.writableuserdao = writableuserdao;
-    this.connectiondao = connectiondao;
-    this.instanceservice = instanceservice;
+  constructor() {
+    super(null);
+
+    // -------------- FIRST FIRST FIRST --------------
+    //
+    // Because this is the logger, it really has to be initialized first.
+    // Once we get through this, then we can intialize dao's and services however we want.
+    //
+    this.readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
+    this.writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
+    this.logrecordsdao = new LogRecordsDao(null);
+    //
+    // --- end first ---
+
+    this.instancedao = new InstanceDao(this);
+    this.connectiondao = new ConnectionDao(this);
+    this.readonlyuserdao = new CommonReadOnlyUserDao(null);
+    this.writableuserdao = new WritableUserDao(null);
+    this.themedao = new WritableThemeDao(null);
+    this.i18nwritabledao = new Writablei18nDao(null);
+    this.instanceservice = new InstanceService(this, this.instancedao);
+    this.writablegamedao = new WritableGameDao(null);
+
     this.connectionLoginMethod = new ConnectionLoginMethod(this, this);
     this.connectionIdleMethod = new ConnectionIdleMethod(this, this);
     this.publicationservice = new PublicationService(this, this);
+
     this.i18nservice = new I18nService(
       this,
-      i18nwritabledao,
+      this.i18nwritabledao,
       this,
       this.publicationservice,
     );
     this.themeservice = new ThemeService(
       this,
-      themedao,
+      this.themedao,
       this.publicationservice,
     );
     this.userservice = new UserService(
       this,
-      writableuserdao,
+      this.writableuserdao,
       this.themeservice,
       this.publicationservice,
       this,
     );
     this.loggerservice = new LoggerService(
       this,
-      readableloggerconfigdao,
-      writableloggerconfigdao,
-      logrecordsdao,
+      this.readableloggerconfigdao,
+      this.writableloggerconfigdao,
+      this.logrecordsdao,
       this,
       this.publicationservice,
     );
+    this.engineservice = new ChessEngineService(this);
     this.gameservice = new GameService(
-      parent,
-      writablegamedao,
+      this,
+      this.writablegamedao,
       this.publicationservice,
       this,
       this.instanceservice,
       this.writableuserdao,
+      this.engineservice,
     );
 
     Meteor.onConnection((connection) => this.onConnection(connection));
@@ -149,7 +173,7 @@ export default class ConnectionService extends Stoppable {
           msgobject,
         )}`,
     );
-    const connection = this.connections[session];
+    const connection = globalThis.ICCServer.connections[session];
     this.logger.debug(() => `onDirectMessage connection=${connection}`);
     if (!connection) {
       // TODO: Handle this error
@@ -161,9 +185,9 @@ export default class ConnectionService extends Stoppable {
 
   private onClose(ourconnection: ServerConnection): void {
     this.logger.debug(() => `${ourconnection.connectionid} onClose`);
-    if (ourconnection.user) this.events.emit("userlogout", connection.user);
+    if (ourconnection.user) this.events.emit("userlogout", ourconnection.user);
     ourconnection.stop();
-    delete this.connections[ourconnection.connectionid];
+    delete globalThis.ICCServer.connections[ourconnection.connectionid];
     this.connectiondao.remove(ourconnection._id);
   }
 
@@ -186,10 +210,10 @@ export default class ConnectionService extends Stoppable {
       connrecord as ConnectionRecord,
       this.connectiondao,
       this.userservice,
-      this.userdao,
+      this.readonlyuserdao,
       this.writableuserdao,
     );
-    this.connections[connection.id] = ourconnection;
+    globalThis.ICCServer.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
     this.events.emit(connection.id, ourconnection);
   }
@@ -209,7 +233,12 @@ export default class ConnectionService extends Stoppable {
     if (this.events.listenerCount("userlogin")) {
       this.events.emit(
         "userlogin",
-        new ServerUser(this, userid, this.userdao, this.writableuserdao),
+        new ServerUser(
+          this,
+          userid,
+          this.readonlyuserdao,
+          this.writableuserdao,
+        ),
       );
     }
     this.logger.debug(() => `login returning id=${userid}`);
@@ -229,11 +258,11 @@ export default class ConnectionService extends Stoppable {
   public async getConnection(connection: string): Promise<ServerConnection> {
     this.logger.debug(() => `getConnection conn=${connection}`);
     return new Promise<ServerConnection>((resolve) => {
-      if (this.connections[connection]) {
+      if (globalThis.ICCServer.connections[connection]) {
         this.logger.debug(
           () => `getConnection conn=${connection} resolving valid connection`,
         );
-        resolve(this.connections[connection]);
+        resolve(globalThis.ICCServer.connections[connection]);
         return;
       }
       this.logger.debug(

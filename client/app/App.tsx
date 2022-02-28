@@ -13,7 +13,7 @@ const App: FCICC = ({ classes, ...rest }) => {
     <Router>
       <Switch>
         <Route exact path="/">
-          <ComponentsView
+          <GameMarkup
             keyboardFunctions={[]}
             token={{
               token: "",
@@ -22,8 +22,8 @@ const App: FCICC = ({ classes, ...rest }) => {
             classes={[]}
           />
         </Route>
-        <Route exact path="/game">
-          <GameMarkup
+        <Route exact path="/ui-elements">
+          <ComponentsView
             keyboardFunctions={[]}
             token={{
               token: "",
