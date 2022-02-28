@@ -67,7 +67,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           </ActionButton>
 
           <StandardButton>Button</StandardButton>
-          <StandardButton color="blue">Button</StandardButton>
+          <StandardButton color="primary">Button</StandardButton>
           <StandardButton disabled>Button</StandardButton>
         </div>
         <CapturedPieces color="black" soliders={{ k: 3, q: 2, p: 4 }} />
@@ -81,7 +81,6 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           classes={[]}
           status="in"
         /> */}
-        <GameSetup />
         {/* <div>
           <h2>Movelist</h2>
           <Movelist
@@ -163,47 +162,9 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           keyboardFunctions={[]}
           classes={[]}
         />
-        <Input
-          name="fakeInput1"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "FAKE_INPUT",
-            args: [],
-          }}
-          msgText={{
-            token: "FAKE_MSG_TEXT",
-            args: [],
-          }}
-        />
-        <Input
-          error
-          name="fakeInput2"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "FAKE_INPUT",
-            args: [],
-          }}
-          msgText={{
-            token: "FAKE_MSG_TEXT",
-            args: [],
-          }}
-        />
-        <Input
-          type="password"
-          name="fakeInput3"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "FAKE_INPUT",
-            args: [],
-          }}
-          msgText={{
-            token: "FAKE_MSG_TEXT",
-            args: [],
-          }}
-        />
+        <Input name="input1" label="Input1" />
+        <Input name="input2" label="Input2" error errorText="Error text" />
+        <Input name="input2" label="Input2" disabled />
         <Select
           options={["Fake item 1", "Fake item 2"]}
           onSelect={() => null}
@@ -220,35 +181,10 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         />
 
         <div>
-          <Switch
-            name="fakeSwitch1"
-            keyboardFunctions={[]}
-            classes={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-          />
+          <Switch name="fakeSwitch1" />
         </div>
-        <Checkbox
-          name="fakeCheckbox1"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "",
-            args: [],
-          }}
-        />
-        <Checkbox
-          name="fakeCheckbox2"
-          disabled
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "",
-            args: [],
-          }}
-        />
+        <Checkbox name="fakeCheckbox1" />
+        <Checkbox name="fakeCheckbox2" disabled />
         <TextArea
           name="fakeTextArea1"
           keyboardFunctions={[]}

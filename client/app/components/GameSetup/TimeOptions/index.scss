@@ -1,5 +1,5 @@
-.gameSetupTimeOptions {
-  &__timeOptions {
+.gameSetup .timeOptions {
+  &__list {
     display: grid;
     grid-template-columns: repeat(4, 8.3rem);
     grid-template-rows: 6rem 6rem;
@@ -12,7 +12,7 @@
   }
 
   @media (max-width: 1366px) {
-    &__timeOptions {
+    &__list {
       grid-template-rows: 6rem;
 
       &
@@ -38,7 +38,7 @@
     position: relative;
     margin-bottom: -15px;
 
-    &__timeOptions {
+    &__list {
       grid-template-rows: 6rem;
       grid-template-columns: repeat(auto-fill, 8.3rem);
       margin-right: calc(-100% + 8.3rem);
@@ -61,9 +61,8 @@
       width: 7.8rem;
     }
 
-    &__timeOptions {
+    &__list {
       grid-template-columns: repeat(auto-fill, 7.8rem);
-
     }
   }
 }

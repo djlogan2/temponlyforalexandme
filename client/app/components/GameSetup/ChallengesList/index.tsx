@@ -2,15 +2,15 @@ import React, { FC } from "react";
 import OpenChallengeItem from "../../OpenChallengeItem";
 import "./index.scss";
 
-interface IGameSetupChallengesListProps {}
+interface IChallengesListProps {}
 
-const GameSetupChallengesList: FC<IGameSetupChallengesListProps> = () => (
-  <div className="gameSetupChallengesList">
+const ChallengesList: FC<IChallengesListProps> = () => (
+  <div className="challengesList">
     {new Array(4).fill(0).map((_, i) => (
       <OpenChallengeItem
         key={i}
         size="small"
-        className="gameSetupChallengesList__item"
+        className="challengesList__item"
         flag="IT"
         chessTitle="WGM"
         gameTime={15}
@@ -23,4 +23,4 @@ const GameSetupChallengesList: FC<IGameSetupChallengesListProps> = () => (
   </div>
 );
 
-export default GameSetupChallengesList;
+export default ChallengesList;

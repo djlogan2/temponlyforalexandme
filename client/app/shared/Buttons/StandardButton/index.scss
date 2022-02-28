@@ -21,11 +21,19 @@
     max-width: 34rem;
   }
 
-  &--white {
+  &--height-small {
+    height: 4rem;
+  }
+
+  &--height-big {
+    height: 5rem;
+  }
+
+  &--regular {
     background-color: #fff;
   }
 
-  &--blue {
+  &--primary {
     background-color: var(--colorPrimary);
     color: #fff;
   }

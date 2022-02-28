@@ -1,0 +1,92 @@
+.customChallenge {
+  &__card {
+    padding: 1.6rem 2rem;
+    background-color: var(--colorWhiteOne);
+    margin: 1.8rem 0 2rem 0;
+    border-radius: 8px;
+  }
+
+  &__subtitle {
+    font-size: 1.2rem;
+    color: var(--colorBlackOne);
+  }
+
+  &__inputs {
+    margin: 0.8rem 0 1.2rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1.4rem;
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+  }
+
+  &__textPlaceholder {
+    font-size: 1.6rem;
+    line-height: 1.909rem;
+    margin-left: 1rem;
+  }
+
+  &__rating {
+    font-size: 2.4rem;
+    color: var(--colorDarkOne);
+    display: flex;
+    align-items: center;
+
+    &:nth-child(2) {
+      color: var(--colorDarkTwo);
+      opacity: 0.5;
+    }
+  }
+
+  &__btnRating {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background-color: var(--colorDarkTwo);
+    color: var(--colorWhiteOne);
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1.2rem;
+  }
+
+  &__ratings {
+    margin-top: 2rem;
+  }
+
+  &__colors {
+    .pieceButton {
+      &:nth-child(1) {
+        svg {
+          fill: var(--colorWhiteTwo);
+        }
+      }
+
+      &:nth-child(2) {
+        margin: 0 2.5rem;
+      }
+
+      &:nth-child(3) {
+        svg {
+          fill: var(--colorDarkOne);
+        }
+      }
+    }
+  }
+
+  &__variants-btn {
+    margin-top: 1.6rem;
+    padding-left: 0 !important;
+    justify-content: start !important;
+  }
+
+  &__actions {
+    button:nth-child(2) {
+      margin-top: 0.8rem;
+    }
+  }
+}

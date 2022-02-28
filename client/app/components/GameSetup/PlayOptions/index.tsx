@@ -3,16 +3,13 @@ import { options } from "../constants";
 import { TOptions } from "../types";
 import TabButton from "/client/app/shared/Buttons/TabButton";
 
-interface IGameSetupPlayOptionsProps {
+interface IPlayOptionsProps {
   onClick: (tab: TOptions) => void;
   gameOption: TOptions;
 }
 
-const GameSetupPlayOptions: FC<IGameSetupPlayOptionsProps> = ({
-  onClick,
-  gameOption,
-}) => (
-  <div className="gameSetupPlayOptions d-flex space-between">
+const PlayOptions: FC<IPlayOptionsProps> = ({ onClick, gameOption }) => (
+  <div className="playOptions d-flex space-between">
     {options.map((tab) => (
       <TabButton
         isColorless={gameOption !== tab}
@@ -26,4 +23,4 @@ const GameSetupPlayOptions: FC<IGameSetupPlayOptionsProps> = ({
   </div>
 );
 
-export default GameSetupPlayOptions;
+export default PlayOptions;

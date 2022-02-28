@@ -5,22 +5,22 @@ import { timeOptions } from "../constants";
 import { TTimeOption } from "../types";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 
-interface IGameSetupTimeOptionsProps {
+interface ITimeOptionProps {
   showMoreChallengeTimes?: boolean;
   timeOption?: TTimeOption;
   onClick: (time: TTimeOption) => void;
 }
 
-const GameSetupTimeOptions: FC<IGameSetupTimeOptionsProps> = ({
+const TimeOption: FC<ITimeOptionProps> = ({
   showMoreChallengeTimes,
   timeOption,
   onClick,
 }) => (
-  <div className="gameSetupTimeOptions">
+  <div className="timeOptions">
     <div
       className={clsx(
-        "gameSetupTimeOptions__timeOptions",
-        showMoreChallengeTimes && "gameSetupTimeOptions__timeOptions--seenAll",
+        "timeOptions__list",
+        showMoreChallengeTimes && "timeOptions__list--seenAll",
       )}
     >
       {timeOptions.map((time) => (
@@ -29,9 +29,7 @@ const GameSetupTimeOptions: FC<IGameSetupTimeOptionsProps> = ({
           key={time}
           onClick={() => onClick(time)}
         >
-          {time === "custom" && (
-            <More className="gameSetupTimeOptions__customTime" />
-          )}
+          {time === "custom" && <More className="timeOptions__customTime" />}
           <p>{time}</p>
           {time !== "custom" && <p>minute</p>}
         </TabButtonSquared>
@@ -40,4 +38,4 @@ const GameSetupTimeOptions: FC<IGameSetupTimeOptionsProps> = ({
   </div>
 );
 
-export default GameSetupTimeOptions;
+export default TimeOption;
