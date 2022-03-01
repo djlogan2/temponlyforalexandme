@@ -95,8 +95,13 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     };
 
     const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
-    modifier.$set.action = { $push: audit };
-    this.dao.update({ _id: this.me._id }, modifier);
+    // @ts-ignore
+    modifier.$push.actions = audit;
+    try {
+      this.dao.update({ _id: this.me._id }, modifier);
+    } catch (e) {
+      console.log("WTF??");
+    }
   }
 
   protected isClosing(): void {

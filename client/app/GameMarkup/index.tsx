@@ -39,7 +39,8 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
       const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-shadow
-      const { tomove, variations, fen, clocks } = {}; // gInstance.getDefaultProperties();
+      const { tomove, variations, fen, clocks } =
+        gInstance.getDefaultProperties();
       setFen(fen);
       setMoveToMake(tomove);
       updateClocks(clocks);

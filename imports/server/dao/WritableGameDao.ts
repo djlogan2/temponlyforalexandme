@@ -14,7 +14,7 @@ export default class WritableGameDao extends ReadWriteDao<BasicGameRecord> {
     modifier: Mongo.Modifier<BasicGameRecord>,
   ): number {
     // @ts-ignore
-    if (!modifier.$set?.actions) throw new Meteor.Error("SERVER_ERROR");
+    if (!modifier.$push?.actions) throw new Meteor.Error("SERVER_ERROR");
     return super.update(selector, modifier);
   }
 }
