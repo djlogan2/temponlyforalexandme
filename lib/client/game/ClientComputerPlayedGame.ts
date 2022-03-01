@@ -51,7 +51,7 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
       () =>
         `[${this.hash}] updateMoveFromEvent move=${move.move} color=${move.smith.color} tomove=${this.me.tomove}`,
     );
-    if (move.smith.color !== this.me.tomove) this.makeMoveAuth("", move.move);
+    if (move.smith.color !== this.me.opponentcolor) this.makeMoveAuth("", move.move);
   }
 
   protected startTimer(milliseconds: number, fn: () => void) {
