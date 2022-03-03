@@ -1,11 +1,10 @@
-import React, { FCICC } from "react";
-import "./index.scss";
+import React, { FCICC, useState } from "react";
 import { useHistory } from "react-router-dom";
-import Movelist from "../components/Movelist";
+import GameSetup from "../components/GameSetup";
 import Avatar from "../shared/Avatar";
 import StandardButton from "../shared/Buttons/StandardButton";
+import "./index.scss";
 import CapturedPieces from "/client/app/components/CapturedPieces";
-import DummyChessboard from "/client/app/components/DummyChessboard";
 import PlayerInfo from "/client/app/components/PlayerInfo";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
 import Checkbox from "/client/app/shared/Checkbox";
@@ -28,11 +27,18 @@ import Title from "/client/app/shared/Typographies/Title";
 interface IComponentsView {}
 
 const ComponentsView: FCICC<IComponentsView> = () => {
+  const [showGameSetupModal, setShowGameSetupModal] = useState(false);
   const history = useHistory();
 
   return (
     <div className="container">
       <div className="elements-container">
+        <StandardButton onClick={() => setShowGameSetupModal(true)}>
+          Game setup
+        </StandardButton>
+        {showGameSetupModal && (
+          <GameSetup onCloseModal={() => setShowGameSetupModal(false)} />
+        )}
         <div>
           <Avatar
             picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -43,29 +49,16 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         </div>
         <div>
           <h2>Buttons</h2>
-          <ActionButton
-            name="fakeButton"
-            hoverText="report"
-            token={{ token: "FAKE_BUTTON", args: [] }}
-            keyboardFunctions={[]}
-            classes={[]}
-          >
+          <ActionButton name="fakeButton" hoverText="report">
             M
           </ActionButton>
 
-          <ActionButton
-            name="fakeButton"
-            hoverText="1234"
-            token={{ token: "FAKE_BUTTON", args: [] }}
-            disabled
-            keyboardFunctions={[]}
-            classes={[]}
-          >
+          <ActionButton name="fakeButton" hoverText="1234" disabled>
             M
           </ActionButton>
 
           <StandardButton>Button</StandardButton>
-          <StandardButton color="blue">Button</StandardButton>
+          <StandardButton color="primary">Button</StandardButton>
           <StandardButton disabled>Button</StandardButton>
         </div>
         <CapturedPieces color="black" soliders={{ k: 3, q: 2, p: 4 }} />
@@ -132,47 +125,9 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           keyboardFunctions={[]}
           classes={[]}
         />
-        <Input
-          name="fakeInput1"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "FAKE_INPUT",
-            args: [],
-          }}
-          msgText={{
-            token: "FAKE_MSG_TEXT",
-            args: [],
-          }}
-        />
-        <Input
-          error
-          name="fakeInput2"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "FAKE_INPUT",
-            args: [],
-          }}
-          msgText={{
-            token: "FAKE_MSG_TEXT",
-            args: [],
-          }}
-        />
-        <Input
-          type="password"
-          name="fakeInput3"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "FAKE_INPUT",
-            args: [],
-          }}
-          msgText={{
-            token: "FAKE_MSG_TEXT",
-            args: [],
-          }}
-        />
+        <Input name="input1" label="Input1" />
+        <Input name="input2" label="Input2" error errorText="Error text" />
+        <Input name="input2" label="Input2" disabled />
         <Select
           options={["Fake item 1", "Fake item 2"]}
           onSelect={() => null}
@@ -189,35 +144,10 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         />
 
         <div>
-          <Switch
-            name="fakeSwitch1"
-            keyboardFunctions={[]}
-            classes={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-          />
+          <Switch name="fakeSwitch1" />
         </div>
-        <Checkbox
-          name="fakeCheckbox1"
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "",
-            args: [],
-          }}
-        />
-        <Checkbox
-          name="fakeCheckbox2"
-          disabled
-          keyboardFunctions={[]}
-          classes={[]}
-          token={{
-            token: "",
-            args: [],
-          }}
-        />
+        <Checkbox name="fakeCheckbox1" />
+        <Checkbox name="fakeCheckbox2" disabled />
         <TextArea
           name="fakeTextArea1"
           keyboardFunctions={[]}
@@ -239,7 +169,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
       <div className="board-contaier">
         <div className="board-wrapper">
           {/* @ts-ignore */}
-          <DummyChessboard />
+          {/* <DummyChessboard /> */}
         </div>
       </div>
     </div>

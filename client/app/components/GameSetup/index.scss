@@ -1,22 +1,24 @@
 .gameSetup {
-  width: 67.6rem;
+  max-width: 67.6rem;
+  width: 100%;
   background: #eceff5;
-  height: 100vh;
-  padding: 1.8rem 2.2rem;
+  height: 100%;
+  position: fixed;
 
-  &__pointer {
-    cursor: pointer;
+  .scrollBar {
+    & > div {
+      width: 100%;
+    }
   }
 
-  &__actions {
-    display: flex;
-    justify-content: space-between;
+  &__scrollContainer {
+    width: 100%;
+    padding: 1.8rem 2.2rem;
   }
 
   &__container {
     width: 36rem;
     margin: 0 auto;
-    margin-top: 4.4rem;
   }
 
   &__title {
@@ -25,88 +27,38 @@
     line-height: 2.93rem;
     color: var(--colorDarkOne);
     text-align: center;
-    margin-bottom: 2.65rem;
+    margin-bottom: 2rem;
   }
 
-  &__options {
-    display: flex;
-    justify-content: space-between;
+  @media (max-width: 1366px) {
+    max-width: 45rem;
   }
 
-  &__subtitle {
-    font-size: 1.8rem;
-    line-height: 2.2rem;
-    font-weight: 500;
-    color: var(--colorDarkOne);
-    margin: 2.4rem 0;
-  }
-
-  &__timeOptions {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-
-  &__challengeTime {
-    height: 6rem;
-    width: 8.3rem;
-    padding: 1.2rem;
-    &:nth-child(1) {
-      margin-bottom: 0.8rem;
+  @media (max-width: 1024px) {
+    &__scrollContainer {
+      padding: 1.2rem 2rem;
     }
-    font-weight: 700;
-    font-size: 1.4rem;
-    line-height: 1.703rem;
-    color: var(--colorDarkOne);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
 
-    &--active {
-      background-color: var(--colorPrimary);
-      color: #fff;
+    &__controlsIcon {
+      width: 2.2rem;
+      height: 2.2rem;
+    }
+
+    &__container {
+      margin-top: 1.5rem;
     }
   }
 
-  &__more--active {
-    > * {
-      fill: #fff !important;
+  @media (max-width: 375px) {
+    width: 100%;
+    padding-bottom: 1rem;
+
+    &__container {
+      width: 34rem;
     }
-  }
 
-  &__challenge-item {
-    &:not(:last-child) {
-      margin-bottom: 0.8rem;
+    &__scrollContainer {
+      padding: 1.5rem;
     }
-  }
-  &__challenge-types {
-    display: flex;
-    margin-bottom: 1.7rem;
-  }
-
-  &__challenge-type {
-    margin-right: 2.4rem;
-    color: var(--colorGreyOne);
-    cursor: pointer;
-
-    &--active {
-      color: var(--colorPrimary);
-    }
-  }
-
-  &__btn-more {
-    padding: 0.95rem;
-    height: 4rem;
-  }
-
-  &__show-more {
-    font-size: 1.6rem;
-    color: var(--colorPrimary);
-    text-decoration: underline;
-    cursor: pointer;
-    text-align: center;
-    margin-top: 1.6rem;
-    margin-bottom: 1.8rem;
   }
 }

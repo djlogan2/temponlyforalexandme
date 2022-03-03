@@ -35,6 +35,7 @@ class TestCommonPlayedGame extends CommonPlayedGame {
   }
 
   protected internalMakeMove(
+    who: string,
     move: Move,
     fen: string,
     result: GameStatus,
@@ -42,7 +43,14 @@ class TestCommonPlayedGame extends CommonPlayedGame {
     eco: ECOObject,
   ): void {}
 
-  protected internalSetDraw(color: PieceColor, draw: boolean): void {}
+  protected internalSetDraw(
+    who: string,
+    color: PieceColor,
+    draw: boolean,
+    type: "drawdecline" | "drawrevoke" | "drawrequest",
+  ): void {
+    throw new Error("Method not implemented.");
+  }
 
   protected isAuthorizedToMove(who: User): boolean {
     return true;

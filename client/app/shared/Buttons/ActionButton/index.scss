@@ -38,6 +38,10 @@
     max-width: 77%;
   }
 
+  &--primary {
+    background-color: var(--colorPrimary);
+  }
+
   &--dark {
     background-color: var(--colorDarkOne);
 

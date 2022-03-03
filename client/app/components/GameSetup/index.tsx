@@ -1,120 +1,87 @@
-import clsx from "clsx";
-import React, { useState } from "react";
+import React, { FC, useRef, useState } from "react";
+import useOnClickOutside from "../../hooks/useClickOutside";
 import Backdrop from "../../shared/Backdrop";
-import StandardButton from "../../shared/Buttons/StandardButton";
-import TabButton from "../../shared/Buttons/TabButton";
-import Heading5 from "../../shared/Typographies/Heading5";
-import ArrowLeft from "../icons/ArrowLeft";
-import Close from "../icons/Close";
-import More from "../icons/More";
-import OpenChallengeItem from "../OpenChallengeItem";
-import UserItem from "../UserItem";
-import { options, timeOptions, challengeTypes } from "./constants";
+import ScrollBar from "../../shared/ScrollBar";
+import AnyonePlay from "./AnyonePlay";
+import ChallengeLaunched from "./ChallengeLaunched";
+import ComputerPlay from "./ComputerPlay";
+import { title } from "./constants";
+import Controls from "./Controls";
+import CustomChallenge from "./CustomChallenge";
+import PlayOptions from "./PlayOptions";
+import PlayWithFriends from "./PlayWithFriends";
+import Share from "./Share";
+import { EComponents } from "./types";
 
-const GameSetup = () => {
-  const [gameOption, setGameOption] =
-    useState<typeof options[number]>("Anyone");
+interface IGameSetupProps {
+  onCloseModal: () => void;
+}
 
-  const [timeOption, setTimeOption] = useState<typeof timeOptions[number]>(15);
+const gameSetupComponents = {
+  Anyone: AnyonePlay,
+  Custom: CustomChallenge,
+  Computer: ComputerPlay,
+  Share,
+  Friends: PlayWithFriends,
+  Challenge: ChallengeLaunched,
+};
 
-  const [activeChallenge, setActiveChallenge] =
-    useState<typeof challengeTypes[number]>("Challenge");
+const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
+  const [components, setComponent] = useState<EComponents[]>([
+    EComponents.ANYONE,
+  ]);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside(backdropRef, onCloseModal);
+
+  const currentTab = components[components.length - 1];
+
+  const navigate = (component: EComponents) => {
+    if (currentTab === component) {
+      return;
+    }
+
+    setComponent((prev) => [...prev, component]);
+  };
+
+  const returnBack = () => {
+    if (components.length === 1) {
+      return;
+    }
+
+    const copiedComponents = [...components];
+    copiedComponents.pop();
+    setComponent(copiedComponents);
+  };
+
+  const Component = gameSetupComponents[currentTab];
 
   return (
     <Backdrop>
-      <div className="gameSetup">
-        <div className="gameSetup__actions">
-          <ArrowLeft className="gameSetup__pointer" />
-          <Close className="gameSetup__pointer" />
-        </div>
-        <div className="gameSetup__container">
-          <div className="gameSetup__title">Play</div>
-          <div className="gameSetup__options">
-            {options.map((tab) => (
-              <TabButton
-                key={tab}
-                onClick={() => setGameOption(tab)}
-                color={gameOption === tab ? "primary" : undefined}
-              >
-                {tab}
-              </TabButton>
-            ))}
-          </div>
-          <div className="gameSetup__subtitle">Launch a new challenge</div>
-          <div className="gameSetup__timeOptions">
-            {timeOptions.map((time) => (
-              <TabButton
-                key={time}
-                className={clsx(
-                  "gameSetup__challengeTime",
-                  time === timeOption && "gameSetup__challengeTime--active",
-                )}
-                onClick={() => setTimeOption(time)}
-              >
-                {time !== "custom" ? (
-                  <>
-                    <p>{time}</p>
-                    <p>minute</p>
-                  </>
-                ) : (
-                  <>
-                    <More
-                      className={clsx(
-                        time === timeOption && "gameSetup__more--active",
-                      )}
-                    />
-                    <p>{time}</p>
-                  </>
-                )}
-              </TabButton>
-            ))}
-          </div>
-          <div className="gameSetup__subtitle">Join an Open challenge</div>
-          <div className="gameSetup__challenge-types">
-            {challengeTypes.map((type) => (
-              <Heading5
-                key={type}
-                onClick={() => setActiveChallenge(type)}
-                className={clsx(
-                  "gameSetup__challenge-type",
-                  type === activeChallenge &&
-                    "gameSetup__challenge-type--active",
-                )}
-              >
-                {type}
-              </Heading5>
-            ))}
-          </div>
-          {new Array(4).fill(0).map((_, i) => (
-            <OpenChallengeItem
-              key={i}
-              size="small"
-              className="gameSetup__challenge-item"
-              flag="IT"
-              chessTitle="WGM"
-              gameTime={15}
-              userRating={1600}
-              username="Test"
-              userPic="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              userStatus="online"
-            />
-            // <UserItem
-            //   key={i}
-            // className="gameSetup__challenge-item"
-            //   text="User name (1600)"
-            //   chessTitle="WGM"
-            //   status="online"
-            //   flag="IT"
-            //   size="sm"
-            // />
-          ))}
+      <div className="gameSetup" ref={backdropRef}>
+        <ScrollBar
+          autoHeight={false}
+          height={768}
+          style={{
+            backgroundColor: "var(--colorOneThree)",
+          }}
+        >
+          <div className="gameSetup__scrollContainer">
+            <Controls onCloseModal={onCloseModal} onReturnBack={returnBack} />
+            <div className="gameSetup__container">
+              <div className="gameSetup__title">{title[currentTab]}</div>
+              {currentTab !== EComponents.CHALLENGE && (
+                <PlayOptions
+                  onClick={(tab) => {
+                    navigate(tab);
+                  }}
+                  gameOption={currentTab}
+                />
+              )}
 
-          <p className="gameSetup__show-more">Show more</p>
-
-          <StandardButton className="gameSetup__btn-more">
-            More Options
-          </StandardButton>
-        </div>
+              <Component navigate={navigate} />
+            </div>
+          </div>
+        </ScrollBar>
       </div>
     </Backdrop>
   );

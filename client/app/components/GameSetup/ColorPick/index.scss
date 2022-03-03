@@ -1,0 +1,31 @@
+.gameSetup .colorPick {
+  &__subtitle {
+    margin-bottom: 1.8rem;
+  }
+
+  &__colors {
+    .pieceButton {
+      &:nth-child(1) {
+        svg {
+          fill: var(--colorWhiteTwo);
+        }
+      }
+
+      &:nth-child(2) {
+        margin: 0 2.5rem;
+      }
+
+      &:nth-child(3) {
+        svg {
+          fill: var(--colorDarkOne);
+        }
+      }
+    }
+  }
+
+  &__variants-btn {
+    margin-top: 1.6rem;
+    padding-left: 0 !important;
+    justify-content: start !important;
+  }
+}

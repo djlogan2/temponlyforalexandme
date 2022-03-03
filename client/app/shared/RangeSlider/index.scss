@@ -1,0 +1,59 @@
+.rangeSlider {
+  width: 100%;
+  position: relative;
+
+  &__input {
+    width: 100%;
+    position: relative;
+    height: 0.2rem;
+
+    &::before {
+      position: absolute;
+      content: "";
+
+      background-color: var(--colorGreyOne);
+      opacity: 0.5;
+      border-radius: 15px;
+      outline: 0;
+      transition: 0.2s;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      outline: 0;
+    }
+
+    -webkit-appearance: none; /* Override default CSS styles */
+    appearance: none;
+
+    &::-webkit-slider-thumb {
+      position: relative;
+      z-index: 1;
+      -webkit-appearance: none; /* Override default look */
+      appearance: none;
+      width: 2rem; /* Set a specific slider handle width */
+      height: 2rem; /* Slider handle height */
+      background: var(--colorPrimary); /* Green background */
+      cursor: pointer; /* Cursor on hover */
+      box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      opacity: 1.5 !important;
+    }
+  }
+
+  &__message {
+    content: "";
+    position: absolute;
+    width: 12rem;
+    height: 2.7rem;
+    padding: 0.4rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--colorPrimary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--colorPrimary);
+    font-size: 1.6rem;
+    margin-top: 1.55rem;
+  }
+}

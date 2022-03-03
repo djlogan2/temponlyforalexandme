@@ -36,13 +36,13 @@ const Select: FCICC<ISelectProps> = ({
   return (
     <div className={clsx("selectContainer", className)} ref={ref}>
       <Input
+        label=""
         placeholder={placeholderText}
-        token={token}
         name="select"
         onFocus={() => {
           setShowOptions(true);
         }}
-        rightIcon={
+        icon={
           <span
             onClick={() => setShowOptions((val) => !val)}
             role="presentation"
@@ -53,8 +53,6 @@ const Select: FCICC<ISelectProps> = ({
         value={selected}
         onChange={noop}
         disabled={disabled}
-        keyboardFunctions={[]}
-        classes={[]}
       />
 
       {showOptions && (

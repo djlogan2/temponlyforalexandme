@@ -31,7 +31,7 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
     fields?: (keyof T)[],
   ): void {
     const self = this;
-    this.loggerrrod.debug(
+    this.loggerrrod.trace(
       () =>
         `${self.collection} start selector=${JSON.stringify(
           selector,
@@ -46,7 +46,7 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
 
     this.observehandle = cursor.observeChanges({
       added(id, doc) {
-        self.loggerrrod.debug(
+        self.loggerrrod.trace(
           () =>
             `${
               self.collection
@@ -55,7 +55,7 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
         self.onRecordAdded(id, doc);
       },
       changed(id, doc) {
-        self.loggerrrod.debug(
+        self.loggerrrod.trace(
           () =>
             `${
               self.collection
@@ -64,7 +64,7 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
         self.onFieldsChanged(id, doc);
       },
       removed(id) {
-        self.loggerrrod.debug(
+        self.loggerrrod.trace(
           () => `${self.collection} start.observChanges.removed id=${id}`,
         );
         self.onRecordRemoved(id);
@@ -77,7 +77,7 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
    * @protected
    */
   protected stopping(): void {
-    this.loggerrrod.debug(() => `${this.collection} stopping`);
+    this.loggerrrod.trace(() => `${this.collection} stopping`);
     super.stopping();
     if (this.observehandle) this.observehandle.stop();
   }

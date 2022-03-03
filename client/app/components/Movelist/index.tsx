@@ -182,9 +182,6 @@ const Movelist: FCICC<IMovelistProps> = ({
             color="red"
             size="small"
             name="fakeButton"
-            token={{ token: "M", args: [] }}
-            keyboardFunctions={[]}
-            classes={[]}
             onButtonClick={onResignClick}
             hoverText="REJECT"
             onClick={() => {
@@ -196,9 +193,6 @@ const Movelist: FCICC<IMovelistProps> = ({
           <ActionButton
             size="small"
             name="fakeButton"
-            token={{ token: "M", args: [] }}
-            keyboardFunctions={[]}
-            classes={[]}
             onButtonClick={onDrawClick}
             hoverText="DRAW"
           >

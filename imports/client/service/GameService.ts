@@ -58,6 +58,10 @@ export default class GameService extends CommonGameService {
     });
   }
 
+  public getGameEntity(id: string) {
+    return this.dao.get(id);
+  }
+
   public getTyped(id: string, user: ClientUser) {
     const game = this.dao.get(id);
     if (!game) return undefined;

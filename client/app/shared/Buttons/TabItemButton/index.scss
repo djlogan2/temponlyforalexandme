@@ -1,0 +1,18 @@
+.tabItemButton {
+  outline: none;
+  border: none;
+  height: 2rem;
+
+  color: var(--colorGreyOne);
+  fill: currentColor;
+
+  &--selected,
+  &:active {
+    color: var(--colorBlueOne);
+  }
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}

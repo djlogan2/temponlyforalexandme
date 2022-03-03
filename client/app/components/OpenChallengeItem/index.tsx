@@ -10,26 +10,28 @@ import ChessTitle from "../icons/ChessTitle";
 import "./index.scss";
 
 interface IOpenChallengeItemProps {
-  size?: "big" | "small";
-  chessTitle: string;
-  flag: TFlags;
   username: string;
-  userRating: number;
   gameTime: number;
-  userStatus: TUserStatus;
+  userStatus?: TUserStatus;
+  icon?: JSX.Element;
+  flag?: TFlags;
+  chessTitle?: string;
+  size?: "big" | "small";
   userPic?: string;
+  userRating?: number;
   className?: string;
 }
 
 const OpenChallengeItem: FC<IOpenChallengeItemProps> = ({
   chessTitle,
+  icon,
   className,
   flag,
   gameTime,
   username,
   userRating,
   userPic,
-  userStatus,
+  userStatus = "offline",
   size = "big",
 }) => (
   <div className={clsx("openChangeItem", `openChangeItem--${size}`, className)}>
@@ -43,7 +45,9 @@ const OpenChallengeItem: FC<IOpenChallengeItemProps> = ({
       <Bullet />
     </Avatar>
     <Heading6 className="openChangeItem__gameTime">{gameTime} minutes</Heading6>
-    <Heading6 className="openChangeItem__delimiter">|</Heading6>
+    {(userPic || userRating) && (
+      <Heading6 className="openChangeItem__delimiter">|</Heading6>
+    )}
 
     {userPic && (
       <Avatar
@@ -54,9 +58,14 @@ const OpenChallengeItem: FC<IOpenChallengeItemProps> = ({
         className="openChangeItem__userPic"
       />
     )}
-    <Paragraph className="openChangeItem__user">({userRating})</Paragraph>
-    <ChessTitle text={chessTitle} className="openChangeItem__title" />
-    <Flag flag={flag} />
+    {userRating && (
+      <Paragraph className="openChangeItem__user">({userRating})</Paragraph>
+    )}
+    {chessTitle && (
+      <ChessTitle text={chessTitle} className="openChangeItem__title" />
+    )}
+    {flag && <Flag flag={flag} />}
+    {icon}
   </div>
 );
 

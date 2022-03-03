@@ -23,15 +23,15 @@ import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
 import CommonGameService from "/lib/CommonGameService";
-import GameMakeMoveMethod from "/imports/server/clientmethods/game/GameMakeMoveMethod";
 import ServerAnalysisGame from "/lib/server/game/ServerAnalysisGame";
-import GameResignMethod from "/imports/server/clientmethods/game/GameResignMethod";
-import GameDrawMethod from "/imports/server/clientmethods/game/GameDrawMethod";
 import InstanceService from "/imports/server/service/InstanceService";
 import ServerUserPlayedGame from "/lib/server/game/ServerUserPlayedGame";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import User from "/lib/User";
 import { Mongo } from "meteor/mongo";
+import GameMethods from "/imports/server/clientmethods/game/GameMethods";
+import ChessEngineService from "/imports/server/service/ChessEngineService";
+import BookService from "/imports/server/service/BookService";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -43,15 +43,15 @@ export default class GameService extends CommonGameService {
 
   private readonly startcomputergamemethod: StartComputerGameClientMethod;
 
-  private readonly makemovemethod: GameMakeMoveMethod;
-
-  private readonly drawmethod: GameDrawMethod;
-
-  private readonly resignmethod: GameResignMethod;
+  private gamecommandmethod: GameMethods;
 
   private readonly instanceservice: InstanceService;
 
+  private readonly engineservice: ChessEngineService;
+
   private readonly userdao: WritableUserDao;
+
+  private readonly bookservice: BookService;
 
   // private gamehistoryservice: someday_over_the_rainbow;
 
@@ -62,14 +62,18 @@ export default class GameService extends CommonGameService {
     connectionservice: ConnectionService,
     instanceservice: InstanceService,
     userdao: WritableUserDao,
+    engineservice: ChessEngineService,
+    bookservice: BookService,
   ) {
     super(parent);
 
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
     this.userdao = userdao;
+    this.bookservice = bookservice;
 
     this.instanceservice = instanceservice;
+    this.engineservice = engineservice;
 
     publicationservice.publishDao(
       "games",
@@ -82,9 +86,7 @@ export default class GameService extends CommonGameService {
       connectionservice,
       this,
     );
-    this.makemovemethod = new GameMakeMoveMethod(this, connectionservice, this);
-    this.resignmethod = new GameResignMethod(this, connectionservice, this);
-    this.drawmethod = new GameDrawMethod(this, connectionservice, this);
+    this.gamecommandmethod = new GameMethods(this, connectionservice, this);
   }
 
   protected startMethods(): void {}
@@ -96,7 +98,13 @@ export default class GameService extends CommonGameService {
     if (!game) return undefined;
     switch (game.status) {
       case "computer":
-        return new ServerComputerPlayedGame(this, id, this.writabledao);
+        return new ServerComputerPlayedGame(
+          this,
+          id,
+          this.writabledao,
+          this.engineservice,
+          this.bookservice,
+        );
       case "analyzing":
         return new ServerAnalysisGame(this, id, this.writabledao);
       default: {
@@ -296,7 +304,13 @@ export default class GameService extends CommonGameService {
     gamerecord._id = id;
     const game =
       ratingtype === "computer"
-        ? new ServerComputerPlayedGame(this, id, this.writabledao)
+        ? new ServerComputerPlayedGame(
+            this,
+            id,
+            this.writabledao,
+            this.engineservice,
+            this.bookservice,
+          )
         : new ServerUserPlayedGame(this, id, this.writabledao);
     game.startClock();
     return id;

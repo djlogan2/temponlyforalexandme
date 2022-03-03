@@ -1,19 +1,45 @@
 .tabButton {
   width: 11.5rem;
-  padding: 0.55rem 0;
+  padding: 0.5rem 0 0.6rem 0;
   font-size: 1.8rem;
   line-height: 2.147rem;
   text-align: center;
   border: 0;
   outline: 0;
-  background: #FFF;
+  background-color: #fff;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   color: var(--colorDarkOne);
   cursor: pointer;
 
+  &--colorless {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  
   &--primary {
     background-color: var(--colorPrimary);
-    color: #FFF;
+    color: #fff;
+    fill: #fff;
+  }
+
+
+  &:disabled {
+    background: rgba(85, 88, 106, 0.5);
+    color: #fff;
+  }
+
+  &:hover {
+    background-color: var(--colorDarkOne);
+    color: #fff;
+  }
+
+  &:active {
+    background-color: var(--colorPrimary);
+    fill: #fff;
+  }
+
+  &__text {
+    margin: 0 0.8rem;
   }
 }

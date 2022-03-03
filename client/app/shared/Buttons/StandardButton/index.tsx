@@ -5,25 +5,28 @@ import "./index.scss";
 
 interface IStandardButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "big" | "small";
-  color?: "white" | "blue";
+  color?: "regular" | "primary";
+  height?: "small" | "big";
 }
 
 const StandardButton: FC<IStandardButtonProps> = ({
   children,
   size = "big",
-  color = "white",
+  color = "regular",
+  height = "big",
   className,
   ...rest
 }) => (
   <button
     type="button"
-    {...rest}
     className={clsx(
       "standardButton",
       `standardButton--${size}`,
       `standardButton--${color}`,
+      `standardButton--height-${height}`,
       className,
     )}
+    {...rest}
   >
     <Heading5>{children}</Heading5>
   </button>

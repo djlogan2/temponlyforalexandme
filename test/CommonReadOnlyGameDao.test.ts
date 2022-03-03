@@ -17,10 +17,20 @@ class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
   protected endGame(status: GameStatus, status2: number): void {}
 
   protected internalMakeMove(
+    who: string,
     move: Move,
     fen: string,
     result: GameStatus,
   ): void {}
+
+  protected internalSetDraw(
+    who: string,
+    color: PieceColor,
+    draw: boolean,
+    type: "drawdecline" | "drawrevoke" | "drawrequest",
+  ): void {
+    throw new Error("Method not implemented.");
+  }
 
   protected isAuthorizedToMove(who: User): boolean {
     return true;
@@ -30,7 +40,8 @@ class CommonComputerPlayedGameTest extends CommonComputerPlayedGame {
     return null;
   }
 
-  protected internalSetDraw(color: PieceColor, draw: boolean): void {}
+  // protected internalSetDraw(color: PieceColor, draw: boolean, type): void {
+  // }
 
   protected isClosing(): void {
     throw new Error("Method not implemented.");

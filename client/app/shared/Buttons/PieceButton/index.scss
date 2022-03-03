@@ -1,0 +1,51 @@
+.pieceButton {
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.1));
+  border-radius: 50%;
+  background-color: var(--colorWhiteTwo);
+  border: 0;
+  outline: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &--small {
+    width: 4.8rem;
+    height: 4.8rem;
+    padding: 1.129rem;
+  }
+
+  &--big {
+    width: 6.8rem;
+    height: 6.8rem;
+    padding: 1.6rem;
+  }
+
+  &:hover {
+    background-color: var(--colorDarkTwo);
+  }
+
+  &:active {
+    background-color: var(--colorDarkOne);
+  }
+
+  &:disabled {
+    background: rgba(85, 88, 106, 0.5);
+
+    svg {
+      filter: opacity(30%);
+    }
+
+    &--big {
+      svg {
+        width: 3.6rem;
+        height: 3.6rem;
+      }
+    }
+
+    &--small {
+      width: 2.541rem;
+      height: 2.541rem;
+    }
+  }
+}

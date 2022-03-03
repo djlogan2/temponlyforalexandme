@@ -4,7 +4,7 @@ import ClientLogger from "/lib/client/ClientLogger";
 import { BasicGameRecord } from "/lib/records/GameRecord";
 import SubscribedReactiveReadOnlyDao from "/lib/client/SubscribedReactiveReadOnlyDao";
 
-export default class ClientSingleGameReadOnlyDao extends SubscribedReactiveReadOnlyDao<
+export default class ClientStartedGameReadOnlyDao extends SubscribedReactiveReadOnlyDao<
   BasicGameRecord,
   "started" | "removed" | "fen"
 > {

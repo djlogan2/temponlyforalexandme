@@ -1,0 +1,37 @@
+.tabButtonSquared {
+  width: 8.3rem;
+  height: 6rem;
+  padding: 1rem;
+  font-size: 1.8rem;
+  line-height: 2.147rem;
+  text-align: center;
+  border: 0;
+  outline: 0;
+  background: #fff;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  color: var(--colorDarkOne);
+  cursor: pointer;
+
+  &--primary {
+    background-color: var(--colorPrimary);
+    color: #fff;
+    fill: #fff;
+  }
+
+  &:disabled {
+    background: rgba(85, 88, 106, 0.5);
+    color: #fff;
+  }
+
+  &:hover {
+    background-color: var(--colorDarkOne);
+    color: #fff;
+    fill: #fff;
+  }
+
+  &:active {
+    background-color: var(--colorPrimary);
+    fill: #fff;
+  }
+}
