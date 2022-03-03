@@ -28,6 +28,8 @@ import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import ServerUser from "/lib/server/ServerUser";
 import ChessEngineService from "/imports/server/service/ChessEngineService";
 import InstanceDao from "/imports/server/dao/InstanceDao";
+import BookService from "/imports/server/service/BookService";
+import WritableBookDao from "/imports/server/dao/WritableBookDao";
 
 export default class ConnectionService extends Stoppable {
   private readonly readableloggerconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -50,6 +52,8 @@ export default class ConnectionService extends Stoppable {
 
   private readonly writablegamedao: WritableGameDao;
 
+  private readonly bookdao: WritableBookDao;
+
   private readonly instanceservice: InstanceService;
 
   private readonly userservice: UserService;
@@ -57,6 +61,8 @@ export default class ConnectionService extends Stoppable {
   private readonly publicationservice: PublicationService;
 
   private readonly gameservice: GameService;
+
+  private readonly bookservice: BookService;
 
   private readonly engineservice: ChessEngineService;
 
@@ -90,12 +96,13 @@ export default class ConnectionService extends Stoppable {
 
     this.instancedao = new InstanceDao(this);
     this.connectiondao = new ConnectionDao(this);
-    this.readonlyuserdao = new CommonReadOnlyUserDao(null);
-    this.writableuserdao = new WritableUserDao(null);
-    this.themedao = new WritableThemeDao(null);
-    this.i18nwritabledao = new Writablei18nDao(null);
+    this.readonlyuserdao = new CommonReadOnlyUserDao(this);
+    this.writableuserdao = new WritableUserDao(this);
+    this.themedao = new WritableThemeDao(this);
+    this.i18nwritabledao = new Writablei18nDao(this);
     this.instanceservice = new InstanceService(this, this.instancedao);
-    this.writablegamedao = new WritableGameDao(null);
+    this.writablegamedao = new WritableGameDao(this);
+    this.bookdao = new WritableBookDao(this);
 
     this.connectionLoginMethod = new ConnectionLoginMethod(this, this);
     this.connectionIdleMethod = new ConnectionIdleMethod(this, this);
@@ -128,6 +135,7 @@ export default class ConnectionService extends Stoppable {
       this.publicationservice,
     );
     this.engineservice = new ChessEngineService(this);
+    this.bookservice = new BookService(this, this.bookdao);
     this.gameservice = new GameService(
       this,
       this.writablegamedao,
@@ -136,6 +144,7 @@ export default class ConnectionService extends Stoppable {
       this.instanceservice,
       this.writableuserdao,
       this.engineservice,
+      this.bookservice,
     );
 
     Meteor.onConnection((connection) => this.onConnection(connection));

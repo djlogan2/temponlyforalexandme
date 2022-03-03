@@ -3,7 +3,6 @@ import {
   ECOObject,
   GameAuditDrawRecord,
   GameAuditMoveRecord,
-  GameAuditRecord,
   GameStatus,
 } from "/lib/records/GameRecord";
 import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
@@ -17,21 +16,26 @@ import LambdaChessEngine from "/lib/server/chessengine/LambdaChessEngine";
 import ChessEngineService from "/imports/server/service/ChessEngineService";
 import { EngineResult } from "/lib/server/EngineInterfaces";
 import { Meteor } from "meteor/meteor";
+import BookService from "/imports/server/service/BookService";
 
 export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   private dao: WritableGameDao;
 
   private engine: LambdaChessEngine;
 
+  private bookservice: BookService;
+
   constructor(
     parent: Stoppable | null,
     id: string,
     writabledao: WritableGameDao,
     engineservice: ChessEngineService,
+    bookservice: BookService,
   ) {
     super(parent, id, new ServerReadOnlyGameDao(parent, id, writabledao));
     this.dao = writabledao;
     this.engine = engineservice.acquireComputerPlayUnit();
+    this.bookservice = bookservice;
   }
 
   protected stopping() {
@@ -41,6 +45,12 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   public startClock() {
     super.startClock();
     if (this.me.tomove === this.me.opponentcolor) return;
+    const bookrecord = this.bookservice.findBook(this.me.fen);
+    if (bookrecord) {
+      const idx = Math.round(Math.random() * (bookrecord.entries.length - 1));
+      this.makeMoveAuth("computer", bookrecord.entries[idx].smith);
+      return;
+    }
     this.engine
       .getComputerMove(
         this.me.clocks.w.current,
@@ -97,11 +107,7 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
     // @ts-ignore
     modifier.$push.actions = audit;
-    try {
-      this.dao.update({ _id: this.me._id }, modifier);
-    } catch (e) {
-      console.log("WTF??");
-    }
+    this.dao.update({ _id: this.me._id }, modifier);
   }
 
   protected isClosing(): void {

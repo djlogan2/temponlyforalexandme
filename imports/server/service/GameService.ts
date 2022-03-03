@@ -31,6 +31,7 @@ import User from "/lib/User";
 import { Mongo } from "meteor/mongo";
 import GameMethods from "/imports/server/clientmethods/game/GameMethods";
 import ChessEngineService from "/imports/server/service/ChessEngineService";
+import BookService from "/imports/server/service/BookService";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -50,6 +51,8 @@ export default class GameService extends CommonGameService {
 
   private readonly userdao: WritableUserDao;
 
+  private readonly bookservice: BookService;
+
   // private gamehistoryservice: someday_over_the_rainbow;
 
   constructor(
@@ -60,12 +63,14 @@ export default class GameService extends CommonGameService {
     instanceservice: InstanceService,
     userdao: WritableUserDao,
     engineservice: ChessEngineService,
+    bookservice: BookService,
   ) {
     super(parent);
 
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
     this.userdao = userdao;
+    this.bookservice = bookservice;
 
     this.instanceservice = instanceservice;
     this.engineservice = engineservice;
@@ -98,6 +103,7 @@ export default class GameService extends CommonGameService {
           id,
           this.writabledao,
           this.engineservice,
+          this.bookservice,
         );
       case "analyzing":
         return new ServerAnalysisGame(this, id, this.writabledao);
@@ -303,6 +309,7 @@ export default class GameService extends CommonGameService {
             id,
             this.writabledao,
             this.engineservice,
+            this.bookservice,
           )
         : new ServerUserPlayedGame(this, id, this.writabledao);
     game.startClock();
