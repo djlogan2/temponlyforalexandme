@@ -3,7 +3,7 @@ module.exports = {
     one: {
       host: "v2a.chessclub.com",
       username: "oleshkoo",
-      pem: "~/.ssh/id_rsa",
+      pem: "C:\\Users\\38096\\.ssh\\id_rsa",
     },
   },
 
