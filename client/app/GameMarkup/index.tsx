@@ -34,46 +34,46 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   const [moveToMake, setMoveToMake] = useState<"w" | "b" | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>();
 
+  const onGameStartedListener = (id: string) => {
+    const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const { tomove, variations, fen, clocks } = gInstance.getDefaultProperties();
+    setFen(fen);
+    setMoveToMake(tomove);
+    updateClocks(clocks);
+    setMovelist(variations.movelist.slice(1));
+    // @ts-ignore
+    gInstance.events.on("fen", (data) => {
+      setFen(data);
+    });
+
+    // @ts-ignore
+    gInstance.events.on("movelist", (data) => {
+      setMovelist(data.movelist.slice(1));
+    });
+
+    // @ts-ignore
+    gInstance.events.on("clocks", (data) => {
+      updateClocks(data);
+    });
+
+    // @ts-ignore
+    gInstance.events.on("tomove", (data) => {
+      setMoveToMake(data);
+    });
+    setGameInstance(gInstance);
+  };
+
+  const onGameRemovedListener = () => {
+    setFen("");
+    updateClocks(null);
+    setMovelist([]);
+    // @ts-ignore
+    setGameInstance(null);
+  };
+
   useEffect(() => {
-    const onGameStartedListener = (id: string) => {
-      const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const { tomove, variations, fen, clocks } = gInstance.getDefaultProperties();
-      setFen(fen);
-      setMoveToMake(tomove);
-      updateClocks(clocks);
-      setMovelist(variations.movelist.slice(1));
-      // @ts-ignore
-      gInstance.events.on("fen", (data) => {
-        setFen(data);
-      });
-
-      // @ts-ignore
-      gInstance.events.on("movelist", (data) => {
-        setMovelist(data.movelist.slice(1));
-      });
-
-      // @ts-ignore
-      gInstance.events.on("clocks", (data) => {
-        updateClocks(data);
-      });
-
-      // @ts-ignore
-      gInstance.events.on("tomove", (data) => {
-        setMoveToMake(data);
-      });
-      setGameInstance(gInstance);
-    };
-
-    const onGameRemovedListener = () => {
-      setFen("");
-      updateClocks(null);
-      setMovelist([]);
-      // @ts-ignore
-      setGameInstance(null);
-    };
-
     gameservice.events.on("started", onGameStartedListener);
     gameservice.events.on("removed", onGameRemovedListener);
     return () => gameservice.events.off("started", onGameStartedListener);
@@ -110,7 +110,6 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
     updateLegalMoves(currentLegalMoves);
   }, [fen]);
 
-  console.log(fen, movelist, moveToMake);
   return (
     <>
       <button

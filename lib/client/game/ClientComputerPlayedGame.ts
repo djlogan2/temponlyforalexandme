@@ -75,7 +75,9 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     _fen: string,
     _result: GameStatus,
   ): void {
-    Meteor.call("gamecommand", this.me._id, { move: move.san, type: "move" });
+    if (move.color === this.me.opponentcolor) {
+      Meteor.call("gamecommand", this.me._id, { move: move.san, type: "move" });
+    }
   }
 
   protected isAuthorizedToMove(who: User): boolean {
