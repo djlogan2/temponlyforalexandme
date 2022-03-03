@@ -1,0 +1,30 @@
+.gameSetup .timeControl {
+  &__subtitle {
+    margin-bottom: 1.8rem;
+  }
+
+  &__inputs {
+    margin: 0.8rem 0 1.2rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1.4rem;
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+  }
+
+  &__textPlaceholder {
+    font-size: 1.6rem;
+    line-height: 1.909rem;
+    margin-left: 1rem;
+  }
+
+  &__popularTimes {
+    padding-left: 0;
+    justify-content: start;
+    margin-top: 1.8rem;
+    max-width: max-content;
+  }
+}

@@ -1,22 +1,20 @@
 import clsx from "clsx";
-import React, { ButtonHTMLAttributes, FCICC } from "react";
+import React, { ButtonHTMLAttributes, FC } from "react";
 import "./index.scss";
 
 interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  name: string;
   className?: string;
   hoverText?: string;
   onButtonClick?: () => void;
   size?: "small" | "medium" | "big";
-  color?: "red" | "dark" | "grey";
+  color?: "red" | "dark" | "grey" | "primary";
 }
 
-const ActionButton: FCICC<ActionButtonProps> = ({
+const ActionButton: FC<ActionButtonProps> = ({
   name,
   className,
   onButtonClick,
   hoverText,
-  token,
   children,
   color = "dark",
   size = "medium",
@@ -24,7 +22,6 @@ const ActionButton: FCICC<ActionButtonProps> = ({
 }) => (
   <button
     data-hover={hoverText}
-    name={name}
     onClick={onButtonClick}
     className={clsx(
       "activeButton",

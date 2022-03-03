@@ -2,10 +2,12 @@ import React, { FC } from "react";
 
 interface ICloseProps {
   className?: string;
+  onClick?: () => void;
 }
 
-const Close: FC<ICloseProps> = ({ className }) => (
+const Close: FC<ICloseProps> = ({ className, onClick }) => (
   <svg
+    onClick={onClick}
     className={className}
     width="32"
     height="32"

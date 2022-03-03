@@ -1,0 +1,74 @@
+.gameSetup .playWithFriends {
+  &__searchIcon {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  &__card {
+    margin: 2rem 0;
+  }
+
+  &__btn {
+    margin-top: 0.8rem;
+  }
+
+  &__foundFriends {
+    background-color: var(--colorWhiteOne);
+    margin-top: -2.4rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-radius: 8px;
+  }
+
+  &__textButton {
+    margin-top: .8rem;
+    max-width: max-content;
+  }
+
+  &__foundFriend {
+    border-radius: 0;
+    box-shadow: none;
+
+    &:nth-child(even) {
+      background-color: var(--colorWhiteTwo);
+    }
+  }
+
+  &__opponents {
+    position: relative;
+    overflow: auto;
+    width: 100%;
+    &-list {
+      width: max-content;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-column-gap: 2.4rem;
+      overflow-x: auto;
+    }
+  }
+
+  &__item {
+    white-space: nowrap;
+    color: var(--colorGreyOne);
+
+    &--active {
+      color: initial;
+    }
+  }
+
+  &__userItem {
+    &:not(:last-child) {
+      margin-bottom: 0.8rem;
+    }
+  }
+
+  &__timeOptions {
+    margin-top: 2rem;
+  }
+
+  &__showMore {
+    margin-top: 1.6rem;
+    padding-left: 0;
+    justify-content: start;
+  }
+}

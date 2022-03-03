@@ -1,0 +1,14 @@
+.gameSetup .anyonePlay {
+  &__customChallenge {
+    margin-top: 1.6rem;
+    padding: 0.95rem;
+    height: 4rem;
+  }
+
+  @media (max-width: 375px) {
+    &__customChallenge {
+      width: 34rem;
+      height: 5rem;
+    }
+  }
+}

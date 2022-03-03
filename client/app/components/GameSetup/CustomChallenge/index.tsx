@@ -1,37 +1,23 @@
 import React, { FC } from "react";
-import LongArrow from "../../icons/LongArrow";
-import Piece from "../../icons/Piece";
-import PieceBRandom from "../../icons/PieceBRandom";
-import PieceButton from "/client/app/shared/Buttons/PieceButton";
+import Card from "../Card";
+import ColorPick from "../ColorPick";
+import RatedGame from "../RatedGame";
+import Shortcut from "../Shortcut";
+import Subtitle from "../Subtitle";
+import TimeOptions from "../TimeOptions";
+import { EComponents } from "../types";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import TextButton from "/client/app/shared/Buttons/TextButton";
-import Checkbox from "/client/app/shared/Checkbox";
-import Input from "/client/app/shared/Input";
-import Switch from "/client/app/shared/Switch";
 
-interface ICustomChallengeProps {}
+interface ICustomChallengeProps {
+  navigate: (option: EComponents) => void;
+}
 
-const CustomChallenge: FC<ICustomChallengeProps> = () => (
+const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => (
   <div className="customChallenge">
-    <div className="customChallenge__card">
-      <p className="customChallenge__subtitle">Time control</p>
-      <div className="customChallenge__inputs">
-        <Input label="Move" name="move1" placeholder="00m" type="number" />
-        <Input label="Move" name="mov2" placeholder="00m" type="number" />
-      </div>
-      <p className="customChallenge__checkbox">
-        <Checkbox name="checkbox" />
-        <span className="customChallenge__textPlaceholder">
-          Text placeholder
-        </span>
-      </p>
-    </div>
-    <div className="customChallenge__card d-flex space-between">
-      <p className="customChallenge__subtitle">Rated Game</p>
-      <Switch name="rated" />
-    </div>
-    <div className="customChallenge__card">
-      <p className="customChallenge__subtitle">Time control</p>
+    <TimeOptions className="customChallenge__card" />
+    <RatedGame className="customChallenge__card" />
+    <Card className="customChallenge__card">
+      <Subtitle>Rating Range</Subtitle>
 
       <div className="customChallenge__ratings d-flex space-between">
         <span className="customChallenge__decrease customChallenge__rating">
@@ -50,35 +36,25 @@ const CustomChallenge: FC<ICustomChallengeProps> = () => (
           </button>
         </span>
       </div>
-    </div>
-    <div className="customChallenge__card">
-      <p className="customChallenge__subtitle">Color</p>
-      <div className="customChallenge__colors d-flex justify-center align-items-center">
-        <PieceButton size="small">
-          <Piece />
-        </PieceButton>
-        <PieceButton size="big">
-          <PieceBRandom />
-        </PieceButton>
-        <PieceButton size="small">
-          <Piece />
-        </PieceButton>
-      </div>
+    </Card>
 
-      <TextButton className="customChallenge__variants-btn">
-        Variants <LongArrow />
-      </TextButton>
-    </div>
-    <div className="customChallenge__card d-flex space-between">
-      <p className="customChallenge__subtitle">Make it a Shortcut</p>
-      <Switch name="shortcut" />
-    </div>
+    <ColorPick className="customChallenge__card" />
+
+    <Shortcut className="customChallenge__card " />
 
     <div className="customChallenge__actions">
-      <StandardButton color="primary" height="small">
+      <StandardButton
+        color="primary"
+        height="small"
+        onClick={() => navigate(EComponents.CHALLENGE)}
+      >
         Launch Challenge
       </StandardButton>
-      <StandardButton color="regular" height="small">
+      <StandardButton
+        color="regular"
+        height="small"
+        onClick={() => navigate(EComponents.SHARE)}
+      >
         Share challenge
       </StandardButton>
     </div>

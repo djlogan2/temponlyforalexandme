@@ -2,10 +2,12 @@ import React, { FC } from "react";
 
 interface IArrowLeftProps {
   className?: string;
+  onClick?: () => void;
 }
 
-const ArrowLeft: FC<IArrowLeftProps> = ({ className }) => (
+const ArrowLeft: FC<IArrowLeftProps> = ({ className, onClick }) => (
   <svg
+    onClick={onClick}
     className={className}
     width="32"
     height="32"

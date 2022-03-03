@@ -1,0 +1,41 @@
+.gameSetup .computerPlay {
+  &__fen-input {
+    svg {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+  }
+
+  &__card {
+    margin: 2rem 0;
+  }
+
+  &__subtitle {
+    margin: 2.4rem 0;
+  }
+
+  &__rangeSlider {
+    height: 15.7rem;
+  }
+
+  &__sliderSubtitle {
+    margin-bottom: 3.4rem;
+  }
+
+  &__colors {
+    height: 19.3rem;
+  }
+
+  &__rated {
+    height: 8.3rem;
+    align-items: center;
+  }
+
+  &__positionSubtitle {
+    margin-bottom: 1.8rem;
+  }
+
+  &__fen {
+    height: 13.5rem;
+  }
+}

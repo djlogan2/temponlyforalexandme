@@ -1,30 +1,63 @@
-import clsx from "clsx";
-import React, { useState } from "react";
+import React, { FC, useRef, useState } from "react";
+import useOnClickOutside from "../../hooks/useClickOutside";
 import Backdrop from "../../shared/Backdrop";
-import StandardButton from "../../shared/Buttons/StandardButton";
-import TextButton from "../../shared/Buttons/TextButton";
 import ScrollBar from "../../shared/ScrollBar";
-import Arrow from "../icons/Arrow";
-import LongArrow from "../icons/LongArrow";
-import Challenges from "./Challenges";
-import ChallengesList from "./ChallengesList";
+import AnyonePlay from "./AnyonePlay";
+import ChallengeLaunched from "./ChallengeLaunched";
+import ComputerPlay from "./ComputerPlay";
+import { title } from "./constants";
 import Controls from "./Controls";
 import CustomChallenge from "./CustomChallenge";
 import PlayOptions from "./PlayOptions";
-import TimeOptions from "./TimeOptions";
-import { TChallenge, TOptions, TTimeOption } from "./types";
+import PlayWithFriends from "./PlayWithFriends";
+import Share from "./Share";
+import { EComponents } from "./types";
 
-const GameSetup = () => {
-  const [gameOption, setGameOption] = useState<TOptions>("Anyone");
-  const [timeOption, setTimeOption] = useState<TTimeOption>(15);
-  const [activeChallenge, setActiveChallenge] =
-    useState<TChallenge>("Challenge");
-  const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
-  const [customChallenge, setCustomChallenge] = useState(false);
+interface IGameSetupProps {
+  onCloseModal: () => void;
+}
+
+const gameSetupComponents = {
+  Anyone: AnyonePlay,
+  Custom: CustomChallenge,
+  Computer: ComputerPlay,
+  Share,
+  Friends: PlayWithFriends,
+  Challenge: ChallengeLaunched,
+};
+
+const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
+  const [components, setComponent] = useState<EComponents[]>([
+    EComponents.ANYONE,
+  ]);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  useOnClickOutside(backdropRef, onCloseModal);
+
+  const currentTab = components[components.length - 1];
+
+  const navigate = (component: EComponents) => {
+    if (currentTab === component) {
+      return;
+    }
+
+    setComponent((prev) => [...prev, component]);
+  };
+
+  const returnBack = () => {
+    if (components.length === 1) {
+      return;
+    }
+
+    const copiedComponents = [...components];
+    copiedComponents.pop();
+    setComponent(copiedComponents);
+  };
+
+  const Component = gameSetupComponents[currentTab];
 
   return (
     <Backdrop>
-      <div className="gameSetup">
+      <div className="gameSetup" ref={backdropRef}>
         <ScrollBar
           autoHeight={false}
           height={768}
@@ -33,59 +66,19 @@ const GameSetup = () => {
           }}
         >
           <div className="gameSetup__scrollContainer">
-            <Controls />
+            <Controls onCloseModal={onCloseModal} onReturnBack={returnBack} />
             <div className="gameSetup__container">
-              <div className="gameSetup__title">
-                {customChallenge ? "Custom Challenge" : "Play"}
-              </div>
-              <PlayOptions onClick={setGameOption} gameOption={gameOption} />
-
-              {customChallenge ? (
-                <CustomChallenge />
-              ) : (
-                <>
-                  <div className="gameSetup__subtitle">
-                    Launch a new challenge
-                  </div>
-                  <TimeOptions
-                    onClick={setTimeOption}
-                    timeOption={timeOption}
-                    showMoreChallengeTimes={showMoreChallengeTimes}
-                  />
-                  <TextButton
-                    isFullWidth
-                    onClick={() => setShowMoreChallengeTimes((prev) => !prev)}
-                    className="gameSetup__showMore"
-                  >
-                    Show More
-                    <Arrow
-                      className={clsx(
-                        "gameSetup__arrowDown",
-                        showMoreChallengeTimes && "gameSetup__arrowUp",
-                      )}
-                    />
-                  </TextButton>
-                  <div className="gameSetup__subtitle">
-                    Join an Open challenge
-                  </div>
-                  <Challenges
-                    activeChallenge={activeChallenge}
-                    onClick={setActiveChallenge}
-                  />
-                  <ChallengesList />
-                  <TextButton className="gameSetup__showMore">
-                    Show more
-                    <LongArrow className="gameSetup__longArrowRight" />
-                    <Arrow className="gameSetup__arrowDown" />
-                  </TextButton>
-                  <StandardButton
-                    className="gameSetup__customChallenge"
-                    onClick={() => setCustomChallenge(true)}
-                  >
-                    Custom Challenge
-                  </StandardButton>
-                </>
+              <div className="gameSetup__title">{title[currentTab]}</div>
+              {currentTab !== EComponents.CHALLENGE && (
+                <PlayOptions
+                  onClick={(tab) => {
+                    navigate(tab);
+                  }}
+                  gameOption={currentTab}
+                />
               )}
+
+              <Component navigate={navigate} />
             </div>
           </div>
         </ScrollBar>

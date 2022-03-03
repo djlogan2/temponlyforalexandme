@@ -1,9 +1,54 @@
 .gameSetup .challenges {
-  margin-left: 0.8rem;
-  display: flex;
-  margin-bottom: 1.7rem;
+  &__btns {
+    margin-left: 0.8rem;
+    display: flex;
+    margin-bottom: 1.7rem;
+  }
 
   &__item {
     margin-right: 2.4rem;
+  }
+
+  &__subtitle {
+    margin: 2rem 0;
+  }
+
+  &__longArrowRight {
+    fill: var(--colorPrimary);
+    margin-left: 1rem;
+  }
+
+  &__arrowDown {
+    display: none;
+  }
+
+  &__showMore {
+    margin-top: .8rem;
+    padding-left: 0;
+    justify-content: start;
+  }
+
+  @media (max-width: 1366px) {
+    &__longArrowRight {
+      display: none;
+    }
+
+    &__arrowDown {
+      transform: rotate(-90deg);
+      width: 2rem;
+      height: 2rem;
+      margin-left: 1rem;
+      display: inline-block;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    &__arrowDown {
+      display: none;
+    }
+
+    &__longArrowRight {
+      display: inline-block;
+    }
   }
 }

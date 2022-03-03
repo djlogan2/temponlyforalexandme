@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import { options } from "../constants";
-import { TOptions } from "../types";
+import { EComponents } from "../types";
 import TabButton from "/client/app/shared/Buttons/TabButton";
 
 interface IPlayOptionsProps {
-  onClick: (tab: TOptions) => void;
-  gameOption: TOptions;
+  onClick: (tab: EComponents) => void;
+  gameOption: EComponents;
 }
 
 const PlayOptions: FC<IPlayOptionsProps> = ({ onClick, gameOption }) => (
