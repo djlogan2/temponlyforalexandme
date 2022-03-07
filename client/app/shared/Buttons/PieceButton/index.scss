@@ -21,6 +21,10 @@
     padding: 1.6rem;
   }
 
+  &--dark {
+    background-color: var(--colorDarkOne);
+  }
+
   &:hover {
     background-color: var(--colorDarkTwo);
   }

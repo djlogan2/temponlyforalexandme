@@ -1,29 +1,47 @@
 import clsx from "clsx";
-import React, { FC, useState } from "react";
+import { noop } from "lodash";
+import React, { FC, useEffect, useState } from "react";
+import Arrow from "../../icons/Arrow";
 import More from "../../icons/More";
 import { timeOptions } from "../constants";
+import Subtitle from "../Subtitle";
+import TimeControl from "../TimeControl";
 import { TTimeOption } from "../types";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 import TextButton from "/client/app/shared/Buttons/TextButton";
-import TimeControl from "../TimeControl";
-import Arrow from "../../icons/Arrow";
-import Subtitle from "../Subtitle";
 
 interface ITimeOptionProps {
   className?: string;
+  subtitle: string;
+  onPickTime: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined,
+  ) => void;
 }
 
-const TimeOption: FC<ITimeOptionProps> = ({ className }) => {
+const TimeOption: FC<ITimeOptionProps> = ({
+  className,
+  subtitle,
+  onPickTime = noop,
+}) => {
   const [customTime, showCustomTime] = useState(false);
-  const [timeOption, setTimeOption] = useState<TTimeOption>(15);
+  const [timeOption, setTimeOption] = useState<TTimeOption | undefined>();
   const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
 
   return customTime ? (
-    <TimeControl className={className} onReturn={() => showCustomTime(false)} />
+    <TimeControl
+      className={className}
+      onReturn={() => showCustomTime(false)}
+      onPickTime={(field, value, shouldValidate) => {
+        onPickTime(field, value, shouldValidate);
+        setTimeOption("custom");
+      }}
+    />
   ) : (
     <>
       <Subtitle size="big" className="timeOptions__subtitle">
-        Launch a new challenge
+        {subtitle}
       </Subtitle>
 
       <div className={clsx("timeOptions", className)}>
@@ -38,9 +56,11 @@ const TimeOption: FC<ITimeOptionProps> = ({ className }) => {
               color={timeOption === time ? "primary" : undefined}
               key={time}
               onClick={() => {
-                setTimeOption(time);
                 if (time === "custom") {
                   showCustomTime(true);
+                } else {
+                  setTimeOption(time);
+                  onPickTime("time", time);
                 }
               }}
             >

@@ -2,29 +2,14 @@ import React, { FC, useRef, useState } from "react";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import Backdrop from "../../shared/Backdrop";
 import ScrollBar from "../../shared/ScrollBar";
-import AnyonePlay from "./AnyonePlay";
-import ChallengeLaunched from "./ChallengeLaunched";
-import ComputerPlay from "./ComputerPlay";
-import { title } from "./constants";
+import { gameSetupComponents, title } from "./constants";
 import Controls from "./Controls";
-import CustomChallenge from "./CustomChallenge";
 import PlayOptions from "./PlayOptions";
-import PlayWithFriends from "./PlayWithFriends";
-import Share from "./Share";
 import { EComponents } from "./types";
 
 interface IGameSetupProps {
   onCloseModal: () => void;
 }
-
-const gameSetupComponents = {
-  Anyone: AnyonePlay,
-  Custom: CustomChallenge,
-  Computer: ComputerPlay,
-  Share,
-  Friends: PlayWithFriends,
-  Challenge: ChallengeLaunched,
-};
 
 const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
   const [components, setComponent] = useState<EComponents[]>([
@@ -78,7 +63,7 @@ const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
                 />
               )}
 
-              <Component navigate={navigate} />
+              <Component navigate={navigate} onCloseModal={onCloseModal} />
             </div>
           </div>
         </ScrollBar>

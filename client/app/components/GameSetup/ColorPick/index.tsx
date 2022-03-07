@@ -1,4 +1,6 @@
-import React, { FC, HTMLAttributes } from "react";
+import clsx from "clsx";
+import { noop } from "lodash";
+import React, { FC, HTMLAttributes, useState } from "react";
 import LongArrow from "../../icons/LongArrow";
 import Piece from "../../icons/Piece";
 import PieceBRandom from "../../icons/PieceBRandom";
@@ -7,28 +9,60 @@ import Subtitle from "../Subtitle";
 import "./index.scss";
 import PieceButton from "/client/app/shared/Buttons/PieceButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
-interface IColorPickProps extends HTMLAttributes<HTMLDivElement> {}
+interface IColorPickProps extends HTMLAttributes<HTMLDivElement> {
+  onColorPick: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined,
+  ) => void;
+}
 
-const ColorPick: FC<IColorPickProps> = ({ className }) => (
-  <Card className={className}>
-    <Subtitle className="colorPick__subtitle">Color</Subtitle>
-    <div className="colorPick__colors d-flex justify-center align-items-center">
-      <PieceButton size="small">
-        <Piece />
-      </PieceButton>
-      <PieceButton size="big">
-        <PieceBRandom />
-      </PieceButton>
-      <PieceButton size="small">
-        <Piece />
-      </PieceButton>
-    </div>
+const ColorPick: FC<IColorPickProps> = ({ className, onColorPick = noop }) => {
+  const [color, setColor] = useState<PieceColor | "">("");
 
-    <TextButton className="colorPick__variants-btn">
-      Variants <LongArrow />
-    </TextButton>
-  </Card>
-);
+  return (
+    <Card className={clsx("colorPick", className)}>
+      <Subtitle className="colorPick__subtitle">Color</Subtitle>
+      <div className="colorPick__colors d-flex justify-center align-items-center">
+        <PieceButton
+          size="small"
+          onClick={() => {
+            onColorPick("color", "w");
+            setColor("w");
+          }}
+          color={color === "w" ? "dark" : "regular"}
+        >
+          <Piece />
+        </PieceButton>
+        <PieceButton
+          size="big"
+          onClick={() => {
+            onColorPick("color", "");
+            setColor("");
+          }}
+          color={color === "" ? "dark" : "regular"}
+        >
+          <PieceBRandom />
+        </PieceButton>
+        <PieceButton
+          size="small"
+          onClick={() => {
+            onColorPick("color", "b");
+            setColor("b");
+          }}
+          color={color === "b" ? "dark" : "regular"}
+        >
+          <Piece />
+        </PieceButton>
+      </div>
+
+      <TextButton className="colorPick__variants-btn">
+        Variants <LongArrow />
+      </TextButton>
+    </Card>
+  );
+};
 
 export default ColorPick;

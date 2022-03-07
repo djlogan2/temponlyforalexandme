@@ -1,11 +1,17 @@
 import clsx from "clsx";
 import "./index.scss";
-import React, { FC, InputHTMLAttributes, useState } from "react";
+import React, { FC, InputHTMLAttributes, useEffect, useState } from "react";
 
 interface IRangeSliderProps extends InputHTMLAttributes<HTMLInputElement> {
   value: number;
   min: number;
   max: number;
+
+  onPickSkill: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined,
+  ) => void;
 }
 
 const RangeSlider: FC<IRangeSliderProps> = ({
@@ -13,6 +19,7 @@ const RangeSlider: FC<IRangeSliderProps> = ({
   value,
   min = 0,
   max,
+  onPickSkill,
   ...props
 }) => {
   const [currentValue, setCurrentValue] = useState(value || min);
@@ -23,7 +30,10 @@ const RangeSlider: FC<IRangeSliderProps> = ({
       <input
         className={clsx("rangeSlider__input", className)}
         type="range"
-        onChange={(e) => setCurrentValue(+e.target.value)}
+        onChange={(e) => {
+          setCurrentValue(+e.target.value);
+          onPickSkill("skill", +e.target.value);
+        }}
         min={min}
         max={max}
         value={currentValue}
@@ -33,7 +43,6 @@ const RangeSlider: FC<IRangeSliderProps> = ({
         className="rangeSlider__message"
         style={{
           left: `calc(${ratio} * 93.5%)`,
-          // left: "100%",
           transform: "translateX(calc(-50% + 1rem))",
         }}
       >

@@ -12,3 +12,8 @@ export enum EComponents {
 export type TOptions = typeof options[number];
 export type TTimeOption = typeof timeOptions[number];
 export type TChallenge = typeof challengeTypes[number];
+
+export interface ICommonGameSetup {
+  navigate: (tab: EComponents) => void;
+  onCloseModal: () => void;
+}

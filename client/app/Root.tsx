@@ -48,26 +48,20 @@ function loggedin() {
 }
 
 const Root: FCICC = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   useEffect(() => {
     if (globalThis.icc.connection.user) {
-      setIsLoggedIn(true);
       return;
     }
     globalThis.icc.connection.events.on("loggedin", () => {
-      setIsLoggedIn(true);
       loggedin();
     });
   }, []);
 
-  return isLoggedIn ? (
+  return (
     <ThemeProvider themeService={theme}>
       <Theme />
       <App {...props} />
     </ThemeProvider>
-  ) : (
-    <LoadingPlaceholder />
   );
 };
 

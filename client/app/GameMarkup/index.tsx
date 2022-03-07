@@ -1,9 +1,10 @@
+import { Chess } from "chess.js";
 import clsx from "clsx";
 import React, { FCICC, useEffect, useState } from "react";
+import GameSetup from "../components/GameSetup";
 import { calcTime } from "../data/utils";
 import { gameservice } from "../Root";
 import "./index.scss";
-import { Chess } from "chess.js";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 import Flip from "/client/app/components/icons/Flip";
 import Movelist, { IMoveItem } from "/client/app/components/Movelist";
@@ -13,19 +14,12 @@ import GameTitle from "/client/app/shared/GameTitle";
 import ClientUser from "/lib/client/ClientUser";
 import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
-import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
+import { PieceColor } from "/lib/records/ChallengeRecord";
 
 interface IGameMarkup {}
 
-console.log(process.env);
-
-const computerchallenge: ComputerChallengeRecord = {
-  skill_level: 1,
-  color: "w",
-  clock: { minutes: 15 },
-};
-
 const GameMarkup: FCICC<IGameMarkup> = () => {
+  const [showGameSetup, setShowGameSetup] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
@@ -33,15 +27,16 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   const [gameInstance, setGameInstance] = useState<
     ClientComputerPlayedGame | ClientAnalysisGame
   >();
-  const [moveToMake, setMoveToMake] = useState<"w" | "b" | undefined>();
+  const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>();
 
   const onGameStartedListener = (id: string) => {
     const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
-    // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const { tomove, variations, fen, clocks } =
+      // @ts-ignore
       gInstance.getDefaultProperties();
+
     setFen(fen);
     setMoveToMake(tomove);
     updateClocks(clocks);
@@ -115,12 +110,12 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => gameservice.startComputerGame(computerchallenge)}
-      >
+      <button type="button" onClick={() => setShowGameSetup(true)}>
         Start a game
       </button>
+      {showGameSetup && (
+        <GameSetup onCloseModal={() => setShowGameSetup(false)} />
+      )}
       {fen && clocks && moveToMake ? (
         <div className="gameContainer">
           <PlayerInfo

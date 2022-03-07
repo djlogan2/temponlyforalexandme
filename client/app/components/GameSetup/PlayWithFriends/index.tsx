@@ -8,16 +8,14 @@ import UserItem from "../../UserItem";
 import Card from "../Card";
 import Shortcut from "../Shortcut";
 import TimeOptions from "../TimeOptions";
-import { EComponents } from "../types";
+import { EComponents, ICommonGameSetup } from "../types";
 import useOnClickOutside from "/client/app/hooks/useClickOutside";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import Input from "/client/app/shared/Input";
 import Heading5 from "/client/app/shared/Typographies/Heading5";
 
-interface IPlayWithFriendsProps {
-  navigate: (tab: EComponents) => void;
-}
+interface IPlayWithFriendsProps extends ICommonGameSetup {}
 
 const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
   const [opponents, setOpponents] = useState<number>(0);
@@ -106,7 +104,11 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
         </TextButton>
       </div>
 
-      <TimeOptions className="playWithFriends__timeOptions" />
+      <TimeOptions
+        onPickTime={() => {}}
+        className="playWithFriends__timeOptions"
+        subtitle="Launch a new challenge"
+      />
       <Shortcut className="playWithFriends__card" />
 
       <StandardButton className="playWithFriends__btn" color="primary">

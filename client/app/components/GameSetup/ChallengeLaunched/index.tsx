@@ -3,12 +3,10 @@ import Close from "../../icons/Close";
 import OpenChallengeItem from "../../OpenChallengeItem";
 import Challenges from "../Challenges";
 import TimeOptions from "../TimeOptions";
-import { EComponents } from "../types";
+import { EComponents, ICommonGameSetup } from "../types";
 import "./index.scss";
 
-interface IChallengeLaunchedProps {
-  navigate: (option: EComponents) => void;
-}
+interface IChallengeLaunchedProps extends ICommonGameSetup {}
 
 const ChallengeLaunched: FC<IChallengeLaunchedProps> = ({ navigate }) => (
   <div className="challengeLaunched">
@@ -18,7 +16,7 @@ const ChallengeLaunched: FC<IChallengeLaunchedProps> = ({ navigate }) => (
       gameTime={15}
       icon={<Close className="challengeLaunched__close" />}
     />
-    <TimeOptions />
+    <TimeOptions onPickTime={() => {}} subtitle="Launch a new challenge" />
     <Challenges />
   </div>
 );

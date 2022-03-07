@@ -6,17 +6,14 @@ import Instagram from "../../icons/Instagram";
 import Mail from "../../icons/Mail";
 import Twitter from "../../icons/Twitter";
 import OpenChallengeItem from "../../OpenChallengeItem";
-import UserItem from "../../UserItem";
 import Card from "../Card";
 import Subtitle from "../Subtitle";
-import { EComponents } from "../types";
+import { EComponents, ICommonGameSetup } from "../types";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import Input from "/client/app/shared/Input";
 
-interface IShareProps {
-  navigate: (tab: EComponents) => void;
-}
+interface IShareProps extends ICommonGameSetup {}
 
 const Share: FC<IShareProps> = ({ navigate }) => (
   <div className="share">

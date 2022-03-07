@@ -5,16 +5,18 @@ import RatedGame from "../RatedGame";
 import Shortcut from "../Shortcut";
 import Subtitle from "../Subtitle";
 import TimeOptions from "../TimeOptions";
-import { EComponents } from "../types";
+import { EComponents, ICommonGameSetup } from "../types";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 
-interface ICustomChallengeProps {
-  navigate: (option: EComponents) => void;
-}
+interface ICustomChallengeProps extends ICommonGameSetup {}
 
 const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => (
   <div className="customChallenge">
-    <TimeOptions className="customChallenge__card" />
+    <TimeOptions
+      onPickTime={() => {}}
+      className="customChallenge__card"
+      subtitle="Launch a new challenge"
+    />
     <RatedGame className="customChallenge__card" />
     <Card className="customChallenge__card">
       <Subtitle>Rating Range</Subtitle>
@@ -38,7 +40,7 @@ const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => (
       </div>
     </Card>
 
-    <ColorPick className="customChallenge__card" />
+    <ColorPick onColorPick={() => {}} className="customChallenge__card" />
 
     <Shortcut className="customChallenge__card " />
 
