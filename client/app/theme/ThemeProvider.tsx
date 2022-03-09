@@ -10,6 +10,7 @@ const ThemeProvider: FC<IThemeProvider> = ({ themeService, children }) => {
   const [theme, setTheme] = useState<Object | undefined>(() =>
     themeService.getTheme(),
   );
+
   const themeValue = useMemo(() => ({ theme, isReady: !!theme }), [theme]);
 
   useEffect(() => {

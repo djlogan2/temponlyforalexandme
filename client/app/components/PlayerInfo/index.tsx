@@ -10,7 +10,7 @@ import WebcamIcon from "../icons/Webcam";
 import "./index.scss";
 
 interface IPlayerInfoProps {
-  picture: string;
+  picture?: string;
   username: string;
   rank: number;
   title: string;
@@ -33,7 +33,6 @@ const PlayerInfo: FC<IPlayerInfoProps> = ({
   <div className={clsx("playerInfo", flip && "playerInfo--flipped", className)}>
     <Avatar
       picture={picture}
-      username={username}
       className="playerInfo__avatar"
       status={userStatus}
       size="bg"

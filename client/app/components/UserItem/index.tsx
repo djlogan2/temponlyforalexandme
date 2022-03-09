@@ -38,7 +38,6 @@ const UserItem: FC<IUserItemProps> = ({
       size={size}
       status={status}
       picture={picture}
-      username={text}
       alt={`${text}'s profile`}
     />
     <p className="userItem__username">{text}</p>

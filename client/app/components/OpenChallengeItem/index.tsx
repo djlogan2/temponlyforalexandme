@@ -38,7 +38,6 @@ const OpenChallengeItem: FC<IOpenChallengeItemProps> = ({
     <Avatar
       status="offline"
       size="md"
-      username=""
       alt="challenge game icon"
       className="openChangeItem__challengePic"
     >

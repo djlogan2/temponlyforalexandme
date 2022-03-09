@@ -39,10 +39,10 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         {showGameSetupModal && (
           <GameSetup onCloseModal={() => setShowGameSetupModal(false)} />
         )}
+        <img alt="test svg" className="testSvg" />
         <div>
           <Avatar
             picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-            username="username"
             status="online"
             alt="test picture"
           />

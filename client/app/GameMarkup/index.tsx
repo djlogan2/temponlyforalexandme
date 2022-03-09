@@ -3,6 +3,8 @@ import clsx from "clsx";
 import React, { FCICC, useEffect, useState } from "react";
 import GameSetup from "../components/GameSetup";
 import { calcTime } from "../data/utils";
+import useSound from "../hooks/useSound";
+import { ESounds } from "../hooks/useSound/constants";
 import { gameservice } from "../Root";
 import "./index.scss";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
@@ -18,7 +20,7 @@ import { PieceColor } from "/lib/records/ChallengeRecord";
 
 interface IGameMarkup {}
 
-const GameMarkup: FCICC<IGameMarkup> = () => {
+const GameMarkup: FCICC<IGameMarkup> = ({ ...rest }) => {
   const [showGameSetup, setShowGameSetup] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [fen, setFen] = useState<string>();
@@ -30,48 +32,51 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>();
 
-  const onGameStartedListener = (id: string) => {
-    const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const { tomove, variations, fen, clocks } =
-      // @ts-ignore
-      gInstance.getDefaultProperties();
-
-    setFen(fen);
-    setMoveToMake(tomove);
-    updateClocks(clocks);
-    setMovelist(variations.movelist.slice(1));
-    // @ts-ignore
-    gInstance.events.on("fen", (data) => {
-      setFen(data);
-    });
-
-    // @ts-ignore
-    gInstance.events.on("movelist", (data) => {
-      setMovelist(data.movelist.slice(1));
-    });
-
-    // @ts-ignore
-    gInstance.events.on("clocks", (data) => {
-      updateClocks(data);
-    });
-
-    // @ts-ignore
-    gInstance.events.on("tomove", (data) => {
-      setMoveToMake(data);
-    });
-    setGameInstance(gInstance);
-  };
-
-  const onGameRemovedListener = () => {
-    setFen("");
-    updateClocks(null);
-    setMovelist([]);
-    // @ts-ignore
-    setGameInstance(null);
-  };
+  const play = useSound(ESounds.MOVE);
 
   useEffect(() => {
+    const onGameStartedListener = (id: string) => {
+      const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const { tomove, variations, fen, clocks } =
+        // @ts-ignore
+        gInstance.getDefaultProperties();
+
+      setFen(fen);
+      setMoveToMake(tomove);
+      updateClocks(clocks);
+      setMovelist(variations.movelist.slice(1));
+      // @ts-ignore
+      gInstance.events.on("fen", (data) => {
+        play();
+        setFen(data);
+      });
+
+      // @ts-ignore
+      gInstance.events.on("movelist", (data) => {
+        setMovelist(data.movelist.slice(1));
+      });
+
+      // @ts-ignore
+      gInstance.events.on("clocks", (data) => {
+        updateClocks(data);
+      });
+
+      // @ts-ignore
+      gInstance.events.on("tomove", (data) => {
+        setMoveToMake(data);
+      });
+      setGameInstance(gInstance);
+    };
+
+    const onGameRemovedListener = () => {
+      setFen("");
+      updateClocks(null);
+      setMovelist([]);
+      // @ts-ignore
+      setGameInstance(null);
+    };
+
     gameservice.events.on("started", onGameStartedListener);
     gameservice.events.on("removed", onGameRemovedListener);
     return () => gameservice.events.off("started", onGameStartedListener);
@@ -120,7 +125,6 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
         <div className="gameContainer">
           <PlayerInfo
             userStatus="online"
-            picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             rank={2500}
             username="Grand_Master01"
             title="WGM"
@@ -133,7 +137,6 @@ const GameMarkup: FCICC<IGameMarkup> = () => {
           />
           <PlayerInfo
             userStatus="online"
-            picture="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             rank={2500}
             username="Grand_Master02"
             title="GM"

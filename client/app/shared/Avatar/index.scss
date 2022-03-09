@@ -5,7 +5,10 @@
   align-items: center;
   justify-content: center;
   outline: 2px solid currentColor;
-  background: radial-gradient(var(--userAvatarNoPictureBg));
+  background-image: var(--userAvatarDefaultPic);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 
   &--online {
     color: var(--userAvatarColorOnline);

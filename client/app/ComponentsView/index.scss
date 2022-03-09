@@ -23,3 +23,8 @@
   height: auto;
 }
 
+.testSvg {
+  content: var(--testSvg);
+  width: 5rem;
+  height: 5rem;
+}
