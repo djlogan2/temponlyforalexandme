@@ -101,13 +101,6 @@ const Movelist: FCICC<IMovelistProps> = ({
 
   return (
     <div className={clsx("movelist", className)}>
-      <div className="movelist__controls">
-        <PrevEnd />
-        <Prev />
-        <Next />
-        <NextEnd />
-      </div>
-
       <div className="movelist__moves-container">
         <ScrollBar thumbSize={width >= SCREEN_LARGE ? 48.68 : 31.76}>
           <div className="movelist__moves">
@@ -144,12 +137,7 @@ const Movelist: FCICC<IMovelistProps> = ({
       </div>
 
       <div className="movelist__opening">
-        <SmallParagraph
-          name="Opening game"
-          token={{ token: openingName, args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
+        <SmallParagraph>Opening game</SmallParagraph>
       </div>
 
       {RequestIcon ? (
@@ -179,7 +167,7 @@ const Movelist: FCICC<IMovelistProps> = ({
       ) : (
         <div className="movelist__actions">
           <ActionButton
-            color="red"
+            color="danger"
             size="small"
             name="fakeButton"
             onButtonClick={onResignClick}

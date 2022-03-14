@@ -1,8 +1,11 @@
 import { Chess } from "chess.js";
 import clsx from "clsx";
 import React, { FCICC, useEffect, useState } from "react";
+import ControlBox from "../components/ControlBox";
+import FlatMovelist from "../components/FlatMovelist";
 import GameSetup from "../components/GameSetup";
 import { calcTime } from "../data/utils";
+import useWindowSize from "../hooks/userWindowSize";
 import useSound from "../hooks/useSound";
 import { ESounds } from "../hooks/useSound/constants";
 import { gameservice } from "../Root";
@@ -31,6 +34,8 @@ const GameMarkup: FCICC<IGameMarkup> = ({ ...rest }) => {
   >();
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>();
+
+  const { width } = useWindowSize();
 
   const play = useSound(ESounds.MOVE);
 
@@ -186,15 +191,14 @@ const GameMarkup: FCICC<IGameMarkup> = ({ ...rest }) => {
             )}
             isMyTurn={moveToMake === "b"}
           />
-          {movelist && movelist.length && (
-            <Movelist
-              openingName="FAKE_TEXT"
-              token={{ token: "FAKE_TEXT", args: [] }}
-              keyboardFunctions={[]}
-              classes={[]}
-              moves={movelist}
-              className="gameContainer__movelist"
+          {width > 785 ? (
+            <ControlBox
+              className="gameContainer__controlBox"
+              moves={movelist || []}
+              messages={[]}
             />
+          ) : (
+            <FlatMovelist moves={movelist || []} />
           )}
           <DigitalClock
             time={calcTime(

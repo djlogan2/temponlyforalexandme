@@ -1,18 +1,19 @@
 .gameContainer {
   display: grid;
   grid-template-areas:
-    "empty1 top empty2"
-    "player1 board clock1"
-    "empty3 board movelist"
-    "empty4 board movelist"
-    "player2 board clock2"
-    "empty5 bot empty6";
+    ". top ."
+    "player1 board rightSide"
+    "player1 board rightSide"
+    "player2 board rightSide"
+    "player2 board rightSide"
+    ". bot .";
+  grid-template-rows: min-content 1fr min-content;
   grid-column-gap: 2rem;
   grid-row-gap: 1.8rem;
   padding: 3rem;
   align-items: end;
   justify-content: center;
-  box-sizing: border-box;
+  width: 100%;
 
   &__player-one {
     grid-area: player1;
@@ -38,6 +39,8 @@
   }
 
   &__board {
+    width: 57.744rem !important;
+    height: 57.761rem !important;
     grid-area: board;
   }
 
@@ -49,41 +52,60 @@
   }
 
   &__clock-one {
-    grid-area: clock1;
+    grid-area: rightSide;
     align-self: flex-start;
 
     &--flipped {
       align-self: flex-end;
-      grid-area: clock2;
+      grid-area: rightSide;
     }
   }
 
   &__clock-two {
-    grid-area: clock2;
+    grid-area: rightSide;
 
     &--flipped {
-      grid-area: clock1;
+      grid-area: rightSide;
       align-self: flex-start;
     }
   }
 
-  &__movelist {
-    grid-area: movelist;
+  &__controlBox {
+    align-self: center;
+    grid-area: rightSide;
+    width: 44.2rem;
   }
 
   @media (max-width: 1365px) {
     grid-template-areas:
       "top ."
       "player1 ."
-      "board clock1"
-      "board movelist"
-      "board movelist"
-      "board clock2"
+      "board rightSide"
+      "board rightSide"
+      "board rightSide"
+      "board rightSide"
       "player2 ."
       "bot .";
 
     &__btn-flip {
       grid-area: player2;
+    }
+
+    &__controlBox {
+      width: 36.6rem;
+      height: 37.6rem;
+      margin: 1.7rem 0;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    &__board {
+      width: 48.525rem !important;
+      height: 48.539rem !important;
+    }
+
+    &__controlBox {
+      width: 26rem;
     }
   }
 
@@ -95,8 +117,8 @@
       "board"
       "board"
       "board"
-      "movelist";
-    padding: 1.5rem;
+      "rightSide";
+    padding: 3rem;
 
     &__player-one {
       grid-area: players;
@@ -128,6 +150,10 @@
       justify-self: end;
       grid-area: clocks;
     }
+
+    &__board {
+      justify-self: center;
+    }
   }
 
   @media (max-width: 375px) {
@@ -137,4 +163,3 @@
     }
   }
 }
-

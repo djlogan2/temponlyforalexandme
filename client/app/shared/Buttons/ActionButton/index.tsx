@@ -7,7 +7,7 @@ interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   hoverText?: string;
   onButtonClick?: () => void;
   size?: "small" | "medium" | "big";
-  color?: "red" | "dark" | "grey" | "primary";
+  color?: "danger" | "dark" | "grey" | "primary";
 }
 
 const ActionButton: FC<ActionButtonProps> = ({
@@ -27,6 +27,7 @@ const ActionButton: FC<ActionButtonProps> = ({
       "activeButton",
       `activeButton--${color}`,
       `activeButton--${size}`,
+      className,
     )}
     type="button"
     {...rest}

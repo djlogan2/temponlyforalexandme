@@ -1,30 +1,20 @@
-import React, { FCICC } from "react";
-import useTranslate from "/client/app/hooks/useTranslate";
+import React, { FC } from "react";
 import "./index.scss";
 
 interface SmallParagraphProps {
-  name: string;
   className?: string;
   link?: string;
 }
 
-const SmallParagraph: FCICC<SmallParagraphProps> = ({
-  name,
-  token,
-  link,
-  ...rest
-}) => {
-  const translation = useTranslate(token);
-
-  return link ? (
-    <a id={name} className="smallParagraphLink" href={link}>
-      {translation}
+const SmallParagraph: FC<SmallParagraphProps> = ({ link, children, ...rest }) =>
+  link ? (
+    <a className="smallParagraphLink" href={link}>
+      {children}
     </a>
   ) : (
-    <div id={name} className="smallParagraph" {...rest}>
-      {translation}
+    <div className="smallParagraph" {...rest}>
+      {children}
     </div>
   );
-};
 
 export default SmallParagraph;

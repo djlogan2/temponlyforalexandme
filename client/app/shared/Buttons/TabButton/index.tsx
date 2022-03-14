@@ -23,7 +23,7 @@ const TabButton: FC<ITabButtonProps> = ({
     type="button"
     className={clsx(
       "tabButton",
-      color && !isColorless && `tabButton--${color}`,
+      color && `tabButton--${color}`,
       isColorless && `tabButton--colorless`,
       className,
     )}

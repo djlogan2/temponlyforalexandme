@@ -1,0 +1,30 @@
+.controlBox {
+  background-color: var(--colorWhiteOne);
+  border-radius: 15px;
+  padding: 1.5rem 1rem;
+  max-width: 44.2rem;
+  box-shadow: var(--boxShadow);
+
+  &__buttons {
+    margin-bottom: 1rem;
+  }
+
+  &__actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__action-btn {
+    &:nth-child(2) {
+      margin: 0 1rem;
+    }
+  }
+
+  &__moreIcon {
+    transform: rotate(90deg);
+    height: 1.5rem;
+    fill: var(--colorWhiteOne);
+  }
+}

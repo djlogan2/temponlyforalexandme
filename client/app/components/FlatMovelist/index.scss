@@ -1,0 +1,41 @@
+.flatMovelist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(max-content, 3rem));
+  width: fit-content;
+  grid-column-gap: 0.4rem;
+  display: flex;
+
+  &__container {
+    padding: 0.6rem 1rem;
+    background-color: var(--colorWhiteOne);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-column-gap: 0.4rem;
+    font-size: 1.2rem;
+    line-height: 1.432rem;
+    color: var(--colorDarkTwo);
+
+    &:last-child {
+      span:last-child {
+        background-color: var(--colorDarkTwo);
+        color: var(--colorWhiteOne);
+        padding: 0 0.2rem;
+        border-radius: 3px;
+
+        svg {
+          fill: var(--colorWhiteOne);
+        }
+      }
+    }
+  }
+}

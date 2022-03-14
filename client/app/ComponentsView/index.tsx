@@ -112,19 +112,10 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         <Heading6>Heading 6</Heading6>
         <Paragraph>Paragraph</Paragraph>
         <Paragraph link="https://www.google.com">Link</Paragraph>
-        <SmallParagraph
-          name="testSmallPar"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
-        <SmallParagraph
-          name="testSmallParLink"
-          link="https://www.google.com"
-          token={{ token: "FAKE_TEXT", args: [] }}
-          keyboardFunctions={[]}
-          classes={[]}
-        />
+        <SmallParagraph>Small Paragraph</SmallParagraph>
+        <SmallParagraph link="https://www.google.com">
+          Small Link Paragraph
+        </SmallParagraph>
         <Input name="input1" label="Input1" />
         <Input name="input2" label="Input2" error errorText="Error text" />
         <Input name="input2" label="Input2" disabled />

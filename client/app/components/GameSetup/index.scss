@@ -5,6 +5,11 @@
   height: 100%;
   position: fixed;
 
+  ::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
   .scrollBar {
     & > div {
       width: 100%;

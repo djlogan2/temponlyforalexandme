@@ -1,0 +1,64 @@
+.controlBox .movelist {
+  & div {
+    overflow-x: hidden !important;
+  }
+
+  &__controls {
+    padding: 1.6rem;
+    background-color: var(--colorWhiteTwo);
+    display: grid;
+    grid-template-columns: repeat(4, 2.5rem);
+    grid-column-gap: 1rem;
+    justify-content: center;
+    border-radius: 8px;
+
+    svg {
+      fill: var(--colorDarkTwo);
+      cursor: pointer;
+      justify-self: center;
+    }
+  }
+
+  &__list-container {
+    background-color: var(--colorWhiteTwo);
+    border-radius: 8px;
+    margin: 0.2rem 0;
+    padding: 1rem;
+  }
+
+  &__moves {
+    margin-top: 1.2rem;
+    height: 16.5rem;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(max-content, 3rem));
+    grid-column-gap: 0.4rem;
+    grid-row-gap: 0.6rem;
+
+    scroll-snap-type: y proximity;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-column-gap: 0.4rem;
+    font-size: 1.2rem;
+    line-height: 1.432rem;
+    color: var(--colorDarkTwo);
+  }
+
+  &__openingName {
+    padding: 1rem;
+    background-color: var(--colorWhiteTwo);
+    height: 4.6rem;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 1365px) {
+    &__moves {
+      height: 9.1rem;
+    }
+  }
+}
