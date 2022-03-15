@@ -1,17 +1,11 @@
 import React, { FC } from "react";
 import Close from "../../icons/Close";
-import Copy from "../../icons/Copy";
-import Facebook from "../../icons/Facebook";
-import Instagram from "../../icons/Instagram";
-import Mail from "../../icons/Mail";
-import Twitter from "../../icons/Twitter";
 import OpenChallengeItem from "../../OpenChallengeItem";
-import Card from "../Card";
-import Subtitle from "../Subtitle";
+import SendToMail from "../../SendToMail";
+import ShareLink from "../../ShareLink";
+import SocialMedia from "../../SocialMedia";
 import { EComponents, ICommonGameSetup } from "../types";
-import ActionButton from "/client/app/shared/Buttons/ActionButton";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import Input from "/client/app/shared/Input";
 
 interface IShareProps extends ICommonGameSetup {}
 
@@ -26,43 +20,9 @@ const Share: FC<IShareProps> = ({ navigate }) => (
       icon={<Close className="share__closeIcon" />}
     />
 
-    <Card className="share__card">
-      <Subtitle className="share__subtitle" size="small">
-        Share this link with anyone to play
-      </Subtitle>
-      <Input name="link" label="Description" icon={<Copy />} />
-    </Card>
-    <Card className="share__card">
-      <Subtitle className="share__subtitle" size="small">
-        Send to mail
-      </Subtitle>
-      <Input
-        name="link"
-        label="Description"
-        placeholder="Email"
-        icon={<Mail />}
-      />
-    </Card>
-    <Card className="share__card">
-      <Subtitle className="share__subtitle" size="small">
-        Share social media
-      </Subtitle>
-
-      <div className="d-flex space-evenly">
-        <ActionButton color="primary">
-          <Instagram />
-        </ActionButton>
-        <ActionButton color="primary">
-          <Facebook />
-        </ActionButton>
-        <ActionButton color="primary">
-          <Twitter />
-        </ActionButton>
-        <ActionButton color="primary">
-          <Instagram />
-        </ActionButton>
-      </div>
-    </Card>
+    <ShareLink className="share__card" />
+    <SendToMail className="share__card" />
+    <SocialMedia className="share__card" />
     <StandardButton onClick={() => navigate(EComponents.CUSTOM)}>
       Cancel
     </StandardButton>

@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
 import React, { FC } from "react";
 import LongArrow from "../../icons/LongArrow";
-import Card from "../Card";
+import Card from "../../Card";
 import ColorPick from "../ColorPick";
 import RatedGame from "../RatedGame";
-import Subtitle from "../Subtitle";
+import Subtitle from "../../Subtitle";
 import TimeOptions from "../TimeOptions";
 import { ICommonGameSetup } from "../types";
 import "./index.scss";

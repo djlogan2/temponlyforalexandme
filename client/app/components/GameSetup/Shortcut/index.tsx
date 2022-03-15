@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { FC, HTMLAttributes } from "react";
-import Card from "../Card";
-import Subtitle from "../Subtitle";
+import Card from "../../Card";
+import Subtitle from "../../Subtitle";
 import Switch from "/client/app/shared/Switch";
 import "./index.scss";
 

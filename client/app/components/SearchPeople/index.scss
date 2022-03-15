@@ -1,0 +1,38 @@
+.searchPeople {
+  position: relative;
+
+  &__searchIcon {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  &__card {
+    margin: 2rem 0;
+  }
+
+  &__foundFriends {
+    position: absolute;
+    background-color: var(--colorWhiteOne);
+    margin-top: -2.8rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    background-color: var(--colorWhiteOne);
+    z-index: 1;
+  }
+
+  &__textButton {
+    margin-top: 0.8rem;
+    max-width: max-content;
+  }
+
+  &__foundFriend {
+    border-radius: 0;
+    box-shadow: none;
+
+    &:nth-child(even) {
+      background-color: var(--colorWhiteTwo);
+    }
+  }
+}

@@ -1,9 +1,9 @@
 import React, { FC, useState } from "react";
-import ArrowLeft from "../../icons/Arrow";
+import Arrow from "../../icons/Arrow";
 import LongArrow from "../../icons/LongArrow";
 import ChallengesList from "../ChallengesList";
 import { challengeTypes } from "../constants";
-import Subtitle from "../Subtitle";
+import Subtitle from "../../Subtitle";
 import { TChallenge } from "../types";
 import TabItemButton from "/client/app/shared/Buttons/TabItemButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
@@ -37,7 +37,7 @@ const Challenges: FC<IChallengesProps> = () => {
       <TextButton className="challenges__showMore">
         Show more
         <LongArrow className="challenges__longArrowRight" />
-        <ArrowLeft className="challenges__arrowDown" />
+        <Arrow className="challenges__arrowDown" />
       </TextButton>
     </div>
   );

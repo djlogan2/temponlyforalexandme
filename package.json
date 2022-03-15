@@ -10,7 +10,7 @@
     "test": "meteor test --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "prepare": "husky insta ll",
+    "prepare": "husky install",
     "lint": "eslint --ignore-path .gitignore .",
     "prettier": "prettier --ignore-path .gitignore \"**/*.(js|ts|tsx|json)\"",
     "check-types": "tsc",
@@ -113,7 +113,7 @@
     ],
     "**/*.(js|ts|tsx|json)": [
       "prettier --write",
-      "jest --findRelatedTests",
+      "jest --findRelatedTests --coverage=false",
       "git add"
     ]
   }

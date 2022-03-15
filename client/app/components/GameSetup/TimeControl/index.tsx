@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import React, { FC, useEffect, useState } from "react";
 import LongArrow from "../../icons/LongArrow";
-import Card from "../Card";
-import Subtitle from "../Subtitle";
+import Card from "../../Card";
+import Subtitle from "../../Subtitle";
 import "./index.scss";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import Checkbox from "/client/app/shared/Checkbox";

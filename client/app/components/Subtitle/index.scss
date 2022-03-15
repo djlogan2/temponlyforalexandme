@@ -1,16 +1,17 @@
-.gameSetup .subtitle {
+.subtitle {
   align-self: center;
-  
+  margin-bottom: 1.8rem;
+
   &--big {
     font-size: 1.8rem;
     font-weight: 500;
-    line-height: 2.198rem;
+    line-height: 2.2rem;
     color: var(--colorDarkOne);
   }
 
   &--small {
     font-size: 1.2rem;
-    line-height: 1.432rem;
+    line-height: 1.4rem;
     color: var(--colorBlackOne);
   }
 }

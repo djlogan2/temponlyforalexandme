@@ -1,63 +1,25 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import clsx from "clsx";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import LongArrow from "../../icons/LongArrow";
-import Search from "../../icons/Search";
+import SearchPeople from "../../SearchPeople";
 import UserItem from "../../UserItem";
-import Card from "../Card";
 import Shortcut from "../Shortcut";
 import TimeOptions from "../TimeOptions";
-import { EComponents, ICommonGameSetup } from "../types";
-import useOnClickOutside from "/client/app/hooks/useClickOutside";
+import { ICommonGameSetup } from "../types";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
-import Input from "/client/app/shared/Input";
 import Heading5 from "/client/app/shared/Typographies/Heading5";
 
 interface IPlayWithFriendsProps extends ICommonGameSetup {}
 
 const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
   const [opponents, setOpponents] = useState<number>(0);
-  const [isSearching, setIsSearching] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-
-  useOnClickOutside(searchRef, () => {
-    setIsSearching(false);
-  });
 
   return (
     <div className="playWithFriends">
-      <div ref={searchRef}>
-        <Card className="playWithFriends__card">
-          <Input
-            label="User name or email"
-            name="search"
-            icon={<Search className="playWithFriends__searchIcon" />}
-            placeholder="Search friend"
-            onFocus={() => setIsSearching(true)}
-          />
-        </Card>
-        {isSearching && (
-          <div className="playWithFriends__foundFriends">
-            {new Array(4).fill(0).map((_, i) => (
-              <UserItem
-                onClick={() => setIsSearching(false)}
-                className="playWithFriends__foundFriend"
-                key={i}
-                text="Username Test"
-                chessTitle="WGM"
-                flag="FR"
-                size="md"
-                status="online"
-              />
-            ))}
-            <TextButton className="playWithFriends__textButton">
-              More results (4/57) <LongArrow />
-            </TextButton>
-          </div>
-        )}
-      </div>
+      <SearchPeople />
 
       <div className="playWithFriends__opponents">
         <ul className="playWithFriends__opponents-list">

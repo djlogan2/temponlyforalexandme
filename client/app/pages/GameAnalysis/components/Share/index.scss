@@ -1,0 +1,43 @@
+.analysisControlBox .share {
+  &__card {
+    &:not(:first-child) {
+      margin-top: 1.5rem;
+    }
+  }
+
+  &__content {
+    background-color: var(--colorWhiteTwo);
+    height: 60.2rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+
+  &__header {
+    display: flex;
+    margin-bottom: 0.4rem;
+  }
+
+  &__title {
+    transform: translate(50%);
+  }
+
+  &__backIcon {
+    width: 1.8rem;
+    height: 1.8rem;
+    fill: var(--colorDarkOne);
+  }
+
+  &__btnBack {
+    outline: 0;
+    border: 0;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+
+    span {
+      font-size: 1rem;
+      line-height: 1.2rem;
+      margin-left: 0.5rem;
+    }
+  }
+}

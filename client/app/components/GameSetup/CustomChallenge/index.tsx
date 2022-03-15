@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import Card from "../Card";
+import Card from "../../Card";
 import ColorPick from "../ColorPick";
 import RatedGame from "../RatedGame";
 import Shortcut from "../Shortcut";
-import Subtitle from "../Subtitle";
+import Subtitle from "../../Subtitle";
 import TimeOptions from "../TimeOptions";
 import { EComponents, ICommonGameSetup } from "../types";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";

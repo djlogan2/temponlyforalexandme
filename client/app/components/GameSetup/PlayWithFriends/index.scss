@@ -12,28 +12,6 @@
     margin-top: 0.8rem;
   }
 
-  &__foundFriends {
-    background-color: var(--colorWhiteOne);
-    margin-top: -2.4rem;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-radius: 8px;
-  }
-
-  &__textButton {
-    margin-top: .8rem;
-    max-width: max-content;
-  }
-
-  &__foundFriend {
-    border-radius: 0;
-    box-shadow: none;
-
-    &:nth-child(even) {
-      background-color: var(--colorWhiteTwo);
-    }
-  }
-
   &__opponents {
     position: relative;
     overflow: auto;

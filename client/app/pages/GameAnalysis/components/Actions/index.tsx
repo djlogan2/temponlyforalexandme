@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import Computer from "/client/app/components/icons/Computer";
 import Download from "/client/app/components/icons/Download";
 import Library from "/client/app/components/icons/Library";
@@ -8,7 +8,11 @@ import Share from "/client/app/components/icons/Share";
 import Upload from "/client/app/components/icons/Upload";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
 
-const Actions = () => (
+interface IActionsProps {
+  onShareClick: () => void;
+}
+
+const Actions = ({ onShareClick }: IActionsProps) => (
   <div className="analysisControlBox__actions d-flex space-between">
     <ActionButton size="small" color="secondary">
       <Plus />
@@ -28,7 +32,7 @@ const Actions = () => (
     <ActionButton size="small" color="secondary">
       <Upload />
     </ActionButton>
-    <ActionButton size="small" color="secondary">
+    <ActionButton size="small" color="secondary" onClick={onShareClick}>
       <Share />
     </ActionButton>
   </div>

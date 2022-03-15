@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from "react";
 import Arrow from "../../icons/Arrow";
 import More from "../../icons/More";
 import { timeOptions } from "../constants";
-import Subtitle from "../Subtitle";
+import Subtitle from "../../Subtitle";
 import TimeControl from "../TimeControl";
 import { TTimeOption } from "../types";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
