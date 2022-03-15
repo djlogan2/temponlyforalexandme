@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Heading5 from "../../Typographies/Heading5";
 
 interface ITabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color?: "primary";
+  color?: "primary" | "secondary";
   iconLeft?: JSX.Element;
   iconRight?: JSX.Element;
   isColorless?: boolean;

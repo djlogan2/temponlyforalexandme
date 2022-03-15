@@ -1,5 +1,6 @@
 import ComponentsView from "/client/app/ComponentsView";
 import GameMarkup from "/client/app/GameMarkup";
+import GameAnalysis from "/client/app/pages/GameAnalysis";
 import React, { FCICC } from "react";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import LoadingPlaceholder from "./shared/LoadingPlaceholder";
@@ -13,14 +14,10 @@ const App: FCICC = ({ classes, ...rest }) => {
     <Router>
       <Switch>
         <Route exact path="/">
-          <GameMarkup
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
-          />
+          <GameMarkup />
+        </Route>
+        <Route exact path="/analysis">
+          <GameAnalysis />
         </Route>
         <Route exact path="/ui-elements">
           <ComponentsView

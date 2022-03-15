@@ -20,7 +20,11 @@ const Actions: FC<IActionsProps> = ({ ...rest }) => (
       <Draw />
     </ActionButton>
 
-    <ActionButton className="controlBox__action-btn" color="grey" size="small">
+    <ActionButton
+      className="controlBox__action-btn"
+      color="secondary"
+      size="small"
+    >
       <More className="controlBox__moreIcon" />
     </ActionButton>
   </div>

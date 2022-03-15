@@ -11,9 +11,14 @@
   outline: 0;
   cursor: pointer;
 
+  svg {
+    fill: var(--colorWhiteOne);
+  }
+
   &:disabled {
     cursor: initial;
     background-color: var(--colorDarkTwo);
+    opacity: .5;
   }
 
   &--primary {
@@ -25,7 +30,7 @@
   &--danger {
     background-color: var(--colorDanger);
   }
-  &--grey {
+  &--secondary {
     background-color: var(--colorDarkTwo);
   }
 

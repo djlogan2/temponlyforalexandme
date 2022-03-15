@@ -1,0 +1,105 @@
+.analysisControlBox {
+  height: 59.8rem;
+  padding: 2rem 1rem;
+  width: 100%;
+  max-width: 44.2rem;
+  background-color: var(--colorWhiteOne);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 0.5rem;
+  }
+
+  &__actions {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 31.2rem;
+  }
+
+  &__table {
+    height: 23.6rem;
+    border-radius: 8px;
+    background-color: var(--colorWhiteTwo);
+    width: 100%;
+    border-spacing: 0;
+  }
+
+  &__headers {
+    text-align: left;
+    background-color: var(--colorWhiteTwo);
+    height: 1.7rem;
+    margin-bottom: 0 !important;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  &__header {
+    padding: 1.2rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.7rem;
+    color: var(--colorDarkOne);
+    padding-bottom: 0.7rem;
+
+    &:nth-child(3) {
+      text-align: right;
+    }
+
+    &:not(:first-child):not(:nth-child(3)) {
+      text-align: center;
+    }
+  }
+
+  &__observerItem {
+    height: 4rem;
+    background-color: var(--colorWhiteOne);
+
+    &:hover {
+      background-color: var(--colorWhiteTwo);
+    }
+
+    td {
+      height: 4rem;
+    }
+
+    td:first-child {
+      font-size: 1.4rem;
+      line-height: 1.7rem;
+      color: var(--colorDarkTwo);
+      display: flex;
+      align-items: center;
+
+      span {
+        margin-left: 0.8rem;
+        vertical-align: middle;
+      }
+    }
+
+    td:last-child {
+      svg {
+        fill: var(--colorDarkTwo);
+      }
+    }
+
+    td:not(:first-child) {
+      text-align: center;
+    }
+  }
+
+  &__table-container {
+    flex: 1;
+    margin-top: .5rem;;
+    margin-bottom: 2rem;
+    height: 23.6rem;
+
+    .scrollBarTrackVertical {
+      top: 3.8rem !important;
+    }
+  }
+}

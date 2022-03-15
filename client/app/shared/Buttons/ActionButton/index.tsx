@@ -7,7 +7,7 @@ interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   hoverText?: string;
   onButtonClick?: () => void;
   size?: "small" | "medium" | "big";
-  color?: "danger" | "dark" | "grey" | "primary";
+  color?: "danger" | "dark" | "secondary" | "primary";
 }
 
 const ActionButton: FC<ActionButtonProps> = ({

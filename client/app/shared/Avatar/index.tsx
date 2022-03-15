@@ -4,19 +4,19 @@ import { TUserStatus } from "../../types";
 import "./index.scss";
 
 interface IAvatarProps {
-  status: TUserStatus;
   alt: string;
   size?: "bg" | "md" | "sm" | "xs";
+  status?: TUserStatus;
   picture?: string;
   className?: string;
 }
 
 const Avatar: FC<IAvatarProps> = ({
-  status,
   picture,
   className,
   alt,
   children,
+  status = "offline",
   size = "bg",
 }) => (
   <div

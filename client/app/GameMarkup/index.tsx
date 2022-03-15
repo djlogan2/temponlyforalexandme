@@ -1,6 +1,6 @@
 import { Chess } from "chess.js";
 import clsx from "clsx";
-import React, { FCICC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import ControlBox from "../components/ControlBox";
 import FlatMovelist from "../components/FlatMovelist";
 import GameSetup from "../components/GameSetup";
@@ -12,7 +12,7 @@ import { gameservice } from "../Root";
 import "./index.scss";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 import Flip from "/client/app/components/icons/Flip";
-import Movelist, { IMoveItem } from "/client/app/components/Movelist";
+import { IMoveItem } from "/client/app/components/Movelist";
 import PlayerInfo from "/client/app/components/PlayerInfo";
 import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
 import GameTitle from "/client/app/shared/GameTitle";
@@ -23,7 +23,7 @@ import { PieceColor } from "/lib/records/ChallengeRecord";
 
 interface IGameMarkup {}
 
-const GameMarkup: FCICC<IGameMarkup> = ({ ...rest }) => {
+const GameMarkup: FC<IGameMarkup> = ({ ...rest }) => {
   const [showGameSetup, setShowGameSetup] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [fen, setFen] = useState<string>();

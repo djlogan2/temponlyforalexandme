@@ -1,5 +1,5 @@
 .tabButton {
-  width: 11.5rem;
+  min-width: 11.5rem;
   padding: 0.5rem 0 0.6rem 0;
   font-size: 1.8rem;
   height: 3.2rem;
@@ -16,6 +16,12 @@
   &--colorless {
     background-color: transparent;
     box-shadow: none;
+  }
+
+  &--secondary {
+    background-color: var(--colorDarkTwo);
+    color: #fff;
+    fill: #fff;
   }
   
   &--primary {
