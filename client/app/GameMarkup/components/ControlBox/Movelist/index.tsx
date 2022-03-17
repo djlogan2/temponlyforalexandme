@@ -1,7 +1,7 @@
 import { noop } from "lodash";
 import React, { FC } from "react";
-import { IMoveItem } from "../../Movelist";
-import Controls from "./components/Controls";
+import { IMoveItem } from "../../../../components/Movelist";
+import GameControls from "../../../../components/GameControls";
 import List from "./components/List";
 import OpeningName from "./components/OpeningName";
 import "./index.scss";
@@ -12,7 +12,7 @@ interface IMovelistProps {
 
 const Movelist: FC<IMovelistProps> = ({ moves }) => (
   <div className="movelist">
-    <Controls
+    <GameControls
       className="movelist__controls"
       onNextClick={noop}
       onNextEndClick={noop}

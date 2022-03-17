@@ -1,7 +1,7 @@
 import { Chess } from "chess.js";
 import clsx from "clsx";
 import React, { FC, useEffect, useState } from "react";
-import ControlBox from "../components/ControlBox";
+import ControlBox from "./components/ControlBox";
 import FlatMovelist from "../components/FlatMovelist";
 import GameSetup from "../components/GameSetup";
 import { calcTime } from "../data/utils";

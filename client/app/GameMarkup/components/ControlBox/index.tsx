@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { FC, useState } from "react";
-import TabButton from "../../shared/Buttons/TabButton";
-import { IMoveItem } from "../Movelist";
+import TabButton from "../../../shared/Buttons/TabButton";
+import { IMoveItem } from "../../../components/Movelist";
 import Actions from "./Actions";
 import Chat from "./Chat";
 import { tabs } from "./constants";

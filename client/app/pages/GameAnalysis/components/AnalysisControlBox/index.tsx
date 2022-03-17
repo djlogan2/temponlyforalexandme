@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Actions from "../Actions";
+import BoardSetup from "../BoardSetupTab";
 import ObserversTab from "../ObserversTab";
 import Share from "../Share";
 import { ETabs } from "./constants";
@@ -42,6 +43,7 @@ const AnalysisControlBox = () => {
           </div>
 
           {activeTab === ETabs.OBSERVERS && <ObserversTab />}
+          {activeTab === ETabs.BOARDSETUP && <BoardSetup />}
 
           <Actions onShareClick={() => setShowShare(true)} />
         </>

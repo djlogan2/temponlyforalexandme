@@ -9,7 +9,7 @@
     background-color: var(--colorWhiteTwo);
     height: 60.2rem;
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
   }
 
   &__header {

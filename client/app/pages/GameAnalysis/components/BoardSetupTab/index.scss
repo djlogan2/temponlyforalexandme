@@ -1,0 +1,77 @@
+.analysisControlBox .boardSetupTab {
+  margin-bottom: auto;
+
+  &__longArrowIcon {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  &__row {
+    margin: 0.5rem 0;
+  }
+
+  &__gameControls {
+    padding: 1.25rem;
+    background-color: var(--colorWhiteTwo);
+    display: grid;
+    grid-template-columns: repeat(4, 2.5rem);
+    grid-column-gap: 1.75rem;
+    justify-content: center;
+    border-radius: var(--border-radius-small);
+
+    svg {
+      width: 1.8rem;
+      height: 1.8rem;
+      fill: var(--colorDarkTwo);
+      cursor: pointer;
+      justify-self: center;
+    }
+  }
+
+  &__accordeon-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__accordeon-content {
+    margin-top: 1rem;
+  }
+
+  &__chevronIcon {
+    width: 1.8rem;
+    height: 1.8rem;
+
+    &Up {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__accordeon {
+    padding: 1.05rem 2.1rem 1.25rem 2.1rem;
+    background-color: var(--colorWhiteTwo);
+    border-radius: var(--border-radius-small);
+  }
+
+  &__castling {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-gap: 1rem;
+
+    &-title {
+      grid-column: 1 / -1;
+      font-size: 1rem;
+      line-height: 1.2rem;
+      color: var(--colorDarkTwo);
+    }
+  }
+
+  &__colorToMove {
+    margin-bottom: 2rem;
+  }
+
+  &__loadOpening {
+    font-size: 1.2rem;
+    line-height: 1.4rem;
+    color: var(--colorDarkTwo);
+  }
+}

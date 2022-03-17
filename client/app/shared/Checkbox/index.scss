@@ -1,51 +1,41 @@
-.checkboxDisabled {
-  parent: system;
-}
-.checkboxDisabled .checkbox {
-  border-color: rgba(15, 90, 182, 0.5);
-}
-.checkboxDisabled .checkboxActive {
-  border-color: rgba(15, 90, 182, 0.5);
-  background-color: rgba(15, 90, 182, 0.5);
-}
-.checkboxLabel {
-  cursor: pointer;
-  parent: system;
-  display: flex;
-  align-items: center;
-}
-.checkboxCircled {
-  parent: system;
-}
-.checkboxCircled .checkbox {
-  border: 1px solid #019DF4;
-  border-radius: 50%;
-}
-.checkboxCircled .checkboxActive {
-  background: #000;
-}
-.checkboxNative {
-  clip: rect(0 0 0 0);
-  width: 1px;
-  height: 1px;
-  parent: system;
-  overflow: hidden;
-  position: absolute;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
 .checkbox {
-  width: 22px;
-  border: 1px var(--colorDarkTwo) solid;
-  height: 22px;
-  parent: system;
-  display: inline-block;
-  background: #FFF;
-  margin-right: 4px;
-  border-radius: 2px;
-}
-.checkboxActive {
-  parent: system;
-  background: var(--colorPrimary);
-  border-color: var(--colorPrimary);
+  background-color: var(--colorWhiteOne);
+
+  &--regular {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.182rem;
+    height: 2.182rem;
+    border-radius: 2px;
+    border: 1px solid var(--colorDarkTwo);
+  }
+
+  &--circled {
+    display: block;
+    border-radius: 10px;
+    width: 1.964rem;
+    height: 1.964rem;
+    border: 1px solid var(--colorPrimary);
+  }
+
+  &--checked {
+    background-color: var(--colorPrimary);
+    border: 1px solid var(--colorDarkTwo);
+
+    svg {
+      fill: var(--colorWhiteOne);
+    }
+  }
+
+  &--disabled {
+    opacity: 0.5;
+  }
+
+  &__text {
+    margin-left: 0.8rem;
+    font-size: 1.6rem;
+    color: var(--colorDarkTwo);
+    line-height: 1.9rem;
+  }
 }

@@ -1,6 +1,6 @@
 .openChangeItem {
   box-shadow: var(--boxShadow);
-  border-radius: 8px;
+  border-radius: var(--border-radius-small);
   background-color: #ffffff;
   display: flex;
   align-items: center;

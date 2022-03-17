@@ -53,7 +53,7 @@ export class Widget extends Component<IWidgetProps, IState> {
     return (
       <div
         style={{
-          background: `#a8a8a8`,
+          background: `var(--colorGreyThree)`,
           height: "100%",
         }}
       >

@@ -44,7 +44,7 @@
 //   &__opening {
 //     width: 160px;
 //     padding: 10px;
-//     border-radius: 8px;
+//     border-radius: var(--border-radius-small);
 //     margin-bottom: 10px;
 //     background-color: #f5f5f5;
 //     color: var(--colorDarkTwo);
@@ -52,7 +52,7 @@
 
 //   &__moves-container {
 //     padding: 10px 0;
-//     border-radius: 8px;
+//     border-radius: var(--border-radius-small);
 //     margin-bottom: 2px;
 //     background-color: #f5f5f5;
 //   }
@@ -78,7 +78,7 @@
 //     parent: system;
 //     display: flex;
 //     padding: 17.3px 28.1px;
-//     border-radius: 8px;
+//     border-radius: var(--border-radius-small);
 //     margin-bottom: 2px;
 //     justify-content: space-between;
 //     background-color: #f5f5f5;

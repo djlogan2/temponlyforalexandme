@@ -10,7 +10,7 @@
     grid-template-columns: repeat(4, 2.5rem);
     grid-column-gap: 1rem;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
 
     svg {
       fill: var(--colorDarkTwo);
@@ -21,7 +21,7 @@
 
   &__list-container {
     background-color: var(--colorWhiteTwo);
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
     margin: 0.2rem 0;
     padding: 1rem;
   }
@@ -53,7 +53,7 @@
     padding: 1rem;
     background-color: var(--colorWhiteTwo);
     height: 4.6rem;
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
   }
 
   @media (max-width: 1365px) {

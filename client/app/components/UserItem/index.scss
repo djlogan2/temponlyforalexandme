@@ -3,7 +3,7 @@
   align-items: center;
   background: #ffffff;
   box-shadow: var(--boxShadow);
-  border-radius: 8px;
+  border-radius: var(--border-radius-small);
   padding: 1rem 1.689rem;
   cursor: pointer;
   color: var(--colorDarkTwo);

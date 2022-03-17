@@ -224,7 +224,7 @@ class DummyChessboard extends Component {
               secondColor: "#ffffff",
             },
             promotion: {
-              backgroundColor: "#a8a8a8",
+              backgroundColor: "var(--colorGreyThree)",
             },
           }}
           movable={legalMoves}

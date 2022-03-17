@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import clsx from "clsx";
+import { noop } from "lodash";
 import React, { FC, InputHTMLAttributes } from "react";
-import Copy from "../../components/icons/Copy";
 import SmallText from "../Typographies/SmallText";
 import "./index.scss";
 
@@ -10,6 +12,7 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   errorText?: string;
   icon?: JSX.Element;
+  onContainerClick?: () => void;
 }
 
 const Input: FC<IInputProps> = ({
@@ -20,9 +23,10 @@ const Input: FC<IInputProps> = ({
   errorText,
   error,
   icon,
+  onContainerClick = noop,
   ...rest
 }) => (
-  <div>
+  <div onClick={onContainerClick}>
     <label
       className={clsx(
         "inputField",
