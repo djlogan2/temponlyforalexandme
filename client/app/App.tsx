@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ComponentsView from "./pages/ComponentsView";
 import LoadingPlaceholder from "./shared/LoadingPlaceholder";
 import { useTheme } from "./theme";
-import GameMarkup from "/client/app/GameMarkup";
+import GameMarkup from "/client/app/pages/GameMarkup";
 import GameAnalysis from "/client/app/pages/GameAnalysis";
 import ResponsiveBreakpoints from "/client/app/ResponsiveBreakpoints";
 

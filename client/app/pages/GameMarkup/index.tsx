@@ -1,13 +1,13 @@
 import { Chess } from "chess.js";
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import FlatMovelist from "../components/FlatMovelist";
-import GameSetup from "../components/GameSetup";
-import { calcTime } from "../data/utils";
-import useWindowSize from "../hooks/userWindowSize";
-import useSound from "../hooks/useSound";
-import { ESounds } from "../hooks/useSound/constants";
-import { gameservice } from "../Root";
+import FlatMovelist from "../../components/FlatMovelist";
+import GameSetup from "../../components/GameSetup";
+import { calcTime } from "../../data/utils";
+import useWindowSize from "../../hooks/userWindowSize";
+import useSound from "../../hooks/useSound";
+import { ESounds } from "../../hooks/useSound/constants";
+import { gameservice } from "../../Root";
 import ControlBox from "./components/ControlBox";
 import "./index.scss";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
@@ -150,7 +150,9 @@ const GameMarkup = () => {
               isFlipped && "gameContainer__player-two--flipped",
             )}
           />
-          <GameTitle minutes={15} className="gameContainer__title" />
+          {width > 785 && (
+            <GameTitle minutes={15} className="gameContainer__title" />
+          )}
           <EnhancedChessboard
             fen={fen}
             flipped={isFlipped}
