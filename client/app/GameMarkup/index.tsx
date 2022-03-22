@@ -1,7 +1,6 @@
 import { Chess } from "chess.js";
 import clsx from "clsx";
-import React, { FC, useEffect, useState } from "react";
-import ControlBox from "./components/ControlBox";
+import React, { useEffect, useState } from "react";
 import FlatMovelist from "../components/FlatMovelist";
 import GameSetup from "../components/GameSetup";
 import { calcTime } from "../data/utils";
@@ -9,6 +8,7 @@ import useWindowSize from "../hooks/userWindowSize";
 import useSound from "../hooks/useSound";
 import { ESounds } from "../hooks/useSound/constants";
 import { gameservice } from "../Root";
+import ControlBox from "./components/ControlBox";
 import "./index.scss";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 import Flip from "/client/app/components/icons/Flip";
@@ -21,9 +21,7 @@ import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 
-interface IGameMarkup {}
-
-const GameMarkup: FC<IGameMarkup> = ({ ...rest }) => {
+const GameMarkup = () => {
   const [showGameSetup, setShowGameSetup] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [fen, setFen] = useState<string>();
@@ -152,16 +150,7 @@ const GameMarkup: FC<IGameMarkup> = ({ ...rest }) => {
               isFlipped && "gameContainer__player-two--flipped",
             )}
           />
-          <GameTitle
-            minutes={15}
-            keyboardFunctions={[]}
-            token={{
-              token: "",
-              args: [],
-            }}
-            classes={[]}
-            className="gameContainer__title"
-          />
+          <GameTitle minutes={15} className="gameContainer__title" />
           <EnhancedChessboard
             fen={fen}
             flipped={isFlipped}

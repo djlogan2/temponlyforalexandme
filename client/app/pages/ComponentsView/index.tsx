@@ -1,8 +1,7 @@
 import React, { FCICC, useState } from "react";
-import { useHistory } from "react-router-dom";
-import GameSetup from "../components/GameSetup";
-import Avatar from "../shared/Avatar";
-import StandardButton from "../shared/Buttons/StandardButton";
+import GameSetup from "../../components/GameSetup";
+import Avatar from "../../shared/Avatar";
+import StandardButton from "../../shared/Buttons/StandardButton";
 import "./index.scss";
 import CapturedPieces from "/client/app/components/CapturedPieces";
 import PlayerInfo from "/client/app/components/PlayerInfo";
@@ -28,7 +27,6 @@ interface IComponentsView {}
 
 const ComponentsView: FCICC<IComponentsView> = () => {
   const [showGameSetupModal, setShowGameSetupModal] = useState(false);
-  const history = useHistory();
 
   return (
     <div className="container">
@@ -67,12 +65,6 @@ const ComponentsView: FCICC<IComponentsView> = () => {
           minutes={10}
           instance="game_title_semifinal"
           date="May 22, 2022"
-          keyboardFunctions={[]}
-          token={{
-            token: "",
-            args: [],
-          }}
-          classes={[]}
         />
 
         <Title
@@ -158,10 +150,7 @@ const ComponentsView: FCICC<IComponentsView> = () => {
         />
       </div>
       <div className="board-contaier">
-        <div className="board-wrapper">
-          {/* @ts-ignore */}
-          {/* <DummyChessboard /> */}
-        </div>
+        <div className="board-wrapper">{/* @ts-ignore */}</div>
       </div>
     </div>
   );

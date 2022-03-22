@@ -1,20 +1,19 @@
-import React, { FCICC, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
-import SubscriptionService from "/imports/client/service/SubscriptionService";
-import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
-import ThemeReadOnlyDao from "/imports/client/dao/ThemeReadOnlyDao";
-import Clienti18n from "/lib/client/Clienti18n";
-import ClientTheme from "/lib/client/ClientTheme";
+import App from "./App";
 import { withTranslations } from "./hocs/withTranslations";
 import Theme, { ThemeProvider } from "./theme";
-import GameService from "/imports/client/service/GameService";
-import ClientServer from "/lib/client/ClientServer";
-import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
-import App from "./App";
-import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
-import LoadingPlaceholder from "./shared/LoadingPlaceholder";
+import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import ClientStartedGameReadOnlyDao from "/imports/client/dao/ClientStartedGameReadOnlyDao";
+import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
+import ThemeReadOnlyDao from "/imports/client/dao/ThemeReadOnlyDao";
+import GameService from "/imports/client/service/GameService";
+import SubscriptionService from "/imports/client/service/SubscriptionService";
+import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
+import Clienti18n from "/lib/client/Clienti18n";
+import ClientServer from "/lib/client/ClientServer";
+import ClientTheme from "/lib/client/ClientTheme";
 
 //---
 globalThis.subscriptionservice = new SubscriptionService(null);
@@ -47,7 +46,7 @@ function loggedin() {
   globalThis.icc.connection.events.off("loggedin", loggedin);
 }
 
-const Root: FCICC = (props) => {
+const Root = () => {
   useEffect(() => {
     if (globalThis.icc.connection.user) {
       return;
@@ -60,7 +59,7 @@ const Root: FCICC = (props) => {
   return (
     <ThemeProvider themeService={theme}>
       <Theme />
-      <App {...props} />
+      <App />
     </ThemeProvider>
   );
 };

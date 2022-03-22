@@ -18,18 +18,18 @@ export const styles = {
 };
 
 export const pieceImages = {
-  bB: "static/images/newPieces/bB.png",
-  bK: "static/images/newPieces/bK.png",
-  bN: "static/images/newPieces/bN.png",
-  bP: "static/images/newPieces/bP.png",
-  bQ: "static/images/newPieces/bQ.png",
-  bR: "static/images/newPieces/bR.png",
-  wB: "static/images/newPieces/wB.png",
-  wK: "static/images/newPieces/wK.png",
-  wN: "static/images/newPieces/wN.png",
-  wP: "static/images/newPieces/wP.png",
-  wQ: "static/images/newPieces/wQ.png",
-  wR: "static/images/newPieces/wR.png",
+  bB: "var(--bB)",
+  bK: "var(--bK)",
+  bN: "var(--bN)",
+  bP: "var(--bP)",
+  bQ: "var(--bQ)",
+  bR: "var(--bR)",
+  wB: "var(--wB)",
+  wK: "var(--wK)",
+  wN: "var(--wN)",
+  wP: "var(--wP)",
+  wQ: "var(--wQ)",
+  wR: "var(--wR)",
 };
 
 export const accessibilityPieces = {

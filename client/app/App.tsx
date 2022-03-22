@@ -1,13 +1,13 @@
-import ComponentsView from "/client/app/ComponentsView";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ComponentsView from "./pages/ComponentsView";
+import LoadingPlaceholder from "./shared/LoadingPlaceholder";
+import { useTheme } from "./theme";
 import GameMarkup from "/client/app/GameMarkup";
 import GameAnalysis from "/client/app/pages/GameAnalysis";
-import React, { FCICC } from "react";
-import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
-import LoadingPlaceholder from "./shared/LoadingPlaceholder";
 import ResponsiveBreakpoints from "/client/app/ResponsiveBreakpoints";
-import { useTheme } from "./theme";
 
-const App: FCICC = ({ classes, ...rest }) => {
+const App = () => {
   const customTheme = useTheme();
 
   return customTheme?.isReady ? (

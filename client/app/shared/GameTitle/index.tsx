@@ -1,4 +1,4 @@
-import React, { FCICC } from "react";
+import React, { FC } from "react";
 import "./index.scss";
 import RapidIcon from "/client/app/shared/GameTitle/children/RapidIcon";
 import clsx from "clsx";
@@ -10,12 +10,7 @@ interface IGameTitle {
   className?: string;
 }
 
-const GameTitle: FCICC<IGameTitle> = ({
-  minutes,
-  instance,
-  date,
-  className,
-}) => (
+const GameTitle: FC<IGameTitle> = ({ minutes, instance, date, className }) => (
   <div className={clsx("gameTitle", className)}>
     <RapidIcon />
     <div className={clsx("gameTitleTitle")}>
