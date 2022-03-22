@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useState } from "react";
 import Actions from "./components/Actions";
 import AnalysisTab from "./components/AnalysisTab";
@@ -9,12 +10,16 @@ import "./index.scss";
 import { TTabs } from "./types";
 import TabButton from "/client/app/shared/Buttons/TabButton";
 
-const AnalysisControlBox = () => {
+interface IAnalysisControlBoxProps {
+  className?: string;
+}
+
+const AnalysisControlBox = ({ className }: IAnalysisControlBoxProps) => {
   const [activeTab, setActiveTab] = useState<TTabs>(ETabs.ANALYSIS);
   const [showShare, setShowShare] = useState(false);
 
   return (
-    <div className="analysisControlBox">
+    <div className={clsx("analysisControlBox", className)}>
       {showShare ? (
         <Share onBackHandler={() => setShowShare(false)} />
       ) : (

@@ -18,7 +18,7 @@ const GameAnalysis = () => (
       onMoveHandler={() => {}}
     />
     <PieceSelection />
-    <AnalysisControlBox />
+    <AnalysisControlBox className="gameAnalysis__controlBox" />
   </div>
 );
 

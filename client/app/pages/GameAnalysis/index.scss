@@ -1,11 +1,16 @@
 .gameAnalysis {
   display: grid;
-  grid-template-columns: min-content 5.7rem 66.8rem;
+  grid-template-columns: repeat(3, max-content);
   grid-column-gap: 1.3rem;
+  align-items: center;
   justify-content: center;
 
   &__board {
-    width: 67.257rem;
-    height: 67.357rem;
+    width: 66.8rem;
+    height: 67.8rem;
+  }
+
+  &__controlBox {
+    width: 44.2rem;
   }
 }
