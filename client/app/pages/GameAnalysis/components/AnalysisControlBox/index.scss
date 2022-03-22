@@ -1,8 +1,10 @@
-.analysisControlBox {
+.gameAnalysis .analysisControlBox {
   height: 66.8rem;
+  min-height: 46.4rem;
   padding: 2rem 1rem;
   width: 100%;
   max-width: 44.2rem;
+  min-width: 36.6rem;
   background-color: var(--colorWhiteOne);
   border-radius: 12px;
   display: flex;
@@ -13,6 +15,11 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    & + div {
+      flex-grow: 1;
+    }
   }
 
   &__actions {

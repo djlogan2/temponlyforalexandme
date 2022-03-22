@@ -2,6 +2,9 @@
   border-radius: var(--border-radius-small);
   background-color: var(--colorWhiteTwo);
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &__inputMessage {
     margin-top: 1rem;
@@ -55,7 +58,7 @@
   }
 
   &__messages {
-    height: 24.5rem;
+    flex-grow: 1;
   }
 
   &__message {

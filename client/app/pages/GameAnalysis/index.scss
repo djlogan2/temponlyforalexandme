@@ -1,0 +1,11 @@
+.gameAnalysis {
+  display: grid;
+  grid-template-columns: min-content 5.7rem 66.8rem;
+  grid-column-gap: 1.3rem;
+  justify-content: center;
+
+  &__board {
+    width: 67.257rem;
+    height: 67.357rem;
+  }
+}

@@ -19,10 +19,10 @@ const Controls: FC<IControls> = ({
   ...rest
 }) => (
   <div {...rest}>
-    <PrevEnd onClick={onPrevEndClick} />
-    <Prev onClick={onPrevClick} />
-    <Next onClick={onNextClick} />
-    <NextEnd onClick={onNextEndClick} />
+    <PrevEnd onClick={onPrevEndClick} className="pointer" />
+    <Prev onClick={onPrevClick} className="pointer" />
+    <Next onClick={onNextClick} className="pointer" />
+    <NextEnd onClick={onNextEndClick} className="pointer" />
   </div>
 );
 

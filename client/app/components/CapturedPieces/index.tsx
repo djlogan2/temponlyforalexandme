@@ -15,7 +15,7 @@ export interface ICapturedPiecesProps {
   soliders: { [K in TFigures]?: number };
 }
 
-export const ComponentsMap: { [K in TFigures]: FC<{ color: string }> } = {
+export const ComponentsMap = {
   p: Pawn,
   n: Knight,
   b: Bishop,
@@ -35,7 +35,7 @@ const CapturedPieces: FC<ICapturedPiecesProps> = ({
       {solidersKeys.map((key) =>
         soliders[key] ? (
           <div key={key}>
-            {new Array(soliders[key]).map((i, idx) => {
+            {new Array(soliders[key]).map((_, idx) => {
               const Component = ComponentsMap[key];
 
               // eslint-disable-next-line react/no-array-index-key

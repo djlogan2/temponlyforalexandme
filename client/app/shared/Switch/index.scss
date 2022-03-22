@@ -1,22 +1,21 @@
 .switchToggle {
   width: 35px;
   height: 18px;
-  parent: system;
   display: inline-block;
   position: relative;
 }
-.switchToggle input[type='checkbox'] {
+.switchToggle input[type="checkbox"] {
   display: none;
 }
-.switchToggle input[type='checkbox']:checked + .switch::before {
+.switchToggle input[type="checkbox"]:checked + .switch::before {
   transform: translateX(17px);
 }
-.switchToggle input[type='checkbox']:checked + .switch {
+.switchToggle input[type="checkbox"]:checked + .switch {
   border: 1px solid var(--colorPrimary);
   background-color: var(--colorPrimary);
 }
-.switchToggle input[type='checkbox']:checked + .switch:before {
-  background-color: #FFF;
+.switchToggle input[type="checkbox"]:checked + .switch:before {
+  background-color: #fff;
 }
 .switchToggle .switch:before {
   top: 2px;
@@ -27,17 +26,23 @@
   position: absolute;
   transition: 0.3s ease;
   border-radius: 50%;
-  background-color: #9698A1;
+  background-color: #9698a1;
 }
 .switch {
   top: 0;
   left: 0;
   right: 0;
-  border: 1px solid #9698A1;
+  border: 1px solid #9698a1;
   bottom: 0;
   cursor: pointer;
-  parent: system;
   position: absolute;
   transition: 0.2s ease;
   border-radius: 25px;
+
+  &__text {
+    margin-left: 0.8rem;
+    font-size: 1.2rem;
+    color: var(--colorDarkTwo);
+    line-height: 1.4rem;
+  }
 }

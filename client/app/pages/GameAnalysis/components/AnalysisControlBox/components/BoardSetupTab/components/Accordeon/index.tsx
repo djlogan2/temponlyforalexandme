@@ -27,8 +27,8 @@ const Accordeon: FC<IAccordeonProps> = ({ children, title, className }) => {
           )}
         />
       </div>
-      {show && (
-        <div className="boardSetupTab__accordeon-content">{children}</div>
+      {show && children && (
+        <div className={clsx("boardSetupTab__content")}>{children}</div>
       )}
     </div>
   );

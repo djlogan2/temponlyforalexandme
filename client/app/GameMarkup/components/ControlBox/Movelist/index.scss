@@ -1,4 +1,8 @@
 .controlBox .movelist {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   & div {
     overflow-x: hidden !important;
   }
@@ -19,34 +23,22 @@
     }
   }
 
+  &__heading {
+    margin-bottom: 1.2rem;
+  }
+
   &__list-container {
     background-color: var(--colorWhiteTwo);
     border-radius: var(--border-radius-small);
     margin: 0.2rem 0;
     padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   &__moves {
-    margin-top: 1.2rem;
-    height: 16.5rem;
-  }
-
-  &__list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(max-content, 3rem));
-    grid-column-gap: 0.4rem;
-    grid-row-gap: 0.6rem;
-
-    scroll-snap-type: y proximity;
-  }
-
-  &__item {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    grid-column-gap: 0.4rem;
-    font-size: 1.2rem;
-    line-height: 1.432rem;
-    color: var(--colorDarkTwo);
+    flex-grow: 1;
   }
 
   &__openingName {
@@ -54,11 +46,5 @@
     background-color: var(--colorWhiteTwo);
     height: 4.6rem;
     border-radius: var(--border-radius-small);
-  }
-
-  @media (max-width: 1365px) {
-    &__moves {
-      height: 9.1rem;
-    }
   }
 }

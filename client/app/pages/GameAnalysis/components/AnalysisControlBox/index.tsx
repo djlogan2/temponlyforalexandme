@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import Actions from "../Actions";
-import BoardSetup from "../BoardSetupTab";
-import ObserversTab from "../ObserversTab";
-import Share from "../Share";
+import Actions from "./components/Actions";
+import AnalysisTab from "./components/AnalysisTab";
+import BoardSetup from "./components/BoardSetupTab";
+import ObserversTab from "./components/ObserversTab";
+import Share from "./components/Share";
 import { ETabs } from "./constants";
 import "./index.scss";
 import { TTabs } from "./types";
@@ -42,8 +43,9 @@ const AnalysisControlBox = () => {
             </TabButton>
           </div>
 
-          {activeTab === ETabs.OBSERVERS && <ObserversTab />}
+          {activeTab === ETabs.ANALYSIS && <AnalysisTab />}
           {activeTab === ETabs.BOARDSETUP && <BoardSetup />}
+          {activeTab === ETabs.OBSERVERS && <ObserversTab />}
 
           <Actions onShareClick={() => setShowShare(true)} />
         </>

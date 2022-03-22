@@ -14,7 +14,7 @@ const ImportPgn = () => {
         name="importPgn"
         label="Import PGN"
         icon={<LongArrow className="boardSetupTab__longArrowIcon" />}
-        onContainerClick={ref.current?.click}
+        onContainerClick={() => ref.current?.click()}
       />
       <input type="file" ref={ref} hidden onChange={onFileChange} />
     </>

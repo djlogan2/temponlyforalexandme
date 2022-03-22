@@ -2,8 +2,9 @@ import { noop } from "lodash";
 import React, { FC } from "react";
 import { IMoveItem } from "../../../../components/Movelist";
 import GameControls from "../../../../components/GameControls";
-import List from "./components/List";
+import Moves from "../../../../components/Moves";
 import OpeningName from "./components/OpeningName";
+import Heading6 from "/client/app/shared/Typographies/Heading6";
 import "./index.scss";
 
 interface IMovelistProps {
@@ -19,7 +20,11 @@ const Movelist: FC<IMovelistProps> = ({ moves }) => (
       onPrevClick={noop}
       onPrevEndClick={noop}
     />
-    <List className="movelist__list-container" moves={moves} />
+
+    <div className="movelist__list-container">
+      <Heading6 className="movelist__heading">Live Chess</Heading6>
+      <Moves moves={moves} className="movelist__moves" />
+    </div>
 
     <OpeningName
       openingName="Chess opening name for these moves"

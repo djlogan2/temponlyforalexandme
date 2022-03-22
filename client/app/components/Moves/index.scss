@@ -1,0 +1,28 @@
+.moves {
+  height: 100%;
+
+  & .scrollBar > div {
+    margin: 0 !important;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(max-content, 3rem));
+    grid-column-gap: 0.4rem;
+    grid-row-gap: 0.6rem;
+
+    scroll-snap-type: y proximity;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-column-gap: 0.4rem;
+    font-size: 1.2rem;
+    line-height: 1.432rem;
+    color: var(--colorDarkTwo);
+  }
+}

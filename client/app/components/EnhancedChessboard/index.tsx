@@ -14,7 +14,7 @@ import {
 interface IEnhancedChessboard {
   fen: string;
   flipped: boolean;
-  className: string;
+  className?: string;
   legalMoves?: string[];
   circles: [];
   arrows: [];
@@ -36,8 +36,10 @@ const EnhancedChessboard: FC<IEnhancedChessboard> = ({
   smallSize,
   onMoveHandler,
 }) => (
-  <div id="fake-styles" className={className}>
+  <div className={className}>
     <ChessBoard
+      bPclassName="p"
+      wPclassName=""
       raf={raf}
       perspective={flipped ? "black" : "white"}
       fen={fen}

@@ -1,0 +1,46 @@
+.analysisControlBox .analysisTab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__row {
+    padding: 1.2rem 1.25rem;
+    background-color: var(--colorWhiteTwo);
+    border-radius: var(--border-radius-small);
+    margin-top: 0.5rem;
+    height: 4.3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &__settings {
+    display: grid;
+    grid-column-gap: 0.8rem;
+    grid-template-columns: max-content max-content 1fr;
+
+    &Icon {
+      justify-self: end;
+    }
+  }
+
+  &__opening {
+    font-size: 1.2rem;
+    line-height: 1.4rem;
+    color: var(--colorDarkTwo);
+  }
+
+  &__controls {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(4, max-content);
+    grid-column-gap: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__moves {
+    flex-grow: 1;
+  }
+}
