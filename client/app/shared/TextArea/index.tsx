@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import "./index.scss";
 import React, { FCICC, TextareaHTMLAttributes } from "react";
-import useTranslate from "../../hooks/useTranslate";
 
 interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
@@ -19,34 +18,28 @@ const TextArea: FCICC<ITextAreaProps> = ({
   msgText,
   error,
   ...rest
-}) => {
-  const labelText = useTranslate(token);
-  const placeholderText = placeHolder && useTranslate(placeHolder);
-  const textAreaMsgText = msgText && useTranslate(msgText);
-
-  return (
-    <div
-      className={clsx(
-        "textareaContainer",
-        className,
-        error && "textareaContainerError",
-      )}
-    >
-      <div className="textareaAreaContainer">
-        <label className="textareaLabel" htmlFor={name}>
-          {labelText}
-          <textarea
-            {...rest}
-            name={name}
-            id={name}
-            placeholder={placeHolder && placeholderText}
-            className="textarea"
-          />
-        </label>
-      </div>
-      {!!msgText && <p className="textareaMsg">{textAreaMsgText}</p>}
+}) => (
+  <div
+    className={clsx(
+      "textareaContainer",
+      className,
+      error && "textareaContainerError",
+    )}
+  >
+    <div className="textareaAreaContainer">
+      <label className="textareaLabel" htmlFor={name}>
+        {token.token}
+        <textarea
+          {...rest}
+          name={name}
+          id={name}
+          placeholder={placeHolder && placeHolder.token}
+          className="textarea"
+        />
+      </label>
     </div>
-  );
-};
+    {!!msgText && <p className="textareaMsg">{msgText.token}</p>}
+  </div>
+);
 
 export default TextArea;

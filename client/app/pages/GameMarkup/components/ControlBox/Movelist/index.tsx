@@ -1,14 +1,14 @@
 import { noop } from "lodash";
 import React, { FC } from "react";
 import GameControls from "../../../../../components/GameControls";
-import { IMoveItem } from "../../../../../components/Movelist";
 import Moves from "../../../../../components/Moves";
 import OpeningName from "./components/OpeningName";
 import "./index.scss";
 import Heading6 from "/client/app/shared/Typographies/Heading6";
+import { TMoveItem } from "/client/app/types";
 
 interface IMovelistProps {
-  moves: IMoveItem[];
+  moves: TMoveItem[];
 }
 
 const Movelist: FC<IMovelistProps> = ({ moves }) => (

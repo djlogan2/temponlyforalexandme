@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { sounds, TSounds } from "./constants";
 
-const useSound = (sound: TSounds) => {
-  const play = useCallback(() => {
+const useSound = () => {
+  const play = useCallback((sound: TSounds) => {
     let value = getComputedStyle(document.documentElement).getPropertyValue(
       sounds[sound],
     );

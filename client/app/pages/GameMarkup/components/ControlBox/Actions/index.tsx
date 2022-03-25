@@ -4,14 +4,17 @@ import More from "/client/app/components/icons/More";
 import Resign from "/client/app/components/icons/Resign";
 import ActionButton from "/client/app/shared/Buttons/ActionButton";
 
-interface IActionsProps extends HTMLAttributes<HTMLDivElement> {}
+interface IActionsProps extends HTMLAttributes<HTMLDivElement> {
+  onResign: () => void;
+}
 
-const Actions: FC<IActionsProps> = ({ ...rest }) => (
+const Actions: FC<IActionsProps> = ({ onResign, ...rest }) => (
   <div {...rest}>
     <ActionButton
       className="controlBox__action-btn"
       color="danger"
       size="small"
+      onClick={onResign}
     >
       <Resign />
     </ActionButton>

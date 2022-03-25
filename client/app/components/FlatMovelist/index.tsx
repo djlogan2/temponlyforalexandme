@@ -1,11 +1,11 @@
 import clsx from "clsx";
 import React, { FC } from "react";
 import { Pieces } from "../../constants";
-import { IMoveItem } from "../Movelist";
+import { TMoveItem } from "../../types";
 import "./index.scss";
 
 interface FlatMovelistProps {
-  moves: IMoveItem[];
+  moves: TMoveItem[];
   className?: string;
 }
 

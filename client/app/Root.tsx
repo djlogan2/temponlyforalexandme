@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import App from "./App";
-import { withTranslations } from "./hocs/withTranslations";
 import Theme, { ThemeProvider } from "./theme";
 import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import ClientStartedGameReadOnlyDao from "/imports/client/dao/ClientStartedGameReadOnlyDao";
@@ -14,6 +13,7 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import Clienti18n from "/lib/client/Clienti18n";
 import ClientServer from "/lib/client/ClientServer";
 import ClientTheme from "/lib/client/ClientTheme";
+import "./i18next";
 
 //---
 globalThis.subscriptionservice = new SubscriptionService(null);
@@ -64,4 +64,4 @@ const Root = () => {
   );
 };
 
-export default withTranslations(Root);
+export default Root;

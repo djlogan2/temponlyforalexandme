@@ -1,21 +1,27 @@
 import clsx from "clsx";
 import React, { FC, useState } from "react";
 import TabButton from "../../../../shared/Buttons/TabButton";
-import { IMoveItem } from "../../../../components/Movelist";
 import Actions from "./Actions";
 import Chat from "./Chat";
 import { tabs } from "./constants";
 import "./index.scss";
 import Movelist from "./Movelist";
 import { ETabs, TTabs } from "./types";
+import { TMoveItem } from "/client/app/types";
 
 interface IControlBoxProps {
-  moves: IMoveItem[];
+  moves: TMoveItem[];
   messages: { id: string; me?: boolean; text: string }[];
+  onResign: () => void;
   className?: string;
 }
 
-const ControlBox: FC<IControlBoxProps> = ({ moves, messages, className }) => {
+const ControlBox: FC<IControlBoxProps> = ({
+  moves,
+  messages,
+  className,
+  onResign,
+}) => {
   const [openedTab, setOpenedTab] = useState<TTabs>(ETabs.MOVELIST);
 
   return (
@@ -36,7 +42,7 @@ const ControlBox: FC<IControlBoxProps> = ({ moves, messages, className }) => {
       {openedTab === ETabs.MOVELIST && <Movelist moves={moves} />}
       {openedTab === ETabs.CHAT && <Chat messages={messages} />}
 
-      <Actions className="controlBox__actions" />
+      <Actions className="controlBox__actions" onResign={onResign} />
     </div>
   );
 };

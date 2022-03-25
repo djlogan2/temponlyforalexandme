@@ -1,6 +1,5 @@
-import { Chess } from "chess.js";
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FlatMovelist from "../../components/FlatMovelist";
 import GameSetup from "../../components/GameSetup";
 import { calcTime } from "../../data/utils";
@@ -10,14 +9,14 @@ import { ESounds } from "../../hooks/useSound/constants";
 import { gameservice } from "../../Root";
 import ControlBox from "./components/ControlBox";
 import "./index.scss";
+import { getLegalMoves } from "./utils";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 import Flip from "/client/app/components/icons/Flip";
-import { IMoveItem } from "/client/app/components/Movelist";
 import PlayerInfo from "/client/app/components/PlayerInfo";
 import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
 import GameTitle from "/client/app/shared/GameTitle";
+import { TMoveItem } from "/client/app/types";
 import ClientUser from "/lib/client/ClientUser";
-import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 
@@ -26,93 +25,91 @@ const GameMarkup = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
-  const [movelist, setMovelist] = useState<IMoveItem[]>();
-  const [gameInstance, setGameInstance] = useState<
-    ClientComputerPlayedGame | ClientAnalysisGame
-  >();
+  const [movelist, setMovelist] = useState<TMoveItem[]>();
+  const [gameInstance, setGameInstance] = useState<ClientComputerPlayedGame>();
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>();
 
   const { width } = useWindowSize();
 
-  const play = useSound(ESounds.MOVE);
+  const playSound = useSound();
 
   useEffect(() => {
     const onGameStartedListener = (id: string) => {
-      const gInstance = gameservice.getTyped(id, connection.user as ClientUser);
-      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const gInstance = gameservice.getTyped(
+        id,
+        connection.user as ClientUser,
+      ) as ClientComputerPlayedGame | undefined;
+
+      if (!gInstance) {
+        return;
+      }
+
       const { tomove, variations, fen, clocks } =
-        // @ts-ignore
         gInstance.getDefaultProperties();
 
       setFen(fen);
       setMoveToMake(tomove);
       updateClocks(clocks);
-      setMovelist(variations.movelist.slice(1));
-      // @ts-ignore
+      setMovelist(variations.movelist.slice(1) as TMoveItem[]);
+
       gInstance.events.on("fen", (data) => {
-        play();
+        playSound(ESounds.MOVE);
         setFen(data);
       });
 
-      // @ts-ignore
       gInstance.events.on("movelist", (data) => {
         setMovelist(data.movelist.slice(1));
       });
 
-      // @ts-ignore
       gInstance.events.on("clocks", (data) => {
         updateClocks(data);
       });
 
-      // @ts-ignore
       gInstance.events.on("tomove", (data) => {
         setMoveToMake(data);
+        gInstance.events.removeAllListeners();
       });
+
+      gInstance.events.on("ended", () => {
+        console.log("ended");
+      });
+
       setGameInstance(gInstance);
     };
 
-    const onGameRemovedListener = () => {
-      setFen("");
-      updateClocks(null);
-      setMovelist([]);
-      // @ts-ignore
-      setGameInstance(null);
+    gameservice.events.on("started", (id) => {
+      onGameStartedListener(id);
+    });
+    gameservice.events.on("removed", () => {
+      console.log("removed");
+    });
+    return () => {
+      gameservice.events.off("started", onGameStartedListener);
+      gameservice.events.off("removed");
     };
-
-    gameservice.events.on("started", onGameStartedListener);
-    gameservice.events.on("removed", onGameRemovedListener);
-    return () => gameservice.events.off("started", onGameStartedListener);
   }, []);
 
-  const handleMove = (move: string[], promotion?: string) => {
-    gameInstance?.makeMove(
-      connection.user as ClientUser,
-      move.join("") + (promotion || ""),
-    );
-  };
+  const handleMove = useCallback(
+    (move: string[], promotion?: string) => {
+      gameInstance?.makeMove(
+        connection.user as ClientUser,
+        move.join("") + (promotion || ""),
+      );
+    },
+    [gameInstance],
+  );
+
+  const onResignHandler = useCallback(() => {
+    gameInstance?.resign(connection.user as ClientUser);
+  }, [gameInstance]);
 
   useEffect(() => {
-    const getLegalMoves = () => {
-      const chess = Chess(fen || "");
-      const moves = {};
-      // @ts-ignore
-      ["a", "b", "c", "d", "e", "f", "g", "h"].forEach((rank) => {
-        // eslint-disable-next-line no-plusplus
-        for (let file = 1; file <= 8; file++) {
-          const legal = chess
-            .moves({ square: rank + file, verbose: true })
-            .map((verbose: { to: any }) => verbose.to);
-          if (!!legal && !!legal.length) {
-            // @ts-ignore
-            moves[rank + file] = legal;
-          }
-        }
-      });
-      return moves;
-    };
+    if (!fen) {
+      return;
+    }
 
-    const currentLegalMoves = getLegalMoves();
+    const currentLegalMoves = getLegalMoves(fen);
     updateLegalMoves(currentLegalMoves);
   }, [fen]);
 
@@ -150,9 +147,6 @@ const GameMarkup = () => {
               isFlipped && "gameContainer__player-two--flipped",
             )}
           />
-          {width > 785 && (
-            <GameTitle minutes={15} className="gameContainer__title" />
-          )}
           <EnhancedChessboard
             fen={fen}
             flipped={isFlipped}
@@ -183,11 +177,15 @@ const GameMarkup = () => {
             isMyTurn={moveToMake === "b"}
           />
           {width > 785 ? (
-            <ControlBox
-              className="gameContainer__controlBox"
-              moves={movelist || []}
-              messages={[]}
-            />
+            <>
+              <GameTitle minutes={15} className="gameContainer__title" />
+              <ControlBox
+                onResign={onResignHandler}
+                className="gameContainer__controlBox"
+                moves={movelist || []}
+                messages={[]}
+              />
+            </>
           ) : (
             <FlatMovelist moves={movelist || []} />
           )}

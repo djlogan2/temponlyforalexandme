@@ -1,4 +1,5 @@
-import React, { FCICC, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import GameSetup from "../../components/GameSetup";
 import Avatar from "../../shared/Avatar";
 import StandardButton from "../../shared/Buttons/StandardButton";
@@ -23,13 +24,18 @@ import Paragraph from "/client/app/shared/Typographies/Paragraph";
 import SmallParagraph from "/client/app/shared/Typographies/SmallParagraph";
 import Title from "/client/app/shared/Typographies/Title";
 
-interface IComponentsView {}
-
-const ComponentsView: FCICC<IComponentsView> = () => {
+const ComponentsView = () => {
   const [showGameSetupModal, setShowGameSetupModal] = useState(false);
+  const { t, i18n: i18next } = useTranslation();
+
+  useEffect(() => {
+    i18n.getTranslation("TEST_TOKEN", i18next.language);
+  }, []);
 
   return (
     <div className="container">
+      <p>{t("Welcome to React")}</p>
+      <p>{t("TEST_TOKEN")}</p>
       <div className="elements-container">
         <StandardButton onClick={() => setShowGameSetupModal(true)}>
           Game setup

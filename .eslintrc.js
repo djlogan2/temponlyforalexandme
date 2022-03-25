@@ -49,7 +49,7 @@ module.exports = {
     "react/prop-types": 0,
     // "@typescript-eslint/no-unused-vars": [true, {"ignore-pattern": "^_"}],
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-shadow": 0,
     "react/require-default-props": 0,
     "no-undef": 0,
     // TODO: Why did we add these three? It removes three errors, at least two of them
@@ -61,6 +61,7 @@ module.exports = {
     "no-param-reassign": 0,
     "react/no-array-index-key": 0,
     "consistent-return": 0,
+    "no-plusplus": 0,
   },
   settings: {
     "import/resolver": {
