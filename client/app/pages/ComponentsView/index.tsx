@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React, { useState } from "react";
 import GameSetup from "../../components/GameSetup";
+import useTranslate from "../../hooks/useTranslate";
 import Avatar from "../../shared/Avatar";
 import StandardButton from "../../shared/Buttons/StandardButton";
 import "./index.scss";
@@ -26,15 +26,10 @@ import Title from "/client/app/shared/Typographies/Title";
 
 const ComponentsView = () => {
   const [showGameSetupModal, setShowGameSetupModal] = useState(false);
-  const { t, i18n: i18next } = useTranslation();
-
-  useEffect(() => {
-    i18n.getTranslation("TEST_TOKEN", i18next.language);
-  }, []);
+  const { t } = useTranslate();
 
   return (
     <div className="container">
-      <p>{t("Welcome to React")}</p>
       <p>{t("TEST_TOKEN")}</p>
       <div className="elements-container">
         <StandardButton onClick={() => setShowGameSetupModal(true)}>

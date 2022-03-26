@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import i18next from "./i18next";
 import ComponentsView from "./pages/ComponentsView";
 import LoadingPlaceholder from "./shared/LoadingPlaceholder";
 import { useTheme } from "./theme";
+import { TI18NDoc } from "./types";
 import GameAnalysis from "/client/app/pages/GameAnalysis";
 import GameMarkup from "/client/app/pages/GameMarkup";
 import ResponsiveBreakpoints from "/client/app/ResponsiveBreakpoints";
@@ -11,8 +13,13 @@ const App = () => {
   const customTheme = useTheme();
 
   useEffect(() => {
-    i18n.events.on("translation", (translation) => {
-      console.log(translation);
+    i18n.events.on("ready", () => {
+      i18n.events.on(
+        "translationchanged",
+        ({ locale, token, text, ...rest }: TI18NDoc) => {
+          i18next.addResource(locale, "translation", token, text);
+        },
+      );
     });
   }, []);
 

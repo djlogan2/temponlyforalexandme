@@ -5,10 +5,11 @@ i18next.use(initReactI18next).init({
   lng: "en",
   resources: {},
   interpolation: {
-    escapeValue: false, // react already safes from xss
+    escapeValue: false,
   },
-  detection: {
-    caches: null,
+  react: {
+    bindI18n: "languageChanged added",
+    bindI18nStore: "added",
   },
 });
 

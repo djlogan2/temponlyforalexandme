@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import "./index.scss";
 import RapidIcon from "/client/app/shared/GameTitle/children/RapidIcon";
 import clsx from "clsx";
+import useTranslate from "../../hooks/useTranslate";
 
 interface IGameTitle {
   minutes: number;
@@ -10,25 +11,21 @@ interface IGameTitle {
   className?: string;
 }
 
-const GameTitle: FC<IGameTitle> = ({ minutes, instance, date, className }) => (
-  <div className={clsx("gameTitle", className)}>
-    <RapidIcon />
-    <div className={clsx("gameTitleTitle")}>
-      {window.i18n.translate("game_title_title", `${minutes}`)}
+const GameTitle: FC<IGameTitle> = ({ minutes, instance, date, className }) => {
+  const { t } = useTranslate();
+
+  return (
+    <div className={clsx("gameTitle", className)}>
+      <RapidIcon />
+      <div className={clsx("gameTitleTitle")}>
+        {t("game_title_title", `${minutes}`)}
+      </div>
+      {instance && (
+        <div className={clsx("gameTitleInstance")}> {t(instance)}</div>
+      )}
+      {date && <div className={clsx("gameTitleDate")}> {t(date)}</div>}
     </div>
-    {instance && (
-      <div className={clsx("gameTitleInstance")}>
-        {" "}
-        {window.i18n.translate(instance)}
-      </div>
-    )}
-    {date && (
-      <div className={clsx("gameTitleDate")}>
-        {" "}
-        {window.i18n.translate(date)}
-      </div>
-    )}
-  </div>
-);
+  );
+};
 
 export default GameTitle;
