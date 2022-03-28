@@ -72,7 +72,7 @@ const GameMarkup = () => {
       });
 
       gInstance.events.on("ended", () => {
-        console.log("ended");
+        // console.log("ended");
       });
 
       setGameInstance(gInstance);
@@ -82,7 +82,7 @@ const GameMarkup = () => {
       onGameStartedListener(id);
     });
     gameservice.events.on("removed", () => {
-      console.log("removed");
+      // console.log("removed");
     });
     return () => {
       gameservice.events.off("started", onGameStartedListener);

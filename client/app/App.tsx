@@ -10,13 +10,14 @@ const App = () => {
   const customTheme = useTheme();
 
   useEffect(() => {
-    i18n.events.on("ready", () => {
-      i18n.events.on(
-        "translationchanged",
-        ({ locale, token, text }: TI18NDoc) => {
-          i18next.addResource(locale, "translation", token, text);
-        },
-      );
+    i18n.events.on("translationchanged", (translation: TI18NDoc) => {
+      if (!translation) {
+        return;
+      }
+
+      const { locale, token, text } = translation;
+
+      i18next.addResource(locale, "translation", token, text);
     });
   }, []);
 

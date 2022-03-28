@@ -3,7 +3,11 @@ import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 const useTranslate = () => {
-  const { t: translate, i18n: i18next, ...rest } = useTranslation();
+  const {
+    t: translate,
+    i18n: i18next,
+    ...rest
+  } = useTranslation(["translation"]);
 
   const t = useCallback(
     (key: string, options?: string | TOptions<StringMap> | undefined) => {

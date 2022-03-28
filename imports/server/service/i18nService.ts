@@ -8,6 +8,7 @@ import ServerConnection from "/lib/server/ServerConnection";
 import { Subscription } from "meteor/meteor";
 import Stoppable from "/lib/Stoppable";
 import ServerUser from "/lib/server/ServerUser";
+import { translations } from "../i18n/en-us";
 
 export default class I18nService extends Stoppable {
   private dao: Writablei18nDao;
@@ -30,10 +31,10 @@ export default class I18nService extends Stoppable {
       ) => new I18nPublication(parent, this, sub, connection, user),
     );
 
-    this.dao.insert({
-      token: "TEST_TOKEN",
-      locale: "en",
-      text: "This is a test token with three arguments, arg0={0} arg1={1} arg2={2}",
+    translations.forEach((t) => {
+      if (!this.dao.readOne({ text: t.text })) {
+        this.dao.insert(t);
+      }
     });
   }
 

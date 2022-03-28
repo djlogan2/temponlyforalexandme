@@ -37,19 +37,6 @@ export default class Clienti18n extends Commoni18n {
     }
   };
 
-  public translate(token: string, ...args: string[]): string {
-    const record = this.dao.readOne({ token });
-    if (!record) return token;
-
-    let translatedtext = record.text;
-
-    for (let x = 0; x < args.length; x += 1) {
-      const replacement = `{${x}}`;
-      translatedtext = translatedtext.replaceAll(replacement, args[x]);
-    }
-    return translatedtext;
-  }
-
   protected stopping(): void {
     throw new Error("Method not implemented.");
   }

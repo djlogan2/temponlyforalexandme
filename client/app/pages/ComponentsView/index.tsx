@@ -30,7 +30,7 @@ const ComponentsView = () => {
 
   return (
     <div className="container">
-      <p>{t("TEST_TOKEN")}</p>
+      <p>{t("customChallenge123123123")}</p>
       <div className="elements-container">
         <StandardButton onClick={() => setShowGameSetupModal(true)}>
           Game setup

@@ -1,23 +1,23 @@
-import React, { FC, useState } from "react";
+import { useTranslate } from "/client/app/hooks";
+import React, { useState } from "react";
 import Arrow from "../../icons/Arrow";
 import LongArrow from "../../icons/LongArrow";
+import Subtitle from "../../Subtitle";
 import ChallengesList from "../ChallengesList";
 import { challengeTypes } from "../constants";
-import Subtitle from "../../Subtitle";
 import { TChallenge } from "../types";
 import TabItemButton from "/client/app/shared/Buttons/TabItemButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 
-interface IChallengesProps {}
-
-const Challenges: FC<IChallengesProps> = () => {
+const Challenges = () => {
   const [activeChallenge, setActiveChallenge] =
-    useState<TChallenge>("Challenge");
+    useState<TChallenge>("challenge");
+  const { t } = useTranslate();
 
   return (
     <div className="challenges">
       <Subtitle size="big" className="challenges__subtitle">
-        Join an Open challenge
+        {t("joinOpenChallenge")}
       </Subtitle>
 
       <div className="challenges__btns">
@@ -28,14 +28,14 @@ const Challenges: FC<IChallengesProps> = () => {
             onClick={() => setActiveChallenge(type)}
             className="challenges__item"
           >
-            {type}
+            {t(type)}
           </TabItemButton>
         ))}
       </div>
 
       <ChallengesList />
       <TextButton className="challenges__showMore">
-        Show more
+        {t("showMore")}
         <LongArrow className="challenges__longArrowRight" />
         <Arrow className="challenges__arrowDown" />
       </TextButton>

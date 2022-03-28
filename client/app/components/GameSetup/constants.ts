@@ -12,7 +12,7 @@ export const options = [
   EComponents.FRIENDS,
   EComponents.COMPUTER,
 ] as const;
-export const challengeTypes = ["Challenge", "Seekgraph"] as const;
+export const challengeTypes = ["challenge", "seekgraph"] as const;
 
 export const title = {
   Anyone: "Play",
