@@ -28,7 +28,7 @@ export default abstract class UserChangePublication<
 
     if (connection) {
       connection.events.on("userlogin", this.pUserLogin);
-      connection.events.on("userlogin", this.pUserLogout);
+      connection.events.on("userlogout", this.pUserLogout);
 
       Meteor.defer(() => {
         if (connection.user) {

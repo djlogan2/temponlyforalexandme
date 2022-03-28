@@ -12,10 +12,7 @@ const useTranslate = () => {
   const t = useCallback(
     (key: string, options?: string | TOptions<StringMap> | undefined) => {
       if (!i18next.getResource(i18next.language, "translation", key)) {
-        // TODO. Find out why it can't find document immediately to emit it
-        setTimeout(() => {
-          i18n.findTranslation(key, i18next.language);
-        }, 0);
+        i18n.findTranslation(key, i18next.language);
       }
 
       return translate(key, options);
