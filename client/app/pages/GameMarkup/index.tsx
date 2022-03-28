@@ -1,20 +1,20 @@
 import clsx from "clsx";
 import React, { useCallback, useEffect, useState } from "react";
-import FlatMovelist from "../../components/FlatMovelist";
-import GameSetup from "../../components/GameSetup";
+import {
+  FlatMovelist,
+  GameSetup,
+  EnhancedChessboard,
+  PlayerInfo,
+} from "/client/app/components";
+import { GameTitle, DigitalClock } from "/client/app/shared";
+import { useWindowSize, useSound } from "/client/app/hooks";
 import { calcTime } from "../../data/utils";
-import useWindowSize from "../../hooks/userWindowSize";
-import useSound from "../../hooks/useSound";
 import { ESounds } from "../../hooks/useSound/constants";
 import { gameservice } from "../../Root";
 import ControlBox from "./components/ControlBox";
 import "./index.scss";
 import { getLegalMoves } from "./utils";
-import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 import Flip from "/client/app/components/icons/Flip";
-import PlayerInfo from "/client/app/components/PlayerInfo";
-import DigitalClock from "/client/app/shared/Clocks/DigitalClock";
-import GameTitle from "/client/app/shared/GameTitle";
 import { TMoveItem } from "/client/app/types";
 import ClientUser from "/lib/client/ClientUser";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
