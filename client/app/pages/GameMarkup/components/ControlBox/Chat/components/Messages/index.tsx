@@ -10,8 +10,6 @@ const Messages: FC<IMessagesProps> = ({ messages }) => (
   <div className="chat__messages">
     <ScrollBar>
       <ul className="chat__list">
-        <Message me>I am a message!</Message>
-        <Message>Not me!</Message>
         {messages.map((msg) => (
           <Message key={msg.id} me={!!msg.me}>
             {msg.text}

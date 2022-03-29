@@ -1,4 +1,5 @@
 import React, { FC, useRef, useState } from "react";
+import { useTranslate } from "../../hooks";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import Backdrop from "../../shared/Backdrop";
 import ScrollBar from "../../shared/ScrollBar";
@@ -12,6 +13,8 @@ interface IGameSetupProps {
 }
 
 const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
+  const { t } = useTranslate();
+
   const [components, setComponent] = useState<EComponents[]>([
     EComponents.ANYONE,
   ]);
@@ -53,7 +56,7 @@ const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
           <div className="gameSetup__scrollContainer">
             <Controls onCloseModal={onCloseModal} onReturnBack={returnBack} />
             <div className="gameSetup__container">
-              <div className="gameSetup__title">{title[currentTab]}</div>
+              <div className="gameSetup__title">{t(title[currentTab])}</div>
               {currentTab !== EComponents.CHALLENGE && (
                 <PlayOptions
                   onClick={(tab) => {

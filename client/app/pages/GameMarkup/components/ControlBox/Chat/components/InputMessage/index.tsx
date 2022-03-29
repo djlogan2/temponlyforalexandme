@@ -2,24 +2,31 @@ import React from "react";
 import InputElement from "../InputElement";
 import LongArrow from "/client/app/components/icons/LongArrow";
 import Smile from "/client/app/components/icons/Smile";
+import { useTranslate } from "/client/app/hooks";
 
-interface IInputMessage {}
+const InputMessage = () => {
+  const { t } = useTranslate();
 
-const InputMessage = () => (
-  <div className="chat__inputMessage">
-    <input type="text" className="chat__input" placeholder="Type a message" />
-    <div className="chat__inputElements">
-      <InputElement>
-        <Smile />
-      </InputElement>
-      <InputElement>
-        <LongArrow />
-      </InputElement>
-      <InputElement>
-        <LongArrow />
-      </InputElement>
+  return (
+    <div className="chat__inputMessage">
+      <input
+        type="text"
+        className="chat__input"
+        placeholder={t("typeMessage")}
+      />
+      <div className="chat__inputElements">
+        <InputElement>
+          <Smile />
+        </InputElement>
+        <InputElement>
+          <LongArrow />
+        </InputElement>
+        <InputElement>
+          <LongArrow />
+        </InputElement>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default InputMessage;

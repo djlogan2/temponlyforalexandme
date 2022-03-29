@@ -1,1 +1,1 @@
-export const tabs = ["Move list", "Chat"];
+export const tabs = ["moveList", "chat"];

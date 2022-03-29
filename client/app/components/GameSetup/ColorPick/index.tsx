@@ -10,6 +10,7 @@ import "./index.scss";
 import PieceButton from "/client/app/shared/Buttons/PieceButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import { PieceColor } from "/lib/records/ChallengeRecord";
+import { useTranslate } from "/client/app/hooks";
 
 interface IColorPickProps extends HTMLAttributes<HTMLDivElement> {
   onColorPick: (
@@ -21,10 +22,11 @@ interface IColorPickProps extends HTMLAttributes<HTMLDivElement> {
 
 const ColorPick: FC<IColorPickProps> = ({ className, onColorPick = noop }) => {
   const [color, setColor] = useState<PieceColor | "">("");
+  const { t } = useTranslate();
 
   return (
     <Card className={clsx("colorPick", className)}>
-      <Subtitle className="colorPick__subtitle">Color</Subtitle>
+      <Subtitle className="colorPick__subtitle">{t("color")}</Subtitle>
       <div className="colorPick__colors d-flex justify-center align-items-center">
         <PieceButton
           size="small"
@@ -59,7 +61,7 @@ const ColorPick: FC<IColorPickProps> = ({ className, onColorPick = noop }) => {
       </div>
 
       <TextButton className="colorPick__variants-btn">
-        Variants <LongArrow />
+        {t("variants")} <LongArrow />
       </TextButton>
     </Card>
   );

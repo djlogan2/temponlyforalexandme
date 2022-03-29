@@ -13,6 +13,7 @@ import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import Input from "/client/app/shared/Input";
 import RangeSlider from "/client/app/shared/RangeSlider";
 import { PieceColor } from "/lib/records/ChallengeRecord";
+import { useTranslate } from "/client/app/hooks";
 
 interface IComputerPlayProps extends ICommonGameSetup {}
 
@@ -33,17 +34,19 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
     },
   });
 
+  const { t } = useTranslate();
+
   return (
     <form onSubmit={formik.handleSubmit} className="computerPlay">
       <TimeOptions
         className="computerPlay__card"
-        subtitle="Set game options"
+        subtitle={t("setGameOptions")}
         onPickTime={formik.setFieldValue}
       />
 
       <Card className="computerPlay__card computerPlay__rangeSlider">
         <Subtitle size="small" className="computerPlay__sliderSubtitle">
-          Computer profile
+          {t("computerProfile")}
         </Subtitle>
         <RangeSlider
           min={1000}
@@ -62,20 +65,20 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
 
       <Card className="computerPlay__card computerPlay__fen">
         <Subtitle size="small" className="computerPlay__positionSubtitle">
-          Starting position
+          {t("computerProfile")}
         </Subtitle>
 
         <Input
           name="startingFen"
-          label="Description"
+          label={t("description")}
           icon={<LongArrow />}
           className="computerPlay__fen-input"
-          placeholder="Share FEN"
+          placeholder={t("shareFen")}
         />
       </Card>
 
       <StandardButton type="submit" color="primary">
-        Play
+        {t("play")}
       </StandardButton>
     </form>
   );

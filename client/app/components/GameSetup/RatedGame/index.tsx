@@ -1,17 +1,24 @@
 import clsx from "clsx";
-import React, { FC, HTMLAttributes } from "react";
+import React from "react";
 import Card from "../../Card";
 import Subtitle from "../../Subtitle";
-import Switch from "/client/app/shared/Switch";
 import "./index.scss";
+import { useTranslate } from "/client/app/hooks";
+import Switch from "/client/app/shared/Switch";
 
-interface IRatedGameProps extends HTMLAttributes<HTMLElement> {}
+interface IRatedGameProps {
+  className?: string;
+}
 
-const RatedGame: FC<IRatedGameProps> = ({ className }) => (
-  <Card className={clsx("ratedGame d-flex space-between", className)}>
-    <Subtitle>Rated Game</Subtitle>
-    <Switch name="rated" />
-  </Card>
-);
+const RatedGame = ({ className }: IRatedGameProps) => {
+  const { t } = useTranslate();
+
+  return (
+    <Card className={clsx("ratedGame d-flex space-between", className)}>
+      <Subtitle>{t("ratedGame")}</Subtitle>
+      <Switch name="rated" />
+    </Card>
+  );
+};
 
 export default RatedGame;

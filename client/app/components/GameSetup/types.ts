@@ -1,12 +1,12 @@
 import { options, timeOptions, challengeTypes } from "./constants";
 
 export enum EComponents {
-  ANYONE = "Anyone",
-  FRIENDS = "Friends",
-  COMPUTER = "Computer",
-  CUSTOM = "Custom",
-  SHARE = "Share",
-  CHALLENGE = "Challenge",
+  ANYONE = "anyone",
+  FRIENDS = "friends",
+  COMPUTER = "computer",
+  CUSTOM = "custom",
+  SHARE = "share",
+  CHALLENGE = "challenge",
 }
 
 export type TOptions = typeof options[number];

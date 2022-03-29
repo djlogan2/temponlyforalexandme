@@ -8,6 +8,7 @@ import UserItem from "../../UserItem";
 import Shortcut from "../Shortcut";
 import TimeOptions from "../TimeOptions";
 import { ICommonGameSetup } from "../types";
+import { useTranslate } from "/client/app/hooks";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import Heading5 from "/client/app/shared/Typographies/Heading5";
@@ -16,6 +17,7 @@ interface IPlayWithFriendsProps extends ICommonGameSetup {}
 
 const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
   const [opponents, setOpponents] = useState<number>(0);
+  const { t } = useTranslate();
 
   return (
     <div className="playWithFriends">
@@ -30,7 +32,7 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
             )}
             onClick={() => setOpponents(0)}
           >
-            <Heading5>Friends (210)</Heading5>
+            <Heading5>{t("friendsWithAmount", { amount: 100 })}</Heading5>
           </li>
           <li
             className={clsx(
@@ -39,7 +41,7 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
             )}
             onClick={() => setOpponents(1)}
           >
-            <Heading5>Opponents (120)</Heading5>
+            <Heading5>{t("opponentsWithAmount", { amount: 50 })}</Heading5>
           </li>
           <li
             className={clsx(
@@ -48,7 +50,7 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
             )}
             onClick={() => setOpponents(2)}
           >
-            <Heading5>Near me (100)</Heading5>
+            <Heading5>{t("nearMeWithAmount", { amount: 5 })}</Heading5>
           </li>
         </ul>
       </div>
@@ -62,22 +64,22 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
           ))}
         </ul>
         <TextButton className="playWithFriends__showMore">
-          Show more <LongArrow />
+          {t("showMOre")} <LongArrow />
         </TextButton>
       </div>
 
       <TimeOptions
         onPickTime={() => {}}
         className="playWithFriends__timeOptions"
-        subtitle="Launch a new challenge"
+        subtitle={t("launchNewChallenge")}
       />
       <Shortcut className="playWithFriends__card" />
 
       <StandardButton className="playWithFriends__btn" color="primary">
-        Launch challenge
+        {t("launchChallenge")}
       </StandardButton>
       <StandardButton className="playWithFriends__btn">
-        Challenge link
+        {t("challengeLink")}
       </StandardButton>
     </div>
   );

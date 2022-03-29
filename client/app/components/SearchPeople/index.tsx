@@ -1,4 +1,5 @@
 import React, { FC, useRef, useState } from "react";
+import { useTranslate } from "../../hooks";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import TextButton from "../../shared/Buttons/TextButton";
 import Input from "../../shared/Input";
@@ -16,6 +17,7 @@ interface ISearchPeopleProps {
 const SearchPeople: FC<ISearchPeopleProps> = ({ subtitle }) => {
   const [isSearching, setIsSearching] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslate();
 
   useOnClickOutside(searchRef, () => {
     setIsSearching(false);
@@ -26,10 +28,10 @@ const SearchPeople: FC<ISearchPeopleProps> = ({ subtitle }) => {
       <Card className="searchPeople__card">
         {subtitle && <Subtitle>{subtitle}</Subtitle>}
         <Input
-          label="User name or email"
+          label={t("userNameOrEmail")}
           name="search"
           icon={<Search className="searchPeople__searchIcon" />}
-          placeholder="Search friend"
+          placeholder={t("searchFriend")}
           onFocus={() => setIsSearching(true)}
         />
       </Card>
@@ -48,7 +50,7 @@ const SearchPeople: FC<ISearchPeopleProps> = ({ subtitle }) => {
             />
           ))}
           <TextButton className="searchPeople__textButton">
-            More results (4/57) <LongArrow />
+            {t("moreResults")} (4/57) <LongArrow />
           </TextButton>
         </div>
       )}

@@ -7,6 +7,7 @@ import "./index.scss";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import Checkbox from "/client/app/shared/Checkbox";
 import Input from "/client/app/shared/Input";
+import { useTranslate } from "/client/app/hooks";
 
 interface ITimeControlProps {
   className?: string;
@@ -30,32 +31,34 @@ const TimeControl: FC<ITimeControlProps> = ({
     onPickTime("time", +(seconds / 60).toFixed(2) + minutes);
   }, [minutes, seconds]);
 
+  const { t } = useTranslate();
+
   return (
     <Card className={clsx("timeControl", className)}>
-      <Subtitle className="timeControl__subtitle">Time control</Subtitle>
+      <Subtitle className="timeControl__subtitle">{t("timeControl")}</Subtitle>
       <div className="timeControl__inputs">
         <Input
-          label="Minutes"
+          label={t("minutes")}
           name="move1"
-          placeholder="00m"
+          placeholder={t("minutesWithAmount", { min: "00" })}
           type="number"
           onChange={(e) => setMinutes(+e.target.value)}
         />
         <Input
-          label="Seconds"
+          label={t("seconds")}
           name="mov2"
-          placeholder="00m"
+          placeholder={t("secondsWithAmount", { sec: "00" })}
           type="number"
           onChange={(e) => setSeconds(+e.target.value)}
         />
       </div>
       <p className="timeControl__checkbox">
         <Checkbox name="checkbox" />
-        <span className="timeControl__textPlaceholder">Unlimited</span>
+        <span className="timeControl__textPlaceholder">{t("unlimited")}</span>
       </p>
 
       <TextButton className="timeControl__popularTimes" onClick={onReturn}>
-        Popular times <LongArrow />
+        {t("popularTimes")} <LongArrow />
       </TextButton>
     </Card>
   );

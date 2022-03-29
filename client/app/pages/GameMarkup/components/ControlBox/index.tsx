@@ -7,6 +7,7 @@ import { tabs } from "./constants";
 import "./index.scss";
 import Movelist from "./Movelist";
 import { ETabs, TTabs } from "./types";
+import { useTranslate } from "/client/app/hooks";
 import { TMoveItem } from "/client/app/types";
 
 interface IControlBoxProps {
@@ -23,6 +24,7 @@ const ControlBox: FC<IControlBoxProps> = ({
   onResign,
 }) => {
   const [openedTab, setOpenedTab] = useState<TTabs>(ETabs.MOVELIST);
+  const { t } = useTranslate();
 
   return (
     <div className={clsx("controlBox", className)}>
@@ -34,7 +36,7 @@ const ControlBox: FC<IControlBoxProps> = ({
             color={openedTab === i ? "primary" : undefined}
             isColorless
           >
-            {tab}
+            {t(tab)}
           </TabButton>
         ))}
       </div>

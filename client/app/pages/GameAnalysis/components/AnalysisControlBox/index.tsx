@@ -8,6 +8,7 @@ import Share from "./components/Share";
 import { ETabs } from "./constants";
 import "./index.scss";
 import { TTabs } from "./types";
+import { useTranslate } from "/client/app/hooks";
 import TabButton from "/client/app/shared/Buttons/TabButton";
 
 interface IAnalysisControlBoxProps {
@@ -17,6 +18,7 @@ interface IAnalysisControlBoxProps {
 const AnalysisControlBox = ({ className }: IAnalysisControlBoxProps) => {
   const [activeTab, setActiveTab] = useState<TTabs>(ETabs.ANALYSIS);
   const [showShare, setShowShare] = useState(false);
+  const { t } = useTranslate();
 
   return (
     <div className={clsx("analysisControlBox", className)}>
@@ -30,21 +32,21 @@ const AnalysisControlBox = ({ className }: IAnalysisControlBoxProps) => {
               isColorless
               color={activeTab === ETabs.ANALYSIS ? "secondary" : undefined}
             >
-              Analysis
+              {t("analysis")}
             </TabButton>
             <TabButton
               onClick={() => setActiveTab(ETabs.BOARDSETUP)}
               isColorless
               color={activeTab === ETabs.BOARDSETUP ? "secondary" : undefined}
             >
-              Board Setup
+              {t("boardSetup")}
             </TabButton>
             <TabButton
               onClick={() => setActiveTab(ETabs.OBSERVERS)}
               isColorless
               color={activeTab === ETabs.OBSERVERS ? "secondary" : undefined}
             >
-              Observers
+              {t("observers")}
             </TabButton>
           </div>
 

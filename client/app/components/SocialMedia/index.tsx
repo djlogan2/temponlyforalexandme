@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React, { FC } from "react";
+import { useTranslate } from "../../hooks";
 import ActionButton from "../../shared/Buttons/ActionButton";
 import Card from "../Card";
 import Facebook from "../icons/Facebook";
@@ -12,27 +13,31 @@ interface ISocialMediaProps {
   className?: string;
 }
 
-const SocialMedia: FC<ISocialMediaProps> = ({ className }) => (
-  <Card className={clsx("socialMedia", className)}>
-    <Subtitle className="socialMedia__subtitle" size="small">
-      Share social media
-    </Subtitle>
+const SocialMedia: FC<ISocialMediaProps> = ({ className }) => {
+  const { t } = useTranslate();
 
-    <div className="d-flex space-evenly socialMeda__actions">
-      <ActionButton color="primary">
-        <Instagram />
-      </ActionButton>
-      <ActionButton color="primary">
-        <Facebook />
-      </ActionButton>
-      <ActionButton color="primary">
-        <Twitter />
-      </ActionButton>
-      <ActionButton color="primary">
-        <Instagram />
-      </ActionButton>
-    </div>
-  </Card>
-);
+  return (
+    <Card className={clsx("socialMedia", className)}>
+      <Subtitle className="socialMedia__subtitle" size="small">
+        {t("shareSocialMedia")}
+      </Subtitle>
+
+      <div className="d-flex space-evenly socialMeda__actions">
+        <ActionButton color="primary">
+          <Instagram />
+        </ActionButton>
+        <ActionButton color="primary">
+          <Facebook />
+        </ActionButton>
+        <ActionButton color="primary">
+          <Twitter />
+        </ActionButton>
+        <ActionButton color="primary">
+          <Instagram />
+        </ActionButton>
+      </div>
+    </Card>
+  );
+};
 
 export default SocialMedia;

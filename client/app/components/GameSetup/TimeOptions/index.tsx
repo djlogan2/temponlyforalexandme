@@ -1,12 +1,13 @@
 import clsx from "clsx";
 import { noop } from "lodash";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import Arrow from "../../icons/Arrow";
 import More from "../../icons/More";
-import { timeOptions } from "../constants";
 import Subtitle from "../../Subtitle";
+import { timeOptions } from "../constants";
 import TimeControl from "../TimeControl";
 import { TTimeOption } from "../types";
+import { useTranslate } from "/client/app/hooks";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 
@@ -28,6 +29,7 @@ const TimeOption: FC<ITimeOptionProps> = ({
   const [customTime, showCustomTime] = useState(false);
   const [timeOption, setTimeOption] = useState<TTimeOption | undefined>();
   const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
+  const { t } = useTranslate();
 
   return customTime ? (
     <TimeControl
@@ -68,7 +70,7 @@ const TimeOption: FC<ITimeOptionProps> = ({
                 <More className="timeOptions__customTime" />
               )}
               <p>{time}</p>
-              {time !== "custom" && <p>minute</p>}
+              {time !== "custom" && <p>{t("minute")}</p>}
             </TabButtonSquared>
           ))}
         </div>
@@ -78,7 +80,7 @@ const TimeOption: FC<ITimeOptionProps> = ({
         onClick={() => setShowMoreChallengeTimes((prev) => !prev)}
         className="timeOptions__showMore"
       >
-        Show More
+        {t("showMore")}
         <Arrow
           className={clsx(
             "timeOptions__arrowDown",

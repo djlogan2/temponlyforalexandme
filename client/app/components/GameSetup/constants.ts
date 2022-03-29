@@ -15,19 +15,19 @@ export const options = [
 export const challengeTypes = ["challenge", "seekgraph"] as const;
 
 export const title = {
-  Anyone: "Play",
-  Friends: "Create challenge",
-  Computer: "Play with computer",
-  Custom: "Custom Challenge",
-  Share: "Share challenge",
-  Challenge: "Challenge launched",
+  anyone: "play",
+  friends: "createChallenge",
+  computer: "playComputer",
+  custom: "customChallenge",
+  share: "shareChallenge",
+  challenge: "challengeLaunched",
 };
 
 export const gameSetupComponents = {
-  Anyone: AnyonePlay,
-  Custom: CustomChallenge,
-  Computer: ComputerPlay,
-  Share,
-  Friends: PlayWithFriends,
-  Challenge: ChallengeLaunched,
+  anyone: AnyonePlay,
+  custom: CustomChallenge,
+  computer: ComputerPlay,
+  share: Share,
+  friends: PlayWithFriends,
+  challenge: ChallengeLaunched,
 };

@@ -8,58 +8,63 @@ import Accordeon from "./components/Accordeon";
 import Checkbox from "/client/app/shared/Checkbox";
 import Switch from "/client/app/shared/Switch";
 import ScrollBar from "/client/app/shared/ScrollBar";
+import { useTranslate } from "/client/app/hooks";
 
-const BoardSetup = () => (
-  <ScrollBar className="boardSetupTab__scroll">
-    <div className="boardSetupTab">
-      <Accordeon title="Load opening" className="boardSetupTab__row">
-        <p className="boardSetupTab__opening">Openening name 1</p>
-        <p className="boardSetupTab__opening">Openening name 1</p>
-        <p className="boardSetupTab__opening">Openening name 1</p>
-      </Accordeon>
-      <Accordeon title="Move settings" className="boardSetupTab__row">
-        <div className="d-flex space-between boardSetupTab__colorToMove">
-          <Checkbox circled name="whiteToMove" text="White to move" />
-          <Checkbox circled name="blackToMove" text="Black to move" />
-          <Switch name="enPassant" text="En passant" />
-        </div>
-        <div className="d-flex space-between">
-          <div className="boardSetupTab__castling">
-            <span className="boardSetupTab__castling-title">
-              White Castling
-            </span>
-            <Checkbox name="white-(0-0)" text="(0-0)" checked />
-            <Checkbox name="white-(0-0-0)" text="(0-0-0)" />
+const BoardSetup = () => {
+  const { t } = useTranslate();
+
+  return (
+    <ScrollBar className="boardSetupTab__scroll">
+      <div className="boardSetupTab">
+        <Accordeon title="Load opening" className="boardSetupTab__row">
+          <p className="boardSetupTab__opening">Openening name 1</p>
+          <p className="boardSetupTab__opening">Openening name 1</p>
+          <p className="boardSetupTab__opening">Openening name 1</p>
+        </Accordeon>
+        <Accordeon title="Move settings" className="boardSetupTab__row">
+          <div className="d-flex space-between boardSetupTab__colorToMove">
+            <Checkbox circled name="whiteToMove" text={t("whiteMove")} />
+            <Checkbox circled name="blackToMove" text={t("blackMove")} />
+            <Switch name="enPassant" text={t("enPassant")} />
           </div>
-          <div className="boardSetupTab__castling">
-            <span className="boardSetupTab__castling-title">
-              Black Castling
-            </span>
-            <Checkbox name="black-(0-0)" text="(0-0)" checked />
-            <Checkbox name="black-(0-0-0)" text="(0-0-0)" />
+          <div className="d-flex space-between">
+            <div className="boardSetupTab__castling">
+              <span className="boardSetupTab__castling-title">
+                {t("whiteCastling")}
+              </span>
+              <Checkbox name="white-(0-0)" text="(0-0)" checked />
+              <Checkbox name="white-(0-0-0)" text="(0-0-0)" />
+            </div>
+            <div className="boardSetupTab__castling">
+              <span className="boardSetupTab__castling-title">
+                {t("blackCastling")}
+              </span>
+              <Checkbox name="black-(0-0)" text="(0-0)" checked />
+              <Checkbox name="black-(0-0-0)" text="(0-0-0)" />
+            </div>
           </div>
-        </div>
-      </Accordeon>
-      <Accordeon title="PGN detail" />
-      <GameControls
-        className="boardSetupTab__row boardSetupTab__gameControls"
-        onNextClick={() => {}}
-        onNextEndClick={() => {}}
-        onPrevClick={() => {}}
-        onPrevEndClick={() => {}}
-      />
-      <div className="boardSetupTab__row">
-        <Input
-          name="loadFen"
-          label="Load FEN"
-          icon={<LongArrow className="boardSetupTab__longArrowIcon" />}
+        </Accordeon>
+        <Accordeon title={t("pgnDetail")} />
+        <GameControls
+          className="boardSetupTab__row boardSetupTab__gameControls"
+          onNextClick={() => {}}
+          onNextEndClick={() => {}}
+          onPrevClick={() => {}}
+          onPrevEndClick={() => {}}
         />
+        <div className="boardSetupTab__row">
+          <Input
+            name="loadFen"
+            label={t("loadFen")}
+            icon={<LongArrow className="boardSetupTab__longArrowIcon" />}
+          />
+        </div>
+        <div className="boardSetupTab__row">
+          <ImportPgn />
+        </div>
       </div>
-      <div className="boardSetupTab__row">
-        <ImportPgn />
-      </div>
-    </div>
-  </ScrollBar>
-);
+    </ScrollBar>
+  );
+};
 
 export default BoardSetup;
