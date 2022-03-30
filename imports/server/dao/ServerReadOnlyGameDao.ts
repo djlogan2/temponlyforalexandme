@@ -23,4 +23,8 @@ export default class ServerReadOnlyGameDao extends CommonSingleGameReadOnlyGameD
   public get events(): BasicEventEmitter<GameEvents> {
     return this.pEvents;
   }
+
+  protected onReady(): void {
+    this.events.emit("ready");
+  }
 }

@@ -1,4 +1,4 @@
-import { Move } from "chess.js";
+import { Chess, Move } from "chess.js";
 import {
   AnalysisGameRecord,
   BasicMoveListNode,
@@ -8,6 +8,7 @@ import {
   GameStatus,
   PlayedGameMoveListNode,
 } from "/lib/records/GameRecord";
+import WritableECODao from "/imports/server/dao/WritableECODao";
 
 type Modifier = {
   $set: { [key: string]: any };
@@ -20,12 +21,13 @@ export default function internalMakeMove(
   fen: string,
   result: GameStatus,
   result2: number,
-  eco: ECOObject,
+  ecodao: WritableECODao,
 ): Modifier {
   const modifier: Modifier = { $set: {} };
 
+  const preveco = updateECOToDate(game, ecodao, modifier);
   // Important: updateVariations MUST occur before updateClocks!!
-  updateVariations(game, modifier, move, eco);
+  updateVariations(game, modifier, move, ecodao, preveco);
   updateToMove(game, modifier);
   updateFen(modifier, fen);
   if (game.status !== "analyzing") {
@@ -34,6 +36,59 @@ export default function internalMakeMove(
   }
   updateStatus(game, modifier, result, result2);
   return modifier;
+}
+
+// function getChessEngineWithMoves(game: BasicPlayedGameRecord | AnalysisGameRecord): ChessInstance {
+//   const path: number[] = [];
+//   let cmi = game.variations.currentmoveindex;
+//   while(cmi) {
+//     path.push(cmi);
+//     cmi = (game.variations.movelist[cmi] as BasicMoveListNode).prev;
+//   };
+//
+//   const inst = new Chess(game.startingFen);
+//   while(path.length) {
+//     cmi = path.pop() as number;
+//     inst.move((game.variations.movelist[cmi] as BasicMoveListNode).move);
+//   }
+//   return inst;
+// }
+
+function updateECOToDate(
+  game: BasicPlayedGameRecord | AnalysisGameRecord,
+  ecodao: WritableECODao,
+  modifier: Modifier,
+  pCmi?: number,
+): ECOObject {
+  let cmi: number = pCmi || game.variations.currentmoveindex;
+  let node: BasicMoveListNode = game.variations.movelist[
+    cmi
+  ] as BasicMoveListNode;
+  const path: number[] = [];
+
+  if (node.eco) return node.eco;
+
+  const inst = new Chess(game.startingFen);
+
+  while (cmi) {
+    path.push(cmi);
+    cmi = (game.variations.movelist[cmi] as BasicMoveListNode).prev;
+  }
+
+  let eco: ECOObject = { code: "NO_ECO", name: "NO_ECO" };
+
+  while (path.length) {
+    cmi = path.pop() as number;
+    node = game.variations.movelist[cmi] as BasicMoveListNode;
+    inst.move(node.move);
+    if (!node.eco) {
+      const record = ecodao.readOne({ fen: inst.fen() });
+      if (record) eco = { code: record.eco, name: record.name };
+      (game.variations.movelist[cmi] as BasicMoveListNode).eco = eco;
+      modifier.$set[`variations.movelist.${cmi}.eco`] = eco;
+    }
+  }
+  return eco;
 }
 
 function updateToMove(
@@ -102,11 +157,15 @@ function updateVariations(
   game: BasicPlayedGameRecord | AnalysisGameRecord,
   modifier: Modifier,
   move: Move,
-  eco: ECOObject,
+  ecodao: WritableECODao,
+  preveco: ECOObject,
 ): void {
   const cmi = game.variations.currentmoveindex;
   const currentnode = game.variations.movelist[cmi];
   const { variations } = currentnode;
+
+  const record = ecodao.readOne({ fen: game.fen });
+  const eco = record ? { code: record.eco, name: record.name } : preveco;
 
   const existingmove: number =
     variations?.findIndex((idx) => {

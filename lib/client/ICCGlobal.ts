@@ -1,6 +1,6 @@
 import Stoppable from "/lib/Stoppable";
 import ClientLogger from "/lib/client/ClientLogger";
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 import { CollectionNames } from "/lib/CollectionNames";
 import { Mongo } from "meteor/mongo";
 import { Meteor } from "meteor/meteor";

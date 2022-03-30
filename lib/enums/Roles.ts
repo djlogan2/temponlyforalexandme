@@ -1,4 +1,5 @@
 export const ALL_USER_ROLES = [
+  "create_personal_library",
   "login",
   "play_computer_games",
   "play_rated_games",

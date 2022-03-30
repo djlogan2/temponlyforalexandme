@@ -9,7 +9,7 @@ import CommonSingleGameReadOnlyGameDao, {
 } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 export default class ClientSingleGameReadOnlyDao extends CommonSingleGameReadOnlyGameDao {
-  private readonly pEvents: ICCEventEmitter<"move">;
+  private readonly pEvents: ICCEventEmitter<"move" | "ready">;
 
   private readonly logger1: ClientLogger;
 
@@ -33,5 +33,9 @@ export default class ClientSingleGameReadOnlyDao extends CommonSingleGameReadOnl
 
   public get events(): BasicEventEmitter<GameEvents> {
     return this.pEvents;
+  }
+
+  protected onReady(): void {
+    this.pEvents.emit("ready");
   }
 }

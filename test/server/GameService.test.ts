@@ -19,6 +19,7 @@ import InstanceService from "/imports/server/service/InstanceService";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import ChessEngineService from "/imports/server/service/ChessEngineService";
 import BookService from "/imports/server/service/BookService";
+import WritableECODao from "/imports/server/dao/WritableECODao";
 
 describe("GameService", function () {
   describe("startGameFromChallenge", function () {
@@ -32,6 +33,7 @@ describe("GameService", function () {
     let publicationservice: SinonStubbedInstance<PublicationService>;
     let connectionservice: SinonStubbedInstance<ConnectionService>;
     let userdao: SinonStubbedInstance<WritableUserDao>;
+    let ecodao: SinonStubbedInstance<WritableECODao>;
     let user: SinonStubbedInstance<ServerUser>;
     let engineservice: SinonStubbedInstance<ChessEngineService>;
     let bookservice: SinonStubbedInstance<BookService>;
@@ -48,6 +50,7 @@ describe("GameService", function () {
       engineservice = sandbox.createStubInstance(ChessEngineService);
       bookservice = sandbox.createStubInstance(BookService);
       user = sandbox.createStubInstance(ServerUser);
+      ecodao = sandbox.createStubInstance(WritableECODao);
       sandbox.stub(user, "id").get(() => "idxxid");
       sandbox.stub(user, "isolation_group").get(() => "myisogroup");
       sandbox.stub(user, "username").get(() => "yyusernameyy");
@@ -71,6 +74,7 @@ describe("GameService", function () {
         userdao,
         engineservice,
         bookservice,
+        ecodao,
       );
     });
 

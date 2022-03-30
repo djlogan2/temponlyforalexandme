@@ -1,4 +1,4 @@
-import CommonGameService from "/lib/CommonGameService";
+import CommonGameService from "/lib/game/CommonGameService";
 import sinon from "sinon";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 

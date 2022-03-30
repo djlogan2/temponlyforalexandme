@@ -1,4 +1,4 @@
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 import { Meteor } from "meteor/meteor";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import Stoppable from "/lib/Stoppable";
@@ -11,6 +11,8 @@ export default class ClientLogger extends CommonLogger {
       const loggerconfigdao =
         globalThis.loggerconfigdao as ReadOnlyLoggerConfigurationDao;
       loggerconfigdao.events.on(module, this.logLevelChanged);
+      const record = loggerconfigdao.readOne({ module });
+      if (record) this.logLevelChanged(record.debuglevel);
     }
   }
 

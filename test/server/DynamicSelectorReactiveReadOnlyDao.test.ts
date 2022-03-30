@@ -7,7 +7,7 @@ import "../../lib/server/ICCGlobal";
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
-import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReactiveReadOnlyDao";
+import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 
 interface TestRecord {
   _id: string;
@@ -16,7 +16,7 @@ interface TestRecord {
   data: string;
 }
 
-class TestReactiveReadOnlyDao extends DynamicSelectorReactiveReadOnlyDao<TestRecord> {
+class TestReactiveReadOnlyDao extends ReactiveReadOnlyDao<TestRecord> {
   public events = new EventEmitter();
 
   constructor() {

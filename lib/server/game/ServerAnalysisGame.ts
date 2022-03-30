@@ -2,7 +2,6 @@ import { Move } from "chess.js";
 import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
 import {
   GameStatus,
-  ECOObject,
   GameAuditMoveRecord,
   GameAuditSetFenRecord,
 } from "/lib/records/GameRecord";
@@ -12,17 +11,22 @@ import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import Stoppable from "/lib/Stoppable";
 import internalMakeMove from "./CommonInternalMakeMove";
 import { PieceColor } from "/lib/records/ChallengeRecord";
+import WritableECODao from "/imports/server/dao/WritableECODao";
 
 export default class ServerAnalysisGame extends CommonAnalysisGame {
   private dao: WritableGameDao;
+
+  private ecodao: WritableECODao;
 
   constructor(
     parent: Stoppable | null,
     id: string,
     writabledao: WritableGameDao,
+    ecodao: WritableECODao,
   ) {
     super(parent, id, new ServerReadOnlyGameDao(parent, id, writabledao));
     this.dao = writabledao;
+    this.ecodao = ecodao;
   }
 
   protected isAuthorizedToMove(who: User): boolean {
@@ -35,7 +39,6 @@ export default class ServerAnalysisGame extends CommonAnalysisGame {
     fen: string,
     result: GameStatus,
     result2: number,
-    eco: ECOObject,
   ): void {
     const audit: GameAuditMoveRecord = {
       type: "move",
@@ -44,7 +47,14 @@ export default class ServerAnalysisGame extends CommonAnalysisGame {
       who,
     };
 
-    const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
+    const modifier = internalMakeMove(
+      this.me,
+      move,
+      fen,
+      result,
+      result2,
+      this.ecodao,
+    );
     modifier.$set.action = { $push: audit };
     this.dao.update({ _id: this.me._id }, modifier);
   }
@@ -59,7 +69,10 @@ export default class ServerAnalysisGame extends CommonAnalysisGame {
       fen,
     };
 
-    this.dao.update({ _id: this.me._id }, { $set: { tomove, fen } });
+    this.dao.update(
+      { _id: this.me._id },
+      { $set: { tomove, fen, actions: { $push: audit } } },
+    );
   }
 
   protected stopping(): void {}

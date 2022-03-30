@@ -1,11 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import CommonBasicGame from "/lib/game/CommonBasicGame";
-import {
-  BasicPlayedGameRecord,
-  Clock,
-  GameStatus,
-} from "/lib/records/GameRecord";
-import CommonLogger from "/lib/CommonLogger";
+import { BasicPlayedGameRecord, Clock } from "/lib/records/GameRecord";
+import CommonLogger from "/lib/logger/CommonLogger";
 import Stoppable from "/lib/Stoppable";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import User from "/lib/User";
@@ -37,7 +33,7 @@ export default abstract class CommonPlayedGame extends CommonBasicGame {
     super(parent, id, dao);
     this.logger2 = globalThis.ICCServer.utilities.getLogger(
       this,
-      "CommonPlayedGame_js",
+      "CommonPlayedGame_ts",
     );
   }
 

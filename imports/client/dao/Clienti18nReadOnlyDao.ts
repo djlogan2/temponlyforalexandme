@@ -2,7 +2,7 @@ import { i18nRecord } from "/lib/records/i18nRecord";
 import Stoppable from "/lib/Stoppable";
 import SubscribedReactiveReadOnlyDao from "/lib/client/SubscribedReactiveReadOnlyDao";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 
 export default class Clienti18nReadOnlyDao extends SubscribedReactiveReadOnlyDao<
   i18nRecord,
@@ -43,5 +43,9 @@ export default class Clienti18nReadOnlyDao extends SubscribedReactiveReadOnlyDao
     // TODO: What to do if a token record gets deleted??
     this.logger.trace(() => `onRecordRemoved id=${id}`);
     this.events.emit("translationchanged", null);
+  }
+
+  protected onReady(): void {
+    this.events.emit("ready");
   }
 }

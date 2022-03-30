@@ -2,7 +2,6 @@ import Stoppable from "/lib/Stoppable";
 import User from "/lib/User";
 import { UserChallengeRecord } from "/lib/records/ChallengeRecord";
 import { Meteor } from "meteor/meteor";
-import CommonChallengeService from "/lib/CommonChallengeService";
 
 export default abstract class CommonChallenge extends Stoppable {
   protected record: UserChallengeRecord;

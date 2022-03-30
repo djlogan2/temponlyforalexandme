@@ -21,11 +21,11 @@ export default class ClientTheme extends CommonTheme {
     this.dao = dao;
 
     this.events.on("themechanged", (reactclass: any) => {
-      this.logger.trace(() => `THEME: ${JSON.stringify(reactclass)}`);
+      this.logger.debug(() => `THEME: ${JSON.stringify(reactclass)}`);
     });
 
     const readyHandler = () => {
-      this.logger.trace(() => "The ClientTheme is ready");
+      this.logger.debug(() => "The ClientTheme is ready");
       this.isReady = true;
       this.events.off("ready", readyHandler);
     };

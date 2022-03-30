@@ -116,7 +116,7 @@ export interface BasicMoveListNode extends MoveZero {
   prev: number;
   move: string;
   smith: ChessJSMove;
-  eco: ECOObject;
+  eco?: ECOObject;
 }
 
 export interface PlayedGameMoveListNode extends BasicMoveListNode {
@@ -124,12 +124,7 @@ export interface PlayedGameMoveListNode extends BasicMoveListNode {
   bcurrent: number;
 }
 
-interface ExaminedGameMoveListNode extends BasicMoveListNode {
-  wcurrent?: number;
-  bcurrent?: number;
-}
-
-interface VariationsInterface {
+export interface VariationsInterface {
   halfmovetakeback: number;
   currentmoveindex: number;
   movelist: (BasicMoveListNode | MoveZero)[];
@@ -176,7 +171,6 @@ export interface AnalysisGameRecord extends BasicGameRecord {
   status: "analyzing";
   w: Partial<PlayerInfo>;
   b: Partial<PlayerInfo>;
-  ratinginterface?: string;
   rated?: boolean;
   result: GameStatus;
   result2?: number;

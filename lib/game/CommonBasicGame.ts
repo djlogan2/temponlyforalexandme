@@ -1,13 +1,9 @@
 import Stoppable from "/lib/Stoppable";
-import {
-  BasicGameRecord,
-  ECOObject,
-  GameStatus,
-} from "/lib/records/GameRecord";
+import { BasicGameRecord, GameStatus } from "/lib/records/GameRecord";
 import User from "/lib/User";
 import { Chess, Move } from "chess.js";
 import { Meteor } from "meteor/meteor";
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
 import CommonSingleGameReadOnlyGameDao, {
   GameEvents,
@@ -39,7 +35,6 @@ export default abstract class CommonBasicGame extends Stoppable {
     fen: string,
     result: GameStatus,
     result2: number,
-    eco: ECOObject,
   ): void;
 
   protected get global(): GlobalGame {
@@ -68,13 +63,6 @@ export default abstract class CommonBasicGame extends Stoppable {
     );
     this.pId = id;
     this.readonlydao = readonlydao;
-  }
-
-  public getECO(fen: string): ECOObject {
-    return {
-      name: "UNKNOWN",
-      code: "UNKNOWN",
-    };
   }
 
   public makeMove(who: User, move: string): void {
@@ -123,7 +111,6 @@ export default abstract class CommonBasicGame extends Stoppable {
       this.global.chessObject.fen(),
       gameresult,
       result2,
-      this.getECO(this.global.chessObject.fen()),
     );
     if (gameresult === "*") this.postmoveTasks();
     else {

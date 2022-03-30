@@ -7,7 +7,7 @@ import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 import { CollectionNames } from "/lib/CollectionNames";
 
 interface TestRecord {
@@ -56,6 +56,8 @@ class TestReactiveReadOnlyDao extends ReactiveReadOnlyDao<TestRecord> {
   protected onStop(): void {
     this.events.emit("onstop");
   }
+
+  protected onReady(): void {}
 }
 
 function remotedb(what: string) {

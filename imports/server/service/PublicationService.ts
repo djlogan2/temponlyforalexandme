@@ -28,11 +28,11 @@ export default class PublicationService extends Stoppable {
       ...args: any[]
     ) => Publication<any>,
   ): void {
-    this.logger.trace(() => `publishDao ${publication}`);
+    this.logger.debug(() => `publishDao ${publication}`);
     const self = this;
     Meteor.startup(() => {
       Meteor.publish(publication, async function (...args: string[]) {
-        self.logger.trace(
+        self.logger.debug(
           () =>
             `--connectionpublish-- pub=${publication} conn=${this.connection.id}`,
         );

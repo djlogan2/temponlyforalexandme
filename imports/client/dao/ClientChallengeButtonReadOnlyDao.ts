@@ -5,7 +5,7 @@ import SubscriptionService from "/imports/client/service/SubscriptionService";
 import { OneChallengeButton } from "/lib/records/ChallengeButtonRecord";
 
 export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButtonChallengeDao {
-  private pEvents: BasicEventEmitter<"added" | "changed" | "removed">;
+  private pEvents: BasicEventEmitter<"added" | "changed" | "removed" | "ready">;
 
   constructor(
     parent: Stoppable | null,
@@ -34,5 +34,9 @@ export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButt
 
   protected onRecordRemoved(id: string): void {
     this.pEvents.emit("removed");
+  }
+
+  protected onReady(): void {
+    this.pEvents.emit("ready");
   }
 }

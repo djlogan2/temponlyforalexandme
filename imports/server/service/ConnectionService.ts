@@ -16,7 +16,6 @@ import ConnectionLoginMethod, {
   HttpHeadersICareAbout,
 } from "/imports/server/clientmethods/connection/ConnectionLoginMethod";
 import LoggerService from "/imports/server/service/LoggerService";
-import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 import WritableLoggerConfigurationDao from "/imports/server/dao/WritableLoggerConfigurationDao";
 import LogRecordsDao from "/imports/server/dao/LogRecordsDao";
 import ConnectionIdleMethod from "/imports/server/clientmethods/connection/ConnectionIdleMethod";
@@ -30,6 +29,8 @@ import ChessEngineService from "/imports/server/service/ChessEngineService";
 import InstanceDao from "/imports/server/dao/InstanceDao";
 import BookService from "/imports/server/service/BookService";
 import WritableBookDao from "/imports/server/dao/WritableBookDao";
+import WritableECODao from "/imports/server/dao/WritableECODao";
+import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 
 export default class ConnectionService extends Stoppable {
   private readonly readableloggerconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -53,6 +54,8 @@ export default class ConnectionService extends Stoppable {
   private readonly writablegamedao: WritableGameDao;
 
   private readonly bookdao: WritableBookDao;
+
+  private readonly ecodao: WritableECODao;
 
   private readonly instanceservice: InstanceService;
 
@@ -91,6 +94,15 @@ export default class ConnectionService extends Stoppable {
     this.readableloggerconfigdao = new ReadOnlyLoggerConfigurationDao(null);
     this.writableloggerconfigdao = new WritableLoggerConfigurationDao(null);
     this.logrecordsdao = new LogRecordsDao(null);
+    this.publicationservice = new PublicationService(this, this);
+    this.loggerservice = new LoggerService(
+      this,
+      this.readableloggerconfigdao,
+      this.writableloggerconfigdao,
+      this.logrecordsdao,
+      this,
+      this.publicationservice,
+    );
     //
     // --- end first ---
 
@@ -103,10 +115,10 @@ export default class ConnectionService extends Stoppable {
     this.instanceservice = new InstanceService(this, this.instancedao);
     this.writablegamedao = new WritableGameDao(this);
     this.bookdao = new WritableBookDao(this);
+    this.ecodao = new WritableECODao(this);
 
     this.connectionLoginMethod = new ConnectionLoginMethod(this, this);
     this.connectionIdleMethod = new ConnectionIdleMethod(this, this);
-    this.publicationservice = new PublicationService(this, this);
 
     this.i18nservice = new I18nService(
       this,
@@ -126,14 +138,6 @@ export default class ConnectionService extends Stoppable {
       this.publicationservice,
       this,
     );
-    this.loggerservice = new LoggerService(
-      this,
-      this.readableloggerconfigdao,
-      this.writableloggerconfigdao,
-      this.logrecordsdao,
-      this,
-      this.publicationservice,
-    );
     this.engineservice = new ChessEngineService(this);
     this.bookservice = new BookService(this, this.bookdao);
     this.gameservice = new GameService(
@@ -145,6 +149,7 @@ export default class ConnectionService extends Stoppable {
       this.writableuserdao,
       this.engineservice,
       this.bookservice,
+      this.ecodao,
     );
 
     Meteor.onConnection((connection) => this.onConnection(connection));

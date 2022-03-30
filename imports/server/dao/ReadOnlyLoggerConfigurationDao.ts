@@ -18,4 +18,8 @@ export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLogger
     super.stopping();
     this.events.removeAllListeners();
   }
+
+  protected onReady(): void {
+    this.events.emit("ready");
+  }
 }

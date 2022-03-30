@@ -31,4 +31,8 @@ export default class ClientStartedGameReadOnlyDao extends SubscribedReactiveRead
   protected onRecordRemoved(id: string): void {
     this.events.emit("removed", id);
   }
+
+  protected onReady(): void {
+    this.events.emit("ready");
+  }
 }

@@ -1,7 +1,7 @@
 import Stoppable from "/lib/Stoppable";
 import ClientChallengeReadOnlyDao from "/imports/client/dao/ClientChallengeReadOnlyDao";
 import { Meteor } from "meteor/meteor";
-import CommonChallengeService from "/lib/CommonChallengeService";
+import CommonChallengeService from "/lib/challenges/CommonChallengeService";
 import { ClockSettings, PieceColor } from "/lib/records/ChallengeRecord";
 import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonChallengeDao";
 

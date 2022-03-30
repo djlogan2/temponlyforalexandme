@@ -11,6 +11,7 @@ import { Subscription } from "meteor/meteor";
 import ServerUserClientMethod from "/imports/server/clientmethods/ServerUserClientMethod";
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { DEFAULT_ANONYMOUS_USER_ROLES } from "/lib/enums/Roles";
+import { BaseClient, Issuer } from "openid-client";
 
 export default class UserService extends Stoppable {
   private userdao: WritableUserDao;
@@ -20,6 +21,8 @@ export default class UserService extends Stoppable {
   private logger;
 
   private setusermethod: ServerUserClientMethod;
+
+  private iccissuer?: Issuer<BaseClient>;
 
   constructor(
     parent: Stoppable | null,
@@ -47,15 +50,21 @@ export default class UserService extends Stoppable {
     );
   }
 
+  private discoverICC(): void {
+    Issuer.discover("https://login.chessclub.com").then((issuer) => {
+      this.iccissuer = issuer;
+    });
+  }
+
   public logon(hashtoken: string, locale: string): string {
-    this.logger.trace(() => `logon hashtoken=${hashtoken}`);
+    this.logger.debug(() => `logon hashtoken=${hashtoken}`);
     const userdb = this.getUserFromHashToken(hashtoken, locale);
-    this.logger.trace(() => `logon id=${userdb._id}`);
+    this.logger.debug(() => `logon id=${userdb._id}`);
     return userdb._id;
   }
 
   private createAnonymousUser(hashToken: string, locale: string): UserRecord {
-    this.logger.trace(() => "creating anonymous user");
+    this.logger.debug(() => "creating anonymous user");
     const userrecord: Mongo.OptionalId<UserRecord> = {
       createdAt: new Date(),
       isolation_group: "public",
@@ -76,11 +85,11 @@ export default class UserService extends Stoppable {
   }
 
   private getUserFromHashToken(hashtoken: string, locale: string): UserRecord {
-    this.logger.trace(() => `getUserFromHashToken hashtoken=${hashtoken}`);
+    this.logger.debug(() => `getUserFromHashToken hashtoken=${hashtoken}`);
     const userrecord = this.userdao.readOne({
       "hashTokens.hashtoken": hashtoken,
     });
-    this.logger.trace(
+    this.logger.debug(
       () => `userrecord=${userrecord?._id || "NO RECORD FOUND IN DATABASE"}`,
     );
 

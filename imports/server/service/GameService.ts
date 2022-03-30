@@ -22,7 +22,7 @@ import StartComputerGameClientMethod from "/imports/server/clientmethods/game/St
 import ConnectionService from "/imports/server/service/ConnectionService";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
-import CommonGameService from "/lib/CommonGameService";
+import CommonGameService from "/lib/game/CommonGameService";
 import ServerAnalysisGame from "/lib/server/game/ServerAnalysisGame";
 import InstanceService from "/imports/server/service/InstanceService";
 import ServerUserPlayedGame from "/lib/server/game/ServerUserPlayedGame";
@@ -32,6 +32,7 @@ import { Mongo } from "meteor/mongo";
 import GameMethods from "/imports/server/clientmethods/game/GameMethods";
 import ChessEngineService from "/imports/server/service/ChessEngineService";
 import BookService from "/imports/server/service/BookService";
+import WritableECODao from "/imports/server/dao/WritableECODao";
 
 export const STARTING_POSITION: string =
   "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -40,6 +41,8 @@ export default class GameService extends CommonGameService {
   private readonly logger: ServerLogger;
 
   private readonly writabledao: WritableGameDao;
+
+  private readonly ecodao: WritableECODao;
 
   private readonly startcomputergamemethod: StartComputerGameClientMethod;
 
@@ -64,11 +67,13 @@ export default class GameService extends CommonGameService {
     userdao: WritableUserDao,
     engineservice: ChessEngineService,
     bookservice: BookService,
+    ecodao: WritableECODao,
   ) {
     super(parent);
 
     this.logger = new ServerLogger(this, "GameService_js");
     this.writabledao = writabledao;
+    this.ecodao = ecodao;
     this.userdao = userdao;
     this.bookservice = bookservice;
 
@@ -104,9 +109,10 @@ export default class GameService extends CommonGameService {
           this.writabledao,
           this.engineservice,
           this.bookservice,
+          this.ecodao,
         );
       case "analyzing":
-        return new ServerAnalysisGame(this, id, this.writabledao);
+        return new ServerAnalysisGame(this, id, this.writabledao, this.ecodao);
       default: {
         throw new Meteor.Error("UNKNOWN_GAME_TYPE");
       }
@@ -144,7 +150,7 @@ export default class GameService extends CommonGameService {
     challenge: ComputerChallengeRecord | UserChallengeRecord,
     connectionid: string,
   ): string {
-    this.logger.trace(
+    this.logger.debug(
       () =>
         `startComputerGame challenger=${
           challenger.id
@@ -310,8 +316,9 @@ export default class GameService extends CommonGameService {
             this.writabledao,
             this.engineservice,
             this.bookservice,
+            this.ecodao,
           )
-        : new ServerUserPlayedGame(this, id, this.writabledao);
+        : new ServerUserPlayedGame(this, id, this.writabledao, this.ecodao);
     game.startClock();
     return id;
   }

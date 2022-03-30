@@ -34,6 +34,8 @@ class TestReactiveReadOnlyDao extends ReactiveReadOnlyDao<TestRecord> {
   protected onStop(): void {
     this.events.emit("onstop");
   }
+
+  protected onReady(): void {}
 }
 
 class TestReactiveReadOnlyDao2 extends ReactiveReadOnlyDao<TestRecord> {
@@ -59,6 +61,8 @@ class TestReactiveReadOnlyDao2 extends ReactiveReadOnlyDao<TestRecord> {
   protected onStop(): void {
     this.events.emit("onstop");
   }
+
+  protected onReady(): void {}
 }
 
 Meteor.subscribe("reactivereadonlydaotest");

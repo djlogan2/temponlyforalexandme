@@ -6,7 +6,7 @@ import { BasicEventEmitter } from "/lib/BasicEventEmitter";
 
 export default class ClientChallengeReadOnlyDao extends CommonReadOnlyChallengeDao {
   private pEvents: ICCEventEmitter<
-    "challengeadded" | "challengeremoved" | "challengemodified"
+    "challengeadded" | "challengeremoved" | "challengemodified" | "ready"
   >;
 
   constructor(
@@ -25,5 +25,9 @@ export default class ClientChallengeReadOnlyDao extends CommonReadOnlyChallengeD
     "challengeadded" | "challengeremoved" | "challengemodified"
   > {
     return this.pEvents;
+  }
+
+  protected onReady(): void {
+    this.pEvents.emit("ready");
   }
 }

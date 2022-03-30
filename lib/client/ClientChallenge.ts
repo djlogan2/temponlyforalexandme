@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import User from "../User";
-import CommonChallenge from "/lib/CommonChallenge";
+import CommonChallenge from "/lib/challenges/CommonChallenge";
 
 export default class ClientChallenge extends CommonChallenge {
   protected internalAcceptChallenge(who: User, connectionid: string): void {

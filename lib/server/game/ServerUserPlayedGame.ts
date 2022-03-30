@@ -1,6 +1,5 @@
 import { Move } from "chess.js";
 import {
-  ECOObject,
   GameAuditDrawRecord,
   GameAuditMoveRecord,
   GameStatus,
@@ -13,17 +12,22 @@ import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import CommonUserPlayedGame from "/lib/game/CommonUserPlayedGame";
 import { Meteor } from "meteor/meteor";
+import WritableECODao from "/imports/server/dao/WritableECODao";
 
 export default class ServerUserPlayedGame extends CommonUserPlayedGame {
-  private dao: WritableGameDao;
+  private readonly dao: WritableGameDao;
+
+  private readonly ecodao: WritableECODao;
 
   constructor(
     parent: Stoppable | null,
     id: string,
     writabledao: WritableGameDao,
+    ecodao: WritableECODao,
   ) {
     super(parent, id, new ServerReadOnlyGameDao(parent, id, writabledao));
     this.dao = writabledao;
+    this.ecodao = ecodao;
   }
 
   public endGame(status: GameStatus, status2: number): void {
@@ -48,7 +52,6 @@ export default class ServerUserPlayedGame extends CommonUserPlayedGame {
     fen: string,
     result: GameStatus,
     result2: number,
-    eco: ECOObject,
   ): void {
     const audit: GameAuditMoveRecord = {
       type: "move",
@@ -57,7 +60,14 @@ export default class ServerUserPlayedGame extends CommonUserPlayedGame {
       who,
     };
 
-    const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
+    const modifier = internalMakeMove(
+      this.me,
+      move,
+      fen,
+      result,
+      result2,
+      this.ecodao,
+    );
     modifier.$set.action = { $push: audit };
     this.dao.update({ _id: this.me._id }, modifier);
   }

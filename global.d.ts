@@ -10,7 +10,7 @@ import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerCo
 import PooledEventEmitter from "/lib/client/PooledEventEmitter";
 import { CollectionNames } from "/lib/CollectionNames";
 import { SubscriptionNames } from "/lib/SubscriptionNames";
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 import ClientServer from "/lib/client/ClientServer";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
@@ -62,7 +62,6 @@ declare global {
   var i18n: Clienti18n;
   var theme: ClientTheme;
   var subscriptionservice: SubscriptionService;
-  var loggerdao: ReadOnlyLoggerConfigurationDao;
   var Assets: any;
   var cuser: ClientUser;
   var userlist: { [id: string]: ClientUser };

@@ -35,4 +35,6 @@ export default class InstanceDao extends WritableReactiveDao<InstanceRecord> {
   protected stopping() {
     super.stopping();
   }
+
+  protected onReady(): void {}
 }

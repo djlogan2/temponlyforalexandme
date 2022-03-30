@@ -30,6 +30,8 @@ class TestCommonReadOnlyLoggerConfigurationDao extends CommonReadOnlyLoggerConfi
   public delete(id: string) {
     this.onRecordRemoved(id);
   }
+
+  protected onReady(): void {}
 }
 
 describe("CommonReadOnlyLoggerConfigurationDao", function () {

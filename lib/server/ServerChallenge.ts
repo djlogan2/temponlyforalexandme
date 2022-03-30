@@ -1,4 +1,4 @@
-import CommonChallenge from "/lib/CommonChallenge";
+import CommonChallenge from "/lib/challenges/CommonChallenge";
 import WritableChallengeDao from "/imports/server/dao/WritableChallengeDao";
 import GameService from "/imports/server/service/GameService";
 import { UserChallengeRecord } from "/lib/records/ChallengeRecord";

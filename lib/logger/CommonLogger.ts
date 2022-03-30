@@ -30,7 +30,7 @@ export default abstract class CommonLogger extends Stoppable {
     super(parent);
     this.identifier = identifier;
     this.type = clientServer;
-    this.identlevel = "debug";
+    this.identlevel = "error";
   }
 
   /**

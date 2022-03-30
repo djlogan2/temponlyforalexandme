@@ -110,7 +110,7 @@ export default abstract class AbstractClientMethod extends Stoppable {
           this.validatearguments(obj);
           this.called(obj)
             .then((retvalue: any) => {
-              this.logger.trace(
+              this.logger.debug(
                 () => `called() has returned: ${util.inspect(retvalue)}`,
               );
               resolve(retvalue);

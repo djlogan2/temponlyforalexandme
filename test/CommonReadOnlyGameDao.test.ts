@@ -61,6 +61,8 @@ class CommonReadOnlyGameDaoTest extends CommonSingleGameReadOnlyGameDao {
     const dao = sinon.createStubInstance(CommonSingleGameReadOnlyGameDao);
     return new CommonComputerPlayedGameTest(this, game._id, dao);
   }
+
+  protected onReady(): void {}
 }
 
 describe("CommonReadOnlyGameDao", function () {

@@ -18,7 +18,7 @@ import { UserRoles } from "/lib/enums/Roles";
 import ChallengeClientMethod from "/imports/server/clientmethods/challenge/ChallegeClientMethod";
 import WritableUserDao from "/imports/server/dao/WritableUserDao";
 import UserRecord from "/lib/records/UserRecord";
-import CommonChallengeService from "/lib/CommonChallengeService";
+import CommonChallengeService from "/lib/challenges/CommonChallengeService";
 import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonChallengeDao";
 import ChallengeButtonPublication from "/imports/server/publications/ChallengeButtonPublication";
 import ChallengePublication from "/imports/server/publications/ChallengePublication";
@@ -233,6 +233,7 @@ export default class ChallengeService extends CommonChallengeService {
     };
 
     if (color) challengerecord.color = color;
+    if (opponentclock) challengerecord.opponentclocks = opponentclock;
 
     let matchingChallenge;
     //
@@ -265,12 +266,14 @@ export default class ChallengeService extends CommonChallengeService {
   private findMatchingChallenge(
     challenge: Mongo.OptionalId<UserChallengeRecord>,
   ): UserChallengeRecord | null {
+    const ourclock = challenge.opponentclocks || challenge.clock;
+
     const selector: Mongo.Selector<UserChallengeRecord> = {
       $and: [
         { $owner: { $ne: challenge.owner } },
         { isolation_group: challenge.isolation_group },
         { rated: challenge.rated },
-        { "clock.minutes": challenge.clock.minutes },
+        { "clock.minutes": ourclock.minutes },
         {
           $or: [
             { who: { $exists: false } },

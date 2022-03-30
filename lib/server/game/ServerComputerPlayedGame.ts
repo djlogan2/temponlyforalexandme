@@ -1,6 +1,5 @@
 import { Move } from "chess.js";
 import {
-  ECOObject,
   GameAuditDrawRecord,
   GameAuditMoveRecord,
   GameStatus,
@@ -17,13 +16,16 @@ import ChessEngineService from "/imports/server/service/ChessEngineService";
 import { EngineResult } from "/lib/server/EngineInterfaces";
 import { Meteor } from "meteor/meteor";
 import BookService from "/imports/server/service/BookService";
+import WritableECODao from "/imports/server/dao/WritableECODao";
 
 export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
-  private dao: WritableGameDao;
+  private readonly dao: WritableGameDao;
 
-  private engine: LambdaChessEngine;
+  private readonly engine: LambdaChessEngine;
 
-  private bookservice: BookService;
+  private readonly bookservice: BookService;
+
+  private readonly ecodao: WritableECODao;
 
   constructor(
     parent: Stoppable | null,
@@ -31,11 +33,13 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     writabledao: WritableGameDao,
     engineservice: ChessEngineService,
     bookservice: BookService,
+    ecodao: WritableECODao,
   ) {
     super(parent, id, new ServerReadOnlyGameDao(parent, id, writabledao));
     this.dao = writabledao;
     this.engine = engineservice.acquireComputerPlayUnit();
     this.bookservice = bookservice;
+    this.ecodao = ecodao;
   }
 
   protected stopping() {
@@ -95,7 +99,6 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
     fen: string,
     result: GameStatus,
     result2: number,
-    eco: ECOObject,
   ): void {
     const audit: GameAuditMoveRecord = {
       type: "move",
@@ -104,7 +107,14 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
       who,
     };
 
-    const modifier = internalMakeMove(this.me, move, fen, result, result2, eco);
+    const modifier = internalMakeMove(
+      this.me,
+      move,
+      fen,
+      result,
+      result2,
+      this.ecodao,
+    );
     // @ts-ignore
     modifier.$push.actions = audit;
     this.dao.update({ _id: this.me._id }, modifier);

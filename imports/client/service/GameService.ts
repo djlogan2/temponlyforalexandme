@@ -7,7 +7,7 @@ import ClientConnection from "/lib/client/ClientConnection";
 import ClientLogger from "/lib/client/ClientLogger";
 import ClientUser from "/lib/client/ClientUser";
 import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
-import CommonGameService from "/lib/CommonGameService";
+import CommonGameService from "/lib/game/CommonGameService";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import Stoppable from "/lib/Stoppable";
 
@@ -39,7 +39,7 @@ export default class GameService extends CommonGameService {
   public startComputerGame(
     computerchallenge: ComputerChallengeRecord,
   ): Promise<void> {
-    this.logger.trace(
+    this.logger.debug(
       () =>
         `startComputerGame computerchallenge=${util.inspect(
           computerchallenge,

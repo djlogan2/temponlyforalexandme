@@ -9,6 +9,7 @@ import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOn
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import ClientLogger from "/lib/client/ClientLogger";
 import { Random } from "meteor/random";
+import * as util from "util";
 
 export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
   private readonly user: ClientUser;
@@ -49,18 +50,22 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
   protected updateMoveFromEvent(move: BasicMoveListNode): void {
     this.logger1.debug(
       () =>
-        `[${this.hash}] updateMoveFromEvent move=${move.move} color=${move.smith.color} tomove=${this.me.tomove}`,
+        `[${this.hash}] updateMoveFromEvent move=${util.inspect(
+          move,
+        )} opponentcolor=${this.me.opponentcolor}`,
     );
     if (move.smith.color !== this.me.opponentcolor)
       this.makeMoveAuth("", move.move);
   }
 
   protected startTimer(milliseconds: number, fn: () => void) {
+    this.logger1.debug(() => `startTimer milliseconds=${milliseconds}`);
     super.startTimer(milliseconds, fn);
     this.events.emit("clockstarted", milliseconds);
   }
 
   protected stopClock() {
+    this.logger1.debug(() => `stopClock`);
     super.stopClock();
     this.events.emit("clockstopped");
   }
@@ -76,16 +81,24 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     _fen: string,
     _result: GameStatus,
   ): void {
+    this.logger1.debug(
+      () =>
+        `internalMakeMove move=${util.inspect(move)} opponentcolor=${
+          this.me.opponentcolor
+        }`,
+    );
     if (move.color === this.me.opponentcolor) {
       Meteor.call("gamecommand", this.me._id, { move: move.san, type: "move" });
     }
   }
 
   protected isAuthorizedToMove(who: User): boolean {
+    this.logger1.debug(() => `isAuthorizedToMove who=${who.id}`);
     return who.id === this.me.opponent.userid;
   }
 
   protected playerColor(who: User): PieceColor | null {
+    this.logger1.debug(() => `playerColor who=${who.id}`);
     if (who.id === this.me.opponent.userid) return this.me.opponentcolor;
     return null;
   }
@@ -95,6 +108,7 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     color: PieceColor,
     draw: boolean,
   ): void {
+    this.logger1.debug(() => `internalSetDraw color=${color} draw=${draw}`);
     Meteor.call("gamecommand", "draw", this.me._id);
   }
 

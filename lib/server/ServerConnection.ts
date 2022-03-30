@@ -65,13 +65,13 @@ export default class ServerConnection extends AbstractTimestampNode {
 
   protected stopping(): void {
     super.stopping();
-    this.logger2.trace(() => `${this.connectionid} stopping`);
+    this.logger2.debug(() => `${this.connectionid} stopping`);
     this.closing();
   }
 
   public idleMessage(idle: IdleMessage): void {
     this.pIdle = idle;
-    this.logger2.trace(() => `idle=${JSON.stringify(idle)}`);
+    this.logger2.debug(() => `idle=${JSON.stringify(idle)}`);
     this.connectiondao.update(
       { connectionid: this.connectionid },
       { $set: { focused: idle.focused, idleseconds: idle.idleseconds } },
@@ -81,7 +81,7 @@ export default class ServerConnection extends AbstractTimestampNode {
   }
 
   public handleDirectMessage(messagetype: string, message: any) {
-    this.logger2.trace(
+    this.logger2.debug(
       () =>
         `${
           this.connectionid
@@ -107,7 +107,7 @@ export default class ServerConnection extends AbstractTimestampNode {
     writableuserdao: WritableUserDao,
   ) {
     super(parent, 60);
-    this.logger2.trace(
+    this.logger2.debug(
       () => `constructor: ${JSON.stringify(connectionrecord)}`,
     );
     this.userdao = readonlyuserdao;
@@ -120,12 +120,12 @@ export default class ServerConnection extends AbstractTimestampNode {
   }
 
   private closing(): void {
-    this.logger2.trace(() => `${this.connectionid} closing`);
+    this.logger2.debug(() => `${this.connectionid} closing`);
     this.events.emit("closing");
   }
 
   protected sendFunction(msg: PingMessage | PongMessage | PongResponse): void {
-    this.logger2.trace(
+    this.logger2.debug(
       () => `${this.connectionid} sendFunction: ${JSON.stringify(msg)}`,
     );
     Meteor.directStream.send(
@@ -135,7 +135,7 @@ export default class ServerConnection extends AbstractTimestampNode {
   }
 
   public login(hashtoken: string, locale: string): string {
-    this.logger2.trace(
+    this.logger2.debug(
       () =>
         `${this.connectionid} login hashtoken=${hashtoken} locale=${locale}`,
     );
@@ -143,7 +143,7 @@ export default class ServerConnection extends AbstractTimestampNode {
     const id = this.userservice.logon(hashtoken, locale);
     this.pUser = new ServerUser(this, id, this.userdao, this.writableuserdao);
     this.events.emit("userlogin", this.pUser);
-    this.logger2.trace(
+    this.logger2.debug(
       () => `${this.connectionid} login emitted "userlogin", userid=${id}`,
     );
     return id;

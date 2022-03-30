@@ -1,13 +1,13 @@
-import DynamicSelectorReactiveReadOnlyDao from "/imports/dao/DynamicSelectorReactiveReadOnlyDao";
 import { CollectionNames } from "/lib/CollectionNames";
 import { Subscription } from "meteor/meteor";
 import Stoppable from "/lib/Stoppable";
 import ServerLogger from "/lib/server/ServerLogger";
 import * as util from "util";
+import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 
 export default abstract class Publication<
   T extends { _id: string },
-> extends DynamicSelectorReactiveReadOnlyDao<T> {
+> extends ReactiveReadOnlyDao<T> {
   private logger: ServerLogger;
 
   private nativesubscription: Subscription;

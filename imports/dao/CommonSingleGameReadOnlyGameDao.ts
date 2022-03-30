@@ -7,27 +7,28 @@ import ReactiveReadOnlyDao from "/imports/dao/ReactiveReadOnlyDao";
 import { BasicEventEmitter } from "/lib/BasicEventEmitter";
 import { Meteor } from "meteor/meteor";
 import { PieceColor } from "/lib/records/ChallengeRecord";
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 import * as util from "util";
 import { Random } from "meteor/random";
 
 export type GameEvents =
-  | "abortrequested"
   | "abortremoved"
-  | "adjournrequested"
+  | "abortrequested"
   | "adjournremoved"
-  | "drawrequested"
-  | "drawremoved"
-  | "move"
-  | "movelist"
-  | "fen"
-  | "clocks"
-  | "tomove"
+  | "adjournrequested"
   | "clockchanged"
+  | "clocks"
   | "clockstarted"
   | "clockstopped"
   | "converted"
-  | "ended";
+  | "drawremoved"
+  | "drawrequested"
+  | "ended"
+  | "fen"
+  | "move"
+  | "movelist"
+  | "ready"
+  | "tomove";
 export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveReadOnlyDao<BasicGameRecord> {
   protected id: string;
 

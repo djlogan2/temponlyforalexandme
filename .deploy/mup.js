@@ -2,8 +2,8 @@ module.exports = {
   servers: {
     one: {
       host: "v2a.chessclub.com",
-      username: "oleshkoo",
-      pem: "C:\\Users\\38096\\.ssh\\id_rsa",
+      username: "david",
+      pem: "~/.ssh/id_rsa",
     },
   },
 

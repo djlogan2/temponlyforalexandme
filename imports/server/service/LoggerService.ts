@@ -106,4 +106,8 @@ export default class LoggerService extends Stoppable {
   }
 
   protected stopping(): void {}
+
+  getModuleRecord(module: string) {
+    return this.readableconfigdao.readOne({ module });
+  }
 }

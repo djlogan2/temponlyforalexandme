@@ -2,7 +2,7 @@ import chai, { expect } from "chai";
 import CommonPlayedGame from "/lib/game/CommonPlayedGame";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import sinon, { SinonSandbox, SinonStubbedInstance } from "sinon";
-import { ECOObject, GameStatus } from "/lib/records/GameRecord";
+import { GameStatus } from "/lib/records/GameRecord";
 import { Chess, Move } from "chess.js";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import User from "/lib/User";
@@ -40,7 +40,6 @@ class TestCommonPlayedGame extends CommonPlayedGame {
     fen: string,
     result: GameStatus,
     result2: number,
-    eco: ECOObject,
   ): void {}
 
   protected internalSetDraw(

@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import { Meteor } from "meteor/meteor";
-import CommonLogger from "/lib/CommonLogger";
+import CommonLogger from "/lib/logger/CommonLogger";
 import {
   LOGLEVEL,
   logLevelStrings,

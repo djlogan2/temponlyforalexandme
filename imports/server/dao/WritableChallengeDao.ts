@@ -3,7 +3,7 @@ import WritableReactiveDao from "/imports/server/dao/WritableReactiveDao";
 import EventEmitter from "eventemitter3";
 
 export default class WritableChallengeDao extends WritableReactiveDao<UserChallengeRecord> {
-  private pEvents = new EventEmitter<"added" | "removed">();
+  private pEvents = new EventEmitter<"added" | "removed" | "ready">();
 
   public get events() {
     return this.pEvents;
@@ -23,5 +23,9 @@ export default class WritableChallengeDao extends WritableReactiveDao<UserChalle
 
   protected onRecordRemoved(id: string): void {
     this.pEvents.emit("removed", id);
+  }
+
+  protected onReady(): void {
+    this.pEvents.emit("ready");
   }
 }

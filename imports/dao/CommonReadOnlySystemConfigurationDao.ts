@@ -13,4 +13,6 @@ export default class CommonReadOnlySystemConfigurationDao extends ReactiveReadOn
   ): void {}
 
   protected onRecordRemoved(id: string): void {}
+
+  protected onReady(): void {}
 }
