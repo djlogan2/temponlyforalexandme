@@ -6,7 +6,7 @@ import SubscribedReactiveReadOnlyDao from "/lib/client/SubscribedReactiveReadOnl
 
 export default class ClientStartedGameReadOnlyDao extends SubscribedReactiveReadOnlyDao<
   BasicGameRecord,
-  "started" | "removed" | "fen"
+  "started" | "removed" | "fen" | "ready"
 > {
   private readonly logger: ClientLogger;
 

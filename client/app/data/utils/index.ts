@@ -29,8 +29,6 @@ export const calculateTimeLeft = (timePassed: number) => {
     .map((t) => (`${t}`.length === 1 ? `0${t}` : t))
     .join(":");
 
-  // console.log(timePassed);
-
   return durationLeft;
 };
 
@@ -44,7 +42,8 @@ export const calcTime = (
   const t2 = calculateTimeLeft((initial || 0) * 60 * 1000);
 
   if (isMyTurn && t1 === t2) {
-    return startTime + time - Date.now();
+    const t = startTime + time - Date.now();
+    return Math.max(t, 0);
   }
 
   return time;
