@@ -83,12 +83,12 @@ const GameMarkup = () => {
           <ControlBox
             onResign={resign}
             className="gameContainer__controlBox"
-            moves={movelist || []}
+            moves={movelist}
             messages={[]}
           />
         </>
       ) : (
-        <FlatMovelist moves={movelist || []} />
+        <FlatMovelist moves={movelist} />
       )}
       <DigitalClock
         time={calcTime(
