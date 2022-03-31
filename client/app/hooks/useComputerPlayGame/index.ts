@@ -29,8 +29,8 @@ export const getLegalMoves = (fen: string) => {
 const useComputerPlayGame = (gameId: string) => {
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
-  const [movelist, setMovelist] = useState<TMoveItem[]>();
-  const [gameInstance, setGameInstance] = useState<ClientComputerPlayedGame>();
+  const [movelist, setMovelist] = useState<TMoveItem[]>([]);
+  const [game, setGame] = useState<ClientComputerPlayedGame>();
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>();
   const playSound = useSound();
@@ -43,6 +43,7 @@ const useComputerPlayGame = (gameId: string) => {
       | undefined;
 
     if (!game) {
+      history.push("/");
       return;
     }
 
@@ -58,7 +59,6 @@ const useComputerPlayGame = (gameId: string) => {
       setFen(data);
 
       if (!fen) {
-        history.push("/");
         return;
       }
 
@@ -80,22 +80,26 @@ const useComputerPlayGame = (gameId: string) => {
 
     game.events.on("ended", () => {});
 
-    setGameInstance(game);
+    setGame(game);
+
+    return () => {
+      gameservice.events.removeAllListeners();
+    };
   }, []);
 
   const makeMove = useCallback(
     (move: string[], promotion?: string) => {
-      gameInstance?.makeMove(
+      game?.makeMove(
         connection.user as ClientUser,
         move.join("") + (promotion || ""),
       );
     },
-    [gameInstance],
+    [game],
   );
 
   const resign = useCallback(() => {
-    gameInstance?.resign(connection.user as ClientUser);
-  }, [gameInstance]);
+    game?.resign(connection.user as ClientUser);
+  }, [game]);
 
   return { fen, clocks, movelist, moveToMake, legalMoves, makeMove, resign };
 };

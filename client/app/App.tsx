@@ -11,8 +11,14 @@ import { gameservice } from "./Root";
 const App = () => {
   const customTheme = useTheme();
   const [isGameServiceReady, setIsGameServiceReady] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    globalThis.icc.connection.events.on("loggedin", () => {
+      setIsLoggedIn(true);
+      globalThis.icc.connection.events.off("loggedin");
+    });
+
     i18n.events.on("translationchanged", (translation: TI18NDoc) => {
       if (!translation) {
         return;
@@ -29,7 +35,7 @@ const App = () => {
     });
   }, []);
 
-  return customTheme?.isReady && isGameServiceReady ? (
+  return customTheme?.isReady && isLoggedIn ? (
     <Router>
       <Switch>
         <Route exact path="/">

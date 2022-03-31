@@ -18,18 +18,18 @@ export const styles = {
 };
 
 export const pieceImages = {
-  bB: "var(--bB)",
-  bK: "var(--bK)",
-  bN: "var(--bN)",
-  bP: "var(--bP)",
-  bQ: "var(--bQ)",
-  bR: "var(--bR)",
-  wB: "var(--wB)",
-  wK: "var(--wK)",
-  wN: "var(--wN)",
-  wP: "var(--wP)",
-  wQ: "var(--wQ)",
-  wR: "var(--wR)",
+  bB: "var(--resource_bB)",
+  bK: "var(--resource_bK)",
+  bN: "var(--resource_bN)",
+  bP: "var(--resource_bP)",
+  bQ: "var(--resource_bQ)",
+  bR: "var(--resource_bR)",
+  wB: "var(--resource_wB)",
+  wK: "var(--resource_wK)",
+  wN: "var(--resource_wN)",
+  wP: "var(--resource_wP)",
+  wQ: "var(--resource_wQ)",
+  wR: "var(--resource_wR)",
 };
 
 export const accessibilityPieces = {

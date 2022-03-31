@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import App from "./App";
@@ -42,26 +42,11 @@ export const gameservice = new GameService(
   globalThis.icc.connection,
 );
 
-function loggedin() {
-  globalThis.icc.connection.events.off("loggedin", loggedin);
-}
-
-const Root = () => {
-  useEffect(() => {
-    if (globalThis.icc.connection.user) {
-      return;
-    }
-    globalThis.icc.connection.events.on("loggedin", () => {
-      loggedin();
-    });
-  }, []);
-
-  return (
-    <ThemeProvider themeService={theme}>
-      <Theme />
-      <App />
-    </ThemeProvider>
-  );
-};
+const Root = () => (
+  <ThemeProvider themeService={theme}>
+    <Theme />
+    <App />
+  </ThemeProvider>
+);
 
 export default Root;

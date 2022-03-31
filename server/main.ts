@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 // noinspection JSUnusedLocalSymbols
 
 import "../lib/server/ICCGlobal";
@@ -20,3 +22,30 @@ const parent = null;
 // -------------- FIRST FIRST FIRST --------------
 
 const connectionservice = new ConnectionService();
+
+// @ts-ignore
+Picker.route("/static/images/:folder/:file", function (params, req, res, next) {
+  const staticResource = req.originalUrl.split("--")[0];
+
+  const mime = {
+    html: "text/html",
+    txt: "text/plain",
+    css: "text/css",
+    gif: "image/gif",
+    jpg: "image/jpeg",
+    png: "image/png",
+    svg: "image/svg+xml",
+    js: "application/javascript",
+  };
+  const ext = staticResource.split(".")[1] as keyof typeof mime;
+
+  fs.readFile(`${process.env.PWD}/public${staticResource}`, (err, data) => {
+    if (err) {
+      res.statusCode = 500;
+      res.end(`Error getting the file: ${err}.`);
+    } else {
+      res.setHeader("Content-Type", mime[ext]);
+      res.end(data);
+    }
+  });
+});
