@@ -20,6 +20,6 @@ export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLogger
   }
 
   protected onReady(): void {
-    this.events.emit("ready");
+    if (this.events) this.events.emit("ready");
   }
 }

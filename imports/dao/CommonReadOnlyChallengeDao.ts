@@ -8,7 +8,7 @@ export default abstract class CommonReadOnlyChallengeDao extends ReactiveReadOnl
     "challengeadded" | "challengeremoved" | "challengemodified"
   >;
 
-  protected constructor(parent: Stoppable | null) {
+  constructor(parent: Stoppable | null) {
     super(parent, "challenges");
   }
 

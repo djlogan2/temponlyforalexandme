@@ -31,6 +31,12 @@ import BookService from "/imports/server/service/BookService";
 import WritableBookDao from "/imports/server/dao/WritableBookDao";
 import WritableECODao from "/imports/server/dao/WritableECODao";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
+import ChallengeService from "/imports/server/service/ChallengeService";
+import CommonReadOnlyChallengeDao from "/imports/dao/CommonReadOnlyChallengeDao";
+import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonChallengeDao";
+import WritableChallengeDao from "/imports/server/dao/WritableChallengeDao";
+import ServerReadOnlyButtonChallengeDao from "/imports/server/dao/ServerReadOnlyButtonChallengeDao";
+import ServerReadOnlyChallengeDao from "/imports/server/dao/ServerReadOnlyChallengeDao";
 
 export default class ConnectionService extends Stoppable {
   private readonly readableloggerconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -55,6 +61,12 @@ export default class ConnectionService extends Stoppable {
 
   private readonly bookdao: WritableBookDao;
 
+  private readonly challengedao: ServerReadOnlyChallengeDao;
+
+  private readonly buttondao: ServerReadOnlyButtonChallengeDao;
+
+  private readonly writablechallengedao: WritableChallengeDao;
+
   private readonly ecodao: WritableECODao;
 
   private readonly instanceservice: InstanceService;
@@ -68,6 +80,8 @@ export default class ConnectionService extends Stoppable {
   private readonly bookservice: BookService;
 
   private readonly engineservice: ChessEngineService;
+
+  private readonly challengeservice: ChallengeService;
 
   private connectionLoginMethod: ConnectionLoginMethod;
 
@@ -117,6 +131,10 @@ export default class ConnectionService extends Stoppable {
     this.bookdao = new WritableBookDao(this);
     this.ecodao = new WritableECODao(this);
 
+    this.challengedao = new ServerReadOnlyChallengeDao(this);
+    this.buttondao = new ServerReadOnlyButtonChallengeDao(this);
+    this.writablechallengedao = new WritableChallengeDao(this);
+
     this.connectionLoginMethod = new ConnectionLoginMethod(this, this);
     this.connectionIdleMethod = new ConnectionIdleMethod(this, this);
 
@@ -151,7 +169,17 @@ export default class ConnectionService extends Stoppable {
       this.bookservice,
       this.ecodao,
     );
-
+    this.challengeservice = new ChallengeService(
+      this,
+      this.instanceservice,
+      this.challengedao,
+      this.writablechallengedao,
+      this.gameservice,
+      this,
+      this.writableuserdao,
+      this.buttondao,
+      this.publicationservice,
+    );
     Meteor.onConnection((connection) => this.onConnection(connection));
 
     // globalThis.ICCServer.services.connectionservice = this;

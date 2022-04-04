@@ -96,8 +96,11 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
 
     let count = this.cursor.count();
 
+    this.loggerrrod.debug(() => `${this.collection} starting observehandle`);
+
     this.observehandle = this.cursor.observeChanges({
       added(id, doc) {
+        self.loggerrrod.debug(() => `${self.collection} added`);
         const idx = ids?.length ? ids.indexOf(id) : -1;
         if (idx === -1) self.onRecordAdded(id, doc);
         else {
@@ -110,17 +113,42 @@ export default abstract class ReactiveReadOnlyDao<T> extends ReadOnlyDao<T> {
             ids = [];
           }
         }
-        if (!count) self.onReady();
+        if (!count) {
+          self.loggerrrod.debug(
+            () => `${self.collection} added - sending onready`,
+          );
+          self.onReady();
+        }
       },
       changed(id, doc) {
+        self.loggerrrod.debug(() => `${self.collection} changed`);
         self.onFieldsChanged(id, doc);
-        if (!count) self.onReady();
+        if (!count) {
+          self.loggerrrod.debug(
+            () => `${self.collection} changed - sending onready`,
+          );
+          self.onReady();
+        }
       },
       removed(id) {
+        self.loggerrrod.debug(() => `${self.collection} removed`);
         self.onRecordRemoved(id);
-        if (!count) self.onReady();
+        if (!count) {
+          self.loggerrrod.debug(
+            () => `${self.collection} removed - sending onready`,
+          );
+          self.onReady();
+        }
       },
     });
+
+    if (!count) {
+      self.loggerrrod.debug(
+        () =>
+          `${self.collection} observehandle - sending onready due to no records`,
+      );
+      self.onReady();
+    }
   }
 
   /**

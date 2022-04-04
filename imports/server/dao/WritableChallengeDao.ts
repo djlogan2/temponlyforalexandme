@@ -1,9 +1,14 @@
 import { UserChallengeRecord } from "/lib/records/ChallengeRecord";
 import WritableReactiveDao from "/imports/server/dao/WritableReactiveDao";
 import EventEmitter from "eventemitter3";
+import Stoppable from "/lib/Stoppable";
 
 export default class WritableChallengeDao extends WritableReactiveDao<UserChallengeRecord> {
   private pEvents = new EventEmitter<"added" | "removed" | "ready">();
+
+  public constructor(parent: Stoppable | null) {
+    super(parent, "challenges");
+  }
 
   public get events() {
     return this.pEvents;

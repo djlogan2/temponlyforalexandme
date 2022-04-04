@@ -38,6 +38,6 @@ export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLogger
   }
 
   protected onReady(): void {
-    this.pEvents.emit("ready");
+    if (this.pEvents) this.pEvents.emit("ready");
   }
 }

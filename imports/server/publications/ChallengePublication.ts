@@ -6,9 +6,12 @@ import ServerConnection from "/lib/server/ServerConnection";
 import Stoppable from "/lib/Stoppable";
 import { Mongo } from "meteor/mongo";
 import { Subscription } from "meteor/meteor";
+import ServerLogger from "/lib/server/ServerLogger";
 
 export default class ChallengePublication extends UserChangePublication<UserChallengeRecord> {
   private user?: ServerUser;
+
+  private readonly logger2: ServerLogger;
 
   private readonly pRoleAdded: (role: UserRoles) => void;
 
@@ -21,6 +24,8 @@ export default class ChallengePublication extends UserChangePublication<UserChal
   ) {
     super(parent, sub, "challenges", connection);
 
+    this.logger2 = new ServerLogger(this, "ChallengePublication_ts");
+
     this.pRoleRemoved = (role) => this.roleremoved(role);
     this.pRoleAdded = (role) => this.roleadded(role);
     if (connection.user) {
@@ -29,18 +34,25 @@ export default class ChallengePublication extends UserChangePublication<UserChal
   }
 
   protected userLogin(user: ServerUser): void {
+    this.logger2.debug(() => `userLogin user=${user.id}`);
     this.user = user;
     this.user.events.on("roleremoved", (role) => this.roleremoved(role));
+    this.doit();
   }
 
   protected roleremoved(role: UserRoles): void {
+    this.logger2.debug(() => `roleremoved role=${role}`);
     if (role === "play_rated_games" || role === "play_unrated_games")
       this.doit();
   }
 
-  protected roleadded(role: UserRoles): void {}
+  protected roleadded(role: UserRoles): void {
+    this.logger2.debug(() => `roleadded role=${role}`);
+    this.doit();
+  }
 
   protected doit(): void {
+    this.logger2.debug(() => `doit`);
     if (!this.user) return;
 
     if (!this.user.isAuthorized(["play_rated_games", "play_unrated_games"])) {
@@ -77,6 +89,7 @@ export default class ChallengePublication extends UserChangePublication<UserChal
   }
 
   protected userLogout(): void {
+    this.logger2.debug(() => `userLogout`);
     if (this.user) {
       this.user.events.off("roleadded", this.pRoleAdded);
       this.user.events.off("roleremoved", this.pRoleRemoved);
