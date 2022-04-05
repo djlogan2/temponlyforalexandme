@@ -28,7 +28,6 @@ export default class ClientSingleGameReadOnlyDao extends CommonSingleGameReadOnl
       "games",
     );
     this.connection = connection;
-    // this.start({ _id: id });
   }
 
   public get events(): BasicEventEmitter<GameEvents> {
@@ -36,6 +35,6 @@ export default class ClientSingleGameReadOnlyDao extends CommonSingleGameReadOnl
   }
 
   protected onReady(): void {
-    this.pEvents.emit("ready");
+    this.pEvents?.emit("ready");
   }
 }
