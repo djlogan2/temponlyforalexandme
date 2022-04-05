@@ -1,10 +1,10 @@
 import CommonTheme from "/lib/CommonTheme";
-import ThemeReadOnlyDao from "/imports/client/dao/ThemeReadOnlyDao";
+import ClientThemeReadOnlyDao from "/imports/client/dao/ClientThemeReadOnlyDao";
 import ClientLogger from "/lib/client/ClientLogger";
 import Stoppable from "/lib/Stoppable";
 
 export default class ClientTheme extends CommonTheme {
-  dao: ThemeReadOnlyDao;
+  dao: ClientThemeReadOnlyDao;
 
   public get events() {
     return this.dao.events;
@@ -14,7 +14,7 @@ export default class ClientTheme extends CommonTheme {
 
   public isReady = false;
 
-  constructor(parent: Stoppable | null, dao: ThemeReadOnlyDao) {
+  constructor(parent: Stoppable | null, dao: ClientThemeReadOnlyDao) {
     super(parent);
     this.logger = new ClientLogger(this, "ClientTheme_js");
     globalThis.theme = this;

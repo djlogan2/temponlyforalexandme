@@ -20,6 +20,7 @@ export default class ReadOnlyLoggerConfigurationDao extends CommonReadOnlyLogger
       this,
       "logger_configuration",
     );
+    this.start({});
   }
 
   /**

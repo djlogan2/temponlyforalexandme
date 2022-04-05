@@ -47,7 +47,6 @@ export default abstract class CommonSingleGameReadOnlyGameDao extends ReactiveRe
     this.id = id;
     this.hash = Random.hexString(16);
     this.logger.debug(() => `constructor [${this.hash}]`);
-    this.start({ _id: id });
   }
 
   protected onFieldsChanged(

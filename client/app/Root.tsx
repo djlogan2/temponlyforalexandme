@@ -7,7 +7,7 @@ import Theme, { ThemeProvider } from "./theme";
 import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import ClientStartedGameReadOnlyDao from "/imports/client/dao/ClientStartedGameReadOnlyDao";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
-import ThemeReadOnlyDao from "/imports/client/dao/ThemeReadOnlyDao";
+import ClientThemeReadOnlyDao from "/imports/client/dao/ClientThemeReadOnlyDao";
 import GameService from "/imports/client/service/GameService";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
@@ -32,7 +32,7 @@ globalThis.icc = new ClientServer(userdao);
 const subscriptionservice = new SubscriptionService(null);
 
 const i18ndao = new Clienti18nReadOnlyDao(null, subscriptionservice);
-const themedao = new ThemeReadOnlyDao(null, subscriptionservice);
+const themedao = new ClientThemeReadOnlyDao(null, subscriptionservice);
 
 const i18nClient = new Clienti18n(null, i18ndao);
 const theme = new ClientTheme(null, themedao);

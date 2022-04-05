@@ -4,7 +4,7 @@ import SubscribedReactiveReadOnlyDao from "/lib/client/SubscribedReactiveReadOnl
 import { ThemeRecord } from "/lib/records/ThemeRecord";
 import CommonLogger from "/lib/logger/CommonLogger";
 
-export default class ThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
+export default class ClientThemeReadOnlyDao extends SubscribedReactiveReadOnlyDao<
   ThemeRecord,
   "themechanged" | "ready"
 > {

@@ -18,6 +18,7 @@ export default class ServerReadOnlyGameDao extends CommonSingleGameReadOnlyGameD
   ) {
     super(parent, id);
     this.dao = writabledao;
+    this.start({ _id: id });
   }
 
   public get events(): BasicEventEmitter<GameEvents> {

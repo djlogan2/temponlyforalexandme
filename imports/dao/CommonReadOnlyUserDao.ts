@@ -5,7 +5,6 @@ import Stoppable from "/lib/Stoppable";
 export default class CommonReadOnlyUserDao extends ReactiveReadOnlyDao<UserRecord> {
   constructor(parent: Stoppable | null) {
     super(parent, "users");
-    this.start({}, undefined, undefined);
   }
 
   private eachField(id: string, record: Partial<UserRecord>): void {

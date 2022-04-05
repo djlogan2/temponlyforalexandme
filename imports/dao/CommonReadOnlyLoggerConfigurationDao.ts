@@ -16,7 +16,6 @@ export default abstract class CommonReadOnlyLoggerConfigurationDao extends React
    */
   constructor(parent: Stoppable | null) {
     super(parent, "logger_configuration");
-    this.start({}, undefined, undefined);
   }
 
   /**
