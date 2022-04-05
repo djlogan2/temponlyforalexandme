@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import App from "./App";
 import Theme, { ThemeProvider } from "./theme";
-
+import ClientChallengeButtonReadOnlyDao from "/imports/client/dao/ClientChallengeButtonReadOnlyDao";
+import ClientChallengeReadOnlyDao from "/imports/client/dao/ClientChallengeReadOnlyDao";
 import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import ClientStartedGameReadOnlyDao from "/imports/client/dao/ClientStartedGameReadOnlyDao";
 import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import ClientThemeReadOnlyDao from "/imports/client/dao/ClientThemeReadOnlyDao";
+import ChallengeService from "/imports/client/service/ChallengeService";
 import GameService from "/imports/client/service/GameService";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import Clienti18n from "/lib/client/Clienti18n";
 import ClientServer from "/lib/client/ClientServer";
 import ClientTheme from "/lib/client/ClientTheme";
-import ChallengeService from "/imports/client/service/ChallengeService";
-import ClientChallengeReadOnlyDao from "/imports/client/dao/ClientChallengeReadOnlyDao";
-import ClientChallengeButtonReadOnlyDao from "/imports/client/dao/ClientChallengeButtonReadOnlyDao";
 
 //---
 globalThis.subscriptionservice = new SubscriptionService(null);
@@ -44,16 +43,7 @@ const buttondao = new ClientChallengeButtonReadOnlyDao(
   null,
   subscriptionservice,
 );
-const challenges = new ChallengeService(null, challengedao, buttondao);
-
-console.log("Are we here?");
-challenges.events.on("ready", () => {
-  console.log("ready");
-});
-challenges.events.on("challengeadded", (id) => {
-  console.log(`added=${id}`);
-});
-console.log("We are!");
+export const challenges = new ChallengeService(null, challengedao, buttondao);
 
 export const gameservice = new GameService(
   null,

@@ -6,7 +6,7 @@ import LoadingPlaceholder from "./shared/LoadingPlaceholder";
 import { useTheme } from "./theme";
 import { TI18NDoc } from "./types";
 import Home from "./pages/Home";
-import { gameservice } from "./Root";
+import { challenges, gameservice } from "./Root";
 
 const App = () => {
   const customTheme = useTheme();
@@ -30,12 +30,20 @@ const App = () => {
     });
 
     gameservice.events.on("ready", () => {
-      // DOESN"T FIRE
       setIsGameServiceReady(true);
+    });
+
+    challenges.events.on("ready", () => {
+      console.log(challenges.getButtons());
+
+      console.log("ready");
+    });
+    challenges.events.on("challengeadded", (id) => {
+      console.log(`added=${id}`);
     });
   }, []);
 
-  return customTheme?.isReady && isLoggedIn ? (
+  return customTheme?.isReady && isLoggedIn && isGameServiceReady ? (
     <Router>
       <Switch>
         <Route exact path="/">

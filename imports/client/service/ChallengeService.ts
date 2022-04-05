@@ -8,6 +8,8 @@ import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonC
 export default class ChallengeService extends CommonChallengeService {
   private dao: ClientChallengeReadOnlyDao;
 
+  private buttondao: CommonReadOnlyButtonChallengeDao;
+
   public get events() {
     return this.dao.events;
   }
@@ -19,6 +21,7 @@ export default class ChallengeService extends CommonChallengeService {
   ) {
     super(parent, buttondao);
     this.dao = dao;
+    this.buttondao = buttondao;
   }
 
   public addChallenge(
@@ -41,6 +44,10 @@ export default class ChallengeService extends CommonChallengeService {
 
   public declineChallenge(): void {
     Meteor.call("decline", "remove", "id");
+  }
+
+  public getButtons() {
+    return this.buttondao.readMany({});
   }
 
   protected internalAddChallenge(
