@@ -32,7 +32,7 @@ const useComputerPlayGame = (gameId: string) => {
   const [movelist, setMovelist] = useState<TMoveItem[]>([]);
   const [game, setGame] = useState<ClientComputerPlayedGame>();
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
-  const [legalMoves, updateLegalMoves] = useState<any>();
+  const [legalMoves, updateLegalMoves] = useState<any>({});
   const playSound = useSound();
 
   const history = useHistory();
