@@ -4,8 +4,10 @@ import Stoppable from "/lib/Stoppable";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import { OneChallengeButton } from "/lib/records/ChallengeButtonRecord";
 
+type TEvents = "added" | "changed" | "removed" | "ready";
+
 export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButtonChallengeDao {
-  private pEvents: BasicEventEmitter<"added" | "changed" | "removed" | "ready">;
+  private pEvents: BasicEventEmitter<TEvents>;
 
   constructor(
     parent: Stoppable | null,
@@ -16,6 +18,10 @@ export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButt
       this,
       "challengebuttons",
     );
+  }
+
+  public get events(): BasicEventEmitter<TEvents> {
+    return this.pEvents;
   }
 
   protected onFieldsChanged(

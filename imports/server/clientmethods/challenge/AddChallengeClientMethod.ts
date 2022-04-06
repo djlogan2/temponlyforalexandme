@@ -9,7 +9,7 @@ import { Meteor } from "meteor/meteor";
 import ChallengeService from "/imports/server/service/ChallengeService";
 
 interface AddChallengeClientObject extends ClientCallObject {
-  clock: ClockSettings;
+  clocks: ClockSettings;
   rated: boolean;
   color?: PieceColor;
   who?: string[];
@@ -27,7 +27,7 @@ export default class AddChallengeClientMethod extends AbstractClientMethod {
     super(
       parent,
       "addchallenge",
-      ["clocks", "rated", "color", "opponentclocks"],
+      ["clocks", "rated", "color", "who", "opponentclocks"],
       [],
       connectionservice,
     );
@@ -36,8 +36,8 @@ export default class AddChallengeClientMethod extends AbstractClientMethod {
 
   protected validatearguments(obj: AddChallengeClientObject): void {
     function checkclock(clock: any): void {
-      check(obj.clock, Object);
-      check(obj.clock.minutes, Number);
+      check(obj.clocks, Object);
+      check(obj.clocks.minutes, Number);
       if (clock.adjust) {
         check(clock.adjust.incseconds, Number);
         if (["inc", "us", "bronstein"].indexOf(clock.adjust.type) === -1)
@@ -47,7 +47,7 @@ export default class AddChallengeClientMethod extends AbstractClientMethod {
 
     check(obj, Object);
     check(obj.rated, Boolean);
-    checkclock(obj.clock);
+    checkclock(obj.clocks);
     check(obj.who, Match.Maybe([String]));
 
     if (obj.opponentclocks) checkclock(obj.opponentclocks);
@@ -64,7 +64,7 @@ export default class AddChallengeClientMethod extends AbstractClientMethod {
       this.challengeservice.addChallenge(
         obj.connection,
         obj.rated,
-        obj.clock,
+        obj.clocks,
         obj.color,
         obj.who,
         obj.opponentclocks,

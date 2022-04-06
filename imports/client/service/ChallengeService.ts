@@ -3,21 +3,25 @@ import ClientChallengeReadOnlyDao from "/imports/client/dao/ClientChallengeReadO
 import { Meteor } from "meteor/meteor";
 import CommonChallengeService from "/lib/challenges/CommonChallengeService";
 import { ClockSettings, PieceColor } from "/lib/records/ChallengeRecord";
-import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonChallengeDao";
+import ClientChallengeButtonReadOnlyDao from "../dao/ClientChallengeButtonReadOnlyDao";
 
 export default class ChallengeService extends CommonChallengeService {
   private dao: ClientChallengeReadOnlyDao;
 
-  private buttondao: CommonReadOnlyButtonChallengeDao;
+  private buttondao: ClientChallengeButtonReadOnlyDao;
 
   public get events() {
     return this.dao.events;
   }
 
+  public get buttonEvents() {
+    return this.buttondao.events;
+  }
+
   constructor(
     parent: Stoppable | null,
     dao: ClientChallengeReadOnlyDao,
-    buttondao: CommonReadOnlyButtonChallengeDao,
+    buttondao: ClientChallengeButtonReadOnlyDao,
   ) {
     super(parent, buttondao);
     this.dao = dao;
