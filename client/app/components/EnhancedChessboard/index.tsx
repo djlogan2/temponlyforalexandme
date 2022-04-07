@@ -53,6 +53,7 @@ const EnhancedChessboard: FC<IEnhancedChessboard> = ({
       onUpdateCircles={() => null}
       onUpdateArrows={() => null}
       onMove={onMoveHandler}
+      handleDelete={() => null}
       smartMoves={smartMoves}
       showLegalMoves={showLegalMoves}
       smallSize={smallSize}
