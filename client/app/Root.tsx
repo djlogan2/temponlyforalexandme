@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import App from "./App";
@@ -16,6 +16,9 @@ import CommonReadOnlyUserDao from "/imports/dao/CommonReadOnlyUserDao";
 import Clienti18n from "/lib/client/Clienti18n";
 import ClientServer from "/lib/client/ClientServer";
 import ClientTheme from "/lib/client/ClientTheme";
+import i18next from "./i18next";
+import { LoadingPlaceholder } from "./shared";
+import { TI18NDoc } from "./types";
 
 //---
 globalThis.subscriptionservice = new SubscriptionService(null);
@@ -51,15 +54,67 @@ export const gameservice = new GameService(
   globalThis.icc.connection,
 );
 
-globalThis.connection.loggedin(() => {
-  challenges.addChallenge({ minutes: 15 }, true);
+i18n.events.on("translationchanged", (translation: TI18NDoc) => {
+  if (!translation) {
+    return;
+  }
+
+  const { locale, token, text } = translation;
+
+  i18next.addResource(locale, "translation", token, text);
 });
 
-const Root = () => (
-  <ThemeProvider themeService={theme}>
-    <Theme />
-    <App />
-  </ThemeProvider>
-);
+const Root = () => {
+  const [isGameServiceReady, setIsGameServiceReady] = useState(false);
+  const [isChallengesReady, setIsChallengesReady] = useState(false);
+  const [isChallengesButtonsReady, setIsChallengesButtonsReady] =
+    useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const onGameServiceReady = () => {
+      setIsGameServiceReady(true);
+
+      gameservice.events.off("ready", onGameServiceReady);
+    };
+
+    const onChallengesReady = () => {
+      setIsChallengesReady(true);
+
+      challenges.events.off("ready", onChallengesReady);
+    };
+
+    const onChallengesButtonsReady = () => {
+      setIsChallengesButtonsReady(true);
+
+      challenges.buttonEvents.off("ready", onChallengesButtonsReady);
+    };
+
+    const onLogin = () => {
+      setIsLoggedIn(true);
+      globalThis.icc.connection.events.off("loggedin", onLogin);
+    };
+
+    gameservice.events.on("ready", onGameServiceReady);
+    challenges.events.on("ready", onChallengesReady);
+    challenges.buttonEvents.on("ready", onChallengesButtonsReady);
+    globalThis.icc.connection.events.on("loggedin", onLogin);
+  });
+
+  const isAppReady =
+    isGameServiceReady &&
+    isChallengesReady &&
+    isChallengesButtonsReady &&
+    isLoggedIn;
+
+  return isAppReady ? (
+    <ThemeProvider themeService={theme}>
+      <Theme />
+      <App />
+    </ThemeProvider>
+  ) : (
+    <LoadingPlaceholder />
+  );
+};
 
 export default Root;

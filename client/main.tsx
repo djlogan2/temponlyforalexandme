@@ -1,8 +1,14 @@
 import { Meteor } from "meteor/meteor";
-import { render } from "react-dom";
 import * as React from "react";
+import { render } from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import Root from "./app/Root";
 
 Meteor.startup(() => {
-  render(<Root />, document.getElementById("root"));
+  render(
+    <Router>
+      <Root />
+    </Router>,
+    document.getElementById("root"),
+  );
 });
