@@ -51,6 +51,10 @@ export const gameservice = new GameService(
   globalThis.icc.connection,
 );
 
+globalThis.connection.loggedin(() => {
+  challenges.addChallenge({ minutes: 15 }, true);
+});
+
 const Root = () => (
   <ThemeProvider themeService={theme}>
     <Theme />

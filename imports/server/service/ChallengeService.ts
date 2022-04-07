@@ -281,7 +281,7 @@ export default class ChallengeService extends CommonChallengeService {
 
     const selector: Mongo.Selector<UserChallengeRecord> = {
       $and: [
-        { $owner: { $ne: challenge.owner } },
+        { owner: { $ne: challenge.owner } },
         { isolation_group: challenge.isolation_group },
         { rated: challenge.rated },
         { "clock.minutes": ourclock.minutes },

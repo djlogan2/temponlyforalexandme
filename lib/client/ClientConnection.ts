@@ -128,6 +128,18 @@ export default class ClientConnection extends AbstractTimestampNode {
     });
   }
 
+  public loggedin(callback: () => void): void {
+    if (this.pUser) {
+      callback();
+      return;
+    }
+    const fn = () => {
+      callback();
+      this.pEvents.off("loggedin", fn);
+    };
+    this.pEvents.on("loggedin", fn);
+  }
+
   private isActive(): void {
     console.log("isActive called");
     if (this.focused) this.idle = 0;
