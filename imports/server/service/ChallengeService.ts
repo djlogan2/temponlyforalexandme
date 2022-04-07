@@ -23,6 +23,7 @@ import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonC
 import ChallengeButtonPublication from "/imports/server/publications/ChallengeButtonPublication";
 import ChallengePublication from "/imports/server/publications/ChallengePublication";
 import PublicationService from "/imports/server/service/PublicationService";
+import AddChallengeClientMethod from "../clientmethods/challenge/AddChallengeClientMethod";
 
 export default class ChallengeService extends CommonChallengeService {
   private instanceservice: InstanceService;
@@ -36,6 +37,8 @@ export default class ChallengeService extends CommonChallengeService {
   private readonly userdao: WritableUserDao;
 
   private readonly challengemethod: ChallengeClientMethod;
+
+  private readonly addchallengemethod: AddChallengeClientMethod;
 
   private readonly pUserLogin: (user: ServerUser) => void;
 
@@ -68,6 +71,12 @@ export default class ChallengeService extends CommonChallengeService {
     this.userdao = userdao;
 
     this.challengemethod = new ChallengeClientMethod(
+      this,
+      connectionservice,
+      this,
+    );
+
+    this.addchallengemethod = new AddChallengeClientMethod(
       this,
       connectionservice,
       this,
@@ -201,7 +210,7 @@ export default class ChallengeService extends CommonChallengeService {
   public addChallenge(
     connection: ServerConnection,
     rated: boolean,
-    clock: ClockSettings,
+    clocks: ClockSettings,
     color?: PieceColor,
     who?: string[],
     opponentclock?: ClockSettings,
@@ -209,8 +218,10 @@ export default class ChallengeService extends CommonChallengeService {
     if (!connection.user) throw new Meteor.Error("INVALID_USER");
 
     if (who && who.length) {
-      if (who.indexOf(connection.user.id) !== -1)
+      if (who.indexOf(connection.user.id) === -1) {
         throw new Meteor.Error("INVALID_USERID");
+      }
+
       if (
         this.userdao.count({
           isolation_group: connection.user.isolation_group,
@@ -226,7 +237,7 @@ export default class ChallengeService extends CommonChallengeService {
       instance_id: this.instanceservice.instanceid,
       connection_id: connection._id,
       rated,
-      clock,
+      clocks,
       who: who || [],
       qualifies: [],
       declined: [],
@@ -266,11 +277,11 @@ export default class ChallengeService extends CommonChallengeService {
   private findMatchingChallenge(
     challenge: Mongo.OptionalId<UserChallengeRecord>,
   ): UserChallengeRecord | null {
-    const ourclock = challenge.opponentclocks || challenge.clock;
+    const ourclock = challenge.opponentclocks || challenge.clocks;
 
     const selector: Mongo.Selector<UserChallengeRecord> = {
       $and: [
-        { $owner: { $ne: challenge.owner } },
+        { owner: { $ne: challenge.owner } },
         { isolation_group: challenge.isolation_group },
         { rated: challenge.rated },
         { "clock.minutes": ourclock.minutes },
@@ -315,14 +326,14 @@ export default class ChallengeService extends CommonChallengeService {
     connectionId: string,
     ownerid: string,
     isolationGroup: string,
-    clock: ClockSettings,
+    clocks: ClockSettings,
     rated: boolean,
     color: PieceColor | null,
     who: string[] | null,
     opponentclocks: ClockSettings | null,
   ): void {
     const userchallenge: Mongo.OptionalId<UserChallengeRecord> = {
-      clock,
+      clocks,
       connection_id: connectionId,
       declined: [],
       instance_id: this.instanceservice.instanceid,

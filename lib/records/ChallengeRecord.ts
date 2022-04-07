@@ -6,7 +6,7 @@ export type ClockSettings = { minutes: number; adjust?: IncrementType };
 export type PieceColor = "b" | "w";
 
 export interface BasicChallengeRecord {
-  clock: ClockSettings;
+  clocks: ClockSettings;
   opponentclocks?: ClockSettings;
   color?: PieceColor;
 }

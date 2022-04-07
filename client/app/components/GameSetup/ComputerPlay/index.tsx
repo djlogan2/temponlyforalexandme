@@ -28,7 +28,7 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
       gameservice.startComputerGame({
         skill_level: Math.max(1, Math.round((values.skill - 1000) / 100)),
         color: values.color as PieceColor,
-        clock: { minutes: values.time },
+        clocks: { minutes: values.time },
       });
       onCloseModal();
     },

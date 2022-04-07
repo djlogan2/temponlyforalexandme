@@ -7,11 +7,40 @@ import { useTheme } from "./theme";
 import { TI18NDoc } from "./types";
 import Home from "./pages/Home";
 import { challenges, gameservice } from "./Root";
+import { OneChallengeButton } from "/lib/records/ChallengeButtonRecord";
 
 const App = () => {
   const customTheme = useTheme();
   const [isGameServiceReady, setIsGameServiceReady] = useState(false);
+  const [isChallengesReady, setIsChallengesReady] = useState(false);
+  const [isChallengesButtonsReady, setIsChallengesButtonsReady] =
+    useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (isChallengesButtonsReady && isChallengesReady && isLoggedIn) {
+      const challenge: OneChallengeButton = {
+        name: "Challenge with me!",
+        challenge: {
+          rated: false,
+          isolation_group: "public",
+          clocks: {
+            minutes: 15,
+          },
+          color: "w",
+          opponentclocks: {
+            minutes: 15,
+          },
+        },
+      };
+
+      const id = globalThis.icc.connection.user?.id || "";
+
+      challenges.addChallenge({ minutes: 15 }, false, "w", [id], {
+        minutes: 15,
+      });
+    }
+  }, [isChallengesReady, isChallengesButtonsReady, isLoggedIn]);
 
   useEffect(() => {
     globalThis.icc.connection.events.on("loggedin", () => {
@@ -34,16 +63,24 @@ const App = () => {
     });
 
     challenges.events.on("ready", () => {
-      console.log(challenges.getButtons());
-
-      console.log("ready");
+      setIsChallengesReady(true);
     });
-    challenges.events.on("challengeadded", (id) => {
-      console.log(`added=${id}`);
+
+    challenges.buttonEvents.on("ready", () => {
+      // challenges.addChallenge()
+
+      setIsChallengesButtonsReady(true);
     });
   }, []);
 
-  return customTheme?.isReady && isLoggedIn && isGameServiceReady ? (
+  const isAppReady =
+    customTheme?.isReady &&
+    isLoggedIn &&
+    isGameServiceReady &&
+    isChallengesReady &&
+    isChallengesButtonsReady;
+
+  return isAppReady ? (
     <Router>
       <Switch>
         <Route exact path="/">

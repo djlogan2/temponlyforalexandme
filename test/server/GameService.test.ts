@@ -87,7 +87,7 @@ describe("GameService", function () {
     it("should fail 0 increment with ILLEGAL_TIME", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "inc", incseconds: 0 } },
+        clocks: { minutes: 15, adjust: { type: "inc", incseconds: 0 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -97,7 +97,7 @@ describe("GameService", function () {
     it("should fail 0 us with ILLEGAL_TIME", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "us", incseconds: 0 } },
+        clocks: { minutes: 15, adjust: { type: "us", incseconds: 0 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -107,7 +107,7 @@ describe("GameService", function () {
     it("should fail 0 bronstein with ILLEGAL_TIME", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "bronstein", incseconds: 0 } },
+        clocks: { minutes: 15, adjust: { type: "bronstein", incseconds: 0 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -117,7 +117,7 @@ describe("GameService", function () {
     it("should fail 0 minutes if there is no increment or delay", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 0 },
+        clocks: { minutes: 0 },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -127,7 +127,7 @@ describe("GameService", function () {
     it("should succeed with 0 minutes if there is increment or delay (bronstein)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 0, adjust: { type: "bronstein", incseconds: 60 } },
+        clocks: { minutes: 0, adjust: { type: "bronstein", incseconds: 60 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -137,7 +137,7 @@ describe("GameService", function () {
     it("should succeed with 0 minutes if there is increment or delay (us)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 0, adjust: { type: "us", incseconds: 60 } },
+        clocks: { minutes: 0, adjust: { type: "us", incseconds: 60 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -147,7 +147,7 @@ describe("GameService", function () {
     it("should succeed with 0 minutes if there is increment or delay (inc)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 0, adjust: { type: "inc", incseconds: 60 } },
+        clocks: { minutes: 0, adjust: { type: "inc", incseconds: 60 } },
       };
       gameservice.startGameFromChallenge(user, challenge, "x");
       chai.assert.fail("check user");
@@ -156,7 +156,7 @@ describe("GameService", function () {
     it("should fail if minutes is not an integer", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15.78, adjust: { type: "inc", incseconds: 60 } },
+        clocks: { minutes: 15.78, adjust: { type: "inc", incseconds: 60 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -166,7 +166,7 @@ describe("GameService", function () {
     it("should fail if minutes is negative", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: -15, adjust: { type: "inc", incseconds: 60 } },
+        clocks: { minutes: -15, adjust: { type: "inc", incseconds: 60 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -176,7 +176,7 @@ describe("GameService", function () {
     it("should fail if inc or delay is not an integer (inc)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "inc", incseconds: 60.86 } },
+        clocks: { minutes: 15, adjust: { type: "inc", incseconds: 60.86 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -186,7 +186,7 @@ describe("GameService", function () {
     it("should fail if inc or delay is not an integer (us)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "us", incseconds: 60.86 } },
+        clocks: { minutes: 15, adjust: { type: "us", incseconds: 60.86 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -196,7 +196,7 @@ describe("GameService", function () {
     it("should fail if inc or delay is not an integer (bronestein)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: {
+        clocks: {
           minutes: 15,
           adjust: { type: "bronstein", incseconds: 60.86 },
         },
@@ -209,7 +209,7 @@ describe("GameService", function () {
     it("should fail if inc or delay is negative (bronestein)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "bronstein", incseconds: -60 } },
+        clocks: { minutes: 15, adjust: { type: "bronstein", incseconds: -60 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -219,7 +219,7 @@ describe("GameService", function () {
     it("should fail if inc or delay is negative (us)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "us", incseconds: -60 } },
+        clocks: { minutes: 15, adjust: { type: "us", incseconds: -60 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -229,7 +229,7 @@ describe("GameService", function () {
     it("should fail if inc or delay is negative (inc)", function () {
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15, adjust: { type: "inc", incseconds: -60 } },
+        clocks: { minutes: 15, adjust: { type: "inc", incseconds: -60 } },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challenge, "x"),
@@ -239,15 +239,15 @@ describe("GameService", function () {
     it("should fail skill level is not within 1 and 10", function () {
       const challengeneg: ComputerChallengeRecord = {
         skill_level: -1,
-        clock: { minutes: 15 },
+        clocks: { minutes: 15 },
       };
       const challengezro: ComputerChallengeRecord = {
         skill_level: -1,
-        clock: { minutes: 15 },
+        clocks: { minutes: 15 },
       };
       const challengepos: ComputerChallengeRecord = {
         skill_level: -1,
-        clock: { minutes: 15 },
+        clocks: { minutes: 15 },
       };
       expect(() =>
         gameservice.startGameFromChallenge(user, challengeneg, "x"),
@@ -295,7 +295,7 @@ describe("GameService", function () {
       };
       const challenge: ComputerChallengeRecord = {
         skill_level: 1,
-        clock: { minutes: 15 },
+        clocks: { minutes: 15 },
         color: "w",
       };
 

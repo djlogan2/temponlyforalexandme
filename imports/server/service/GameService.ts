@@ -132,10 +132,10 @@ export default class GameService extends CommonGameService {
         );
     }
 
-    let etime = challenge.clock.minutes;
+    let etime = challenge.clocks.minutes;
 
-    if (challenge.clock.adjust)
-      etime += Math.round((2.0 * challenge.clock.adjust.incseconds) / 3.0);
+    if (challenge.clocks.adjust)
+      etime += Math.round((2.0 * challenge.clocks.adjust.incseconds) / 3.0);
 
     if (opponentsEtime && opponentsEtime !== etime) return null;
 
@@ -164,22 +164,22 @@ export default class GameService extends CommonGameService {
 
     // It has to be a positive integer or zero
     if (
-      challenge.clock.minutes < 0 ||
-      !Number.isInteger(challenge.clock.minutes)
+      challenge.clocks.minutes < 0 ||
+      !Number.isInteger(challenge.clocks.minutes)
     )
       throw new Meteor.Error("ILLEGAL_TIME");
 
     // If it's zero, we have to have a non-zero increment/delay
-    if (challenge.clock.minutes === 0) {
-      if (!challenge.clock.adjust?.incseconds)
+    if (challenge.clocks.minutes === 0) {
+      if (!challenge.clocks.adjust?.incseconds)
         throw new Meteor.Error("ILLEGAL_TIME");
     }
 
     // If inc/delay exists, it must be a positive integer
-    if (challenge.clock.adjust) {
+    if (challenge.clocks.adjust) {
       if (
-        challenge.clock.adjust.incseconds < 1 ||
-        !Number.isInteger(challenge.clock.adjust.incseconds)
+        challenge.clocks.adjust.incseconds < 1 ||
+        !Number.isInteger(challenge.clocks.adjust.incseconds)
       )
         throw new Meteor.Error("ILLEGAL_TIME");
     }
@@ -210,8 +210,8 @@ export default class GameService extends CommonGameService {
       (ratingtype ? challengeuser?.ratings[ratingtype].rating : 1600) || 1600;
 
     if (opponentcolor === "w") {
-      whiteClockSettings = challenge.clock;
-      blackClockSettings = challenge.opponentclocks || challenge.clock;
+      whiteClockSettings = challenge.clocks;
+      blackClockSettings = challenge.opponentclocks || challenge.clocks;
       if (challengeuser) {
         whiteplayer = {
           userid: challenger.id,
@@ -225,8 +225,8 @@ export default class GameService extends CommonGameService {
         };
       }
     } else {
-      blackClockSettings = challenge.clock;
-      whiteClockSettings = challenge.opponentclocks || challenge.clock;
+      blackClockSettings = challenge.clocks;
+      whiteClockSettings = challenge.opponentclocks || challenge.clocks;
       if (challengeuser) {
         blackplayer = {
           userid: challenger.id,
