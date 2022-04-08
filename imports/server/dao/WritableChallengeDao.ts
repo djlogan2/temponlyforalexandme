@@ -8,6 +8,7 @@ export default class WritableChallengeDao extends WritableReactiveDao<UserChalle
 
   public constructor(parent: Stoppable | null) {
     super(parent, "challenges");
+    this.start({});
   }
 
   public get events() {

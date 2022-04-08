@@ -87,7 +87,8 @@ export default class ConnectionService extends Stoppable {
 
   private connectionIdleMethod: ConnectionIdleMethod;
 
-  private events = new EventEmitter();
+  private pEvents: EventEmitter<"userlogin" | "userlogout" | string> =
+    new EventEmitter();
 
   private logger = new ServerLogger(this, "server/ConnectionService_ts");
 
@@ -96,6 +97,10 @@ export default class ConnectionService extends Stoppable {
   private readonly themeservice: ThemeService;
 
   private loggerservice: LoggerService;
+
+  public get events() {
+    return this.pEvents;
+  }
 
   constructor() {
     super(null);
@@ -227,7 +232,7 @@ export default class ConnectionService extends Stoppable {
 
   private onClose(ourconnection: ServerConnection): void {
     this.logger.debug(() => `${ourconnection.connectionid} onClose`);
-    if (ourconnection.user) this.events.emit("userlogout", ourconnection.user);
+    if (ourconnection.user) this.pEvents.emit("userlogout", ourconnection.user);
     ourconnection.stop();
     delete globalThis.ICCServer.connections[ourconnection.connectionid];
     this.connectiondao.remove(ourconnection._id);
@@ -257,7 +262,7 @@ export default class ConnectionService extends Stoppable {
     );
     globalThis.ICCServer.connections[connection.id] = ourconnection;
     connection.onClose(() => this.onClose(ourconnection));
-    this.events.emit(connection.id, ourconnection);
+    this.pEvents.emit(connection.id, ourconnection);
   }
 
   public async login(
@@ -272,8 +277,8 @@ export default class ConnectionService extends Stoppable {
     const connection = await this.getConnection(connectionid);
     const userid = connection.login(hashtoken, locale);
     this.connectiondao.update({ connectionid }, { $set: { userid } });
-    if (this.events.listenerCount("userlogin")) {
-      this.events.emit(
+    if (this.pEvents.listenerCount("userlogin")) {
+      this.pEvents.emit(
         "userlogin",
         new ServerUser(
           this,
@@ -312,13 +317,13 @@ export default class ConnectionService extends Stoppable {
       );
       const func = (ourconnection: ServerConnection) => {
         resolve(ourconnection);
-        this.events.off(connection, func);
+        this.pEvents.off(connection, func);
         this.logger.debug(
           () =>
             `getConnection conn=${connection} finally ready, resolving event`,
         );
       };
-      this.events.on(connection, func);
+      this.pEvents.on(connection, func);
     });
   }
 }

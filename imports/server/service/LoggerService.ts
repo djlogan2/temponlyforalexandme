@@ -95,7 +95,7 @@ export default class LoggerService extends Stoppable {
       userid || "-"
     } ${connection || "-"} ${module} ${level} ${text}`;
     // eslint-disable-next-line no-console
-    // console.log(logstring);
+    console.log(logstring);
   }
 
   public changeDebugLevel(module: string, newlevel: LOGLEVEL): void {

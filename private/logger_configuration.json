@@ -3,6 +3,7 @@
   "AbstractClientMethod_ts": "ERROR",
   "AbstractTimestampNode_ts": "ERROR",
   "ChallengePublication_ts": "TRACE",
+  "ChallengeService_ts": "TRACE",
   "client/ClientConnection": "ERROR",
   "ClientComputerPlayedGame_ts": "ERROR",
   "ClientTheme_js": "ERROR",

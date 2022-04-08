@@ -55,15 +55,6 @@ export default class ChallengePublication extends UserChangePublication<UserChal
     this.logger2.debug(() => `doit`);
     if (!this.user) return;
 
-    if (!this.user.isAuthorized(["play_rated_games", "play_unrated_games"])) {
-      this.killCursor();
-      return;
-    }
-
-    let checkrated = null;
-    if (!this.user.isAuthorized("play_rated_games")) checkrated = false;
-    else if (!this.user.isAuthorized("play_unrated_games")) checkrated = true;
-
     const selector: Mongo.Selector<UserChallengeRecord> = {
       $and: [
         { isolation_group: this.user.isolation_group }, // Must be in isolation group
@@ -80,11 +71,6 @@ export default class ChallengePublication extends UserChangePublication<UserChal
         },
       ],
     };
-
-    if (checkrated !== null) {
-      // @ts-ignore
-      selector.$and[1].$or[1].push({ rated: checkrated });
-    }
     this.setSelector(selector);
   }
 

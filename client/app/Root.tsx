@@ -51,8 +51,9 @@ export const gameservice = new GameService(
   globalThis.icc.connection,
 );
 
+const minutes = Math.round(Math.random() * 600);
 globalThis.connection.loggedin(() => {
-  challenges.addChallenge({ minutes: 15 }, true);
+  challenges.addChallenge({ minutes }, true);
 });
 
 const Root = () => (

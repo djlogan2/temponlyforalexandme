@@ -24,9 +24,12 @@ import ChallengeButtonPublication from "/imports/server/publications/ChallengeBu
 import ChallengePublication from "/imports/server/publications/ChallengePublication";
 import PublicationService from "/imports/server/service/PublicationService";
 import AddChallengeClientMethod from "../clientmethods/challenge/AddChallengeClientMethod";
+import ServerLogger from "/lib/server/ServerLogger";
 
 export default class ChallengeService extends CommonChallengeService {
   private instanceservice: InstanceService;
+
+  private readonly logger: ServerLogger;
 
   private readonly readonlydao: CommonReadOnlyChallengeDao;
 
@@ -64,6 +67,7 @@ export default class ChallengeService extends CommonChallengeService {
     publicationservice: PublicationService,
   ) {
     super(parent, buttondao);
+    this.logger = new ServerLogger(this, "ChallengeService_ts");
     this.instanceservice = instanceservice;
     this.readonlydao = readonlydao;
     this.dao = dao;
@@ -102,10 +106,17 @@ export default class ChallengeService extends CommonChallengeService {
 
     this.pChallengeAdded = (challenge: UserChallengeRecord) =>
       this.challengeAdded(challenge);
+
+    connectionservice.events.on("userlogin", this.pUserLogin);
+    connectionservice.events.on("userlogout", this.pUserLogout);
+
     this.dao.events.on("added", (challenge) => this.pChallengeAdded(challenge));
   }
 
   private challengeAdded(challenge: UserChallengeRecord): void {
+    this.logger.debug(
+      () => `challengeAdded challenge=${JSON.stringify(challenge)}`,
+    );
     const owner = this.userdao.get(challenge.owner);
     if (!owner) {
       throw new Meteor.Error("UNABLE_TO_FIND_USER");
@@ -135,6 +146,7 @@ export default class ChallengeService extends CommonChallengeService {
   }
 
   private userLogin(user: ServerUser): void {
+    this.logger.debug(() => `userLogin userid=${user.id}`);
     user.events.on("roleadded", (role: UserRoles) =>
       this.pRoleAdded(user, role),
     );
@@ -145,13 +157,16 @@ export default class ChallengeService extends CommonChallengeService {
   }
 
   private userLogout(user: ServerUser): void {
+    this.logger.debug(() => `userLogout userid=${user.id}`);
     user.events.off("roleadded", this.pRoleAdded);
     user.events.off("roleremoved", this.pRoleRemoved);
     this.dao.update({ qualifies: user.id }, { $pull: { qualifies: user.id } });
+    this.dao.update({ declined: user.id }, { $pull: { declined: user.id } });
     this.dao.removeMany({ owner: user.id });
   }
 
   private userRoleRemoved(user: ServerUser, role: UserRoles): void {
+    this.logger.debug(() => `userRoleRemoved userid=${user.id} role=${role}`);
     if (role !== "play_rated_games" && role !== "play_unrated_games") return;
     this.dao.update(
       {
@@ -163,11 +178,13 @@ export default class ChallengeService extends CommonChallengeService {
   }
 
   private userRoleAdded(user: ServerUser, role: UserRoles): void {
+    this.logger.debug(() => `userRoleAdded userid=${user.id} role=${role}`);
     if (role !== "play_rated_games" && role !== "play_unrated_games") return;
     this.addToExistingChallenges(user);
   }
 
   private addToExistingChallenges(user: ServerUser): void {
+    this.logger.debug(() => `addtoExistingChallenges userid=${user.id}`);
     if (
       !user.isAuthorized("play_rated_games") &&
       !user.isAuthorized("play_unrated_games")
@@ -200,6 +217,12 @@ export default class ChallengeService extends CommonChallengeService {
     }
 
     const ids = this.dao.readMany(selector)?.map((c) => c._id);
+    this.logger.debug(
+      () =>
+        `addToExistingChallenge user=${user.id} qualifies for=${JSON.stringify(
+          ids,
+        )}`,
+    );
     if (ids && ids.length)
       this.dao.update(
         { _id: { $in: ids } },
@@ -215,6 +238,7 @@ export default class ChallengeService extends CommonChallengeService {
     who?: string[],
     opponentclock?: ClockSettings,
   ): void {
+    this.logger.debug(() => `addChallenge`);
     if (!connection.user) throw new Meteor.Error("INVALID_USER");
 
     if (who && who.length) {
@@ -247,21 +271,26 @@ export default class ChallengeService extends CommonChallengeService {
     if (opponentclock) challengerecord.opponentclocks = opponentclock;
 
     let matchingChallenge;
+    let ownMatchingChallenges = 0;
     //
     // We have to keep looking for challenges until we run out of challenges to find
     //
     do {
       matchingChallenge = this.findMatchingChallenge(challengerecord);
       if (matchingChallenge)
-        if (this.acceptChallenge(connection, matchingChallenge._id))
+        if (matchingChallenge.owner === connection.user.id) {
+          ownMatchingChallenges += 1;
+        } else if (this.acceptChallenge(connection, matchingChallenge._id))
           // Another instance could snag it. If it doesn't, we are golden!
           return;
     } while (matchingChallenge);
 
-    this.dao.insert(challengerecord);
+    if (!ownMatchingChallenges) this.dao.insert(challengerecord);
+    else throw new Meteor.Error("DUPLICATE_CHALLENGE");
   }
 
   private acceptChallenge(connection: ServerConnection, id: string): boolean {
+    this.logger.debug(() => `acceptChallenge id=${id}`);
     if (!connection.user) throw new Meteor.Error("UNABLE_TO_FIND_USER");
     const challenge = this.dao.get(id);
     if (!challenge) return false;
@@ -277,22 +306,29 @@ export default class ChallengeService extends CommonChallengeService {
   private findMatchingChallenge(
     challenge: Mongo.OptionalId<UserChallengeRecord>,
   ): UserChallengeRecord | null {
+    this.logger.debug(() => `findMatchingChallenge challenge=${challenge}`);
     const ourclock = challenge.opponentclocks || challenge.clocks;
 
     const selector: Mongo.Selector<UserChallengeRecord> = {
-      $and: [
-        { owner: { $ne: challenge.owner } },
-        { isolation_group: challenge.isolation_group },
-        { rated: challenge.rated },
-        { "clock.minutes": ourclock.minutes },
+      $or: [
         {
-          $or: [
-            { who: { $exists: false } },
-            { who: { $size: 0 } },
-            { who: challenge.owner },
+          owner: challenge.owner,
+        },
+        {
+          $and: [
+            { isolation_group: challenge.isolation_group },
+            { rated: challenge.rated },
+            { "clock.minutes": ourclock.minutes },
+            {
+              $or: [
+                { who: { $exists: false } },
+                { who: { $size: 0 } },
+                { who: challenge.owner },
+              ],
+            },
+            { declined: { $ne: challenge.owner } },
           ],
         },
-        { declined: { $ne: challenge.owner } },
       ],
     };
 
@@ -306,6 +342,8 @@ export default class ChallengeService extends CommonChallengeService {
 
     const challenges = this.dao.readMany(selector);
     if (!challenges || !challenges.length) return null;
+    // TODO: Probably should pick the one with thought (rematches, or new opponents, or closest in rating...
+    //  maybe all of them with weights.
     return challenges[0];
   }
 
@@ -332,6 +370,7 @@ export default class ChallengeService extends CommonChallengeService {
     who: string[] | null,
     opponentclocks: ClockSettings | null,
   ): void {
+    this.logger.debug(() => `internalAddChallenge`);
     const userchallenge: Mongo.OptionalId<UserChallengeRecord> = {
       clocks,
       connection_id: connectionId,
@@ -349,14 +388,17 @@ export default class ChallengeService extends CommonChallengeService {
   }
 
   public internalAddChallengeButton(): void {
+    this.logger.debug(() => `internalAddChallengeButton`);
     throw new Error("Method not implemented.");
   }
 
   public internalUpdateChallengeButton(): void {
+    this.logger.debug(() => `internalUpdateChallengeButton`);
     throw new Error("Method not implemented.");
   }
 
   public internalRemoveChallengebutton(): void {
+    this.logger.debug(() => `internalRemoveChallengebutton`);
     throw new Error("Method not implemented.");
   }
 }
