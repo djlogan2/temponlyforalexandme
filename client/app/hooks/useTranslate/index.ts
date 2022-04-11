@@ -11,13 +11,13 @@ const useTranslate = () => {
 
   const t = useCallback(
     (key: string, options?: string | TOptions<StringMap> | undefined) => {
-      if (!i18next.getResource(i18next.language, "translation", key)) {
+      if (!i18next.exists(key, { lng: i18next.language, ns: "translation" })) {
         i18n.findTranslation(key, i18next.language);
       }
 
       return translate(key, options);
     },
-    [],
+    [translate, i18next],
   );
 
   return { t, i18next, ...rest };

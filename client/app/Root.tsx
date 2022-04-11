@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import App from "./App";
+import { LoadingPlaceholder } from "./shared";
 import Theme, { ThemeProvider } from "./theme";
 import ClientChallengeButtonReadOnlyDao from "/imports/client/dao/ClientChallengeButtonReadOnlyDao";
 import ClientChallengeReadOnlyDao from "/imports/client/dao/ClientChallengeReadOnlyDao";
 import Clienti18nReadOnlyDao from "/imports/client/dao/Clienti18nReadOnlyDao";
 import ClientStartedGameReadOnlyDao from "/imports/client/dao/ClientStartedGameReadOnlyDao";
-import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import ClientThemeReadOnlyDao from "/imports/client/dao/ClientThemeReadOnlyDao";
+import ReadOnlyLoggerConfigurationDao from "/imports/client/dao/ReadOnlyLoggerConfigurationDao";
 import ChallengeService from "/imports/client/service/ChallengeService";
 import GameService from "/imports/client/service/GameService";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
@@ -51,16 +52,41 @@ export const gameservice = new GameService(
   globalThis.icc.connection,
 );
 
-// const minutes = Math.round(Math.random() * 600);
-// globalThis.connection.loggedin(() => {
-//   challenges.addChallenge({ minutes }, true);
-// });
+const Root = () => {
+  const [isAppReady, setIsAppReady] = useState(false);
 
-const Root = () => (
-  <ThemeProvider themeService={theme}>
-    <Theme />
-    <App />
-  </ThemeProvider>
-);
+  useEffect(() => {
+    const GLOBAL_SERVICES = [
+      [gameservice, "ready"],
+      [challenges, "ready"],
+      [globalThis.icc.connection, "loggedin"],
+    ] as const;
+
+    let servicesReady = 0;
+
+    GLOBAL_SERVICES.forEach(([service, e]) => {
+      const onServiceReady = () => {
+        servicesReady++;
+
+        if (servicesReady === GLOBAL_SERVICES.length) {
+          setIsAppReady(true);
+        }
+
+        service.events.off(e as any, onServiceReady);
+      };
+
+      service.events.on(e as any, onServiceReady);
+    });
+  }, []);
+
+  return isAppReady ? (
+    <ThemeProvider themeService={theme}>
+      <Theme />
+      <App />
+    </ThemeProvider>
+  ) : (
+    <LoadingPlaceholder />
+  );
+};
 
 export default Root;
