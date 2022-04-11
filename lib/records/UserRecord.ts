@@ -3,6 +3,8 @@ import { UserRoles } from "../enums/Roles";
 export interface HashToken {
   hashtoken: string;
   lastUsed: Date;
+  instance_id?: string;
+  online: boolean;
 }
 
 export interface RatingObject {
@@ -26,7 +28,7 @@ export default interface UserRecord {
   isdeveloper?: boolean;
   roles: UserRoles[];
   titles?: string[];
-  online: boolean;
+  // online: boolean;
   ratings: {
     bullet: RatingObject;
     blitz: RatingObject;

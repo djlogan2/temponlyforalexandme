@@ -122,27 +122,34 @@ export default class ChallengeService extends CommonChallengeService {
       throw new Meteor.Error("UNABLE_TO_FIND_USER");
     }
 
-    const selector: Mongo.Selector<UserRecord> = { online: true };
+    const selector: Mongo.Selector<UserRecord> = {
+      isolation_group: challenge.isolation_group,
+      "hashTokens.instance_id": this.instanceservice.instanceid,
+    };
 
     if (challenge.who && challenge.who.length) {
       selector._id = { $in: challenge.who };
     } else {
-      selector.isolation_group = owner.isolation_group;
-      selector.instance_id = this.instanceservice.instanceid;
+      selector._id = { $ne: challenge.owner };
     }
 
-    const qualified = this.userdao.readMany(selector);
-    if (!qualified) return;
+    if (challenge.rated) selector.roles = "play_rated_games";
+    else selector.roles = "play_unrated_games";
 
-    const qualifiedIds = qualified
-      .filter(
-        (q) =>
-          (challenge.rated && q.roles.some((r) => r === "play_rated_games")) ||
-          (challenge.rated && q.roles.some((r) => r === "play_unrated_games")),
-      )
-      .map((q) => q._id);
+    this.logger.debug(
+      () => `challengeAdded selector=${JSON.stringify(selector)}`,
+    );
+    const qualified = this.userdao.readMany(selector, "include", ["_id"]);
+    if (!qualified || !qualified.length) return;
 
-    this.dao.update({ _id: challenge._id }, { $addToSet: qualifiedIds });
+    const qualifiedIds = qualified.map((q) => q._id);
+    this.logger.debug(() => `challengeAdded qualifiedIds=${qualifiedIds}`);
+
+    if (qualifiedIds && qualifiedIds.length)
+      this.dao.update(
+        { _id: challenge._id },
+        { $addToSet: { qualifies: { $each: qualifiedIds } } },
+      );
   }
 
   private userLogin(user: ServerUser): void {
@@ -285,8 +292,12 @@ export default class ChallengeService extends CommonChallengeService {
           return;
     } while (matchingChallenge);
 
-    if (!ownMatchingChallenges) this.dao.insert(challengerecord);
+    if (!ownMatchingChallenges)
+      challengerecord._id = this.dao.insert(challengerecord);
     else throw new Meteor.Error("DUPLICATE_CHALLENGE");
+
+    if (challengerecord._id)
+      this.challengeAdded(challengerecord as UserChallengeRecord);
   }
 
   private acceptChallenge(connection: ServerConnection, id: string): boolean {

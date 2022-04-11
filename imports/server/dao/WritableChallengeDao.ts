@@ -6,9 +6,11 @@ import Stoppable from "/lib/Stoppable";
 export default class WritableChallengeDao extends WritableReactiveDao<UserChallengeRecord> {
   private pEvents = new EventEmitter<"added" | "removed" | "ready">();
 
-  public constructor(parent: Stoppable | null) {
+  // eslint-disable-next-line camelcase
+  public constructor(parent: Stoppable | null, instance_id: string) {
     super(parent, "challenges");
-    this.start({});
+    // eslint-disable-next-line camelcase
+    this.start({ instance_id: { $ne: instance_id } });
   }
 
   public get events() {
