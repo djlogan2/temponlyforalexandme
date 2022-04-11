@@ -1,46 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import i18next from "./i18next";
-import { ComponentsView, GameAnalysis, GameMarkup } from "/client/app/pages";
+import Home from "./pages/Home";
+import { challenges, gameservice } from "./Root";
 import LoadingPlaceholder from "./shared/LoadingPlaceholder";
 import { useTheme } from "./theme";
 import { TI18NDoc } from "./types";
-import Home from "./pages/Home";
-import { challenges, gameservice } from "./Root";
-import { OneChallengeButton } from "/lib/records/ChallengeButtonRecord";
+import { ComponentsView, GameAnalysis, GameMarkup } from "/client/app/pages";
 
 const App = () => {
   const customTheme = useTheme();
   const [isGameServiceReady, setIsGameServiceReady] = useState(false);
   const [isChallengesReady, setIsChallengesReady] = useState(false);
-  const [isChallengesButtonsReady, setIsChallengesButtonsReady] =
-    useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (isChallengesButtonsReady && isChallengesReady && isLoggedIn) {
-      const challenge: OneChallengeButton = {
-        name: "Challenge with me!",
-        challenge: {
-          rated: false,
-          isolation_group: "public",
-          clocks: {
-            minutes: 15,
-          },
-          color: "w",
-          opponentclocks: {
-            minutes: 15,
-          },
-        },
-      };
-
+    if (isChallengesReady && isLoggedIn) {
       const id = globalThis.icc.connection.user?.id || "";
 
       challenges.addChallenge({ minutes: 15 }, false, "w", [id], {
         minutes: 15,
       });
     }
-  }, [isChallengesReady, isChallengesButtonsReady, isLoggedIn]);
+  }, [isChallengesReady, isLoggedIn]);
 
   useEffect(() => {
     globalThis.icc.connection.events.on("loggedin", () => {
@@ -65,20 +47,13 @@ const App = () => {
     challenges.events.on("ready", () => {
       setIsChallengesReady(true);
     });
-
-    challenges.buttonEvents.on("ready", () => {
-      // challenges.addChallenge()
-
-      setIsChallengesButtonsReady(true);
-    });
   }, []);
 
   const isAppReady =
     customTheme?.isReady &&
     isLoggedIn &&
     isGameServiceReady &&
-    isChallengesReady &&
-    isChallengesButtonsReady;
+    isChallengesReady;
 
   return isAppReady ? (
     <Router>
