@@ -138,7 +138,10 @@ export default class ConnectionService extends Stoppable {
 
     this.challengedao = new ServerReadOnlyChallengeDao(this);
     this.buttondao = new ServerReadOnlyButtonChallengeDao(this);
-    this.writablechallengedao = new WritableChallengeDao(this);
+    this.writablechallengedao = new WritableChallengeDao(
+      this,
+      this.instanceservice.instanceid,
+    );
 
     this.connectionLoginMethod = new ConnectionLoginMethod(this, this);
     this.connectionIdleMethod = new ConnectionIdleMethod(this, this);
@@ -160,6 +163,7 @@ export default class ConnectionService extends Stoppable {
       this.themeservice,
       this.publicationservice,
       this,
+      this.instanceservice,
     );
     this.engineservice = new ChessEngineService(this);
     this.bookservice = new BookService(this, this.bookdao);

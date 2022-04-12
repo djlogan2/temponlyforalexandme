@@ -12,11 +12,14 @@ import ServerUserClientMethod from "/imports/server/clientmethods/ServerUserClie
 import ConnectionService from "/imports/server/service/ConnectionService";
 import { DEFAULT_ANONYMOUS_USER_ROLES } from "/lib/enums/Roles";
 import { BaseClient, Issuer } from "openid-client";
+import InstanceService from "/imports/server/service/InstanceService";
 
 export default class UserService extends Stoppable {
   private userdao: WritableUserDao;
 
   private themeservice: ThemeService;
+
+  private instanceservice: InstanceService;
 
   private logger;
 
@@ -30,11 +33,13 @@ export default class UserService extends Stoppable {
     themeservice: ThemeService,
     publicationservice: PublicationService,
     connectionservice: ConnectionService,
+    instanceservice: InstanceService,
   ) {
     super(parent);
     this.logger = new ServerLogger(this, "UserService_ts");
     this.userdao = userdao;
     this.themeservice = themeservice;
+    this.instanceservice = instanceservice;
     publicationservice.publishDao(
       null,
       (
@@ -71,8 +76,15 @@ export default class UserService extends Stoppable {
       locale,
       theme: this.themeservice.getDefaultTheme(),
       roles: DEFAULT_ANONYMOUS_USER_ROLES,
-      hashTokens: [{ hashtoken: hashToken, lastUsed: new Date() }],
-      online: true,
+      hashTokens: [
+        {
+          hashtoken: hashToken,
+          lastUsed: new Date(),
+          instance_id: this.instanceservice.instanceid,
+          online: true,
+        },
+      ],
+      // online: true,
       ratings: {
         bullet: { rating: 1600, won: 0, draw: 0, lost: 0 },
         blitz: { rating: 1600, won: 0, draw: 0, lost: 0 },

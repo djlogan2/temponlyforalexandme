@@ -1,34 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { debounce } from "lodash";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import i18next from "./i18next";
 import Home from "./pages/Home";
-import { challenges, gameservice } from "./Root";
-import LoadingPlaceholder from "./shared/LoadingPlaceholder";
+import { challenges } from "./Root";
 import { useTheme } from "./theme";
 import { TI18NDoc } from "./types";
 import { ComponentsView, GameAnalysis, GameMarkup } from "/client/app/pages";
 
 const App = () => {
   const customTheme = useTheme();
-  const [isGameServiceReady, setIsGameServiceReady] = useState(false);
-  const [isChallengesReady, setIsChallengesReady] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (isChallengesReady && isLoggedIn) {
-      const id = globalThis.icc.connection.user?.id || "";
+    const translations = new Map();
 
-      challenges.addChallenge({ minutes: 15 }, false, "w", [id], {
-        minutes: 15,
-      });
-    }
-  }, [isChallengesReady, isLoggedIn]);
+    const debounced = debounce((locale) => {
+      const resources = Object.fromEntries(translations);
 
-  useEffect(() => {
-    globalThis.icc.connection.events.on("loggedin", () => {
-      setIsLoggedIn(true);
-      globalThis.icc.connection.events.off("loggedin");
-    });
+      i18next.addResources(locale, "translation", resources);
+
+      translations.clear();
+    }, 500);
 
     i18n.events.on("translationchanged", (translation: TI18NDoc) => {
       if (!translation) {
@@ -37,25 +29,15 @@ const App = () => {
 
       const { locale, token, text } = translation;
 
-      i18next.addResource(locale, "translation", token, text);
+      translations.set(token, text);
+
+      return debounced(locale);
     });
 
-    gameservice.events.on("ready", () => {
-      setIsGameServiceReady(true);
-    });
-
-    challenges.events.on("ready", () => {
-      setIsChallengesReady(true);
-    });
+    challenges.events.on("challengeadded", console.log);
   }, []);
 
-  const isAppReady =
-    customTheme?.isReady &&
-    isLoggedIn &&
-    isGameServiceReady &&
-    isChallengesReady;
-
-  return isAppReady ? (
+  return (
     <Router>
       <Switch>
         <Route exact path="/">
@@ -72,8 +54,6 @@ const App = () => {
         </Route>
       </Switch>
     </Router>
-  ) : (
-    <LoadingPlaceholder />
   );
 };
 
