@@ -5,6 +5,8 @@ export type SubscriptionNames =
   | "i18n"
   | "logger_configuration"
   | "themes"
+  | "statics"
+  | "unqiestatics"
   /* tests */
   | "sub1"
   | "sub2"

@@ -12,6 +12,8 @@ export type CollectionNames =
   | "log_records"
   | "logger_configuration"
   | "themes"
+  | "statics"
+  | "uniquestatics"
   | "users"
   /* tests */
   | "dynamicselectorreactivereadonlytest"
