@@ -1,0 +1,137 @@
+.gameOver {
+  max-width: 41.8rem;
+  width: 100%;
+  padding-bottom: 5.5rem;
+
+  @media (max-width: 1024px) {
+    padding-bottom: 1.6rem;
+    max-width: 35.3rem;
+  }
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__closeIcon {
+    width: 2.4rem;
+    height: 2.4rem;
+    align-self: flex-end;
+  }
+
+  &__description {
+    color: var(--colorDarkTwo);
+    margin-top: 0.5rem;
+  }
+
+  &__actions {
+    margin-top: 0.8rem;
+    max-width: 30rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.8rem;
+
+    & > button:nth-child(1) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__rating-container {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    grid-gap: 0.9rem;
+    transform: translateX(25%);
+
+    .gameOver__ratingRapid {
+      grid-column: 1 / -1;
+    }
+
+    h4 {
+      color: var(--colorDanger);
+    }
+
+    margin: 2.7rem 0;
+  }
+
+  &__players {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-items: center;
+  }
+
+  &__userPic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  &__img-container {
+    width: 9.75rem;
+    height: 9.75rem;
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    position: relative;
+
+    @media (max-width: 1024px) {
+      width: 8.158rem;
+      height: 8.158rem;
+    }
+
+    &--won::after,
+    &--lost::after,
+    &--draw::after {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -0.8rem;
+      width: 1.6rem;
+      height: 1.6rem;
+      font-size: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 0;
+      font-weight: 700;
+      color: var(--colorWhiteOne);
+    }
+
+    &--won {
+      border: 0.3rem solid var(--userAvatarColorOnline);
+
+      &::after {
+        content: "+";
+        background-color: var(--userAvatarColorOnline);
+      }
+    }
+
+    &--lost {
+      border: 0.3rem solid var(--colorDanger);
+
+      &::after {
+        content: "-";
+        background-color: var(--colorDanger);
+        font-size: 3rem;
+      }
+    }
+
+    &--draw {
+      border: 0.3rem solid var(--colorDarkTwo);
+
+      &::after {
+        content: "=";
+        background-color: var(--colorDarkTwo);
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

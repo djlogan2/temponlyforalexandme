@@ -1,5 +1,4 @@
 .backdrop {
-  position: fixed;
   left: 0;
   right: 0;
   top: 0;
@@ -10,6 +9,14 @@
     rgba(0, 0, 0, 0.408) 100%
   );
   z-index: 9999;
+
+  &--relative {
+    position: absolute;
+  }
+
+  &--fixed {
+    position: fixed;
+  }
 }
 
 .hide-scroll {

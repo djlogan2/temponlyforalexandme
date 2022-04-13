@@ -38,10 +38,16 @@
     grid-area: top;
   }
 
+  &__board-container {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    grid-area: board;
+  }
+
   &__board {
     width: 57.744rem;
     height: 57.761rem;
-    grid-area: board;
   }
 
   &__btn-flip {
