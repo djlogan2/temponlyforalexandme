@@ -317,7 +317,6 @@ export default class ChallengeService extends CommonChallengeService {
   private findMatchingChallenge(
     challenge: Mongo.OptionalId<UserChallengeRecord>,
   ): UserChallengeRecord | null {
-    this.logger.debug(() => `findMatchingChallenge challenge=${challenge}`);
     const ourclock = challenge.opponentclocks || challenge.clocks;
 
     const selector: Mongo.Selector<UserChallengeRecord> = {
@@ -348,7 +347,7 @@ export default class ChallengeService extends CommonChallengeService {
     //   both do, they have to pick opposite colors.
     if (challenge.color) {
       // @ts-ignore
-      selector.$and.push({ color: challenge.color === "w" ? "b" : "w" });
+      selector.$or[1].$and.push({ color: challenge.color === "w" ? "b" : "w" });
     }
 
     const challenges = this.dao.readMany(selector);

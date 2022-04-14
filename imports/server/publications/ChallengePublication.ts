@@ -34,7 +34,7 @@ export default class ChallengePublication extends UserChangePublication<UserChal
   }
 
   protected userLogin(user: ServerUser): void {
-    this.logger2.debug(() => `userLogin user=${user.id}`);
+    if (this.logger2) this.logger2.debug(() => `userLogin user=${user.id}`);
     this.user = user;
     this.user.events.on("roleremoved", (role) => this.roleremoved(role));
     this.doit();

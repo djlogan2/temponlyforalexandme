@@ -150,7 +150,9 @@ function updateClocks(
     now - game.clocks[game.tomove].starttime - lag + inc - delay,
   );
 
-  if (usedtime > 0) modifier.$set[`clocks.${game.tomove}.current`] = usedtime;
+  if (usedtime > 0)
+    modifier.$set[`clocks.${game.tomove}.current`] =
+      game.clocks[game.tomove].current - usedtime;
 }
 
 function updateVariations(
