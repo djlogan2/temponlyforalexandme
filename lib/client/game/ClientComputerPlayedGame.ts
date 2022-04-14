@@ -44,6 +44,7 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
       fen: this.me.fen,
       variations: this.me.variations,
       clocks: this.me.clocks,
+      myColor: this.me.opponentcolor,
     };
   }
 

@@ -35,6 +35,7 @@ const useComputerPlayGame = (gameId: string) => {
   const [game, setGame] = useState<ClientComputerPlayedGame>();
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>({});
+  const [myColor, setMyColor] = useState<PieceColor>();
   const playSound = useSound();
 
   const history = useHistory();
@@ -49,8 +50,10 @@ const useComputerPlayGame = (gameId: string) => {
       return;
     }
 
-    const { tomove, variations, fen, clocks } = game.getDefaultProperties();
+    const { tomove, variations, fen, clocks, myColor } =
+      game.getDefaultProperties();
 
+    setMyColor(myColor);
     setFen(fen);
     setMoveToMake(tomove);
     updateClocks(clocks);
@@ -128,6 +131,7 @@ const useComputerPlayGame = (gameId: string) => {
     moveToMake,
     legalMoves,
     isGameOver,
+    myColor,
     setIsGameOver,
     makeMove,
     resign,

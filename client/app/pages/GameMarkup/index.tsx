@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { calcTime } from "../../data/utils";
 import ControlBox from "./components/ControlBox";
@@ -20,17 +20,22 @@ const GameMarkup = () => {
     clocks,
     fen,
     legalMoves,
-    makeMove,
     moveToMake,
     movelist,
-    resign,
     isGameOver,
+    myColor,
+    resign,
+    makeMove,
     setIsGameOver,
   } = useComputerPlayGame(id);
 
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(myColor === "b");
 
   const { width } = useWindowSize();
+
+  useEffect(() => {
+    setIsFlipped(myColor === "b");
+  }, [myColor]);
 
   return fen && clocks && moveToMake ? (
     <div className="gameContainer">
