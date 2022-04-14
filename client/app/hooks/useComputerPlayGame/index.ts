@@ -8,6 +8,7 @@ import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedG
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import { useSound } from "..";
 import { ESounds } from "../useSound/constants";
+import { calcTime } from "../../data/utils";
 
 export const getLegalMoves = (fen: string) => {
   const chess = Chess(fen || "");
@@ -27,6 +28,7 @@ export const getLegalMoves = (fen: string) => {
 };
 
 const useComputerPlayGame = (gameId: string) => {
+  const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
   const [movelist, setMovelist] = useState<TMoveItem[]>([]);
@@ -78,7 +80,25 @@ const useComputerPlayGame = (gameId: string) => {
       setMoveToMake(data);
     });
 
-    game.events.on("ended", () => {});
+    game.events.on("ended", () => {
+      const white = calcTime(
+        clocks.w.current,
+        tomove === "w",
+        clocks.w.initial.minutes,
+        clocks.w.starttime,
+      );
+
+      const black = calcTime(
+        clocks.b.current,
+        tomove === "b",
+        clocks.b.initial.minutes,
+        clocks.b.starttime,
+      );
+
+      if (Math.floor(white) <= 0 || Math.floor(black) <= 0) {
+        setIsGameOver(true);
+      }
+    });
 
     setGame(game);
 
@@ -101,7 +121,17 @@ const useComputerPlayGame = (gameId: string) => {
     game?.resign(connection.user as ClientUser);
   }, [game]);
 
-  return { fen, clocks, movelist, moveToMake, legalMoves, makeMove, resign };
+  return {
+    fen,
+    clocks,
+    movelist,
+    moveToMake,
+    legalMoves,
+    isGameOver,
+    setIsGameOver,
+    makeMove,
+    resign,
+  };
 };
 
 export default useComputerPlayGame;

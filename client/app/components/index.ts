@@ -13,3 +13,4 @@ export { default as ShareLink } from "./ShareLink";
 export { default as SocialMedia } from "./SocialMedia";
 export { default as Subtitle } from "./Subtitle";
 export { default as UserItem } from "./UserItem";
+export { default as GameOver } from "./GameOver";

@@ -71,6 +71,8 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
   }
 
   protected endGame(status: GameStatus, status2: number): void {
+    this.events.emit("ended", true);
+
     throw new Error("Method not implemented.");
   }
 

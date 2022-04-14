@@ -8,17 +8,27 @@ import {
   EnhancedChessboard,
   FlatMovelist,
   PlayerInfo,
+  GameOver,
 } from "/client/app/components";
 import Flip from "/client/app/components/icons/Flip";
 import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
 import { DigitalClock, GameTitle } from "/client/app/shared";
 
 const GameMarkup = () => {
-  const [isFlipped, setIsFlipped] = useState(false);
   const { id } = useParams<{ id: string }>();
+  const {
+    clocks,
+    fen,
+    legalMoves,
+    makeMove,
+    moveToMake,
+    movelist,
+    resign,
+    isGameOver,
+    setIsGameOver,
+  } = useComputerPlayGame(id);
 
-  const { clocks, fen, legalMoves, makeMove, moveToMake, movelist, resign } =
-    useComputerPlayGame(id);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const { width } = useWindowSize();
 
@@ -48,18 +58,21 @@ const GameMarkup = () => {
           isFlipped && "gameContainer__player-two--flipped",
         )}
       />
-      <EnhancedChessboard
-        fen={fen}
-        flipped={isFlipped}
-        className="gameContainer__board"
-        circles={[]}
-        arrows={[]}
-        legalMoves={legalMoves}
-        showLegalMoves={false}
-        smartMoves={false}
-        smallSize={500}
-        onMoveHandler={makeMove}
-      />
+      <div className="gameContainer__board-container">
+        {isGameOver && <GameOver onClose={() => setIsGameOver(false)} />}
+        <EnhancedChessboard
+          fen={fen}
+          flipped={isFlipped}
+          className="gameContainer__board"
+          circles={[]}
+          arrows={[]}
+          legalMoves={legalMoves}
+          showLegalMoves={false}
+          smartMoves={false}
+          smallSize={500}
+          onMoveHandler={makeMove}
+        />
+      </div>
       <Flip
         onClick={() => setIsFlipped((val) => !val)}
         className="gameContainer__btn-flip"
