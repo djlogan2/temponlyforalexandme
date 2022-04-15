@@ -1,8 +1,13 @@
 import { Meteor } from "meteor/meteor";
-import { render } from "react-dom";
+// @ts-ignore
+import { createRoot } from "react-dom/client";
+
 import * as React from "react";
 import Root from "./app/Root";
 
+const container = document.getElementById("root");
+const root = createRoot(container); // createRoot(container!) if you use TypeScript
+
 Meteor.startup(() => {
-  render(<Root />, document.getElementById("root"));
+  root.render(<Root />);
 });
