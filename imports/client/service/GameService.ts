@@ -10,6 +10,7 @@ import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 import CommonGameService from "/lib/game/CommonGameService";
 import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import Stoppable from "/lib/Stoppable";
+import { GameTypes } from "/lib/records/GameRecord";
 
 export default class GameService extends CommonGameService {
   private readonly logger: ClientLogger;
@@ -60,6 +61,10 @@ export default class GameService extends CommonGameService {
 
   public getGameEntity(id: string) {
     return this.dao.get(id);
+  }
+
+  public getStatus(id: string): undefined | GameTypes {
+    return this.dao.status(id);
   }
 
   public getTyped(id: string, user: ClientUser) {

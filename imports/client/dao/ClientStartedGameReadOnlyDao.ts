@@ -1,7 +1,7 @@
 import Stoppable from "/lib/Stoppable";
 import SubscriptionService from "/imports/client/service/SubscriptionService";
 import ClientLogger from "/lib/client/ClientLogger";
-import { BasicGameRecord } from "/lib/records/GameRecord";
+import { BasicGameRecord, GameTypes } from "/lib/records/GameRecord";
 import SubscribedReactiveReadOnlyDao from "/lib/client/SubscribedReactiveReadOnlyDao";
 
 export default class ClientStartedGameReadOnlyDao extends SubscribedReactiveReadOnlyDao<
@@ -34,5 +34,10 @@ export default class ClientStartedGameReadOnlyDao extends SubscribedReactiveRead
 
   protected onReady(): void {
     this.events.emit("ready");
+  }
+
+  public status(id: string): undefined | GameTypes {
+    const record = this.get(id);
+    if (record) return record.status;
   }
 }

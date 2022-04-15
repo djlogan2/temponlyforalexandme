@@ -80,10 +80,10 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   public endGame(status: GameStatus, status2: number): void {
     // TODO: Update ratings and whatnot
     // Maybe we will change this to analyzing someday, but for now, DELETE!
-    // this.dao.update(
-    //   { _id: this.me._id },
-    //   { $set: { status: "analyzing", result: status, result2: status2 } },
-    // );
+    this.dao.update(
+      { _id: this.me._id },
+      { $set: { status: "analyzing", result: status, result2: status2 } },
+    );
   }
 
   protected isAuthorizedToMove(who: User): boolean {
