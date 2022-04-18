@@ -6,7 +6,7 @@ import * as React from "react";
 import Root from "./app/Root";
 
 const container = document.getElementById("root");
-const root = createRoot(container); // createRoot(container!) if you use TypeScript
+const root = createRoot(container!);
 
 Meteor.startup(() => {
   root.render(<Root />);

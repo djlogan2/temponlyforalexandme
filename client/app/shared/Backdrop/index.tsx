@@ -5,6 +5,7 @@ import "./index.scss";
 interface IBackdropProps {
   pRelative?: boolean;
   className?: string;
+  children: React.ReactNode;
 }
 
 const Backdrop: FC<IBackdropProps> = ({ children, pRelative, className }) => {

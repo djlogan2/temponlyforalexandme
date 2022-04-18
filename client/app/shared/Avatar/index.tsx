@@ -9,6 +9,7 @@ interface IAvatarProps {
   status?: TUserStatus;
   picture?: string;
   className?: string;
+  children?: React.ReactNode;
 }
 
 const Avatar: FC<IAvatarProps> = ({

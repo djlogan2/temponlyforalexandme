@@ -4,6 +4,7 @@ import "./index.scss";
 
 interface Heading2Props {
   className?: any;
+  children: React.ReactNode;
 }
 
 const Heading2: FC<Heading2Props> = ({ className, children, ...rest }) => (

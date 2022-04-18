@@ -9,7 +9,9 @@ const render = (
   ui: React.ReactElement,
   options?: Omit<RenderOptions, "wrapper">,
 ): RenderResult => {
-  const Wrapper: React.FC = ({ children }) => <div>{children}</div>;
+  const Wrapper = ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  );
 
   return rtlRender(ui, { wrapper: Wrapper, ...options });
 };

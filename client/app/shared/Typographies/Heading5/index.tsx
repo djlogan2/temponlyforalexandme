@@ -5,6 +5,7 @@ import "./index.scss";
 interface Heading5Props {
   className?: string;
   onClick?: () => void;
+  children: React.ReactNode;
 }
 
 const Heading5: FC<Heading5Props> = ({ children, className, ...rest }) => (

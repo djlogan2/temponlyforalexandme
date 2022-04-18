@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import React from "react";
 
-const InputElement: FC = ({ children }) => (
+const InputElement = ({ children }: { children: React.ReactNode }) => (
   <button className="chat__inputElement" type="button">
     {children}
   </button>

@@ -8,6 +8,7 @@ interface ParagraphProps {
   className?: string;
   link?: string;
   onClick?: () => void;
+  children: React.ReactNode;
 }
 
 const Paragraph: FC<ParagraphProps> = ({

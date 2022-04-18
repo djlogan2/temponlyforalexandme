@@ -8,6 +8,7 @@ import Paragraph from "/client/app/shared/Typographies/Paragraph";
 interface IAccordeonProps {
   title: string;
   className?: string;
+  children?: React.ReactNode;
 }
 
 const Accordeon: FC<IAccordeonProps> = ({ children, title, className }) => {

@@ -4,6 +4,7 @@ import { IThemeService } from "./types";
 
 interface IThemeProvider {
   themeService: IThemeService;
+  children: ReactNode;
 }
 
 const ThemeProvider: FC<IThemeProvider> = ({ themeService, children }) => {

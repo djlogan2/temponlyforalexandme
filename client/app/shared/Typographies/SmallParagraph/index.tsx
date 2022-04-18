@@ -4,6 +4,7 @@ import "./index.scss";
 interface SmallParagraphProps {
   className?: string;
   link?: string;
+  children: React.ReactNode;
 }
 
 const SmallParagraph: FC<SmallParagraphProps> = ({ link, children, ...rest }) =>
