@@ -16,18 +16,25 @@ type ChessJSPromotablePeice = "r" | "n" | "b" | "q";
 export type GameStatus = "1-0" | "0-1" | "1/2-1/2" | "*";
 
 type GameAuditTypes =
-  | "move"
-  | "drawrequest"
-  | "drawrevoke"
+  | "convert"
   | "drawaccept"
   | "drawdecline"
-  | "setfen"
-  | "resign";
+  | "drawrequest"
+  | "drawrevoke"
+  | "move"
+  | "resign"
+  | "setfen";
 
 export interface GameAuditRecord {
   who: string;
   when: Date;
   type: GameAuditTypes;
+}
+
+export interface GameConvertRecord extends GameAuditRecord {
+  type: "convert";
+  result: GameStatus;
+  result2: number;
 }
 
 export interface GameAuditMoveRecord extends GameAuditRecord {

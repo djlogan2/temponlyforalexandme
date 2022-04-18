@@ -1,7 +1,9 @@
 import { Move } from "chess.js";
 import {
+  AnalysisGameRecord,
   GameAuditDrawRecord,
   GameAuditMoveRecord,
+  GameConvertRecord,
   GameStatus,
 } from "/lib/records/GameRecord";
 import CommonComputerPlayedGame from "/lib/game/CommonComputerPlayedGame";
@@ -17,6 +19,7 @@ import { EngineResult } from "/lib/server/EngineInterfaces";
 import { Meteor } from "meteor/meteor";
 import BookService from "/imports/server/service/BookService";
 import WritableECODao from "/imports/server/dao/WritableECODao";
+import { Mongo } from "meteor/mongo";
 
 export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   private readonly dao: WritableGameDao;
@@ -80,10 +83,28 @@ export default class ServerComputerPlayedGame extends CommonComputerPlayedGame {
   public endGame(status: GameStatus, status2: number): void {
     // TODO: Update ratings and whatnot
     // Maybe we will change this to analyzing someday, but for now, DELETE!
-    this.dao.update(
-      { _id: this.me._id },
-      { $set: { status: "analyzing", result: status, result2: status2 } },
-    );
+    const me = {
+      userid: this.me.opponent.userid,
+      username: this.me.opponent.username || "?",
+    };
+    const audit: GameConvertRecord = {
+      result: status,
+      result2: status2,
+      type: "convert",
+      when: new Date(),
+      who: this.me.opponent.userid,
+    };
+    const modifier: Mongo.Modifier<AnalysisGameRecord> = {
+      $set: {
+        status: "analyzing",
+        result: status,
+        result2: status2,
+        observers: [me],
+        examiners: [me],
+      },
+      $push: { actions: audit },
+    };
+    this.dao.update({ _id: this.me._id }, modifier);
   }
 
   protected isAuthorizedToMove(who: User): boolean {
