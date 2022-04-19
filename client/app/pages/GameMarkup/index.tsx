@@ -14,7 +14,7 @@ import Flip from "/client/app/components/icons/Flip";
 import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
 import { DigitalClock, GameTitle } from "/client/app/shared";
 
-const GameMarkup = () => {
+const GameMarkup = ({ ...props }) => {
   const { id } = useParams<{ id: string }>();
   const {
     clocks,
@@ -24,6 +24,7 @@ const GameMarkup = () => {
     movelist,
     isGameOver,
     myColor,
+    result,
     resign,
     makeMove,
     setIsGameOver,
@@ -32,8 +33,6 @@ const GameMarkup = () => {
   const [isFlipped, setIsFlipped] = useState(myColor === "b");
 
   const { width } = useWindowSize();
-
-  console.log("render");
 
   useEffect(() => {
     setIsFlipped(myColor === "b");
@@ -66,7 +65,9 @@ const GameMarkup = () => {
         )}
       />
       <div className="gameContainer__board-container">
-        {isGameOver && <GameOver onClose={() => setIsGameOver(false)} />}
+        {isGameOver && result && (
+          <GameOver onClose={() => setIsGameOver(false)} result={result} />
+        )}
         <EnhancedChessboard
           fen={fen}
           flipped={isFlipped}

@@ -24,6 +24,7 @@ globalThis.loggerconfigdao = new ReadOnlyLoggerConfigurationDao(
   null,
   window.subscriptionservice,
 );
+
 const userdao = new CommonReadOnlyUserDao(null);
 
 globalThis.icc = new ClientServer(userdao);
@@ -56,26 +57,12 @@ const Root = () => {
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
-    const GLOBAL_SERVICES = [
-      [gameservice, "ready"],
-      [challenges, "ready"],
-      [globalThis.icc.connection, "loggedin"],
-    ] as const;
+    const gameReady = gameservice.onReady();
+    const challengesReady = gameservice.onReady();
+    const loggedIn = globalThis.icc.connection.onLoggedIn();
 
-    let servicesReady = 0;
-
-    GLOBAL_SERVICES.forEach(([service, e]) => {
-      const onServiceReady = () => {
-        servicesReady++;
-
-        if (servicesReady === GLOBAL_SERVICES.length) {
-          setIsAppReady(true);
-        }
-
-        service.events.off(e as any, onServiceReady);
-      };
-
-      service.events.on(e as any, onServiceReady);
+    Promise.all([gameReady, challengesReady, loggedIn]).then(() => {
+      setIsAppReady(true);
     });
   }, []);
 

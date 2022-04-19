@@ -38,6 +38,7 @@ export default class ClientStartedGameReadOnlyDao extends SubscribedReactiveRead
 
   public status(id: string): undefined | GameTypes {
     const record = this.get(id);
+
     if (record) return record.status;
   }
 }

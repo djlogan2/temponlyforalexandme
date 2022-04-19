@@ -28,6 +28,16 @@ export default class ChallengeService extends CommonChallengeService {
     this.buttondao = buttondao;
   }
 
+  public onReady() {
+    return new Promise((resolve) => {
+      const readyHandler = () => {
+        resolve(true);
+        this.events.off("ready", readyHandler);
+      };
+      this.events.on("ready", readyHandler);
+    });
+  }
+
   public addChallenge(
     clock: ClockSettings,
     rated: boolean,

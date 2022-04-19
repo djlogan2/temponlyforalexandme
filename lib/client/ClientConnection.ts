@@ -43,6 +43,16 @@ export default class ClientConnection extends AbstractTimestampNode {
 
   private pUser?: ClientUser;
 
+  public onLoggedIn() {
+    return new Promise((resolve) => {
+      const readyHandler = () => {
+        resolve(true);
+        this.events.off("loggedin", readyHandler);
+      };
+      this.events.on("loggedin", readyHandler);
+    });
+  }
+
   public get events() {
     return this.pEvents;
   }

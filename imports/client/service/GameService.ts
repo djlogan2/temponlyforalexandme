@@ -37,6 +37,16 @@ export default class GameService extends CommonGameService {
     this.dao = gamedao;
   }
 
+  public onReady() {
+    return new Promise((resolve) => {
+      const readyHandler = () => {
+        resolve(true);
+        this.events.off("ready", readyHandler);
+      };
+      this.events.on("ready", readyHandler);
+    });
+  }
+
   public startComputerGame(
     computerchallenge: ComputerChallengeRecord,
   ): Promise<void> {

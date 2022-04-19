@@ -1,13 +1,14 @@
 import { Chess, Square } from "chess.js";
 import { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { useSound } from "..";
 import { gameservice } from "../../Root";
 import { TMoveItem } from "../../types";
 import { ESounds } from "../useSound/constants";
+import { GameStatus } from "../../../../lib/records/GameRecord";
 import ClientUser from "/lib/client/ClientUser";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
+import { GameConvertRecord } from "/lib/records/GameRecord";
 
 export const getLegalMoves = (fen: string) => {
   const chess = Chess(fen || "");
@@ -35,26 +36,14 @@ const useComputerPlayGame = (gameId: string) => {
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>({});
   const [myColor, setMyColor] = useState<PieceColor>();
+  const [result, setResult] = useState<GameStatus>();
   const playSound = useSound();
 
-  const history = useHistory();
-
   useEffect(() => {
-    const gameStatus = gameservice.getStatus(gameId);
-
-    if (gameStatus === "analyzing") {
-      history.push("/analysis");
-      return;
-    }
-
-    const game = gameservice.getTyped(gameId, connection.user as ClientUser) as
-      | ClientComputerPlayedGame
-      | undefined;
-
-    if (!game) {
-      history.push("/");
-      return;
-    }
+    const game = gameservice.getTyped(
+      gameId,
+      connection.user as ClientUser,
+    ) as ClientComputerPlayedGame;
 
     const { tomove, variations, fen, clocks, myColor } =
       game.getDefaultProperties();
@@ -90,6 +79,11 @@ const useComputerPlayGame = (gameId: string) => {
     });
 
     game.events.on("converted", () => {
+      const { result } = gameservice.getGameEntity(
+        gameId,
+      ) as unknown as GameConvertRecord;
+
+      setResult(result);
       setIsGameOver(true);
     });
 
@@ -122,6 +116,7 @@ const useComputerPlayGame = (gameId: string) => {
     legalMoves,
     isGameOver,
     myColor,
+    result,
     setIsGameOver,
     makeMove,
     resign,
