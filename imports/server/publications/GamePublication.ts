@@ -21,7 +21,7 @@ export default class GamePublication extends UserChangePublication<
   }
 
   protected userLogin(user: ServerUser): void {
-    this.setSelector({ "opponent.userid": user.id, status: "computer" });
+    this.setSelector({ "opponent.userid": user.id });
   }
 
   protected userLogout(): void {

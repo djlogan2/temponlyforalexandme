@@ -1,14 +1,13 @@
-import { useHistory } from "react-router-dom";
 import { Chess, Square } from "chess.js";
 import { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useSound } from "..";
 import { gameservice } from "../../Root";
 import { TMoveItem } from "../../types";
+import { ESounds } from "../useSound/constants";
 import ClientUser from "/lib/client/ClientUser";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
-import { useSound } from "..";
-import { ESounds } from "../useSound/constants";
-import { calcTime } from "../../data/utils";
 
 export const getLegalMoves = (fen: string) => {
   const chess = Chess(fen || "");
@@ -42,12 +41,9 @@ const useComputerPlayGame = (gameId: string) => {
 
   useEffect(() => {
     const gameStatus = gameservice.getStatus(gameId);
-    // TODO. Figure out why it doesn't return game status when it changes to analyzing.
-    // Steps to check it - Once the game ends, visit the game page again /game/id.
-    console.log(gameStatus);
 
     if (gameStatus === "analyzing") {
-      history.push("/analyzing");
+      history.push("/analysis");
       return;
     }
 
@@ -93,29 +89,8 @@ const useComputerPlayGame = (gameId: string) => {
       setMoveToMake(data);
     });
 
-    // TODO. Event isn't emitted
     game.events.on("converted", () => {
-      console.log("I HAVE BEEN EMITTED");
-    });
-
-    game.events.on("ended", () => {
-      const white = calcTime(
-        clocks.w.current,
-        tomove === "w",
-        clocks.w.initial.minutes,
-        clocks.w.starttime,
-      );
-
-      const black = calcTime(
-        clocks.b.current,
-        tomove === "b",
-        clocks.b.initial.minutes,
-        clocks.b.starttime,
-      );
-
-      if (Math.floor(white) <= 0 || Math.floor(black) <= 0) {
-        setIsGameOver(true);
-      }
+      setIsGameOver(true);
     });
 
     setGame(game);
