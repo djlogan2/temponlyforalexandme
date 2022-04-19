@@ -41,6 +41,16 @@ const useComputerPlayGame = (gameId: string) => {
   const history = useHistory();
 
   useEffect(() => {
+    const gameStatus = gameservice.getStatus(gameId);
+    // TODO. Figure out why it doesn't return game status when it changes to analyzing.
+    // Steps to check it - Once the game ends, visit the game page again /game/id.
+    console.log(gameStatus);
+
+    if (gameStatus === "analyzing") {
+      history.push("/analyzing");
+      return;
+    }
+
     const game = gameservice.getTyped(gameId, connection.user as ClientUser) as
       | ClientComputerPlayedGame
       | undefined;
@@ -81,6 +91,11 @@ const useComputerPlayGame = (gameId: string) => {
 
     game.events.on("tomove", (data) => {
       setMoveToMake(data);
+    });
+
+    // TODO. Event isn't emitted
+    game.events.on("converted", () => {
+      console.log("I HAVE BEEN EMITTED");
     });
 
     game.events.on("ended", () => {

@@ -1,4 +1,5 @@
 import { Meteor } from "meteor/meteor";
+import { BrowserRouter as Router } from "react-router-dom";
 // @ts-ignore
 import { createRoot } from "react-dom/client";
 
@@ -9,5 +10,9 @@ const container = document.getElementById("root");
 const root = createRoot(container!);
 
 Meteor.startup(() => {
-  root.render(<Root />);
+  root.render(
+    <Router>
+      <Root />
+    </Router>,
+  );
 });
