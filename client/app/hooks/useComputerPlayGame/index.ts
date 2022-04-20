@@ -1,48 +1,37 @@
-import { Chess, Square } from "chess.js";
-import { useCallback, useEffect, useState } from "react";
+import { noop } from "lodash";
+import { useEffect, useState } from "react";
 import { useSound } from "..";
+import { GameStatus } from "../../../../lib/records/GameRecord";
 import { gameservice } from "../../Root";
 import { TMoveItem } from "../../types";
 import { ESounds } from "../useSound/constants";
-import { GameStatus } from "../../../../lib/records/GameRecord";
-import ClientUser from "/lib/client/ClientUser";
+import { getLegalMoves } from "./constants";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import { GameConvertRecord } from "/lib/records/GameRecord";
 
-export const getLegalMoves = (fen: string) => {
-  const chess = Chess(fen || "");
-  const moves: Record<string, Square[]> = {};
-  ["a", "b", "c", "d", "e", "f", "g", "h"].forEach((rank) => {
-    for (let file = 1; file <= 8; file++) {
-      const legal = chess
-        .moves({ square: rank + file, verbose: true })
-        .map((verbose) => verbose.to);
+type TMakeMove = () => (move: string[], promotion?: string) => void;
+type TResign = () => () => void;
 
-      if (legal?.length) {
-        moves[rank + file] = legal;
-      }
-    }
-  });
-  return moves;
-};
+const emptyFunc = () => () => {};
 
 const useComputerPlayGame = (gameId: string) => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
   const [movelist, setMovelist] = useState<TMoveItem[]>([]);
-  const [game, setGame] = useState<ClientComputerPlayedGame>();
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>({});
   const [myColor, setMyColor] = useState<PieceColor>();
   const [result, setResult] = useState<GameStatus>();
+  const [makeMove, setMakeMove] = useState<TMakeMove>(emptyFunc);
+  const [resign, setResign] = useState<TResign>(emptyFunc);
   const playSound = useSound();
 
   useEffect(() => {
     const game = gameservice.getTyped(
       gameId,
-      connection.user as ClientUser,
+      connection.user!,
     ) as ClientComputerPlayedGame;
 
     const { tomove, variations, fen, clocks, myColor } =
@@ -87,26 +76,17 @@ const useComputerPlayGame = (gameId: string) => {
       setIsGameOver(true);
     });
 
-    setGame(game);
+    setMakeMove(
+      () => (move: string[], promotion?: string) =>
+        game.makeMove(connection.user!, move.join("") + (promotion || "")),
+    );
+
+    setResign(() => () => game.resign(connection.user!));
 
     return () => {
       gameservice.events.removeAllListeners();
     };
   }, []);
-
-  const makeMove = useCallback(
-    (move: string[], promotion?: string) => {
-      game?.makeMove(
-        connection.user as ClientUser,
-        move.join("") + (promotion || ""),
-      );
-    },
-    [game],
-  );
-
-  const resign = useCallback(() => {
-    game?.resign(connection.user as ClientUser);
-  }, [game]);
 
   return {
     fen,
