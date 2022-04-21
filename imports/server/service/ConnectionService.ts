@@ -32,11 +32,10 @@ import WritableBookDao from "/imports/server/dao/WritableBookDao";
 import WritableECODao from "/imports/server/dao/WritableECODao";
 import ReadOnlyLoggerConfigurationDao from "/imports/server/dao/ReadOnlyLoggerConfigurationDao";
 import ChallengeService from "/imports/server/service/ChallengeService";
-import CommonReadOnlyChallengeDao from "/imports/dao/CommonReadOnlyChallengeDao";
-import CommonReadOnlyButtonChallengeDao from "/imports/dao/CommonReadOnlyButtonChallengeDao";
 import WritableChallengeDao from "/imports/server/dao/WritableChallengeDao";
 import ServerReadOnlyButtonChallengeDao from "/imports/server/dao/ServerReadOnlyButtonChallengeDao";
 import ServerReadOnlyChallengeDao from "/imports/server/dao/ServerReadOnlyChallengeDao";
+import WritableChallengeButtonDao from "/imports/server/dao/WritableChallengeButtonDao";
 
 export default class ConnectionService extends Stoppable {
   private readonly readableloggerconfigdao: ReadOnlyLoggerConfigurationDao;
@@ -54,6 +53,8 @@ export default class ConnectionService extends Stoppable {
   private readonly writableuserdao: WritableUserDao;
 
   private readonly themedao: WritableThemeDao;
+
+  private readonly writablechallengebuttondao: WritableChallengeButtonDao;
 
   private readonly i18nwritabledao: Writablei18nDao;
 
@@ -135,6 +136,7 @@ export default class ConnectionService extends Stoppable {
     this.writablegamedao = new WritableGameDao(this);
     this.bookdao = new WritableBookDao(this);
     this.ecodao = new WritableECODao(this);
+    this.writablechallengebuttondao = new WritableChallengeButtonDao(null);
 
     this.challengedao = new ServerReadOnlyChallengeDao(this);
     this.buttondao = new ServerReadOnlyButtonChallengeDao(this);
@@ -188,6 +190,7 @@ export default class ConnectionService extends Stoppable {
       this.writableuserdao,
       this.buttondao,
       this.publicationservice,
+      this.writablechallengebuttondao
     );
     Meteor.onConnection((connection) => this.onConnection(connection));
 

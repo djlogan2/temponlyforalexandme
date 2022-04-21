@@ -18,6 +18,9 @@ export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButt
       this,
       "challengebuttons",
     );
+    const id = window?.ICCServer?.collections?.users?.findOne()?._id;
+    this.start({ user_id: id });
+    this.pEvents.emit("ready");
   }
 
   public get events(): BasicEventEmitter<TEvents> {

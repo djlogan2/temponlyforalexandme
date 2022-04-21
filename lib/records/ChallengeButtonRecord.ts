@@ -10,11 +10,11 @@ type OCB1 = Omit<
   | "qualifies"
   | "who"
 >;
-type OCB2 = OCB1 & Pick<OCB1, "color" | "isolation_group" | "opponentclocks">;
-
 export interface OneChallengeButton {
-  name: string; // TODO: What does FE need?
-  challenge: OCB2;
+  name: string;
+  _id: string;
+  user_id: string;
+  challenge: OCB1;
 }
 
 export interface ChallengeButtonRecord {

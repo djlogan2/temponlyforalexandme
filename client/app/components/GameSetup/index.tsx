@@ -7,6 +7,7 @@ import { gameSetupComponents, title } from "./constants";
 import Controls from "./Controls";
 import PlayOptions from "./PlayOptions";
 import { EComponents } from "./types";
+import { challenges } from "/client/app/Root";
 
 interface IGameSetupProps {
   onCloseModal: () => void;
@@ -40,6 +41,11 @@ const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
     copiedComponents.pop();
     setComponent(copiedComponents);
   };
+
+  challenges.buttonEvents.on("ready", () => {
+    const buttons = challenges.getButtons();
+    console.log("COMPONENt: ", buttons);
+  });
 
   const Component = gameSetupComponents[currentTab];
 

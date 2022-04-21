@@ -2,7 +2,7 @@ import Stoppable from "/lib/Stoppable";
 import {
   ClockSettings,
   PieceColor,
-  UserChallengeRecord,
+  UserChallengeRecord
 } from "/lib/records/ChallengeRecord";
 import { Mongo } from "meteor/mongo";
 import InstanceService from "/imports/server/service/InstanceService";
@@ -25,6 +25,7 @@ import ChallengePublication from "/imports/server/publications/ChallengePublicat
 import PublicationService from "/imports/server/service/PublicationService";
 import AddChallengeClientMethod from "../clientmethods/challenge/AddChallengeClientMethod";
 import ServerLogger from "/lib/server/ServerLogger";
+import WritableChallengeButtonDao from "/imports/server/dao/WritableChallengeButtonDao";
 
 export default class ChallengeService extends CommonChallengeService {
   private instanceservice: InstanceService;
@@ -34,6 +35,8 @@ export default class ChallengeService extends CommonChallengeService {
   private readonly readonlydao: CommonReadOnlyChallengeDao;
 
   private readonly dao: WritableChallengeDao;
+
+  private readonly writablechallengebuttondao: WritableChallengeButtonDao;
 
   private readonly gameservice: GameService;
 
@@ -53,7 +56,8 @@ export default class ChallengeService extends CommonChallengeService {
 
   private readonly pChallengeAdded: (challenge: UserChallengeRecord) => void;
 
-  protected stopping(): void {}
+  protected stopping(): void {
+  }
 
   constructor(
     parent: Stoppable | null,
@@ -65,6 +69,7 @@ export default class ChallengeService extends CommonChallengeService {
     userdao: WritableUserDao,
     buttondao: CommonReadOnlyButtonChallengeDao,
     publicationservice: PublicationService,
+    writablechallengebuttondao: WritableChallengeButtonDao
   ) {
     super(parent, buttondao);
     this.logger = new ServerLogger(this, "ChallengeService_ts");
@@ -74,27 +79,29 @@ export default class ChallengeService extends CommonChallengeService {
     this.gameservice = gameservice;
     this.userdao = userdao;
 
+    this.writablechallengebuttondao = writablechallengebuttondao;
+
     this.challengemethod = new ChallengeClientMethod(
       this,
       connectionservice,
-      this,
+      this
     );
 
     this.addchallengemethod = new AddChallengeClientMethod(
       this,
       connectionservice,
-      this,
+      this
     );
 
     publicationservice.publishDao(
       "challenges",
       (sub: Subscription, connection: ServerConnection) =>
-        new ChallengePublication(this, sub, connection),
+        new ChallengePublication(this, sub, connection)
     );
     publicationservice.publishDao(
       "challengebuttons",
       (sub: Subscription, connection: ServerConnection) =>
-        new ChallengeButtonPublication(this, sub, connection),
+        new ChallengeButtonPublication(this, sub, connection)
     );
 
     this.pUserLogin = (user) => this.userLogin(user);
@@ -115,7 +122,7 @@ export default class ChallengeService extends CommonChallengeService {
 
   private challengeAdded(challenge: UserChallengeRecord): void {
     this.logger.debug(
-      () => `challengeAdded challenge=${JSON.stringify(challenge)}`,
+      () => `challengeAdded challenge=${JSON.stringify(challenge)}`
     );
     const owner = this.userdao.get(challenge.owner);
     if (!owner) {
@@ -124,7 +131,7 @@ export default class ChallengeService extends CommonChallengeService {
 
     const selector: Mongo.Selector<UserRecord> = {
       isolation_group: challenge.isolation_group,
-      "hashTokens.instance_id": this.instanceservice.instanceid,
+      "hashTokens.instance_id": this.instanceservice.instanceid
     };
 
     if (challenge.who && challenge.who.length) {
@@ -137,7 +144,7 @@ export default class ChallengeService extends CommonChallengeService {
     else selector.roles = "play_unrated_games";
 
     this.logger.debug(
-      () => `challengeAdded selector=${JSON.stringify(selector)}`,
+      () => `challengeAdded selector=${JSON.stringify(selector)}`
     );
     const qualified = this.userdao.readMany(selector, "include", ["_id"]);
     if (!qualified || !qualified.length) return;
@@ -148,19 +155,21 @@ export default class ChallengeService extends CommonChallengeService {
     if (qualifiedIds && qualifiedIds.length)
       this.dao.update(
         { _id: challenge._id },
-        { $addToSet: { qualifies: { $each: qualifiedIds } } },
+        { $addToSet: { qualifies: { $each: qualifiedIds } } }
       );
   }
 
   private userLogin(user: ServerUser): void {
     this.logger.debug(() => `userLogin userid=${user.id}`);
     user.events.on("roleadded", (role: UserRoles) =>
-      this.pRoleAdded(user, role),
+      this.pRoleAdded(user, role)
     );
     user.events.on("roleremoved", (role: UserRoles) =>
-      this.pRoleRemoved(user, role),
+      this.pRoleRemoved(user, role)
     );
     this.addToExistingChallenges(user);
+
+    this.checkChallengeButtons(user);
   }
 
   private userLogout(user: ServerUser): void {
@@ -178,9 +187,9 @@ export default class ChallengeService extends CommonChallengeService {
     this.dao.update(
       {
         qualifies: user.id,
-        rated: role !== "play_rated_games",
+        rated: role !== "play_rated_games"
       },
-      { $pull: { qualifies: user.id } },
+      { $pull: { qualifies: user.id } }
     );
   }
 
@@ -188,6 +197,23 @@ export default class ChallengeService extends CommonChallengeService {
     this.logger.debug(() => `userRoleAdded userid=${user.id} role=${role}`);
     if (role !== "play_rated_games" && role !== "play_unrated_games") return;
     this.addToExistingChallenges(user);
+  }
+
+  private checkChallengeButtons(user: ServerUser): void {
+    const existingChallengeButtons = this.writablechallengebuttondao.readMany({ user_id: user.id });
+    if (!existingChallengeButtons || !existingChallengeButtons.length) {
+      this.writablechallengebuttondao.insert({
+        name: "5 minutes",
+        user_id: user.id,
+        challenge: {
+          isolation_group: user.isolation_group,
+          rated: false,
+          clocks: {minutes: 5},
+          opponentclocks: {minutes: 5},
+          color: "w"
+        }
+      });
+    }
   }
 
   private addToExistingChallenges(user: ServerUser): void {
@@ -212,10 +238,10 @@ export default class ChallengeService extends CommonChallengeService {
           $or: [
             { who: { $exists: false } },
             { who: { $size: 0 } },
-            { who: user.id },
-          ],
-        },
-      ],
+            { who: user.id }
+          ]
+        }
+      ]
     };
 
     if (rated !== null) {
@@ -227,13 +253,13 @@ export default class ChallengeService extends CommonChallengeService {
     this.logger.debug(
       () =>
         `addToExistingChallenge user=${user.id} qualifies for=${JSON.stringify(
-          ids,
-        )}`,
+          ids
+        )}`
     );
     if (ids && ids.length)
       this.dao.update(
         { _id: { $in: ids } },
-        { $addToSet: { qualifies: user.id } },
+        { $addToSet: { qualifies: user.id } }
       );
   }
 
@@ -243,7 +269,7 @@ export default class ChallengeService extends CommonChallengeService {
     clocks: ClockSettings,
     color?: PieceColor,
     who?: string[],
-    opponentclock?: ClockSettings,
+    opponentclock?: ClockSettings
   ): void {
     this.logger.debug(() => `addChallenge`);
     if (!connection.user) throw new Meteor.Error("INVALID_USER");
@@ -256,7 +282,7 @@ export default class ChallengeService extends CommonChallengeService {
       if (
         this.userdao.count({
           isolation_group: connection.user.isolation_group,
-          _id: { $in: who },
+          _id: { $in: who }
         }) !== who.length
       )
         throw new Meteor.Error("INVALID_USERID");
@@ -271,7 +297,7 @@ export default class ChallengeService extends CommonChallengeService {
       clocks,
       who: who || [],
       qualifies: [],
-      declined: [],
+      declined: []
     };
 
     if (color) challengerecord.color = color;
@@ -309,20 +335,20 @@ export default class ChallengeService extends CommonChallengeService {
     this.gameservice.startGameFromChallenge(
       connection.user,
       challenge,
-      connection._id,
+      connection._id
     );
     return true;
   }
 
   private findMatchingChallenge(
-    challenge: Mongo.OptionalId<UserChallengeRecord>,
+    challenge: Mongo.OptionalId<UserChallengeRecord>
   ): UserChallengeRecord | null {
     const ourclock = challenge.opponentclocks || challenge.clocks;
 
     const selector: Mongo.Selector<UserChallengeRecord> = {
       $or: [
         {
-          owner: challenge.owner,
+          owner: challenge.owner
         },
         {
           $and: [
@@ -333,13 +359,13 @@ export default class ChallengeService extends CommonChallengeService {
               $or: [
                 { who: { $exists: false } },
                 { who: { $size: 0 } },
-                { who: challenge.owner },
-              ],
+                { who: challenge.owner }
+              ]
             },
-            { declined: { $ne: challenge.owner } },
-          ],
-        },
-      ],
+            { declined: { $ne: challenge.owner } }
+          ]
+        }
+      ]
     };
 
     // TODO: What do we wnat to do if one user picks a color and another does not?
@@ -366,7 +392,7 @@ export default class ChallengeService extends CommonChallengeService {
       record,
       this.readonlydao,
       this.dao,
-      this.gameservice,
+      this.gameservice
     );
   }
 
@@ -378,7 +404,7 @@ export default class ChallengeService extends CommonChallengeService {
     rated: boolean,
     color: PieceColor | null,
     who: string[] | null,
-    opponentclocks: ClockSettings | null,
+    opponentclocks: ClockSettings | null
   ): void {
     this.logger.debug(() => `internalAddChallenge`);
     const userchallenge: Mongo.OptionalId<UserChallengeRecord> = {
@@ -390,7 +416,7 @@ export default class ChallengeService extends CommonChallengeService {
       owner: ownerid,
       qualifies: [],
       rated,
-      who: who || [],
+      who: who || []
     };
     if (color) userchallenge.color = color;
     if (opponentclocks) userchallenge.opponentclocks = opponentclocks;

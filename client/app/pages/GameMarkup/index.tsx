@@ -33,8 +33,6 @@ const GameMarkup = () => {
 
   const { width } = useWindowSize();
 
-  console.log("render");
-
   useEffect(() => {
     setIsFlipped(myColor === "b");
   }, [myColor]);
