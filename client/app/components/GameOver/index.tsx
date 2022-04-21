@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router";
 import { SCREEN_LARGE } from "../../constants/breakpoints";
 import { useWindowSize } from "../../hooks";
 import {
@@ -14,19 +15,29 @@ import {
 import Card from "../Card";
 import Close from "../icons/Close";
 import "./index.scss";
+import { GameStatus } from "/lib/records/GameRecord";
 
 interface Props {
   onClose: () => void;
+  result: GameStatus;
 }
 
-const GameOver = ({ onClose }: Props) => {
+const gameResults = {
+  "0-1": "Black won!",
+  "1-0": "White won!",
+  "1/2-1/2": "Draw",
+  "*": "",
+};
+
+const GameOver = ({ onClose, result }: Props) => {
   const { width } = useWindowSize();
+  const history = useHistory();
 
   return width ? (
     <Backdrop pRelative={width >= SCREEN_LARGE}>
       <Card className="gameOver">
         <Close className="gameOver__closeIcon pointer" onClick={onClose} />
-        <Heading2 className="weight-700">Black won!</Heading2>
+        <Heading2 className="weight-700">{gameResults[result]}</Heading2>
         <Paragraph className="gameOver__description">
           Description of the game&apos;s result.
         </Paragraph>
@@ -42,7 +53,7 @@ const GameOver = ({ onClose }: Props) => {
             </div>
             <Paragraph className="weight-700 text-center">User name</Paragraph>
           </div>
-          <Heading3 className="weight-700">1-0</Heading3>
+          <Heading3 className="weight-700">{result}</Heading3>
           <div className="gameOver__player-container">
             <div className="gameOver__img-container gameOver__img-container--lost">
               <img
@@ -66,7 +77,9 @@ const GameOver = ({ onClose }: Props) => {
         <div className="gameOver__actions">
           <StandardButton color="primary">Rematch</StandardButton>
           <StandardButton>New 1 min</StandardButton>
-          <StandardButton>Analysis</StandardButton>
+          <StandardButton onClick={() => history.push("/analysis")}>
+            Analysis
+          </StandardButton>
         </div>
       </Card>
     </Backdrop>

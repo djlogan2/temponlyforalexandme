@@ -1,64 +1,38 @@
-import { useHistory } from "react-router-dom";
-import { Chess, Square } from "chess.js";
-import { useCallback, useEffect, useState } from "react";
+import { noop } from "lodash";
+import { useEffect, useState } from "react";
+import { useSound } from "..";
+import { GameStatus } from "../../../../lib/records/GameRecord";
 import { gameservice } from "../../Root";
 import { TMoveItem } from "../../types";
-import ClientUser from "/lib/client/ClientUser";
+import { ESounds } from "../useSound/constants";
+import { getLegalMoves } from "./constants";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
-import { useSound } from "..";
-import { ESounds } from "../useSound/constants";
-import { calcTime } from "../../data/utils";
+import { GameConvertRecord } from "/lib/records/GameRecord";
 
-export const getLegalMoves = (fen: string) => {
-  const chess = Chess(fen || "");
-  const moves: Record<string, Square[]> = {};
-  ["a", "b", "c", "d", "e", "f", "g", "h"].forEach((rank) => {
-    for (let file = 1; file <= 8; file++) {
-      const legal = chess
-        .moves({ square: rank + file, verbose: true })
-        .map((verbose) => verbose.to);
+type TMakeMove = () => (move: string[], promotion?: string) => void;
+type TResign = () => () => void;
 
-      if (legal?.length) {
-        moves[rank + file] = legal;
-      }
-    }
-  });
-  return moves;
-};
+const emptyFunc = () => () => {};
 
 const useComputerPlayGame = (gameId: string) => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
   const [movelist, setMovelist] = useState<TMoveItem[]>([]);
-  const [game, setGame] = useState<ClientComputerPlayedGame>();
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>({});
   const [myColor, setMyColor] = useState<PieceColor>();
+  const [result, setResult] = useState<GameStatus>();
+  const [makeMove, setMakeMove] = useState<TMakeMove>(emptyFunc);
+  const [resign, setResign] = useState<TResign>(emptyFunc);
   const playSound = useSound();
 
-  const history = useHistory();
-
   useEffect(() => {
-    const gameStatus = gameservice.getStatus(gameId);
-    // TODO. Figure out why it doesn't return game status when it changes to analyzing.
-    // Steps to check it - Once the game ends, visit the game page again /game/id.
-    console.log(gameStatus);
-
-    if (gameStatus === "analyzing") {
-      history.push("/analyzing");
-      return;
-    }
-
-    const game = gameservice.getTyped(gameId, connection.user as ClientUser) as
-      | ClientComputerPlayedGame
-      | undefined;
-
-    if (!game) {
-      history.push("/");
-      return;
-    }
+    const game = gameservice.getTyped(
+      gameId,
+      connection.user!,
+    ) as ClientComputerPlayedGame;
 
     const { tomove, variations, fen, clocks, myColor } =
       game.getDefaultProperties();
@@ -93,51 +67,26 @@ const useComputerPlayGame = (gameId: string) => {
       setMoveToMake(data);
     });
 
-    // TODO. Event isn't emitted
     game.events.on("converted", () => {
-      console.log("I HAVE BEEN EMITTED");
+      const { result } = gameservice.getGameEntity(
+        gameId,
+      ) as unknown as GameConvertRecord;
+
+      setResult(result);
+      setIsGameOver(true);
     });
 
-    game.events.on("ended", () => {
-      const white = calcTime(
-        clocks.w.current,
-        tomove === "w",
-        clocks.w.initial.minutes,
-        clocks.w.starttime,
-      );
+    setMakeMove(
+      () => (move: string[], promotion?: string) =>
+        game.makeMove(connection.user!, move.join("") + (promotion || "")),
+    );
 
-      const black = calcTime(
-        clocks.b.current,
-        tomove === "b",
-        clocks.b.initial.minutes,
-        clocks.b.starttime,
-      );
-
-      if (Math.floor(white) <= 0 || Math.floor(black) <= 0) {
-        setIsGameOver(true);
-      }
-    });
-
-    setGame(game);
+    setResign(() => () => game.resign(connection.user!));
 
     return () => {
       gameservice.events.removeAllListeners();
     };
   }, []);
-
-  const makeMove = useCallback(
-    (move: string[], promotion?: string) => {
-      game?.makeMove(
-        connection.user as ClientUser,
-        move.join("") + (promotion || ""),
-      );
-    },
-    [game],
-  );
-
-  const resign = useCallback(() => {
-    game?.resign(connection.user as ClientUser);
-  }, [game]);
 
   return {
     fen,
@@ -147,6 +96,7 @@ const useComputerPlayGame = (gameId: string) => {
     legalMoves,
     isGameOver,
     myColor,
+    result,
     setIsGameOver,
     makeMove,
     resign,

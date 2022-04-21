@@ -1,3 +1,5 @@
-export { default as GameAnalysis } from "./GameAnalysis";
-export { default as GameMarkup } from "./GameMarkup";
-export { default as ComponentsView } from "./ComponentsView";
+import React from "react";
+
+export const GameAnalysis = React.lazy(() => import("./GameAnalysis"));
+export const GameMarkup = React.lazy(() => import("./GameMarkup"));
+export const ComponentsView = React.lazy(() => import("./ComponentsView"));

@@ -1,6 +1,7 @@
 import { debounce } from "lodash";
 import React, { useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
+import GameGuard from "./guards/GameGuard";
 import i18next from "./i18next";
 import Home from "./pages/Home";
 import { challenges, gameservice } from "./Root";
@@ -39,8 +40,14 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    gameservice.getStatus("trxwpaChkjxZtn7FH");
+
     gameservice.events.on("started", (id) => {
-      history.push(`/game/${id}`);
+      // IT WORKS HERE
+      const gameStatus = gameservice.getStatus(id);
+      if (gameStatus === "computer") {
+        history.push(`/game/${id}`);
+      }
     });
   }, [history]);
 
@@ -49,9 +56,7 @@ const App = () => {
       <Route exact path="/">
         <Home />
       </Route>
-      <Route exact path="/game/:id">
-        <GameMarkup />
-      </Route>
+      <GameGuard exact path="/game/:id" component={GameMarkup} />
       <Route exact path="/analysis">
         <GameAnalysis />
       </Route>
