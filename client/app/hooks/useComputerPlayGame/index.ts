@@ -81,7 +81,7 @@ const useComputerPlayGame = (gameId: string) => {
         game.makeMove(connection.user!, move.join("") + (promotion || "")),
     );
 
-    setResign(() => () => game.resign(connection.user!));
+    setResign(() => () => game.playerResign());
 
     return () => {
       gameservice.events.removeAllListeners();

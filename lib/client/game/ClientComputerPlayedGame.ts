@@ -77,6 +77,12 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
     throw new Error("Method not implemented.");
   }
 
+  public playerResign(): void {
+    this.logger1.debug(() => `Current player has been resigned`);
+
+    Meteor.call("gamecommand", this.me._id, { type: "resign" });
+  }
+
   // fen and result are not currently used on the client, but feel free to use them if you find a reason
   protected internalMakeMove(
     _who: string,
