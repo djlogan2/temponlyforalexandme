@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import LongArrow from "../../icons/LongArrow";
 import Card from "../../Card";
 import ColorPick from "../ColorPick";
@@ -18,6 +18,10 @@ import { useTranslate } from "/client/app/hooks";
 interface IComputerPlayProps extends ICommonGameSetup {}
 
 const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
+  const { t } = useTranslate();
+
+  const [customTime, setCustomTime] = useState<boolean>(false);
+
   const formik = useFormik({
     initialValues: {
       color: "",
@@ -34,14 +38,23 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
     },
   });
 
-  const { t } = useTranslate();
+  const handleTimeChange = (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined,
+  ): void => {
+    formik
+      .setFieldValue(field, value, shouldValidate)
+      .then(() => !customTime && formik.handleSubmit());
+  };
 
   return (
     <form onSubmit={formik.handleSubmit} className="computerPlay">
       <TimeOptions
         className="computerPlay__card"
         subtitle={t("setGameOptions")}
-        onPickTime={formik.setFieldValue}
+        onPickTime={handleTimeChange}
+        onCustomTimeToggled={setCustomTime}
       />
 
       <Card className="computerPlay__card computerPlay__rangeSlider">

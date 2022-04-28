@@ -18,16 +18,18 @@ interface ITimeOptionProps {
     value: any,
     shouldValidate?: boolean | undefined,
   ) => void;
+  onCustomTimeToggled?: (newValue: boolean) => void;
 }
 const TimeOption: FC<ITimeOptionProps> = ({
   className,
   subtitle,
   onPickTime = noop,
+  onCustomTimeToggled,
 }) => {
   const { t } = useTranslate();
   const { challengeTimeOptions } = useChallengeTimeOptions();
 
-  const [customTime, showCustomTime] = useState(false);
+  const [customTime, setCustomTime] = useState(false);
   const [timeOption, setTimeOption] = useState<number | "custom" | undefined>();
   const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
 
@@ -36,10 +38,18 @@ const TimeOption: FC<ITimeOptionProps> = ({
     [challengeTimeOptions],
   );
 
+  const toggleCustomTime = (newValue: boolean): void => {
+    setCustomTime(newValue);
+
+    if (onCustomTimeToggled) {
+      onCustomTimeToggled(newValue);
+    }
+  };
+
   return customTime ? (
     <TimeControl
       className={className}
-      onReturn={() => showCustomTime(false)}
+      onReturn={() => toggleCustomTime(false)}
       onPickTime={(field, value, shouldValidate) => {
         onPickTime(field, value, shouldValidate);
         setTimeOption("custom");
@@ -64,7 +74,7 @@ const TimeOption: FC<ITimeOptionProps> = ({
               key={time}
               onClick={() => {
                 if (time === "custom") {
-                  showCustomTime(true);
+                  toggleCustomTime(true);
                 } else {
                   setTimeOption(time);
                   onPickTime("time", time);
