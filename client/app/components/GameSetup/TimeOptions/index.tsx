@@ -1,15 +1,14 @@
 import clsx from "clsx";
 import { noop } from "lodash";
-import React, { FC, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import Arrow from "../../icons/Arrow";
 import More from "../../icons/More";
 import Subtitle from "../../Subtitle";
-import { timeOptions } from "../constants";
 import TimeControl from "../TimeControl";
-import { TTimeOption } from "../types";
 import { useTranslate } from "/client/app/hooks";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 import TextButton from "/client/app/shared/Buttons/TextButton";
+import useChallengeTimeOptions from "/client/app/hooks/useGameSetup";
 
 interface ITimeOptionProps {
   className?: string;
@@ -20,16 +19,22 @@ interface ITimeOptionProps {
     shouldValidate?: boolean | undefined,
   ) => void;
 }
-
 const TimeOption: FC<ITimeOptionProps> = ({
   className,
   subtitle,
   onPickTime = noop,
 }) => {
-  const [customTime, showCustomTime] = useState(false);
-  const [timeOption, setTimeOption] = useState<TTimeOption | undefined>();
-  const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
   const { t } = useTranslate();
+  const { challengeTimeOptions } = useChallengeTimeOptions();
+
+  const [customTime, showCustomTime] = useState(false);
+  const [timeOption, setTimeOption] = useState<number | "custom" | undefined>();
+  const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
+
+  const timeOptions: [...number[], "custom"] = useMemo(
+    () => [...challengeTimeOptions, "custom"],
+    [challengeTimeOptions],
+  );
 
   return customTime ? (
     <TimeControl
