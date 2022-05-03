@@ -9,3 +9,8 @@ export type TI18NDoc = {
   token: string;
   _id: string;
 };
+
+export type TChallengeTimeOption = {
+  id: string;
+  value: number;
+};

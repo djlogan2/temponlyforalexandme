@@ -5,10 +5,11 @@ import Arrow from "../../icons/Arrow";
 import More from "../../icons/More";
 import Subtitle from "../../Subtitle";
 import TimeControl from "../TimeControl";
+import { TChallengeTimeOption } from "/client/app/types";
+import { useGameSetup } from "/client/app/contexts/gameSetupContext";
 import { useTranslate } from "/client/app/hooks";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 import TextButton from "/client/app/shared/Buttons/TextButton";
-import useChallengeTimeOptions from "/client/app/hooks/useGameSetup";
 
 interface ITimeOptionProps {
   className?: string;
@@ -27,13 +28,12 @@ const TimeOption: FC<ITimeOptionProps> = ({
   onCustomTimeToggled,
 }) => {
   const { t } = useTranslate();
-  const { challengeTimeOptions } = useChallengeTimeOptions();
-
+  const { challengeTimeOptions } = useGameSetup();
   const [customTime, setCustomTime] = useState(false);
   const [timeOption, setTimeOption] = useState<number | "custom" | undefined>();
   const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
 
-  const timeOptions: [...number[], "custom"] = useMemo(
+  const timeOptions: [...TChallengeTimeOption[], "custom"] = useMemo(
     () => [...challengeTimeOptions, "custom"],
     [challengeTimeOptions],
   );
@@ -68,26 +68,31 @@ const TimeOption: FC<ITimeOptionProps> = ({
             showMoreChallengeTimes && "timeOptions__list--seenAll",
           )}
         >
-          {timeOptions.map((time) => (
-            <TabButtonSquared
-              color={timeOption === time ? "primary" : undefined}
-              key={time}
-              onClick={() => {
-                if (time === "custom") {
+          {timeOptions.map((option) =>
+            option === "custom" ? (
+              <TabButtonSquared
+                key={option}
+                onClick={() => {
                   toggleCustomTime(true);
-                } else {
-                  setTimeOption(time);
-                  onPickTime("time", time);
-                }
-              }}
-            >
-              {time === "custom" && (
+                }}
+              >
                 <More className="timeOptions__customTime" />
-              )}
-              <p>{time}</p>
-              {time !== "custom" && <p>{t("minute")}</p>}
-            </TabButtonSquared>
-          ))}
+                <p>{option}</p>
+              </TabButtonSquared>
+            ) : (
+              <TabButtonSquared
+                color={option.value === timeOption ? "primary" : undefined}
+                key={option.id}
+                onClick={() => {
+                  setTimeOption(option.value);
+                  onPickTime("time", option.value);
+                }}
+              >
+                <p>{option.value}</p>
+                <p>{t("minute")}</p>
+              </TabButtonSquared>
+            ),
+          )}
         </div>
       </div>
       <TextButton
