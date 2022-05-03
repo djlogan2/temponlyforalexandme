@@ -97,5 +97,7 @@ export default class GameService extends CommonGameService {
     }
   }
 
-  protected stopping(): void {}
+  protected stopping(): void {
+    this.events.off("ready");
+  }
 }

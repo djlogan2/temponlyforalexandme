@@ -23,20 +23,33 @@ export default class ChallengeButtonPublication extends UserChangePublication<Ch
   }
 
   private getButtons(user?: ServerUser): void {
-    let record;
-
-    if (user) record = this.readOne({ user_id: user.id });
-
-    if (user && !record)
-      record = this.readOne({ isolation_group: user.isolation_group });
-
-    if (!record)
-      record = this.readOne({
-        user_id: { $exists: false },
-        isolation_group: { $exists: false },
-      });
-
-    if (!record) this.killCursor();
-    else this.setSelector({ _id: record._id });
+    this.setSelector({
+      $or: [
+        {
+          user_id: user?.id,
+        },
+        {
+          $and: [
+            {
+              user_id: {
+                $exists: false,
+              },
+            },
+            {
+              $or: [
+                {
+                  isolation_group: user?.isolation_group,
+                },
+                {
+                  isolation_group: {
+                    $exists: false,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
   }
 }

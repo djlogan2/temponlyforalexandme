@@ -58,7 +58,7 @@ const Root = () => {
 
   useEffect(() => {
     const gameReady = gameservice.onReady();
-    const challengesReady = gameservice.onReady();
+    const challengesReady = challenges.onReady();
     const loggedIn = globalThis.icc.connection.onLoggedIn();
 
     Promise.all([gameReady, challengesReady, loggedIn]).then(() => {
