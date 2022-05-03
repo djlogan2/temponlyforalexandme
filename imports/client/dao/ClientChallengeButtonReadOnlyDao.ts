@@ -19,6 +19,7 @@ export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButt
       "challengebuttons",
     );
 
+    this.start({});
     this.pEvents.emit("ready");
   }
 
