@@ -42,7 +42,7 @@ export const GameSetupProvider: FC<IGameSetupContextProps> = ({
 
   useEffect(() => {
     challengeService.buttonEvents.on("ready", () => {
-      const challengeButtons = challengeService.getButtons();
+      const challengeButtons = challengeService.getButtons() || [];
 
       const newTimeOptions = challengeButtons.map<TChallengeTimeOption>(
         (button) => ({
