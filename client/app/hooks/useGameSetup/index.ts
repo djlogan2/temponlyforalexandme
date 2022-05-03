@@ -10,9 +10,21 @@ const useGameSetup = () => {
   );
 
   useEffect(() => {
-    challenges.buttonEvents.on("ready", () => {
+    challenges.buttonEvents.on("ready", (data) => {
       const initialTimeOptions = getChallengeTimeOptions();
       setChallengeTimeOptions(initialTimeOptions);
+    });
+
+    challenges.buttonEvents.on("changed", (data) => {
+      setChallengeTimeOptions(data);
+    });
+
+    challenges.buttonEvents.on("added", (data) => {
+      setChallengeTimeOptions(data);
+    });
+
+    challenges.buttonEvents.on("removed", (data) => {
+      setChallengeTimeOptions(data);
     });
 
     const timeOptions = getChallengeTimeOptions();
