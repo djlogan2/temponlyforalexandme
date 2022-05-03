@@ -4,9 +4,7 @@ import EventEmitter from "eventemitter3";
 import Stoppable from "/lib/Stoppable";
 
 export default class WritableChallengeButtonDao extends WritableReactiveDao<OneChallengeButton> {
-  private pEvents = new EventEmitter<
-    "added" | "removed" | "ready" | "changed"
-  >();
+  private pEvents = new EventEmitter<"added" | "removed" | "ready">();
 
   public constructor(parent: Stoppable | null) {
     super(parent, "challengebuttons");
@@ -20,9 +18,7 @@ export default class WritableChallengeButtonDao extends WritableReactiveDao<OneC
   protected onFieldsChanged(
     id: string,
     record: Partial<OneChallengeButton>,
-  ): void {
-    this.pEvents.emit("changed", record);
-  }
+  ): void {}
 
   protected onRecordAdded(
     id: string,
