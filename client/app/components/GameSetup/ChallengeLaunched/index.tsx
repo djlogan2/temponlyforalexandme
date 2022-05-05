@@ -6,6 +6,7 @@ import TimeOptions from "../TimeOptions";
 import { ICommonGameSetup } from "../types";
 import "./index.scss";
 import { useTranslate } from "/client/app/hooks";
+import { onPickTimeMock } from "../mocks";
 
 interface IChallengeLaunchedProps extends ICommonGameSetup {}
 
@@ -20,7 +21,10 @@ const ChallengeLaunched: FC<IChallengeLaunchedProps> = ({ navigate }) => {
         gameTime={15}
         icon={<Close className="challengeLaunched__close" />}
       />
-      <TimeOptions onPickTime={() => {}} subtitle={t("launchNewChallenge")} />
+      <TimeOptions
+        onPickTime={onPickTimeMock}
+        subtitle={t("launchNewChallenge")}
+      />
       <Challenges />
     </div>
   );

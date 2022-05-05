@@ -1,43 +1,49 @@
+import React, { FC, useMemo, useState } from "react";
+
 import clsx from "clsx";
-import { noop } from "lodash";
-import React, { FC, useState } from "react";
-import Arrow from "../../icons/Arrow";
-import More from "../../icons/More";
-import Subtitle from "../../Subtitle";
-import { timeOptions } from "../constants";
-import TimeControl from "../TimeControl";
-import { TTimeOption } from "../types";
+
+import { TChallengeButton } from "/client/app/types";
+import { useGameSetup } from "/client/app/contexts/gameSetupContext";
 import { useTranslate } from "/client/app/hooks";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 import TextButton from "/client/app/shared/Buttons/TextButton";
+import Arrow from "../../icons/Arrow";
+import More from "../../icons/More";
+import Subtitle from "../../Subtitle";
+import TimeControl from "../TimeControl";
+
+const CUSTOM = "custom";
 
 interface ITimeOptionProps {
-  className?: string;
   subtitle: string;
-  onPickTime: (
-    field: string,
-    value: any,
-    shouldValidate?: boolean | undefined,
-  ) => void;
+  onPickTime: (value: TChallengeButton | number) => Promise<void>;
+  className?: string;
 }
-
 const TimeOption: FC<ITimeOptionProps> = ({
   className,
   subtitle,
-  onPickTime = noop,
+  onPickTime,
 }) => {
-  const [customTime, showCustomTime] = useState(false);
-  const [timeOption, setTimeOption] = useState<TTimeOption | undefined>();
-  const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
   const { t } = useTranslate();
+  const { challengeButtons } = useGameSetup();
+  const [customTime, setCustomTime] = useState(false);
+  const [challengeButton, setChallengeButton] = useState<TChallengeButton>(
+    challengeButtons[0],
+  );
+  const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
+
+  const timeOptions: [...TChallengeButton[], typeof CUSTOM] = useMemo(
+    () => [...challengeButtons, CUSTOM],
+    [challengeButtons],
+  );
 
   return customTime ? (
     <TimeControl
       className={className}
-      onReturn={() => showCustomTime(false)}
-      onPickTime={(field, value, shouldValidate) => {
-        onPickTime(field, value, shouldValidate);
-        setTimeOption("custom");
+      onReturn={() => setCustomTime(false)}
+      onPickTime={(value) => {
+        onPickTime(value);
+        setCustomTime(true);
       }}
     />
   ) : (
@@ -53,26 +59,30 @@ const TimeOption: FC<ITimeOptionProps> = ({
             showMoreChallengeTimes && "timeOptions__list--seenAll",
           )}
         >
-          {timeOptions.map((time) => (
-            <TabButtonSquared
-              color={timeOption === time ? "primary" : undefined}
-              key={time}
-              onClick={() => {
-                if (time === "custom") {
-                  showCustomTime(true);
-                } else {
-                  setTimeOption(time);
-                  onPickTime("time", time);
-                }
-              }}
-            >
-              {time === "custom" && (
+          {timeOptions.map((option) =>
+            option === CUSTOM ? (
+              <TabButtonSquared
+                key={option}
+                onClick={() => setCustomTime(true)}
+              >
                 <More className="timeOptions__customTime" />
-              )}
-              <p>{time}</p>
-              {time !== "custom" && <p>{t("minute")}</p>}
-            </TabButtonSquared>
-          ))}
+                <p>{option}</p>
+              </TabButtonSquared>
+            ) : (
+              <TabButtonSquared
+                color={
+                  option.name === challengeButton.name ? "primary" : undefined
+                }
+                key={option.id}
+                onClick={() => {
+                  setChallengeButton(option);
+                  onPickTime(option);
+                }}
+              >
+                <p>{option.name}</p>
+              </TabButtonSquared>
+            ),
+          )}
         </div>
       </div>
       <TextButton

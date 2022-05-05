@@ -19,6 +19,7 @@ export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButt
       "challengebuttons",
     );
 
+    this.start({});
     this.pEvents.emit("ready");
   }
 
@@ -30,7 +31,7 @@ export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButt
     id: string,
     record: Partial<OneChallengeButton>,
   ): void {
-    this.pEvents.emit("changed");
+    this.pEvents.emit("changed", record);
   }
 
   protected onRecordAdded(
@@ -41,7 +42,7 @@ export default class ClientChallengeButtonReadOnlyDao extends CommonReadOnlyButt
   }
 
   protected onRecordRemoved(id: string): void {
-    this.pEvents.emit("removed");
+    this.pEvents.emit("removed", id);
   }
 
   protected onReady(): void {

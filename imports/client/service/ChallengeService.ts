@@ -21,7 +21,7 @@ export default class ChallengeService extends CommonChallengeService {
   constructor(
     parent: Stoppable | null,
     dao: ClientChallengeReadOnlyDao,
-    buttondao: ClientChallengeButtonReadOnlyDao
+    buttondao: ClientChallengeButtonReadOnlyDao,
   ) {
     super(parent, buttondao);
     this.dao = dao;
@@ -43,7 +43,7 @@ export default class ChallengeService extends CommonChallengeService {
     rated: boolean,
     color?: PieceColor,
     who?: string[],
-    opponentclocks?: ClockSettings
+    opponentclocks?: ClockSettings,
   ): void {
     this.createChallenge("", "", "", clock, rated, color, who, opponentclocks);
   }
@@ -65,9 +65,14 @@ export default class ChallengeService extends CommonChallengeService {
     console.log("ID: ", id);
     const buttons = this.buttondao.readMany({ user_id: id });
     console.log("BUTTONS: ", buttons);
-    return buttons?.map(button => {
-      return { name: button.name, challenge: button.challenge };
-    }) || [];
+    return buttons?.map(
+      (button) =>
+        ({
+          _id: button._id,
+          name: button.name,
+          challenge: button.challenge,
+        } || []),
+    );
   }
 
   protected internalAddChallenge(
@@ -78,20 +83,16 @@ export default class ChallengeService extends CommonChallengeService {
     rated: boolean,
     color: PieceColor | null,
     who: string[] | null,
-    opponentclocks: ClockSettings | null
+    opponentclocks: ClockSettings | null,
   ): void {
     Meteor.call("addchallenge", clock, rated, color, who, opponentclocks);
   }
 
-  protected stopping(): void {
-  }
+  protected stopping(): void {}
 
-  internalAddChallengeButton(): void {
-  }
+  internalAddChallengeButton(): void {}
 
-  internalRemoveChallengebutton(): void {
-  }
+  internalRemoveChallengebutton(): void {}
 
-  internalUpdateChallengeButton(): void {
-  }
+  internalUpdateChallengeButton(): void {}
 }

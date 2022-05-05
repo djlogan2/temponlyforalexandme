@@ -9,3 +9,10 @@ export type TI18NDoc = {
   token: string;
   _id: string;
 };
+
+export type TChallengeButton = {
+  id: string;
+  name: string;
+  time: number;
+  opponentTime?: number;
+};

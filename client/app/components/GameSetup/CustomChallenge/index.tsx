@@ -8,6 +8,7 @@ import TimeOptions from "../TimeOptions";
 import { EComponents, ICommonGameSetup } from "../types";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import { useTranslate } from "/client/app/hooks";
+import { onPickTimeMock } from "../mocks";
 
 interface ICustomChallengeProps extends ICommonGameSetup {}
 
@@ -17,7 +18,7 @@ const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => {
   return (
     <div className="customChallenge">
       <TimeOptions
-        onPickTime={() => {}}
+        onPickTime={onPickTimeMock}
         className="customChallenge__card"
         subtitle={t("launchNewChallenge")}
       />

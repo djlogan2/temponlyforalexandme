@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../lib/client/ClientServer";
 import "../../lib/client/ICCGlobal";
 import App from "./App";
+import { GameSetupProvider } from "./contexts/gameSetupContext";
 import { LoadingPlaceholder } from "./shared";
 import Theme, { ThemeProvider } from "./theme";
 import ClientChallengeButtonReadOnlyDao from "/imports/client/dao/ClientChallengeButtonReadOnlyDao";
@@ -68,8 +69,10 @@ const Root = () => {
 
   return isAppReady ? (
     <ThemeProvider themeService={theme}>
-      <Theme />
-      <App />
+      <GameSetupProvider challengeService={challenges}>
+        <Theme />
+        <App />
+      </GameSetupProvider>
     </ThemeProvider>
   ) : (
     <LoadingPlaceholder />
