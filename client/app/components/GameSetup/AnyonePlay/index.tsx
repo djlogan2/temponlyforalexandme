@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import Challenges from "../Challenges";
 import TimeOptions from "../TimeOptions";
-import { EComponents, ICommonGameSetup } from "../types";
 import { useTranslate } from "/client/app/hooks";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
+import { EComponents, ICommonGameSetup } from "../types";
+import { onPickTimeMock } from "../mocks";
 
 interface IAnyonePlayProps extends ICommonGameSetup {}
 
@@ -12,7 +13,10 @@ const AnyonePlay: FC<IAnyonePlayProps> = ({ navigate }) => {
 
   return (
     <div className="anyonePlay">
-      <TimeOptions onPickTime={() => {}} subtitle={t("launchNewChallenge")} />
+      <TimeOptions
+        onPickTime={onPickTimeMock}
+        subtitle={t("launchNewChallenge")}
+      />
       <Challenges />
       <StandardButton
         className="anyonePlay__customChallenge"
