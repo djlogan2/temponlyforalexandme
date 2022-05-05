@@ -10,7 +10,9 @@ export type TI18NDoc = {
   _id: string;
 };
 
-export type TChallengeTimeOption = {
+export type TChallengeButton = {
   id: string;
-  value: number;
+  name: string;
+  time: number;
+  opponentTime?: number;
 };

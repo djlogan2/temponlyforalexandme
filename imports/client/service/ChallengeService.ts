@@ -68,7 +68,7 @@ export default class ChallengeService extends CommonChallengeService {
     return buttons?.map(
       (button) =>
         ({
-          id: button._id,
+          _id: button._id,
           name: button.name,
           challenge: button.challenge,
         } || []),
