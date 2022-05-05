@@ -12,6 +12,8 @@ import More from "../../icons/More";
 import Subtitle from "../../Subtitle";
 import TimeControl from "../TimeControl";
 
+const CUSTOM = "custom";
+
 interface ITimeOptionProps {
   subtitle: string;
   onPickTime: (value: TChallengeButton | number) => Promise<void>;
@@ -30,8 +32,8 @@ const TimeOption: FC<ITimeOptionProps> = ({
   );
   const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
 
-  const timeOptions: [...TChallengeButton[], "custom"] = useMemo(
-    () => [...challengeButtons, "custom"],
+  const timeOptions: [...TChallengeButton[], typeof CUSTOM] = useMemo(
+    () => [...challengeButtons, CUSTOM],
     [challengeButtons],
   );
 
@@ -58,7 +60,7 @@ const TimeOption: FC<ITimeOptionProps> = ({
           )}
         >
           {timeOptions.map((option) =>
-            option === "custom" ? (
+            option === CUSTOM ? (
               <TabButtonSquared
                 key={option}
                 onClick={() => setCustomTime(true)}

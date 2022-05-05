@@ -20,24 +20,26 @@ import "./index.scss";
 
 interface IComputerPlayProps extends ICommonGameSetup {}
 
+const RANDOM = "random";
+
 const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
 
   const formik = useFormik<{
-    color: PieceColor | "random";
+    color: PieceColor | typeof RANDOM;
     skill: number;
     time: number;
     opponentTime?: number;
   }>({
     initialValues: {
-      color: "random",
+      color: RANDOM,
       time: 0,
       skill: 1,
     },
     onSubmit: (values) => {
       gameservice.startComputerGame({
         skill_level: Math.max(1, Math.round((values.skill - 1000) / 100)),
-        color: values.color === "random" ? undefined : values.color,
+        color: values.color === RANDOM ? undefined : values.color,
         clocks: { minutes: values.time },
         opponentclocks: values.opponentTime
           ? { minutes: values.opponentTime }
