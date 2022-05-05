@@ -1,22 +1,20 @@
-import clsx from "clsx";
 import React, { FC, useEffect, useState } from "react";
+
+import clsx from "clsx";
+
+import { useTranslate } from "/client/app/hooks";
+import TextButton from "/client/app/shared/Buttons/TextButton";
+import Checkbox from "/client/app/shared/Checkbox";
+import Input from "/client/app/shared/Input";
 import LongArrow from "../../icons/LongArrow";
 import Card from "../../Card";
 import Subtitle from "../../Subtitle";
 import "./index.scss";
-import TextButton from "/client/app/shared/Buttons/TextButton";
-import Checkbox from "/client/app/shared/Checkbox";
-import Input from "/client/app/shared/Input";
-import { useTranslate } from "/client/app/hooks";
 
 interface ITimeControlProps {
   className?: string;
   onReturn: () => void;
-  onPickTime: (
-    field: string,
-    value: any,
-    shouldValidate?: boolean | undefined,
-  ) => void;
+  onPickTime: (value: number) => void;
 }
 
 const TimeControl: FC<ITimeControlProps> = ({
@@ -28,7 +26,7 @@ const TimeControl: FC<ITimeControlProps> = ({
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
-    onPickTime("time", +(seconds / 60).toFixed(2) + minutes);
+    onPickTime(+(seconds / 60).toFixed(2) + minutes);
   }, [minutes, seconds]);
 
   const { t } = useTranslate();

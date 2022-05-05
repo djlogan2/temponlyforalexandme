@@ -1,51 +1,64 @@
+import React, { FC } from "react";
+
 import { useFormik } from "formik";
-import React, { FC, useState } from "react";
+
+import { gameservice } from "/client/app/Root";
+import StandardButton from "/client/app/shared/Buttons/StandardButton";
+import { useTranslate } from "/client/app/hooks";
+import { TChallengeButton } from "/client/app/types";
+import { PieceColor } from "/lib/records/ChallengeRecord";
+import RangeSlider from "/client/app/shared/RangeSlider";
+import Input from "/client/app/shared/Input";
 import LongArrow from "../../icons/LongArrow";
 import Card from "../../Card";
-import ColorPick from "../ColorPick";
 import RatedGame from "../RatedGame";
 import Subtitle from "../../Subtitle";
+import ColorPick from "../ColorPick";
 import TimeOptions from "../TimeOptions";
 import { ICommonGameSetup } from "../types";
 import "./index.scss";
-import { gameservice } from "/client/app/Root";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import Input from "/client/app/shared/Input";
-import RangeSlider from "/client/app/shared/RangeSlider";
-import { PieceColor } from "/lib/records/ChallengeRecord";
-import { useTranslate } from "/client/app/hooks";
 
 interface IComputerPlayProps extends ICommonGameSetup {}
 
 const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
 
-  const [customTime, setCustomTime] = useState<boolean>(false);
-
-  const formik = useFormik({
+  const formik = useFormik<{
+    color: PieceColor | "random";
+    skill: number;
+    time: number;
+    opponentTime?: number;
+  }>({
     initialValues: {
-      color: "",
+      color: "random",
       time: 0,
       skill: 1,
     },
     onSubmit: (values) => {
       gameservice.startComputerGame({
         skill_level: Math.max(1, Math.round((values.skill - 1000) / 100)),
-        color: values.color as PieceColor,
+        color: values.color === "random" ? undefined : values.color,
         clocks: { minutes: values.time },
+        opponentclocks: values.opponentTime
+          ? { minutes: values.opponentTime }
+          : undefined,
       });
       onCloseModal();
     },
   });
 
-  const handleTimeChange = (
-    field: string,
-    value: any,
-    shouldValidate?: boolean | undefined,
-  ): void => {
-    formik
-      .setFieldValue(field, value, shouldValidate)
-      .then(() => !customTime && formik.handleSubmit());
+  const handleTimeChange = async (
+    value: TChallengeButton | number,
+  ): Promise<void> => {
+    if (typeof value === "number") {
+      await formik.setFieldValue("time", value);
+      await formik.setFieldValue("opponentTime", undefined);
+    } else {
+      await formik.setFieldValue("time", value.time);
+      await formik.setFieldValue("opponentTime", value.opponentTime);
+
+      formik.handleSubmit();
+    }
   };
 
   return (
@@ -54,7 +67,6 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
         className="computerPlay__card"
         subtitle={t("setGameOptions")}
         onPickTime={handleTimeChange}
-        onCustomTimeToggled={setCustomTime}
       />
 
       <Card className="computerPlay__card computerPlay__rangeSlider">
