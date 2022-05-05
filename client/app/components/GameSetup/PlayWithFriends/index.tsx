@@ -5,6 +5,7 @@ import React, { FC, useState } from "react";
 import LongArrow from "../../icons/LongArrow";
 import SearchPeople from "../../SearchPeople";
 import UserItem from "../../UserItem";
+import { onPickTimeMock } from "../mocks";
 import Shortcut from "../Shortcut";
 import TimeOptions from "../TimeOptions";
 import { ICommonGameSetup } from "../types";
@@ -69,7 +70,7 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
       </div>
 
       <TimeOptions
-        onPickTime={() => {}}
+        onPickTime={onPickTimeMock}
         className="playWithFriends__timeOptions"
         subtitle={t("launchNewChallenge")}
       />
