@@ -9,13 +9,12 @@ import React, {
 
 import { uniqBy } from "lodash";
 
-import ChallengeService from "/imports/client/service/ChallengeService";
 import { TChallengeButton } from "../../types";
-import { GameSetupContext } from "./context";
+import { GameSetupContextProvider } from "./context";
+import ChallengeService from "/imports/client/service/ChallengeService";
 
 interface IGameSetupContextProps {
   challengeService: ChallengeService;
-  children: ReactNode;
 }
 
 const buildChallengeButton = (dbButton: any): TChallengeButton => ({
@@ -26,8 +25,8 @@ const buildChallengeButton = (dbButton: any): TChallengeButton => ({
 });
 
 export const GameSetupProvider: FC<IGameSetupContextProps> = ({
-  challengeService,
   children,
+  challengeService,
 }) => {
   const [challengeButtons, setChallengeButtons] = useState<TChallengeButton[]>(
     [],
@@ -93,8 +92,8 @@ export const GameSetupProvider: FC<IGameSetupContextProps> = ({
   }, []);
 
   return (
-    <GameSetupContext.Provider value={contextValue}>
+    <GameSetupContextProvider value={contextValue}>
       {children}
-    </GameSetupContext.Provider>
+    </GameSetupContextProvider>
   );
 };
