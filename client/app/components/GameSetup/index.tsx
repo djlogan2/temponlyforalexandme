@@ -1,4 +1,5 @@
 import React, { FC, useRef, useState } from "react";
+import { useServices } from "../../contexts/services";
 import { useTranslate } from "../../hooks";
 import useOnClickOutside from "../../hooks/useClickOutside";
 import Backdrop from "../../shared/Backdrop";
@@ -7,7 +8,6 @@ import { gameSetupComponents, title } from "./constants";
 import Controls from "./Controls";
 import PlayOptions from "./PlayOptions";
 import { EComponents } from "./types";
-import { challenges } from "/client/app/Root";
 
 interface IGameSetupProps {
   onCloseModal: () => void;
@@ -15,6 +15,7 @@ interface IGameSetupProps {
 
 const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
+  const { challengeService } = useServices();
 
   const [components, setComponent] = useState<EComponents[]>([
     EComponents.ANYONE,
@@ -42,8 +43,8 @@ const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
     setComponent(copiedComponents);
   };
 
-  challenges.buttonEvents.on("ready", () => {
-    const buttons = challenges.getButtons();
+  challengeService.buttonEvents.on("ready", () => {
+    const buttons = challengeService.getButtons();
     console.log("COMPONENt: ", buttons);
   });
 

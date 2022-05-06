@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useServices } from "../../contexts/services";
 import { calcTime } from "../../data/utils";
 import ControlBox from "./components/ControlBox";
 import "./index.scss";
@@ -14,8 +15,9 @@ import Flip from "/client/app/components/icons/Flip";
 import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
 import { DigitalClock, GameTitle } from "/client/app/shared";
 
-const GameMarkup = ({ ...props }) => {
+const GameMarkup = () => {
   const { id } = useParams<{ id: string }>();
+  const { gameService } = useServices();
   const {
     clocks,
     fen,
@@ -28,7 +30,7 @@ const GameMarkup = ({ ...props }) => {
     resign,
     makeMove,
     setIsGameOver,
-  } = useComputerPlayGame(id);
+  } = useComputerPlayGame(id, gameService);
 
   const [isFlipped, setIsFlipped] = useState(myColor === "b");
 

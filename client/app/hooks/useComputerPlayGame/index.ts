@@ -1,11 +1,10 @@
-import { noop } from "lodash";
 import { useEffect, useState } from "react";
 import { useSound } from "..";
 import { GameStatus } from "../../../../lib/records/GameRecord";
-import { gameservice } from "../../Root";
 import { TMoveItem } from "../../types";
 import { ESounds } from "../useSound/constants";
 import { getLegalMoves } from "./constants";
+import GameService from "/imports/client/service/GameService";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import { GameConvertRecord } from "/lib/records/GameRecord";
@@ -15,7 +14,7 @@ type TResign = () => () => void;
 
 const emptyFunc = () => () => {};
 
-const useComputerPlayGame = (gameId: string) => {
+const useComputerPlayGame = (gameId: string, gameService: GameService) => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
@@ -29,7 +28,7 @@ const useComputerPlayGame = (gameId: string) => {
   const playSound = useSound();
 
   useEffect(() => {
-    const game = gameservice.getTyped(
+    const game = gameService.getTyped(
       gameId,
       connection.user!,
     ) as ClientComputerPlayedGame;
@@ -68,7 +67,7 @@ const useComputerPlayGame = (gameId: string) => {
     });
 
     game.events.on("converted", () => {
-      const { result } = gameservice.getGameEntity(
+      const { result } = gameService.getGameEntity(
         gameId,
       ) as unknown as GameConvertRecord;
 
@@ -84,7 +83,7 @@ const useComputerPlayGame = (gameId: string) => {
     setResign(() => () => game.playerResign());
 
     return () => {
-      gameservice.events.removeAllListeners();
+      gameService.events.removeAllListeners();
     };
   }, []);
 

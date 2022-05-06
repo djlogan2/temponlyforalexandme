@@ -3,7 +3,7 @@ import React, { FC, useMemo, useState } from "react";
 import clsx from "clsx";
 
 import { TChallengeButton } from "/client/app/types";
-import { useGameSetup } from "/client/app/contexts/gameSetupContext";
+import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { useTranslate } from "/client/app/hooks";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 import TextButton from "/client/app/shared/Buttons/TextButton";
