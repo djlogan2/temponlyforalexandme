@@ -2,27 +2,29 @@ import React, { FC } from "react";
 
 import { useFormik } from "formik";
 
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import { useTranslate } from "/client/app/hooks";
-import { TChallengeButton } from "/client/app/types";
+import { useServices } from "/client/app/contexts/services";
+import { ChallengeButton } from "/client/app/types";
 import { PieceColor } from "/lib/records/ChallengeRecord";
+import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import RangeSlider from "/client/app/shared/RangeSlider";
 import Input from "/client/app/shared/Input";
-import { useServices } from "/client/app/contexts/services";
-import LongArrow from "../../icons/LongArrow";
-import Card from "../../Card";
-import RatedGame from "../RatedGame";
+import LongArrow from "/client/app/components/icons/LongArrow";
+import Card from "/client/app/components/Card";
+
 import Subtitle from "../../Subtitle";
+import RatedGame from "../RatedGame";
 import ColorPick from "../ColorPick";
 import TimeOptions from "../TimeOptions";
-import { ICommonGameSetup } from "../types";
+import { CommonGameSetup } from "../types";
+
 import "./index.scss";
 
-interface IComputerPlayProps extends ICommonGameSetup {}
+type ComputerPlayProps = CommonGameSetup;
 
 const RANDOM = "random";
 
-const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
+const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
   const { gameService } = useServices();
 
@@ -51,7 +53,7 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
   });
 
   const handleTimeChange = async (
-    value: TChallengeButton | number,
+    value: ChallengeButton | number,
   ): Promise<void> => {
     if (typeof value === "number") {
       await formik.setFieldValue("time", value);

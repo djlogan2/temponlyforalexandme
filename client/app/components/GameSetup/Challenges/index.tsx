@@ -5,13 +5,13 @@ import LongArrow from "../../icons/LongArrow";
 import Subtitle from "../../Subtitle";
 import ChallengesList from "../ChallengesList";
 import { challengeTypes } from "../constants";
-import { TChallenge } from "../types";
+import { Challenge } from "../types";
 import TabItemButton from "/client/app/shared/Buttons/TabItemButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 
 const Challenges = () => {
   const [activeChallenge, setActiveChallenge] =
-    useState<TChallenge>("challenge");
+    useState<Challenge>("challenge");
   const { t } = useTranslate();
 
   return (

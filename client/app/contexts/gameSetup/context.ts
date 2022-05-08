@@ -1,11 +1,8 @@
-import { TChallengeButton } from "../../types";
 import { createGenericContext } from "../utils";
 
-interface IGameSetupContextValue {
-  challengeButtons: TChallengeButton[];
-}
+import { GameSetupContextValue } from "./types";
 
 const [GameSetupContextProvider, useGameSetup] =
-  createGenericContext<IGameSetupContextValue>();
+  createGenericContext<GameSetupContextValue>();
 
 export { GameSetupContextProvider, useGameSetup };

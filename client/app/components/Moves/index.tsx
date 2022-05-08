@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import React, { FC, HTMLAttributes, useEffect, useMemo, useRef } from "react";
-import { TMoveItem } from "../../types";
+import { MoveItem } from "client/app/types";
 import "./index.scss";
 import { Pieces } from "/client/app/constants";
 import ScrollBar from "/client/app/shared/ScrollBar";
 
 interface IMovesProps extends HTMLAttributes<HTMLDivElement> {
-  moves: TMoveItem[];
+  moves: MoveItem[];
 }
 
 const Moves: FC<IMovesProps> = ({ moves, className, ...rest }) => {

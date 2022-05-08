@@ -3,14 +3,14 @@ import Close from "../../icons/Close";
 import OpenChallengeItem from "../../OpenChallengeItem";
 import Challenges from "../Challenges";
 import TimeOptions from "../TimeOptions";
-import { ICommonGameSetup } from "../types";
+import { CommonGameSetup } from "../types";
 import "./index.scss";
 import { useTranslate } from "/client/app/hooks";
 import { onPickTimeMock } from "../mocks";
 
-interface IChallengeLaunchedProps extends ICommonGameSetup {}
+type ChallengeLaunchedProps = CommonGameSetup;
 
-const ChallengeLaunched: FC<IChallengeLaunchedProps> = ({ navigate }) => {
+const ChallengeLaunched: FC<ChallengeLaunchedProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
   return (

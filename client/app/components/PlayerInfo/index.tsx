@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React, { FC } from "react";
 import Avatar from "../../shared/Avatar";
-import { TUserStatus } from "../../types";
+import { UserStatus } from "../../types";
 import ChatIcon from "../icons/Chat";
 import ChessTitle from "../icons/ChessTitle";
 import France from "../icons/France";
@@ -14,7 +14,7 @@ interface IPlayerInfoProps {
   username: string;
   rank: number;
   title: string;
-  userStatus: TUserStatus;
+  userStatus: UserStatus;
   lagLevel: 1 | 2 | 3 | 4 | 5;
   flip?: boolean;
   className?: string;

@@ -1,38 +1,33 @@
-import React, {
-  FC,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import { uniqBy } from "lodash";
 
-import { TChallengeButton } from "../../types";
-import { GameSetupContextProvider } from "./context";
 import ChallengeService from "/imports/client/service/ChallengeService";
+import { ChallengeButton } from "/client/app/types";
 
-interface IGameSetupContextProps {
+import { GameSetupContextProvider } from "./context";
+import { GameSetupContextValue } from "./types";
+
+type GameSetupContextProps = {
   challengeService: ChallengeService;
-}
+};
 
-const buildChallengeButton = (dbButton: any): TChallengeButton => ({
+const buildChallengeButton = (dbButton: any): ChallengeButton => ({
   id: dbButton._id,
   name: dbButton.name,
   time: dbButton.challenge.clocks.minutes,
   opponentTime: dbButton.challenge.opponentclocks?.minutes,
 });
 
-export const GameSetupProvider: FC<IGameSetupContextProps> = ({
+export const GameSetupProvider: FC<GameSetupContextProps> = ({
   children,
   challengeService,
 }) => {
-  const [challengeButtons, setChallengeButtons] = useState<TChallengeButton[]>(
+  const [challengeButtons, setChallengeButtons] = useState<ChallengeButton[]>(
     [],
   );
 
-  const contextValue = useMemo(
+  const contextValue: GameSetupContextValue = useMemo(
     () => ({
       challengeButtons,
     }),

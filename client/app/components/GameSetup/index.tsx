@@ -1,31 +1,32 @@
 import React, { FC, useRef, useState } from "react";
-import { useServices } from "../../contexts/services";
-import { useTranslate } from "../../hooks";
-import useOnClickOutside from "../../hooks/useClickOutside";
-import Backdrop from "../../shared/Backdrop";
-import ScrollBar from "../../shared/ScrollBar";
+
+import Backdrop from "/client/app/shared/Backdrop";
+import ScrollBar from "/client/app/shared/ScrollBar";
+import { useServices } from "/client/app/contexts/services";
+import { useTranslate, useClickOutside } from "/client/app/hooks";
+
 import { gameSetupComponents, title } from "./constants";
+import { Components } from "./types";
 import Controls from "./Controls";
 import PlayOptions from "./PlayOptions";
-import { EComponents } from "./types";
 
-interface IGameSetupProps {
+type GameSetupProps = {
   onCloseModal: () => void;
-}
+};
 
-const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
+const GameSetup: FC<GameSetupProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
   const { challengeService } = useServices();
 
-  const [components, setComponent] = useState<EComponents[]>([
-    EComponents.ANYONE,
+  const [components, setComponent] = useState<Components[]>([
+    Components.ANYONE,
   ]);
   const backdropRef = useRef<HTMLDivElement>(null);
-  useOnClickOutside(backdropRef, onCloseModal);
+  useClickOutside(backdropRef, onCloseModal);
 
   const currentTab = components[components.length - 1];
 
-  const navigate = (component: EComponents) => {
+  const navigate = (component: Components) => {
     if (currentTab === component) {
       return;
     }
@@ -64,7 +65,7 @@ const GameSetup: FC<IGameSetupProps> = ({ onCloseModal }) => {
             <Controls onCloseModal={onCloseModal} onReturnBack={returnBack} />
             <div className="gameSetup__container">
               <div className="gameSetup__title">{t(title[currentTab])}</div>
-              {currentTab !== EComponents.CHALLENGE && (
+              {currentTab !== Components.CHALLENGE && (
                 <PlayOptions
                   onClick={(tab) => {
                     navigate(tab);

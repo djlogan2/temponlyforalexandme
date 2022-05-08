@@ -5,7 +5,7 @@ import { noop } from "lodash";
 import React, { FC } from "react";
 import Avatar from "../../shared/Avatar";
 import Flag, { TFlags } from "../../shared/Flag";
-import { TUserStatus } from "../../types";
+import { UserStatus } from "../../types";
 import ChessTitle from "../icons/ChessTitle";
 import "./index.scss";
 
@@ -14,7 +14,7 @@ interface IUserItemProps {
   chessTitle: string;
   flag: TFlags;
   onClick?: () => void;
-  status?: TUserStatus;
+  status?: UserStatus;
   picture?: string;
   size?: "md" | "sm";
   className?: string;

@@ -8,15 +8,15 @@ import UserItem from "../../UserItem";
 import { onPickTimeMock } from "../mocks";
 import Shortcut from "../Shortcut";
 import TimeOptions from "../TimeOptions";
-import { ICommonGameSetup } from "../types";
+import { CommonGameSetup } from "../types";
 import { useTranslate } from "/client/app/hooks";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import Heading5 from "/client/app/shared/Typographies/Heading5";
 
-interface IPlayWithFriendsProps extends ICommonGameSetup {}
+type PlayWithFriendsProps = CommonGameSetup;
 
-const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
+const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
   const [opponents, setOpponents] = useState<number>(0);
   const { t } = useTranslate();
 

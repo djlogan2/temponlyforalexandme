@@ -2,7 +2,7 @@ import React, { FC, useMemo, useState } from "react";
 
 import clsx from "clsx";
 
-import { TChallengeButton } from "/client/app/types";
+import { ChallengeButton } from "/client/app/types";
 import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { useTranslate } from "/client/app/hooks";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
@@ -16,7 +16,7 @@ const CUSTOM = "custom";
 
 interface ITimeOptionProps {
   subtitle: string;
-  onPickTime: (value: TChallengeButton | number) => Promise<void>;
+  onPickTime: (value: ChallengeButton | number) => Promise<void>;
   className?: string;
 }
 const TimeOption: FC<ITimeOptionProps> = ({
@@ -27,12 +27,12 @@ const TimeOption: FC<ITimeOptionProps> = ({
   const { t } = useTranslate();
   const { challengeButtons } = useGameSetup();
   const [customTime, setCustomTime] = useState(false);
-  const [challengeButton, setChallengeButton] = useState<TChallengeButton>(
+  const [challengeButton, setChallengeButton] = useState<ChallengeButton>(
     challengeButtons[0],
   );
   const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
 
-  const timeOptions: [...TChallengeButton[], typeof CUSTOM] = useMemo(
+  const timeOptions: [...ChallengeButton[], typeof CUSTOM] = useMemo(
     () => [...challengeButtons, CUSTOM],
     [challengeButtons],
   );

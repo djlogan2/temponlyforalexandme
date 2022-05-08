@@ -3,12 +3,12 @@ import Challenges from "../Challenges";
 import TimeOptions from "../TimeOptions";
 import { useTranslate } from "/client/app/hooks";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import { EComponents, ICommonGameSetup } from "../types";
+import { Components, CommonGameSetup } from "../types";
 import { onPickTimeMock } from "../mocks";
 
-interface IAnyonePlayProps extends ICommonGameSetup {}
+type AnyonePlayProps = CommonGameSetup;
 
-const AnyonePlay: FC<IAnyonePlayProps> = ({ navigate }) => {
+const AnyonePlay: FC<AnyonePlayProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
   return (
@@ -20,7 +20,7 @@ const AnyonePlay: FC<IAnyonePlayProps> = ({ navigate }) => {
       <Challenges />
       <StandardButton
         className="anyonePlay__customChallenge"
-        onClick={() => navigate(EComponents.CUSTOM)}
+        onClick={() => navigate(Components.CUSTOM)}
       >
         {t("customChallenge")}
       </StandardButton>

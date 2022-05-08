@@ -5,7 +5,7 @@ import Avatar from "../../shared/Avatar";
 import Flag, { TFlags } from "../../shared/Flag";
 import Heading6 from "../../shared/Typographies/Heading6";
 import Paragraph from "../../shared/Typographies/Paragraph";
-import { TUserStatus } from "../../types";
+import { UserStatus } from "../../types";
 import Bullet from "../icons/Bullet";
 import ChessTitle from "../icons/ChessTitle";
 import "./index.scss";
@@ -13,7 +13,7 @@ import "./index.scss";
 interface IOpenChallengeItemProps {
   username: string;
   gameTime: number;
-  userStatus?: TUserStatus;
+  userStatus?: UserStatus;
   icon?: JSX.Element;
   flag?: TFlags;
   chessTitle?: string;

@@ -1,16 +1,16 @@
 import { BasicMoveListNode, MoveZero } from "/lib/records/GameRecord";
 
-export type TUserStatus = "online" | "idle" | "unavailable" | "offline";
-export type TMoveItem = BasicMoveListNode & MoveZero;
+export type UserStatus = "online" | "idle" | "unavailable" | "offline";
+export type MoveItem = BasicMoveListNode & MoveZero;
 
-export type TI18NDoc = {
+export type I18NDoc = {
   locale: string;
   text: string;
   token: string;
   _id: string;
 };
 
-export type TChallengeButton = {
+export type ChallengeButton = {
   id: string;
   name: string;
   time: number;
