@@ -1,13 +1,15 @@
-import { debounce } from "lodash";
 import React, { useEffect } from "react";
+
 import { Route, Switch, useHistory } from "react-router-dom";
+import { debounce } from "lodash";
+
 import { useServices } from "./contexts/services";
 import GameGuard from "./guards/GameGuard";
-import i18next from "./i18next";
 import Home from "./pages/Home";
-import { useTheme } from "./theme";
-import { TI18NDoc } from "./types";
-import { ComponentsView, GameAnalysis, GameMarkup } from "/client/app/pages";
+import { useTheme } from "./contexts/theme";
+import i18next from "./i18next";
+import { I18NDoc } from "./types";
+import { ComponentsView, GameAnalysis, GameMarkup } from "./pages";
 
 const App = () => {
   const { challengeService, gameService } = useServices();
@@ -25,7 +27,7 @@ const App = () => {
       translations.clear();
     }, 500);
 
-    i18n.events.on("translationchanged", (translation: TI18NDoc) => {
+    i18n.events.on("translationchanged", (translation: I18NDoc) => {
       if (!translation) {
         return;
       }
