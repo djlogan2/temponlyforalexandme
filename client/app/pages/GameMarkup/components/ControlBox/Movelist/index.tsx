@@ -6,13 +6,13 @@ import OpeningName from "./components/OpeningName";
 import "./index.scss";
 import { useTranslate } from "/client/app/hooks";
 import Heading6 from "/client/app/shared/Typographies/Heading6";
-import { TMoveItem } from "/client/app/types";
+import { MoveItem } from "/client/app/types";
 
-interface IMovelistProps {
-  moves: TMoveItem[];
-}
+type MovelistProps = {
+  moves: MoveItem[];
+};
 
-const Movelist: FC<IMovelistProps> = ({ moves }) => {
+const Movelist: FC<MovelistProps> = ({ moves }) => {
   const { t } = useTranslate();
 
   return (

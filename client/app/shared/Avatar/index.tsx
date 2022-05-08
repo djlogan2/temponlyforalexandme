@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import React, { FC } from "react";
-import { TUserStatus } from "../../types";
+import { UserStatus } from "../../types";
 import "./index.scss";
 
 interface IAvatarProps {
   alt: string;
   size?: "bg" | "md" | "sm" | "xs";
-  status?: TUserStatus;
+  status?: UserStatus;
   picture?: string;
   className?: string;
   children?: React.ReactNode;

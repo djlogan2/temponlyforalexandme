@@ -8,16 +8,16 @@ import "./index.scss";
 import Movelist from "./Movelist";
 import { ETabs, TTabs } from "./types";
 import { useTranslate } from "/client/app/hooks";
-import { TMoveItem } from "/client/app/types";
+import { MoveItem } from "/client/app/types";
 
-interface IControlBoxProps {
-  moves: TMoveItem[];
+type ControlBoxProps = {
+  moves: MoveItem[];
   messages: { id: string; me?: boolean; text: string }[];
   onResign: () => void;
   className?: string;
-}
+};
 
-const ControlBox: FC<IControlBoxProps> = ({
+const ControlBox: FC<ControlBoxProps> = ({
   moves,
   messages,
   className,

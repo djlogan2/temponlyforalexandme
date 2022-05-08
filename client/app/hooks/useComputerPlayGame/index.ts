@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSound } from "..";
 import { GameStatus } from "../../../../lib/records/GameRecord";
-import { TMoveItem } from "../../types";
+import { MoveItem } from "../../types";
 import { ESounds } from "../useSound/constants";
 import { getLegalMoves } from "./constants";
 import GameService from "/imports/client/service/GameService";
@@ -18,7 +18,7 @@ const useComputerPlayGame = (gameId: string, gameService: GameService) => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
-  const [movelist, setMovelist] = useState<TMoveItem[]>([]);
+  const [movelist, setMovelist] = useState<MoveItem[]>([]);
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>({});
   const [myColor, setMyColor] = useState<PieceColor>();
@@ -40,7 +40,7 @@ const useComputerPlayGame = (gameId: string, gameService: GameService) => {
     setFen(fen);
     setMoveToMake(tomove);
     updateClocks(clocks);
-    setMovelist(variations.movelist.slice(1) as TMoveItem[]);
+    setMovelist(variations.movelist.slice(1) as MoveItem[]);
 
     game.events.on("fen", (data) => {
       playSound(ESounds.MOVE);
