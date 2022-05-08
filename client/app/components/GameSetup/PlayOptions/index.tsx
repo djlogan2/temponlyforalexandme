@@ -1,8 +1,10 @@
 import React, { FC } from "react";
+
+import TabButton from "/client/app/shared/Buttons/TabButton";
+
 import { options } from "../constants";
 import { Components } from "../types";
 import { useTranslate } from "/client/app/hooks";
-import TabButton from "/client/app/shared/Buttons/TabButton";
 
 type PlayOptionsProps = {
   onClick: (tab: Components) => void;

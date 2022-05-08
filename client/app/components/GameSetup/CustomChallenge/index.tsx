@@ -1,14 +1,16 @@
 import React, { FC } from "react";
+
+import { useTranslate } from "/client/app/hooks";
+import StandardButton from "/client/app/shared/Buttons/StandardButton";
+
 import Card from "../../Card";
+import Subtitle from "../../Subtitle";
+import { Components, CommonGameSetup } from "../types";
+import { onPickTimeMock } from "../mocks";
 import ColorPick from "../ColorPick";
 import RatedGame from "../RatedGame";
 import Shortcut from "../Shortcut";
-import Subtitle from "../../Subtitle";
 import TimeOptions from "../TimeOptions";
-import { Components, CommonGameSetup } from "../types";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import { useTranslate } from "/client/app/hooks";
-import { onPickTimeMock } from "../mocks";
 
 type CustomChallengeProps = CommonGameSetup;
 

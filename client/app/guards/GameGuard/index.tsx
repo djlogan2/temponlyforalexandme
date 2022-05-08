@@ -1,10 +1,12 @@
 import React from "react";
+
 import { Redirect, Route, RouteProps, useParams } from "react-router";
+
 import GameService from "/imports/client/service/GameService";
 
-type Props = RouteProps & { gameService: GameService };
+type GameGuardProps = RouteProps & { gameService: GameService };
 
-const GameGuard = ({ gameService, ...props }: Props) => {
+const GameGuard = ({ gameService, ...props }: GameGuardProps) => {
   const { id } = useParams<{ id: string }>();
 
   // TODO. FIGURE OUT WHY IT DOESN"T WORK HERE

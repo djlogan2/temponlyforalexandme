@@ -1,12 +1,15 @@
 import React, { FC } from "react";
+
+import { useTranslate } from "/client/app/hooks";
+
 import Close from "../../icons/Close";
 import OpenChallengeItem from "../../OpenChallengeItem";
 import Challenges from "../Challenges";
 import TimeOptions from "../TimeOptions";
 import { CommonGameSetup } from "../types";
-import "./index.scss";
-import { useTranslate } from "/client/app/hooks";
 import { onPickTimeMock } from "../mocks";
+
+import "./index.scss";
 
 type ChallengeLaunchedProps = CommonGameSetup;
 

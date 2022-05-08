@@ -1,13 +1,15 @@
-import { useTranslate } from "/client/app/hooks";
 import React, { useState } from "react";
+
+import { useTranslate } from "/client/app/hooks";
+import TabItemButton from "/client/app/shared/Buttons/TabItemButton";
+import TextButton from "/client/app/shared/Buttons/TextButton";
+
 import Arrow from "../../icons/Arrow";
 import LongArrow from "../../icons/LongArrow";
 import Subtitle from "../../Subtitle";
-import ChallengesList from "../ChallengesList";
-import { challengeTypes } from "../constants";
 import { Challenge } from "../types";
-import TabItemButton from "/client/app/shared/Buttons/TabItemButton";
-import TextButton from "/client/app/shared/Buttons/TextButton";
+import { challengeTypes } from "../constants";
+import ChallengesList from "../ChallengesList";
 
 const Challenges = () => {
   const [activeChallenge, setActiveChallenge] =

@@ -1,12 +1,14 @@
 import React, { FC } from "react";
+
+import { useTranslate } from "/client/app/hooks";
+import StandardButton from "/client/app/shared/Buttons/StandardButton";
+
 import Close from "../../icons/Close";
 import OpenChallengeItem from "../../OpenChallengeItem";
 import SendToMail from "../../SendToMail";
 import ShareLink from "../../ShareLink";
 import SocialMedia from "../../SocialMedia";
 import { Components, CommonGameSetup } from "../types";
-import { useTranslate } from "/client/app/hooks";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
 
 type ShareProps = CommonGameSetup;
 

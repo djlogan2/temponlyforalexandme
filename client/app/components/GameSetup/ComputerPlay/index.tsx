@@ -13,10 +13,10 @@ import LongArrow from "/client/app/components/icons/LongArrow";
 import Card from "/client/app/components/Card";
 
 import Subtitle from "../../Subtitle";
+import { CommonGameSetup } from "../types";
 import RatedGame from "../RatedGame";
 import ColorPick from "../ColorPick";
 import TimeOptions from "../TimeOptions";
-import { CommonGameSetup } from "../types";
 
 import "./index.scss";
 

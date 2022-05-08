@@ -1,18 +1,21 @@
-import clsx from "clsx";
 import React, { FC } from "react";
-import { UserStatus } from "../../types";
+
+import clsx from "clsx";
+
+import { UserStatus } from "client/app/types";
+
 import "./index.scss";
 
-interface IAvatarProps {
+type AvatarProps = {
   alt: string;
   size?: "bg" | "md" | "sm" | "xs";
   status?: UserStatus;
   picture?: string;
   className?: string;
   children?: React.ReactNode;
-}
+};
 
-const Avatar: FC<IAvatarProps> = ({
+const Avatar: FC<AvatarProps> = ({
   picture,
   className,
   alt,

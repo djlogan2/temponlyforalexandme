@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { useSound } from "..";
-import { GameStatus } from "../../../../lib/records/GameRecord";
-import { MoveItem } from "../../types";
-import { ESounds } from "../useSound/constants";
-import { getLegalMoves } from "./constants";
+
 import GameService from "/imports/client/service/GameService";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import { GameConvertRecord } from "/lib/records/GameRecord";
+import { GameStatus } from "lib/records/GameRecord";
+import { MoveItem } from "client/app/types";
+
+import { ESounds } from "../useSound/constants";
+import { useSound } from "..";
+import { getLegalMoves } from "./constants";
 
 type TMakeMove = () => (move: string[], promotion?: string) => void;
 type TResign = () => () => void;

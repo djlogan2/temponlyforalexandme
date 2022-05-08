@@ -1,16 +1,20 @@
-import clsx from "clsx";
 import React, { FC } from "react";
-import { useTranslate } from "../../hooks";
-import Avatar from "../../shared/Avatar";
-import Flag, { TFlags } from "../../shared/Flag";
-import Heading6 from "../../shared/Typographies/Heading6";
-import Paragraph from "../../shared/Typographies/Paragraph";
-import { UserStatus } from "../../types";
+
+import clsx from "clsx";
+
+import { UserStatus } from "/client/app/types";
+import { useTranslate } from "/client/app/hooks";
+import Avatar from "/client/app/shared/Avatar";
+import Flag, { TFlags } from "/client/app/shared/Flag";
+import Heading6 from "/client/app/shared/Typographies/Heading6";
+import Paragraph from "/client/app/shared/Typographies/Paragraph";
+
 import Bullet from "../icons/Bullet";
 import ChessTitle from "../icons/ChessTitle";
+
 import "./index.scss";
 
-interface IOpenChallengeItemProps {
+type OpenChallengeItemProps = {
   username: string;
   gameTime: number;
   userStatus?: UserStatus;
@@ -21,9 +25,9 @@ interface IOpenChallengeItemProps {
   userPic?: string;
   userRating?: number;
   className?: string;
-}
+};
 
-const OpenChallengeItem: FC<IOpenChallengeItemProps> = ({
+const OpenChallengeItem: FC<OpenChallengeItemProps> = ({
   chessTitle,
   icon,
   className,

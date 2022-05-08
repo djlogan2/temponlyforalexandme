@@ -1,10 +1,12 @@
-import clsx from "clsx";
 import React, { useEffect, useState } from "react";
+
+import clsx from "clsx";
 import { useParams } from "react-router-dom";
-import { useServices } from "../../contexts/services";
-import { calcTime } from "../../data/utils";
-import ControlBox from "./components/ControlBox";
-import "./index.scss";
+
+import { calcTime } from "client/app/data/utils";
+import { useServices } from "/client/app/contexts/services";
+import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
+import { DigitalClock, GameTitle } from "/client/app/shared";
 import {
   EnhancedChessboard,
   FlatMovelist,
@@ -12,8 +14,9 @@ import {
   GameOver,
 } from "/client/app/components";
 import Flip from "/client/app/components/icons/Flip";
-import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
-import { DigitalClock, GameTitle } from "/client/app/shared";
+
+import ControlBox from "./components/ControlBox";
+import "./index.scss";
 
 const GameMarkup = () => {
   const { id } = useParams<{ id: string }>();

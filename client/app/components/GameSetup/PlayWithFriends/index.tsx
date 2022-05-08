@@ -1,18 +1,21 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import clsx from "clsx";
 import React, { FC, useState } from "react";
-import LongArrow from "../../icons/LongArrow";
-import SearchPeople from "../../SearchPeople";
-import UserItem from "../../UserItem";
-import { onPickTimeMock } from "../mocks";
-import Shortcut from "../Shortcut";
-import TimeOptions from "../TimeOptions";
-import { CommonGameSetup } from "../types";
+
+import clsx from "clsx";
+
 import { useTranslate } from "/client/app/hooks";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import Heading5 from "/client/app/shared/Typographies/Heading5";
+
+import LongArrow from "../../icons/LongArrow";
+import SearchPeople from "../../SearchPeople";
+import UserItem from "../../UserItem";
+import { onPickTimeMock } from "../mocks";
+import { CommonGameSetup } from "../types";
+import Shortcut from "../Shortcut";
+import TimeOptions from "../TimeOptions";
 
 type PlayWithFriendsProps = CommonGameSetup;
 

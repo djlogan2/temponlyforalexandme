@@ -1,15 +1,19 @@
-import clsx from "clsx";
 import React, { FC } from "react";
-import Avatar from "../../shared/Avatar";
+
+import clsx from "clsx";
+
+import Avatar from "client/app/shared/Avatar";
+
 import { UserStatus } from "../../types";
 import ChatIcon from "../icons/Chat";
 import ChessTitle from "../icons/ChessTitle";
 import France from "../icons/France";
 import LagIcon from "../icons/Lag";
 import WebcamIcon from "../icons/Webcam";
+
 import "./index.scss";
 
-interface IPlayerInfoProps {
+type PlayerInfoProps = {
   picture?: string;
   username: string;
   rank: number;
@@ -18,9 +22,9 @@ interface IPlayerInfoProps {
   lagLevel: 1 | 2 | 3 | 4 | 5;
   flip?: boolean;
   className?: string;
-}
+};
 
-const PlayerInfo: FC<IPlayerInfoProps> = ({
+const PlayerInfo: FC<PlayerInfoProps> = ({
   picture,
   username,
   rank,
