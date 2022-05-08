@@ -1,4 +1,4 @@
-export interface IThemeService {
+export type ThemeService = {
   isReady: boolean;
   getTheme: () => Object | undefined;
   events: {
@@ -11,9 +11,9 @@ export interface IThemeService {
       fn: (...args: any[]) => void,
     ) => void;
   };
-}
+};
 
-export interface IThemeContextValue {
+export type ThemeContextValue = {
   theme: Object | undefined;
   isReady: boolean;
-}
+};
