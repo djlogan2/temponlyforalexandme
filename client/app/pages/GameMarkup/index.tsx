@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { useParams } from "react-router-dom";
 
-import { calcTime } from "client/app/data/utils";
+import { calcTime } from "/client/app/data/utils";
 import { useServices } from "/client/app/contexts/services";
 import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
 import { DigitalClock, GameTitle } from "/client/app/shared";

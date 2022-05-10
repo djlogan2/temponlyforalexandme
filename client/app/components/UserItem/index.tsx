@@ -5,8 +5,8 @@ import React, { FC } from "react";
 import clsx from "clsx";
 import { noop } from "lodash";
 
-import Avatar from "client/app/shared/Avatar";
-import Flag, { TFlags } from "client/app/shared/Flag";
+import Avatar from "/client/app/shared/Avatar";
+import Flag, { TFlags } from "/client/app/shared/Flag";
 import { UserStatus } from "client/app/types";
 
 import ChessTitle from "../icons/ChessTitle";

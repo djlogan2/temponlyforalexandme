@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 import { useTranslate } from "/client/app/hooks";
 import { MoveItem } from "/client/app/types";
-import TabButton from "client/app/shared/Buttons/TabButton";
+import TabButton from "/client/app/shared/Buttons/TabButton";
 
 import { ETabs, TTabs } from "./types";
 import { tabs } from "./constants";

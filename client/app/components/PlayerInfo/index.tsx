@@ -2,7 +2,7 @@ import React, { FC } from "react";
 
 import clsx from "clsx";
 
-import Avatar from "client/app/shared/Avatar";
+import Avatar from "/client/app/shared/Avatar";
 
 import { UserStatus } from "../../types";
 import ChatIcon from "../icons/Chat";
