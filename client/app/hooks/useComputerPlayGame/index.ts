@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 
 import GameService from "/imports/client/service/GameService";
+import { GameEvents } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import { GameConvertRecord } from "/lib/records/GameRecord";
 import { GameStatus } from "lib/records/GameRecord";
+
 import { MoveItem } from "client/app/types";
 
 import { ESounds } from "../useSound/constants";
 import { useSound } from "..";
+
 import { getLegalMoves } from "./constants";
 
 type TMakeMove = () => (move: string[], promotion?: string) => void;
@@ -86,7 +89,15 @@ const useComputerPlayGame = (initGameId: string, gameService: GameService) => {
     setResign(() => () => game.playerResign());
 
     return () => {
-      gameService.events.removeAllListeners();
+      const events: GameEvents[] = [
+        "fen",
+        "movelist",
+        "clocks",
+        "tomove",
+        "converted",
+      ];
+
+      events.forEach((event) => game.events.off(event));
     };
   }, [gameId]);
 
