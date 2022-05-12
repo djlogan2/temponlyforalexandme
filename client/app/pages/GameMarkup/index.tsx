@@ -33,6 +33,7 @@ const GameMarkup = () => {
     isGameOver,
     myColor,
     result,
+    setGameId,
     resign,
     makeMove,
     setIsGameOver,
@@ -44,6 +45,8 @@ const GameMarkup = () => {
   useEffect(() => {
     setIsFlipped(myColor === "b");
   }, [myColor]);
+
+  useEffect(() => setGameId(id), [id]);
 
   return fen && clocks && moveToMake ? (
     <div className="gameContainer">
