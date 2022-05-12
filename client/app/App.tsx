@@ -48,6 +48,7 @@ const App = () => {
     gameService.events.on("started", (id) => {
       // IT WORKS HERE
       const gameStatus = gameService.getStatus(id);
+
       if (gameStatus === "computer") {
         history.push(`/game/${id}`);
       }

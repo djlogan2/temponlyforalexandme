@@ -2,7 +2,9 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import { uniqBy } from "lodash";
 
+import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import ChallengeService from "/imports/client/service/ChallengeService";
+import GameService from "/imports/client/service/GameService";
 import { ChallengeButton } from "/client/app/types";
 
 import { GameSetupContextProvider } from "./context";
@@ -10,6 +12,7 @@ import { GameSetupContextValue } from "./types";
 
 type GameSetupContextProps = {
   challengeService: ChallengeService;
+  gameService: GameService;
 };
 
 const buildChallengeButton = (dbButton: any): ChallengeButton => ({
@@ -20,25 +23,38 @@ const buildChallengeButton = (dbButton: any): ChallengeButton => ({
 });
 
 export const GameSetupProvider: FC<GameSetupContextProps> = ({
-  children,
   challengeService,
+  gameService,
+  children,
 }) => {
   const [challengeButtons, setChallengeButtons] = useState<ChallengeButton[]>(
     [],
   );
-
-  const contextValue: GameSetupContextValue = useMemo(
-    () => ({
-      challengeButtons,
-    }),
-    [challengeButtons],
-  );
+  const [lastComputerChallengeSetup, setLastComputerChallengeSetup] =
+    useState<ComputerChallengeRecord | null>(null);
 
   const isButtonNameUnique = useCallback(
     (name: string): boolean =>
       !!challengeButtons.find((button) => button.name === name),
     [challengeButtons],
   );
+
+  const startComputerGame = useCallback(
+    (challengeSetup: ComputerChallengeRecord) => {
+      setLastComputerChallengeSetup(challengeSetup);
+
+      gameService.startComputerGame(challengeSetup);
+    },
+    [gameService, setLastComputerChallengeSetup],
+  );
+
+  const rematchComputerGame = useCallback(() => {
+    if (!lastComputerChallengeSetup) {
+      throw new Error("Unable to find last computer challenge setup");
+    }
+
+    gameService.startComputerGame(lastComputerChallengeSetup);
+  }, [gameService, lastComputerChallengeSetup]);
 
   useEffect(() => {
     challengeService.buttonEvents.on("ready", () => {
@@ -85,6 +101,15 @@ export const GameSetupProvider: FC<GameSetupContextProps> = ({
       setChallengeButtons(newButtons);
     });
   }, []);
+
+  const contextValue: GameSetupContextValue = useMemo(
+    () => ({
+      challengeButtons,
+      startComputerGame,
+      rematchComputerGame,
+    }),
+    [challengeButtons, startComputerGame, rematchComputerGame],
+  );
 
   return (
     <GameSetupContextProvider value={contextValue}>

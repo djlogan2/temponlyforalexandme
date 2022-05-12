@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import clsx from "clsx";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
+import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { calcTime } from "/client/app/data/utils";
 import { useServices } from "/client/app/contexts/services";
 import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
@@ -20,6 +21,8 @@ import "./index.scss";
 
 const GameMarkup = () => {
   const { id } = useParams<{ id: string }>();
+  const history = useHistory();
+  const { width } = useWindowSize();
   const { gameService } = useServices();
   const {
     clocks,
@@ -34,10 +37,9 @@ const GameMarkup = () => {
     makeMove,
     setIsGameOver,
   } = useComputerPlayGame(id, gameService);
+  const { rematchComputerGame } = useGameSetup();
 
   const [isFlipped, setIsFlipped] = useState(myColor === "b");
-
-  const { width } = useWindowSize();
 
   useEffect(() => {
     setIsFlipped(myColor === "b");
@@ -71,7 +73,17 @@ const GameMarkup = () => {
       />
       <div className="gameContainer__board-container">
         {isGameOver && result && (
-          <GameOver onClose={() => setIsGameOver(false)} result={result} />
+          <GameOver
+            result={result}
+            onRematch={() => {
+              setIsGameOver(false);
+              rematchComputerGame();
+            }}
+            onClose={() => {
+              setIsGameOver(false);
+              history.push("/");
+            }}
+          />
         )}
         <EnhancedChessboard
           fen={fen}

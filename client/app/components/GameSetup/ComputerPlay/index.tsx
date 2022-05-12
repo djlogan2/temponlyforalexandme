@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { useFormik } from "formik";
 
 import { useTranslate } from "/client/app/hooks";
-import { useServices } from "/client/app/contexts/services";
+import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { ChallengeButton } from "/client/app/types";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
@@ -26,7 +26,7 @@ const RANDOM = "random";
 
 const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
-  const { gameService } = useServices();
+  const { startComputerGame } = useGameSetup();
 
   const formik = useFormik<{
     color: PieceColor | typeof RANDOM;
@@ -40,7 +40,7 @@ const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
       skill: 1,
     },
     onSubmit: (values) => {
-      gameService.startComputerGame({
+      startComputerGame({
         skill_level: Math.max(1, Math.round((values.skill - 1000) / 100)),
         color: values.color === RANDOM ? undefined : values.color,
         clocks: { minutes: values.time },

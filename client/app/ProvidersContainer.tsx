@@ -24,7 +24,10 @@ export const ProvidersContainer: FC = ({ children }) => {
   }, []);
 
   return isReady ? (
-    <GameSetupProvider challengeService={challengeService}>
+    <GameSetupProvider
+      challengeService={challengeService}
+      gameService={gameService}
+    >
       <ThemeProvider themeService={themeService}>{children}</ThemeProvider>
     </GameSetupProvider>
   ) : (

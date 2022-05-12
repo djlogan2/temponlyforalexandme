@@ -16,7 +16,8 @@ type TResign = () => () => void;
 
 const emptyFunc = () => () => {};
 
-const useComputerPlayGame = (gameId: string, gameService: GameService) => {
+const useComputerPlayGame = (initGameId: string, gameService: GameService) => {
+  const [gameId, setGameId] = useState<string>(initGameId);
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
@@ -87,7 +88,7 @@ const useComputerPlayGame = (gameId: string, gameService: GameService) => {
     return () => {
       gameService.events.removeAllListeners();
     };
-  }, []);
+  }, [gameId]);
 
   return {
     fen,
@@ -98,6 +99,7 @@ const useComputerPlayGame = (gameId: string, gameService: GameService) => {
     isGameOver,
     myColor,
     result,
+    setGameId,
     setIsGameOver,
     makeMove,
     resign,
