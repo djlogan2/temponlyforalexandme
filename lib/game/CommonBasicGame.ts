@@ -17,7 +17,7 @@ export default abstract class CommonBasicGame extends Stoppable {
 
   protected readonlydao: CommonSingleGameReadOnlyGameDao;
 
-  protected abstract isAuthorizedToMove(who: User): boolean;
+  protected abstract isAuthorizedToMove(who: User | string): boolean;
 
   protected abstract premoveTasks(): void;
 

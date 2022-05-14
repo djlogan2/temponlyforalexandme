@@ -15,6 +15,7 @@ export type ClientCalls =
   | "idleFunction"
   | "newUserLogin"
   | "startComputerGame"
+  | "startAnalysisGame"
   | "user_set"
   | "writeToLog";
 type InternalMethodType = (...args: any[]) => Promise<any | undefined>;

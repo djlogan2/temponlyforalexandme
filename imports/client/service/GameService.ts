@@ -48,19 +48,37 @@ export default class GameService extends CommonGameService {
   }
 
   public startComputerGame(
-    computerchallenge: ComputerChallengeRecord,
+    computerChallenge: ComputerChallengeRecord,
   ): Promise<void> {
     this.logger.debug(
       () =>
-        `startComputerGame computerchallenge=${util.inspect(
-          computerchallenge,
+        `startComputerGame computerChallenge=${util.inspect(
+          computerChallenge,
         )}`,
     );
 
     return new Promise<void>((resolve, reject) => {
       Meteor.call(
         "startComputerGame",
-        computerchallenge,
+        computerChallenge,
+        (err: Meteor.Error, _id: string) => {
+          if (err) reject(err);
+          else resolve();
+        },
+      );
+    });
+  }
+
+  public startAnalysisGame(
+    id: string,
+    computerChallenge: ComputerChallengeRecord,
+  ) {
+    this.logger.debug(() => "startAnalysisGame");
+
+    return new Promise<void>((resolve, reject) => {
+      Meteor.call(
+        "startAnalysisGame",
+
         (err: Meteor.Error, _id: string) => {
           if (err) reject(err);
           else resolve();
@@ -90,7 +108,7 @@ export default class GameService extends CommonGameService {
       case "computer":
         return new ClientComputerPlayedGame(this, id, g, user);
       case "analyzing":
-        return new ClientAnalysisGame(this, id, g);
+        return new ClientAnalysisGame(this, id, g, user);
       default: {
         throw new Meteor.Error("UNKNOWN_GAME_TYPE");
       }

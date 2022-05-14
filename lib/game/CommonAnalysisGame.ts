@@ -16,10 +16,8 @@ export default abstract class CommonAnalysisGame extends CommonBasicGame {
 
   protected abstract internalSetFen(who: string, fen: string): void;
 
-  public setFen(who: User, fen: string): void {
-    if (!this.me.examiners.some((ex) => ex.userid === who.id))
-      throw new Meteor.Error("NOT_AN_EXAMINER");
-    this.internalSetFen(who.id, fen);
+  public setFen(who: string, fen: string): void {
+    this.internalSetFen(who, fen);
   }
 
   protected endGame(status: GameStatus, status2: number) {

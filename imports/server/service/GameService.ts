@@ -323,6 +323,10 @@ export default class GameService extends CommonGameService {
     return id;
   }
 
+  public startAnalysisGame() {
+    this.logger.debug(() => "startAnalysisGame");
+  }
+
   private static winDrawLossAssessValues(
     robject1: RatingObject,
     robject2: RatingObject,

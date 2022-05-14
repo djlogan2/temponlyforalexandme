@@ -63,10 +63,10 @@ const App = () => {
       <GameGuard
         exact
         path="/game/:id"
-        component={GameMarkup}
         gameService={gameService}
+        component={GameMarkup}
       />
-      <Route exact path="/analysis">
+      <Route exact path="/analysis/:id">
         <GameAnalysis />
       </Route>
       <Route exact path="/ui-elements">
