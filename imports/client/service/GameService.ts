@@ -69,21 +69,14 @@ export default class GameService extends CommonGameService {
     });
   }
 
-  public startAnalysisGame(
-    id: string,
-    computerChallenge: ComputerChallengeRecord,
-  ) {
+  public startAnalysisGame(id: string) {
     this.logger.debug(() => "startAnalysisGame");
 
     return new Promise<void>((resolve, reject) => {
-      Meteor.call(
-        "startAnalysisGame",
-
-        (err: Meteor.Error, _id: string) => {
-          if (err) reject(err);
-          else resolve();
-        },
-      );
+      Meteor.call("startAnalysisGame", id, (err: Meteor.Error, _id: string) => {
+        if (err) reject(err);
+        else resolve();
+      });
     });
   }
 
