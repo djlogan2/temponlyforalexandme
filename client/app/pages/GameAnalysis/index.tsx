@@ -7,7 +7,7 @@ import { useAnalysisGame } from "/client/app/hooks";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 
 import AnalysisControlBox from "./components/AnalysisControlBox";
-import PieceSelection from "./components/PieceSelection";
+import { EnhancedPiecesSidebar } from "../../components/EnhacedPiecesSidebar";
 
 const GameAnalysis = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,8 +31,9 @@ const GameAnalysis = () => {
         smartMoves={false}
         smallSize={500}
         onMoveHandler={() => {}}
+        edit={{ add: () => {} }}
       />
-      <PieceSelection />
+      <EnhancedPiecesSidebar />
       <AnalysisControlBox className="gameAnalysis__controlBox" />
     </div>
   );

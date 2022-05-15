@@ -22,6 +22,7 @@ interface IEnhancedChessboard {
   smartMoves: boolean;
   smallSize: number;
   onMoveHandler: Function;
+  edit?: { add: () => void };
 }
 
 const EnhancedChessboard: FC<IEnhancedChessboard> = ({
@@ -35,6 +36,7 @@ const EnhancedChessboard: FC<IEnhancedChessboard> = ({
   smartMoves,
   smallSize,
   onMoveHandler,
+  edit,
 }) => (
   <div className={className}>
     <ChessBoard
@@ -58,6 +60,7 @@ const EnhancedChessboard: FC<IEnhancedChessboard> = ({
       smallSize={smallSize}
       isHovering
       promotionPieces={promotionPieces}
+      edit={edit}
     />
   </div>
 );

@@ -1,7 +1,5 @@
 import React from "react";
 
-import { useHistory } from "react-router";
-
 import { GameStatus } from "/lib/records/GameRecord";
 import { SCREEN_LARGE } from "/client/app/constants/breakpoints";
 import { useWindowSize } from "/client/app/hooks";
@@ -37,7 +35,6 @@ const gameResults = {
 
 const GameOver = ({ result, onClose, onRematch, onAnalysis }: Props) => {
   const { width } = useWindowSize();
-  const history = useHistory();
 
   return width ? (
     <Backdrop pRelative={width >= SCREEN_LARGE}>
