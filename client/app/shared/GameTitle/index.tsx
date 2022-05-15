@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import "./index.scss";
 import RapidIcon from "/client/app/shared/GameTitle/children/RapidIcon";
 import clsx from "clsx";
-import useTranslate from "../../hooks/useTranslate";
+import { useTranslate } from "../../hooks";
 
 interface IGameTitle {
   minutes: number;

@@ -88,6 +88,7 @@ const GameMarkup = () => {
               setIsGameOver(false);
               history.push("/");
             }}
+            onAnalysis={() => gameService.startAnalysisGame(id)}
           />
         )}
         <EnhancedChessboard
