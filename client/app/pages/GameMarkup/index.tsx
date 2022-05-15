@@ -6,7 +6,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { calcTime } from "/client/app/data/utils";
 import { useServices } from "/client/app/contexts/services";
-import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
+import { useComputerGame, useWindowSize } from "/client/app/hooks";
 import { DigitalClock, GameTitle } from "/client/app/shared";
 import {
   EnhancedChessboard,
@@ -37,7 +37,7 @@ const GameMarkup = () => {
     resign,
     makeMove,
     setIsGameOver,
-  } = useComputerPlayGame(id, gameService);
+  } = useComputerGame(id, gameService);
   const { rematchComputerGame } = useGameSetup();
 
   const [isFlipped, setIsFlipped] = useState(myColor === "b");

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { useServices } from "/client/app/contexts/services";
-import { useAnalysisPlayGame } from "/client/app/hooks";
+import { useAnalysisGame } from "/client/app/hooks";
 import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
 
 import AnalysisControlBox from "./components/AnalysisControlBox";
@@ -12,7 +12,7 @@ import PieceSelection from "./components/PieceSelection";
 const GameAnalysis = () => {
   const { id } = useParams<{ id: string }>();
   const { gameService } = useServices();
-  const { setGameId } = useAnalysisPlayGame(id, gameService);
+  const { setGameId } = useAnalysisGame(id, gameService);
 
   useEffect(() => {
     setGameId(id);

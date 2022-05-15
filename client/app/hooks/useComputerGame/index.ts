@@ -19,7 +19,7 @@ type Resign = () => () => void;
 
 const emptyFunc = () => () => {};
 
-export const useComputerPlayGame = (
+export const useComputerGame = (
   initGameId: string,
   gameService: GameService,
 ) => {

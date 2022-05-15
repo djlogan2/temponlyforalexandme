@@ -14,7 +14,7 @@ type MakeMove = () => (move: string[], promotion?: string) => void;
 
 const emptyFunc = () => () => {};
 
-export const useAnalysisPlayGame = (
+export const useAnalysisGame = (
   initGameId: string,
   gameService: GameService,
 ) => {
