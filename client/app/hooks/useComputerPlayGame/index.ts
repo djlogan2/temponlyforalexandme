@@ -14,12 +14,15 @@ import { useSound } from "..";
 
 import { getLegalMoves } from "./constants";
 
-type TMakeMove = () => (move: string[], promotion?: string) => void;
-type TResign = () => () => void;
+type MakeMove = () => (move: string[], promotion?: string) => void;
+type Resign = () => () => void;
 
 const emptyFunc = () => () => {};
 
-const useComputerPlayGame = (initGameId: string, gameService: GameService) => {
+export const useComputerPlayGame = (
+  initGameId: string,
+  gameService: GameService,
+) => {
   const [gameId, setGameId] = useState<string>(initGameId);
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
@@ -29,8 +32,8 @@ const useComputerPlayGame = (initGameId: string, gameService: GameService) => {
   const [legalMoves, updateLegalMoves] = useState<any>({});
   const [myColor, setMyColor] = useState<PieceColor>();
   const [result, setResult] = useState<GameStatus>();
-  const [makeMove, setMakeMove] = useState<TMakeMove>(emptyFunc);
-  const [resign, setResign] = useState<TResign>(emptyFunc);
+  const [makeMove, setMakeMove] = useState<MakeMove>(emptyFunc);
+  const [resign, setResign] = useState<Resign>(emptyFunc);
   const playSound = useSound();
 
   useEffect(() => {
@@ -116,5 +119,3 @@ const useComputerPlayGame = (initGameId: string, gameService: GameService) => {
     resign,
   };
 };
-
-export default useComputerPlayGame;

@@ -1,6 +1,5 @@
 import React, { FC, useRef, useState } from "react";
-import { useTranslate } from "../../hooks";
-import useOnClickOutside from "../../hooks/useClickOutside";
+import { useTranslate, useClickOutside } from "../../hooks";
 import TextButton from "../../shared/Buttons/TextButton";
 import Input from "../../shared/Input";
 import Card from "../Card";
@@ -19,7 +18,7 @@ const SearchPeople: FC<ISearchPeopleProps> = ({ subtitle }) => {
   const searchRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslate();
 
-  useOnClickOutside(searchRef, () => {
+  useClickOutside(searchRef, () => {
     setIsSearching(false);
   });
 

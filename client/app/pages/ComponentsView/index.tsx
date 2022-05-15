@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import GameSetup from "../../components/GameSetup";
-import useTranslate from "../../hooks/useTranslate";
+import { useTranslate } from "../../hooks";
 import Avatar from "../../shared/Avatar";
 import StandardButton from "../../shared/Buttons/StandardButton";
 import "./index.scss";

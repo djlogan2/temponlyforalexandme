@@ -1,6 +1,7 @@
-export { default as useClickOutside } from "./useClickOutside";
-export { default as usePrev } from "./usePrev";
-export { default as useSound } from "./useSound";
-export { default as useTranslate } from "./useTranslate";
-export { default as useWindowSize } from "./useWindowSize";
-export { default as useComputerPlayGame } from "./useComputerPlayGame";
+export * from "./useClickOutside";
+export * from "./usePrev";
+export * from "./useSound";
+export * from "./useTranslate";
+export * from "./useWindowSize";
+export * from "./useComputerPlayGame";
+export * from "./useAnalysisPlayGame";

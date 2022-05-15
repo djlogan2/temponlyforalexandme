@@ -25,6 +25,7 @@ type Props = {
   result: GameStatus;
   onClose: () => void;
   onRematch: () => void;
+  onAnalysis: () => void;
 };
 
 const gameResults = {
@@ -34,7 +35,7 @@ const gameResults = {
   "*": "",
 };
 
-const GameOver = ({ result, onClose, onRematch }: Props) => {
+const GameOver = ({ result, onClose, onRematch, onAnalysis }: Props) => {
   const { width } = useWindowSize();
   const history = useHistory();
 
@@ -84,9 +85,7 @@ const GameOver = ({ result, onClose, onRematch }: Props) => {
             Rematch
           </StandardButton>
           <StandardButton>New 1 min</StandardButton>
-          <StandardButton onClick={() => history.push("/analysis")}>
-            Analysis
-          </StandardButton>
+          <StandardButton onClick={onAnalysis}>Analysis</StandardButton>
         </div>
       </Card>
     </Backdrop>

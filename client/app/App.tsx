@@ -52,6 +52,10 @@ const App = () => {
       if (gameStatus === "computer") {
         history.push(`/game/${id}`);
       }
+
+      if (gameStatus === "analyzing") {
+        history.push(`/analysis/${id}`);
+      }
     });
   }, [history]);
 

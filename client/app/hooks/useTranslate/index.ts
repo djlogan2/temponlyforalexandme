@@ -2,7 +2,7 @@ import { StringMap, TOptions } from "i18next";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-const useTranslate = () => {
+export const useTranslate = () => {
   const {
     t: translate,
     i18n: i18next,
@@ -22,5 +22,3 @@ const useTranslate = () => {
 
   return { t, i18next, ...rest };
 };
-
-export default useTranslate;

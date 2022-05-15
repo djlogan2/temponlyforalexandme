@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { noop } from "lodash";
 import React, { FCICC, useRef, useState } from "react";
 import Chevron from "../../components/icons/Chevron";
-import useOnClickOutside from "../../hooks/useClickOutside";
+import { useClickOutside } from "../../hooks";
 import "./index.scss";
 import Input from "../Input";
 
@@ -26,7 +26,7 @@ const Select: FCICC<ISelectProps> = ({
   const [showOptions, setShowOptions] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
-  useOnClickOutside(ref, () => {
+  useClickOutside(ref, () => {
     setShowOptions(false);
   });
 
