@@ -1,7 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useMemo } from "react";
+
 // @ts-ignore
 import ChessBoard from "chessboard";
-import "chessboard/dist/index.css";
+import { Piece, Square } from "chess.js";
+
+import { convertPieceToValue, convertValueToPiece } from "./utils";
 import {
   accessibilityPieces,
   boardSquares,
@@ -10,8 +13,9 @@ import {
   raf,
   styles,
 } from "./constants";
+import "chessboard/dist/index.css";
 
-interface IEnhancedChessboard {
+type Props = {
   fen: string;
   flipped: boolean;
   className?: string;
@@ -22,10 +26,12 @@ interface IEnhancedChessboard {
   smartMoves: boolean;
   smallSize: number;
   onMoveHandler: Function;
-  edit?: { add: () => void };
-}
+  edit?: { add: Piece };
+  handleAdd?: (piece: Piece, square: Square) => void;
+  deletePiece?: (square: Square) => void;
+};
 
-const EnhancedChessboard: FC<IEnhancedChessboard> = ({
+export const EnhancedChessboard: FC<Props> = ({
   fen,
   flipped,
   className,
@@ -37,32 +43,51 @@ const EnhancedChessboard: FC<IEnhancedChessboard> = ({
   smallSize,
   onMoveHandler,
   edit,
-}) => (
-  <div className={className}>
-    <ChessBoard
-      bPclassName="p"
-      wPclassName=""
-      raf={raf}
-      perspective={flipped ? "black" : "white"}
-      fen={fen}
-      boardSquares={boardSquares}
-      pieceImages={pieceImages}
-      accessibilityPieces={accessibilityPieces}
-      styles={styles}
-      movable={legalMoves}
-      circles={circles}
-      arrows={arrows}
-      onUpdateCircles={() => null}
-      onUpdateArrows={() => null}
-      onMove={onMoveHandler}
-      smartMoves={smartMoves}
-      showLegalMoves={showLegalMoves}
-      smallSize={smallSize}
-      isHovering
-      promotionPieces={promotionPieces}
-      edit={edit}
-    />
-  </div>
-);
+  handleAdd,
+  deletePiece,
+}) => {
+  const formattedEdit = useMemo(() => {
+    if (edit) {
+      return {
+        piece: convertPieceToValue(edit.add),
+      };
+    }
+  }, [edit]);
 
-export default EnhancedChessboard;
+  const formattedHandleAdd = useCallback(() => {
+    if (handleAdd) {
+      return (piece: any, square: any) =>
+        handleAdd(convertValueToPiece(piece), square);
+    }
+  }, [handleAdd]);
+
+  return (
+    <div className={className}>
+      <ChessBoard
+        bPclassName="p"
+        wPclassName=""
+        raf={raf}
+        perspective={flipped ? "black" : "white"}
+        fen={fen}
+        boardSquares={boardSquares}
+        pieceImages={pieceImages}
+        accessibilityPieces={accessibilityPieces}
+        styles={styles}
+        movable={legalMoves}
+        circles={circles}
+        arrows={arrows}
+        onUpdateCircles={() => null}
+        onUpdateArrows={() => null}
+        onMove={onMoveHandler}
+        smartMoves={smartMoves}
+        showLegalMoves={showLegalMoves}
+        smallSize={smallSize}
+        isHovering
+        promotionPieces={promotionPieces}
+        edit={formattedEdit}
+        handleAdd={formattedHandleAdd}
+        deletePiece={deletePiece}
+      />
+    </div>
+  );
+};

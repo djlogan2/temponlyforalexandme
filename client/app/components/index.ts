@@ -1,6 +1,5 @@
 export { default as CapturedPieces } from "./CapturedPieces";
 export { default as Card } from "./Card";
-export { default as EnhancedChessboard } from "./EnhancedChessboard";
 export { default as FlatMovelist } from "./FlatMovelist";
 export { default as GameControls } from "./GameControls";
 export { default as GameSetup } from "./GameSetup";
@@ -14,3 +13,4 @@ export { default as SocialMedia } from "./SocialMedia";
 export { default as Subtitle } from "./Subtitle";
 export { default as UserItem } from "./UserItem";
 export { default as GameOver } from "./GameOver";
+export * from "./EnhancedChessboard";
