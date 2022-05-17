@@ -4,21 +4,22 @@ import GameService from "/imports/client/service/GameService";
 import { GameEvents } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 import { MoveItem } from "client/app/types";
+import { Piece, Square } from "chess.js";
 
 import { ESounds } from "../useSound/constants";
 import { useSound } from "..";
-
 import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 
-type MakeMove = () => (move: string[], promotion?: string) => void;
-
 const emptyFunc = () => () => {};
+type MakeMove = () => (move: string[], promotion?: string) => void;
+type Put = () => (piece: Piece, square: Square) => void;
 
 export const useAnalysisGame = (
   initGameId: string,
   gameService: GameService,
 ) => {
   const [gameId, setGameId] = useState<string>(initGameId);
+  const [put, setPut] = useState<Put>(emptyFunc);
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [movelist, setMovelist] = useState<MoveItem[]>([]);
@@ -26,9 +27,13 @@ export const useAnalysisGame = (
   const playSound = useSound();
 
   useEffect(() => {
+    if (!connection.user) {
+      throw new Error("No user");
+    }
+
     const game = gameService.getTyped(
       gameId,
-      connection.user!,
+      connection.user,
     ) as ClientAnalysisGame;
 
     setFen(fen);
@@ -41,6 +46,11 @@ export const useAnalysisGame = (
     setMakeMove(
       () => (move: string[], promotion?: string) =>
         game.makeMove(connection.user!, move.join("") + (promotion || "")),
+    );
+
+    setPut(
+      () => (piece: Piece, square: Square) =>
+        game.put(piece, square, connection.user!.id),
     );
 
     return () => {
@@ -63,5 +73,6 @@ export const useAnalysisGame = (
     setGameId,
     setIsGameOver,
     makeMove,
+    put,
   };
 };

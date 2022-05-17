@@ -1,18 +1,21 @@
 import React, { useEffect } from "react";
 
 import { useParams } from "react-router-dom";
+import { Piece } from "chess.js";
 
 import { useServices } from "/client/app/contexts/services";
 import { useAnalysisGame } from "/client/app/hooks";
-import EnhancedChessboard from "/client/app/components/EnhancedChessboard";
+import { PiecesSidebar } from "/client/app/components/PiecesSidebar";
+import { EnhancedChessboard } from "/client/app/components";
 
 import AnalysisControlBox from "./components/AnalysisControlBox";
-import { EnhancedPiecesSidebar } from "../../components/EnhacedPiecesSidebar";
 
 const GameAnalysis = () => {
   const { id } = useParams<{ id: string }>();
   const { gameService } = useServices();
-  const { setGameId } = useAnalysisGame(id, gameService);
+  const { setGameId, makeMove, put } = useAnalysisGame(id, gameService);
+
+  const [draggedPiece, setDraggedPiece] = React.useState<Piece | null>(null);
 
   useEffect(() => {
     setGameId(id);
@@ -31,9 +34,10 @@ const GameAnalysis = () => {
         smartMoves={false}
         smallSize={500}
         onMoveHandler={() => {}}
-        edit={{ add: () => {} }}
+        handleAdd={put()}
+        edit={draggedPiece ? { add: draggedPiece } : undefined}
       />
-      <EnhancedPiecesSidebar />
+      <PiecesSidebar onDragStart={setDraggedPiece} />
       <AnalysisControlBox className="gameAnalysis__controlBox" />
     </div>
   );
