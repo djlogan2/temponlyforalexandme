@@ -1,0 +1,40 @@
+// TODO: Temp styles, just mock!
+
+.gameAnalysis .pieceSelection {
+  border-radius: var(--border-radius-small);
+  padding: 2.15rem 1.2rem 2.15rem 1.3rem;
+  background-color: var(--colorWhiteOne);
+  height: 66.8rem;
+  width: 5.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  &__piece {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  &--black {
+    fill: var(--colorDarkOne);
+  }
+
+  &--white {
+    fill: var(--colorWhiteTwo);
+  }
+
+  &--close {
+    svg {
+      width: 1.938rem;
+      height: 1.938rem;
+    }
+  }
+
+  &--trash {
+    svg {
+      width: 2.215rem;
+      height: 2.215rem;
+    }
+  }
+}
