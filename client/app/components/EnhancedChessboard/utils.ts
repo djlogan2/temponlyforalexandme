@@ -23,7 +23,7 @@ export const convertValueToPiece = (value: any): Piece => {
     const pieceTypes = Object.keys(Pieces) as Piece["type"][];
     const colors = ["w", "b"] as Piece["color"][];
 
-    if (!pieceTypes.includes(type) && colors.includes(color)) {
+    if (!pieceTypes.includes(type) && !colors.includes(color)) {
       throw new Error(`Can't convert value to Piece: ${value}`);
     }
   }

@@ -49,17 +49,19 @@ export const EnhancedChessboard: FC<Props> = ({
   const formattedEdit = useMemo(() => {
     if (edit) {
       return {
-        piece: convertPieceToValue(edit.add),
+        add: convertPieceToValue(edit.add),
       };
     }
   }, [edit]);
 
-  const formattedHandleAdd = useCallback(() => {
-    if (handleAdd) {
-      return (piece: any, square: any) =>
+  const formattedHandleAdd = useCallback(
+    (piece: any, square: any) => {
+      if (handleAdd) {
         handleAdd(convertValueToPiece(piece), square);
-    }
-  }, [handleAdd]);
+      }
+    },
+    [handleAdd],
+  );
 
   return (
     <div className={className}>
