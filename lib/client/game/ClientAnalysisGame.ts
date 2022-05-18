@@ -1,5 +1,5 @@
 import * as util from "util";
-import { Move } from "chess.js";
+import { Move, Piece, Square } from "chess.js";
 import { Meteor } from "meteor/meteor";
 
 import Stoppable from "/lib/Stoppable";
@@ -28,10 +28,14 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     this.logger1 = new ClientLogger(this, "ClientAnalysisGame_ts");
   }
 
-  protected internalSetFen(_who: string, fen: string): void {
-    this.logger1.debug(() => `internalSetFen fen=${fen}`);
-
-    Meteor.call("gamecommand", this.me._id, { fen, type: "setfen" });
+  public getDefaultProperties() {
+    return {
+      tomove: this.me.tomove,
+      fen: this.me.fen,
+      variations: this.me.variations,
+      // clocks: this.me.clocks,
+      // myColor: this.me.opponentcolor,
+    };
   }
 
   protected isAuthorizedToMove(whoId: string): boolean {
@@ -41,6 +45,35 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
       throw new Meteor.Error("NOT_AN_EXAMINER");
 
     return true;
+  }
+
+  protected internalPut(piece: Piece, square: Square, who: string): void {
+    this.global.chessObject.put(piece, square);
+    const fen = this.global.chessObject.fen();
+
+    this.logger1.debug(
+      () => `internalPutPiece piece=${piece} square=${square} who=${who}`,
+    );
+
+    if (this.isAuthorizedToMove(who)) {
+      Meteor.call("gamecommand", this.me._id, {
+        fen,
+        type: "setfen",
+      });
+    }
+  }
+
+  public setFen(fen: string, who: string): void {
+    this.internalSetFen(fen, who);
+  }
+
+  protected internalSetFen(fen: string, who: string): void {
+    if (this.isAuthorizedToMove(who)) {
+      Meteor.call("gamecommand", this.me._id, {
+        fen,
+        type: "setfen",
+      });
+    }
   }
 
   protected premoveTasks(): void {
@@ -62,6 +95,10 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     if (this.isAuthorizedToMove(who)) {
       Meteor.call("gamecommand", this.me._id, { move: move.san, type: "move" });
     }
+  }
+
+  public put(piece: Piece, square: Square, who: string): void {
+    this.internalPut(piece, square, who);
   }
 
   public get events() {

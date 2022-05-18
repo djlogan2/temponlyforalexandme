@@ -1,4 +1,4 @@
-import { Move } from "chess.js";
+import { Move, Piece, Square } from "chess.js";
 import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
 import {
   GameStatus,
@@ -10,7 +10,6 @@ import ServerReadOnlyGameDao from "/imports/server/dao/ServerReadOnlyGameDao";
 import WritableGameDao from "/imports/server/dao/WritableGameDao";
 import Stoppable from "/lib/Stoppable";
 import internalMakeMove from "./CommonInternalMakeMove";
-import { PieceColor } from "/lib/records/ChallengeRecord";
 import WritableECODao from "/imports/server/dao/WritableECODao";
 
 export default class ServerAnalysisGame extends CommonAnalysisGame {
@@ -59,9 +58,7 @@ export default class ServerAnalysisGame extends CommonAnalysisGame {
     this.dao.update({ _id: this.me._id }, modifier);
   }
 
-  protected internalSetFen(who: string, fen: string): void {
-    const tomove = fen.split(/\s+/)[1] as PieceColor;
-
+  protected internalSetFen(fen: string, who: string): void {
     const audit: GameAuditSetFenRecord = {
       type: "setfen",
       when: new Date(),
@@ -71,7 +68,7 @@ export default class ServerAnalysisGame extends CommonAnalysisGame {
 
     this.dao.update(
       { _id: this.me._id },
-      { $set: { tomove, fen, actions: { $push: audit } } },
+      { $set: { fen }, $push: { actions: audit } },
     );
   }
 

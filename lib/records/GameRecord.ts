@@ -23,7 +23,8 @@ type GameAuditTypes =
   | "drawrevoke"
   | "move"
   | "resign"
-  | "setfen";
+  | "setfen"
+  | "remove";
 
 export interface GameAuditRecord {
   who: string;

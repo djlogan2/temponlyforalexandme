@@ -1,7 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import CommonBasicGame from "/lib/game/CommonBasicGame";
 import { AnalysisGameRecord, GameStatus } from "/lib/records/GameRecord";
-import User from "/lib/User";
 
 export default abstract class CommonAnalysisGame extends CommonBasicGame {
   protected premoveTasks(): void {}
@@ -14,10 +13,10 @@ export default abstract class CommonAnalysisGame extends CommonBasicGame {
     return r as AnalysisGameRecord;
   }
 
-  protected abstract internalSetFen(who: string, fen: string): void;
+  protected abstract internalSetFen(fen: string, who: string): void;
 
-  public setFen(who: string, fen: string): void {
-    this.internalSetFen(who, fen);
+  public setFen(fen: string, who: string): void {
+    this.internalSetFen(fen, who);
   }
 
   protected endGame(status: GameStatus, status2: number) {
