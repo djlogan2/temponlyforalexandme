@@ -109,7 +109,7 @@ export default class GameMethods extends AbstractClientMethod {
             reject(new Meteor.Error("INVALID_COMMAND"));
             return;
           }
-          game.setFen(obj.user.id, obj.data.fen);
+          game.setFen(obj.data.fen, obj.user.id);
           break;
         default: {
           // noinspection UnnecessaryLocalVariableJS

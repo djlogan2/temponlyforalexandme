@@ -21,7 +21,7 @@ export const useAnalysisGame = (
   const [gameId, setGameId] = useState<string>(initGameId);
   const [put, setPut] = useState<Put>(emptyFunc);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [fen, setFen] = useState<string>();
+  const [fen, setFen] = useState<string>("");
   const [movelist, setMovelist] = useState<MoveItem[]>([]);
   const [makeMove, setMakeMove] = useState<MakeMove>(emptyFunc);
   const playSound = useSound();
@@ -36,6 +36,7 @@ export const useAnalysisGame = (
       connection.user,
     ) as ClientAnalysisGame;
 
+    const { fen } = game.getDefaultProperties();
     setFen(fen);
 
     game.events.on("fen", (data) => {

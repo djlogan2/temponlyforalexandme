@@ -13,7 +13,7 @@ import AnalysisControlBox from "./components/AnalysisControlBox";
 const GameAnalysis = () => {
   const { id } = useParams<{ id: string }>();
   const { gameService } = useServices();
-  const { setGameId, makeMove, put } = useAnalysisGame(id, gameService);
+  const { setGameId, makeMove, put, fen } = useAnalysisGame(id, gameService);
 
   const [draggedPiece, setDraggedPiece] = React.useState<Piece | null>(null);
 
@@ -24,7 +24,7 @@ const GameAnalysis = () => {
   return (
     <div className="gameAnalysis">
       <EnhancedChessboard
-        fen="2b2br1/P7/3P1p1p/2p1P2K/k7/NR6/1pP5/q7 w - - 0 1"
+        fen={fen}
         className="gameAnalysis__board"
         flipped={false}
         circles={[]}
@@ -34,7 +34,7 @@ const GameAnalysis = () => {
         smartMoves={false}
         smallSize={500}
         onMoveHandler={() => {}}
-        handleAdd={put()}
+        handleAdd={put}
         edit={draggedPiece ? { add: draggedPiece } : undefined}
       />
       <PiecesSidebar onDragStart={setDraggedPiece} />
