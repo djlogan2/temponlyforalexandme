@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useRef } from "react";
-import LongArrow from "/client/app/components/icons/LongArrow";
+import { LongArrow } from "/client/app/components/icons/LongArrow";
 import { useTranslate } from "/client/app/hooks";
-import Input from "/client/app/shared/Input";
+import { Input } from "/client/app/shared/Input";
 
-const ImportPgn = () => {
+export const ImportPgn = () => {
   const { t } = useTranslate();
   const ref = useRef<HTMLInputElement>(null);
 
@@ -22,5 +22,3 @@ const ImportPgn = () => {
     </>
   );
 };
-
-export default ImportPgn;

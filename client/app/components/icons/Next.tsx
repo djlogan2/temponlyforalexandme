@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface INextProps extends HTMLAttributes<SVGElement> {}
 
-const Next = (props: INextProps) => (
+export const Next = (props: INextProps) => (
   <svg
     width="17"
     height="18"
@@ -18,5 +18,3 @@ const Next = (props: INextProps) => (
     />
   </svg>
 );
-
-export default Next;

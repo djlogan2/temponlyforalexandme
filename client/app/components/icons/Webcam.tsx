@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React from "react";
 
-const Webcam = () => (
+export const Webcam = () => (
   <svg
     width="17"
     height="17"
@@ -26,5 +26,3 @@ const Webcam = () => (
     </defs>
   </svg>
 );
-
-export default Webcam;

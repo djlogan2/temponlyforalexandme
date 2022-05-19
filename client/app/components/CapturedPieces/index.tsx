@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import Pawn from "../icons/ChessFigures/Pawn";
-import Knight from "../icons/ChessFigures/Knight";
-import Bishop from "../icons/ChessFigures/Bishop";
-import Rook from "../icons/ChessFigures/Rook";
-import Queen from "../icons/ChessFigures/Queen";
-import King from "../icons/ChessFigures/King";
+import { Pawn } from "../icons/ChessFigures/Pawn";
+import { Knight } from "../icons/ChessFigures/Knight";
+import { Bishop } from "../icons/ChessFigures/Bishop";
+import { Rook } from "../icons/ChessFigures/Rook";
+import { Queen } from "../icons/ChessFigures/Queen";
+import { King } from "../icons/ChessFigures/King";
 
 export type TFigures = "p" | "n" | "b" | "r" | "q" | "k";
 
@@ -24,7 +24,7 @@ export const ComponentsMap = {
   k: King,
 };
 
-const CapturedPieces: FC<ICapturedPiecesProps> = ({
+export const CapturedPieces: FC<ICapturedPiecesProps> = ({
   color = "white",
   soliders,
 }) => {
@@ -47,5 +47,3 @@ const CapturedPieces: FC<ICapturedPiecesProps> = ({
     </div>
   );
 };
-
-export default CapturedPieces;

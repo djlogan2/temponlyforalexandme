@@ -1,10 +1,10 @@
-import AnyonePlay from "./AnyonePlay";
-import ComputerPlay from "./ComputerPlay";
-import Share from "./Share";
-import CustomChallenge from "./CustomChallenge";
+import { AnyonePlay } from "./AnyonePlay";
+import { ComputerPlay } from "./ComputerPlay";
+import { Share } from "./Share";
+import { CustomChallenge } from "./CustomChallenge";
 import { Components } from "./types";
-import PlayWithFriends from "./PlayWithFriends";
-import ChallengeLaunched from "./ChallengeLaunched";
+import { PlayWithFriends } from "./PlayWithFriends";
+import { ChallengeLaunched } from "./ChallengeLaunched";
 
 export const options = [
   Components.ANYONE,

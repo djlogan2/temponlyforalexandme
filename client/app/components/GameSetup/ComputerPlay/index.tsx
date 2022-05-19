@@ -6,17 +6,17 @@ import { useTranslate } from "/client/app/hooks";
 import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { ChallengeButton } from "/client/app/types";
 import { PieceColor } from "/lib/records/ChallengeRecord";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import RangeSlider from "/client/app/shared/RangeSlider";
-import Input from "/client/app/shared/Input";
-import LongArrow from "/client/app/components/icons/LongArrow";
-import Card from "/client/app/components/Card";
+import { StandardButton } from "/client/app/shared/Buttons/StandardButton";
+import { RangeSlider } from "/client/app/shared/RangeSlider";
+import { Input } from "/client/app/shared/Input";
+import { LongArrow } from "/client/app/components/icons/LongArrow";
+import { Card } from "/client/app/components/Card";
 
-import Subtitle from "../../Subtitle";
+import { Subtitle } from "../../Subtitle";
 import { CommonGameSetup } from "../types";
-import RatedGame from "../RatedGame";
-import ColorPick from "../ColorPick";
-import TimeOptions from "../TimeOptions";
+import { RatedGame } from "../RatedGame";
+import { ColorPick } from "../ColorPick";
+import { TimeOptions } from "../TimeOptions";
 
 import "./index.scss";
 
@@ -24,7 +24,7 @@ type ComputerPlayProps = CommonGameSetup;
 
 const RANDOM = "random";
 
-const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
+export const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
   const { startComputerGame } = useGameSetup();
 
@@ -113,5 +113,3 @@ const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
     </form>
   );
 };
-
-export default ComputerPlay;

@@ -1,15 +1,15 @@
 import React, { FC } from "react";
 import clsx from "clsx";
-import Spinner from "../Spinner";
+import { Spinner } from "../Spinner";
 
-interface ISpinner {
+type LoadingPlaceholderProps = {
   className?: string;
-}
+};
 
-const LoadingPlaceholder: FC<ISpinner> = ({ className }) => (
+export const LoadingPlaceholder: FC<LoadingPlaceholderProps> = ({
+  className,
+}) => (
   <div className={clsx("LoadingPlaceholder", className)}>
     <Spinner />
   </div>
 );
-
-export default LoadingPlaceholder;

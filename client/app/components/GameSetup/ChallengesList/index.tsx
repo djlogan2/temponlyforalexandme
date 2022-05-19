@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import OpenChallengeItem from "../../OpenChallengeItem";
+import { OpenChallengeItem } from "../../OpenChallengeItem";
 import "./index.scss";
 
-interface IChallengesListProps {}
+type ChallengesListProps = {};
 
-const ChallengesList: FC<IChallengesListProps> = () => (
+export const ChallengesList: FC<ChallengesListProps> = () => (
   <div className="challengesList">
     {new Array(4).fill(0).map((_, i) => (
       <OpenChallengeItem
@@ -22,5 +22,3 @@ const ChallengesList: FC<IChallengesListProps> = () => (
     ))}
   </div>
 );
-
-export default ChallengesList;

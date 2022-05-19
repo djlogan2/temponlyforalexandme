@@ -1,12 +1,16 @@
 import React, { FC } from "react";
 
-interface IAbortProps {
+type AbortProps = {
   width?: number;
   height?: number;
   className?: string;
-}
+};
 
-const Abort: FC<IAbortProps> = ({ width = 23, height = 23, className }) => (
+export const Abort: FC<AbortProps> = ({
+  width = 23,
+  height = 23,
+  className,
+}) => (
   <svg
     className={className}
     width={width}
@@ -23,5 +27,3 @@ const Abort: FC<IAbortProps> = ({ width = 23, height = 23, className }) => (
     />
   </svg>
 );
-
-export default Abort;

@@ -1,6 +1,6 @@
 import React from "react";
 
-const PieceBRandom = () => (
+export const PieceBRandom = () => (
   <svg
     width="36"
     height="37"
@@ -68,5 +68,3 @@ const PieceBRandom = () => (
     </defs>
   </svg>
 );
-
-export default PieceBRandom;

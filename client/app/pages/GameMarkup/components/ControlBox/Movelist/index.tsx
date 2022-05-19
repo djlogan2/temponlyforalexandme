@@ -2,20 +2,20 @@ import React, { FC } from "react";
 
 import { noop } from "lodash";
 
-import GameControls from "/client/app/components/GameControls";
-import Moves from "/client/app/components/Moves";
+import { GameControls } from "/client/app/components/GameControls";
+import { Moves } from "/client/app/components/Moves";
 import { MoveItem } from "/client/app/types";
 import { useTranslate } from "/client/app/hooks";
-import Heading6 from "/client/app/shared/Typographies/Heading6";
+import { Heading6 } from "/client/app/shared/Typographies/Heading6";
 
-import OpeningName from "./components/OpeningName";
+import { OpeningName } from "./components/OpeningName";
 import "./index.scss";
 
 type MovelistProps = {
   moves: MoveItem[];
 };
 
-const Movelist: FC<MovelistProps> = ({ moves }) => {
+export const Movelist: FC<MovelistProps> = ({ moves }) => {
   const { t } = useTranslate();
 
   return (
@@ -40,5 +40,3 @@ const Movelist: FC<MovelistProps> = ({ moves }) => {
     </div>
   );
 };
-
-export default Movelist;

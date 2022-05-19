@@ -1,16 +1,16 @@
 import React from "react";
 import "./index.scss";
-import Rook from "../../../../components/icons/ChessFigures/Rook";
-import Knight from "/client/app/components/icons/ChessFigures/Knight";
-import Pawn from "/client/app/components/icons/ChessFigures/Pawn";
-import Bishop from "/client/app/components/icons/ChessFigures/Bishop";
-import Queen from "/client/app/components/icons/ChessFigures/Queen";
-import King from "/client/app/components/icons/ChessFigures/King";
-import ActionButton from "/client/app/shared/Buttons/ActionButton";
-import Close from "/client/app/components/icons/Close";
-import Trash from "/client/app/components/icons/Trash";
+import { Rook } from "../../../../components/icons/ChessFigures/Rook";
+import { Knight } from "/client/app/components/icons/ChessFigures/Knight";
+import { Pawn } from "/client/app/components/icons/ChessFigures/Pawn";
+import { Bishop } from "/client/app/components/icons/ChessFigures/Bishop";
+import { Queen } from "/client/app/components/icons/ChessFigures/Queen";
+import { King } from "/client/app/components/icons/ChessFigures/King";
+import { ActionButton } from "/client/app/shared/Buttons/ActionButton";
+import { Close } from "/client/app/components/icons/Close";
+import { Trash } from "/client/app/components/icons/Trash";
 
-const PieceSelection = () => (
+export const PieceSelection = () => (
   <div className="pieceSelection">
     <King className="p pieceSelection--black pointer" />
     <Queen className="pieceSelection--black pointer" />
@@ -37,5 +37,3 @@ const PieceSelection = () => (
     <King className="pieceSelection--white pointer" />
   </div>
 );
-
-export default PieceSelection;

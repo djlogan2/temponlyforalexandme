@@ -1,6 +1,6 @@
 import React from "react";
 
-const Chat = () => (
+export const Chat = () => (
   <svg
     width="17"
     height="17"
@@ -22,5 +22,3 @@ const Chat = () => (
     />
   </svg>
 );
-
-export default Chat;

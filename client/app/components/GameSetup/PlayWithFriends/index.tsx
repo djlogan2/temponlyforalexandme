@@ -5,21 +5,21 @@ import React, { FC, useState } from "react";
 import clsx from "clsx";
 
 import { useTranslate } from "/client/app/hooks";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import TextButton from "/client/app/shared/Buttons/TextButton";
-import Heading5 from "/client/app/shared/Typographies/Heading5";
+import { StandardButton } from "/client/app/shared/Buttons/StandardButton";
+import { TextButton } from "/client/app/shared/Buttons/TextButton";
+import { Heading5 } from "/client/app/shared/Typographies/Heading5";
 
-import LongArrow from "../../icons/LongArrow";
-import SearchPeople from "../../SearchPeople";
-import UserItem from "../../UserItem";
+import { LongArrow } from "../../icons/LongArrow";
+import { SearchPeople } from "../../SearchPeople";
+import { UserItem } from "../../UserItem";
 import { onPickTimeMock } from "../mocks";
 import { CommonGameSetup } from "../types";
-import Shortcut from "../Shortcut";
-import TimeOptions from "../TimeOptions";
+import { Shortcut } from "../Shortcut";
+import { TimeOptions } from "../TimeOptions";
 
 type PlayWithFriendsProps = CommonGameSetup;
 
-const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
+export const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
   const [opponents, setOpponents] = useState<number>(0);
   const { t } = useTranslate();
 
@@ -88,5 +88,3 @@ const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
     </div>
   );
 };
-
-export default PlayWithFriends;

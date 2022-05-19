@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 import { MoveItem } from "client/app/types";
 import { Pieces } from "/client/app/constants";
-import ScrollBar from "/client/app/shared/ScrollBar";
+import { ScrollBar } from "/client/app/shared/ScrollBar";
 
 import "./index.scss";
 
@@ -12,7 +12,7 @@ interface MovesProps extends HTMLAttributes<HTMLDivElement> {
   moves: MoveItem[];
 }
 
-const Moves: FC<MovesProps> = ({ moves, className, ...rest }) => {
+export const Moves: FC<MovesProps> = ({ moves, className, ...rest }) => {
   const ref = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -52,5 +52,3 @@ const Moves: FC<MovesProps> = ({ moves, className, ...rest }) => {
     </div>
   );
 };
-
-export default Moves;

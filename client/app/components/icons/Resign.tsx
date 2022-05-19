@@ -1,12 +1,16 @@
 import React, { FC } from "react";
 
-interface IResignProps {
+type ResignProps = {
   width?: number;
   height?: number;
   className?: string;
-}
+};
 
-const Resign: FC<IResignProps> = ({ width = 22, height = 22, className }) => (
+export const Resign: FC<ResignProps> = ({
+  width = 22,
+  height = 22,
+  className,
+}) => (
   <svg
     className={className}
     width={width}
@@ -41,5 +45,3 @@ const Resign: FC<IResignProps> = ({ width = 22, height = 22, className }) => (
     </defs>
   </svg>
 );
-
-export default Resign;

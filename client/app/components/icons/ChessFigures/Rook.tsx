@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes } from "react";
 // eslint-disable max-len
 
 interface IRookProps extends HTMLAttributes<SVGElement> {}
-const Rook = (props: IRookProps) => (
+export const Rook = (props: IRookProps) => (
   <svg
     width="32"
     height="34"
@@ -67,5 +67,3 @@ const Rook = (props: IRookProps) => (
     </defs>
   </svg>
 );
-
-export default Rook;

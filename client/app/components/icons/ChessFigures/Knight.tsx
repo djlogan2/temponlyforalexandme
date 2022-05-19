@@ -4,7 +4,7 @@ import React, { HTMLAttributes } from "react";
 interface IKnightProps extends HTMLAttributes<SVGElement> {}
 // eslint-disable max-len
 /* eslint-disable no-use-before-define */
-const Knight = (props: IKnightProps) => (
+export const Knight = (props: IKnightProps) => (
   <svg
     width="32"
     height="34"
@@ -70,5 +70,3 @@ const Knight = (props: IKnightProps) => (
     </defs>
   </svg>
 );
-
-export default Knight;

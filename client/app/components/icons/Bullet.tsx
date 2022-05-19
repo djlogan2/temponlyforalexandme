@@ -1,6 +1,6 @@
 import React from "react";
 
-const Bullet = () => (
+export const Bullet = () => (
   <svg
     width="16"
     height="16"
@@ -30,5 +30,3 @@ const Bullet = () => (
     />
   </svg>
 );
-
-export default Bullet;

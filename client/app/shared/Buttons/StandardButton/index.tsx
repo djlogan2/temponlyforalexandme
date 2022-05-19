@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { ButtonHTMLAttributes, FC } from "react";
-import Heading5 from "../../Typographies/Heading5";
+import { Heading5 } from "../../Typographies/Heading5";
 import "./index.scss";
 
 interface IStandardButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,7 +9,7 @@ interface IStandardButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   height?: "small" | "big";
 }
 
-const StandardButton: FC<IStandardButtonProps> = ({
+export const StandardButton: FC<IStandardButtonProps> = ({
   children,
   size = "big",
   color = "regular",
@@ -31,5 +31,3 @@ const StandardButton: FC<IStandardButtonProps> = ({
     <Heading5>{children}</Heading5>
   </button>
 );
-
-export default StandardButton;

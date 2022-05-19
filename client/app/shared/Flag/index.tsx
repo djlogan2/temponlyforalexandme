@@ -1,21 +1,19 @@
 import clsx from "clsx";
-import Flags from "country-flag-icons/react/3x2";
+import FlagIcons from "country-flag-icons/react/3x2";
 import React, { FC } from "react";
 import "./index.scss";
 
-const { ...flags } = Flags;
+const { ...flags } = FlagIcons;
 
-export type TFlags = keyof typeof flags;
+export type Flags = keyof typeof flags;
 
-interface IFlagProps {
-  flag: TFlags;
+interface FlagProps {
+  flag: Flags;
   className?: string;
 }
 
-const Flag: FC<IFlagProps> = ({ flag, className }) => {
-  const FlagComponent = Flags[flag];
+export const Flag: FC<FlagProps> = ({ flag, className }) => {
+  const FlagComponent = FlagIcons[flag];
 
   return <FlagComponent className={clsx("flag", className)} />;
 };
-
-export default Flag;

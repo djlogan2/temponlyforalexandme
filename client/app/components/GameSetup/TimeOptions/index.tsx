@@ -5,22 +5,23 @@ import clsx from "clsx";
 import { ChallengeButton } from "/client/app/types";
 import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { useTranslate } from "/client/app/hooks";
-import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
-import TextButton from "/client/app/shared/Buttons/TextButton";
+import { TabButtonSquared } from "/client/app/shared/Buttons/TabButtonSquared";
+import { TextButton } from "/client/app/shared/Buttons/TextButton";
 
-import Arrow from "../../icons/Arrow";
-import More from "../../icons/More";
-import Subtitle from "../../Subtitle";
-import TimeControl from "../TimeControl";
+import { Arrow } from "../../icons/Arrow";
+import { More } from "../../icons/More";
+import { Subtitle } from "../../Subtitle";
+import { TimeControl } from "../TimeControl";
 
 const CUSTOM = "custom";
 
-interface ITimeOptionProps {
+type TimeOptionsProps = {
   subtitle: string;
   onPickTime: (value: ChallengeButton | number) => Promise<void>;
   className?: string;
-}
-const TimeOption: FC<ITimeOptionProps> = ({
+};
+
+export const TimeOptions: FC<TimeOptionsProps> = ({
   className,
   subtitle,
   onPickTime,
@@ -102,5 +103,3 @@ const TimeOption: FC<ITimeOptionProps> = ({
     </>
   );
 };
-
-export default TimeOption;

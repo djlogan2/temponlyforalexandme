@@ -1,17 +1,17 @@
 import React, { FC, HTMLAttributes } from "react";
-import Next from "/client/app/components/icons/Next";
-import NextEnd from "/client/app/components/icons/NextEnd";
-import Prev from "/client/app/components/icons/Prev";
-import PrevEnd from "/client/app/components/icons/PrevEnd";
+import { Next } from "/client/app/components/icons/Next";
+import { NextEnd } from "/client/app/components/icons/NextEnd";
+import { Prev } from "/client/app/components/icons/Prev";
+import { PrevEnd } from "/client/app/components/icons/PrevEnd";
 
-interface IControls extends HTMLAttributes<HTMLDivElement> {
+interface GameControlsProps extends HTMLAttributes<HTMLDivElement> {
   onPrevEndClick: () => void;
   onPrevClick: () => void;
   onNextClick: () => void;
   onNextEndClick: () => void;
 }
 
-const Controls: FC<IControls> = ({
+export const GameControls: FC<GameControlsProps> = ({
   onPrevClick,
   onPrevEndClick,
   onNextClick,
@@ -25,5 +25,3 @@ const Controls: FC<IControls> = ({
     <NextEnd onClick={onNextEndClick} className="pointer" />
   </div>
 );
-
-export default Controls;

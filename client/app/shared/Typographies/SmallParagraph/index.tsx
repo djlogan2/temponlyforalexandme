@@ -1,13 +1,17 @@
 import React, { FC } from "react";
 import "./index.scss";
 
-interface SmallParagraphProps {
+type SmallParagraphProps = {
   className?: string;
   link?: string;
   children: React.ReactNode;
-}
+};
 
-const SmallParagraph: FC<SmallParagraphProps> = ({ link, children, ...rest }) =>
+export const SmallParagraph: FC<SmallParagraphProps> = ({
+  link,
+  children,
+  ...rest
+}) =>
   link ? (
     <a className="smallParagraphLink" href={link}>
       {children}
@@ -17,5 +21,3 @@ const SmallParagraph: FC<SmallParagraphProps> = ({ link, children, ...rest }) =>
       {children}
     </div>
   );
-
-export default SmallParagraph;

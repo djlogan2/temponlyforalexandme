@@ -1,8 +1,8 @@
-import React, { FC, HTMLAttributes } from "react";
+import React, { HTMLAttributes } from "react";
 
 interface IKingProps extends HTMLAttributes<SVGElement> {}
 
-const King = (props: IKingProps) => (
+export const King = (props: IKingProps) => (
   <svg
     width="32"
     height="34"
@@ -61,5 +61,3 @@ const King = (props: IKingProps) => (
     </defs>
   </svg>
 );
-
-export default King;

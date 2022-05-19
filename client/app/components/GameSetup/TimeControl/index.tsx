@@ -3,21 +3,21 @@ import React, { FC, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { useTranslate } from "/client/app/hooks";
-import TextButton from "/client/app/shared/Buttons/TextButton";
-import Checkbox from "/client/app/shared/Checkbox";
-import Input from "/client/app/shared/Input";
-import LongArrow from "../../icons/LongArrow";
-import Card from "../../Card";
-import Subtitle from "../../Subtitle";
+import { TextButton } from "/client/app/shared/Buttons/TextButton";
+import { Checkbox } from "/client/app/shared/Checkbox";
+import { Input } from "/client/app/shared/Input";
+import { LongArrow } from "../../icons/LongArrow";
+import { Card } from "../../Card";
+import { Subtitle } from "../../Subtitle";
 import "./index.scss";
 
-interface ITimeControlProps {
+type TimeControlProps = {
   className?: string;
   onReturn: () => void;
   onPickTime: (value: number) => void;
-}
+};
 
-const TimeControl: FC<ITimeControlProps> = ({
+export const TimeControl: FC<TimeControlProps> = ({
   className,
   onReturn,
   onPickTime,
@@ -61,5 +61,3 @@ const TimeControl: FC<ITimeControlProps> = ({
     </Card>
   );
 };
-
-export default TimeControl;

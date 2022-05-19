@@ -1,1 +1,1 @@
-export { default as DigitalClock } from "./DigitalClock";
+export * from "./DigitalClock";

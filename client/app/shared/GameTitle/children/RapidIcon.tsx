@@ -1,6 +1,6 @@
 import React from "react";
 
-const RapidIcon = () => (
+export const RapidIcon = () => (
   <svg
     width="25"
     height="24"
@@ -28,5 +28,3 @@ const RapidIcon = () => (
     />
   </svg>
 );
-
-export default RapidIcon;

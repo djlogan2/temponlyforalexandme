@@ -1,14 +1,14 @@
 import React, { ButtonHTMLAttributes, FC } from "react";
 import "./index.scss";
 import clsx from "clsx";
-import Heading5 from "../../Typographies/Heading5";
+import { Heading5 } from "../../Typographies/Heading5";
 
-interface ITabButtonSquaredProps
+interface TabButtonSquaredProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "primary";
 }
 
-const TabButtonSquared: FC<ITabButtonSquaredProps> = ({
+export const TabButtonSquared: FC<TabButtonSquaredProps> = ({
   children,
   className,
   color,
@@ -26,5 +26,3 @@ const TabButtonSquared: FC<ITabButtonSquaredProps> = ({
     <Heading5>{children}</Heading5>
   </button>
 );
-
-export default TabButtonSquared;

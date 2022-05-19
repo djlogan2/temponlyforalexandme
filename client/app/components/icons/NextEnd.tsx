@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface INextEndProps extends HTMLAttributes<SVGElement> {}
 
-const NextEnd = (props: INextEndProps) => (
+export const NextEnd = (props: INextEndProps) => (
   <svg
     width="17"
     height="18"
@@ -23,5 +23,3 @@ const NextEnd = (props: INextEndProps) => (
     />
   </svg>
 );
-
-export default NextEnd;

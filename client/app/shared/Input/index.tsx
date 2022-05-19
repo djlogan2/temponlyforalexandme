@@ -3,10 +3,10 @@
 import clsx from "clsx";
 import { noop } from "lodash";
 import React, { FC, InputHTMLAttributes } from "react";
-import SmallText from "../Typographies/SmallText";
+import { SmallText } from "../Typographies/SmallText";
 import "./index.scss";
 
-interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
   error?: boolean;
@@ -15,7 +15,7 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   onContainerClick?: () => void;
 }
 
-const Input: FC<IInputProps> = ({
+export const Input: FC<InputProps> = ({
   label,
   name,
   className,
@@ -51,5 +51,3 @@ const Input: FC<IInputProps> = ({
     )}
   </div>
 );
-
-export default Input;

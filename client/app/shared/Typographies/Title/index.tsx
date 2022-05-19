@@ -1,15 +1,13 @@
 import React, { FCICC } from "react";
 import "./index.scss";
 
-interface TitleProps {
+type TitleProps = {
   name: string;
   className?: string;
-}
+};
 
-const Title: FCICC<TitleProps> = ({ name, token, ...rest }) => (
+export const Title: FCICC<TitleProps> = ({ name, token, ...rest }) => (
   <div id={name} className="title" {...rest}>
     {token.token}
   </div>
 );
-
-export default Title;

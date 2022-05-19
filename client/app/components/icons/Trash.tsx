@@ -3,7 +3,7 @@ import React, { HTMLAttributes } from "react";
 
 interface ITrashProps extends HTMLAttributes<SVGElement> {}
 
-const Trash = (props: ITrashProps) => (
+export const Trash = (props: ITrashProps) => (
   <svg
     width="24"
     height="23"
@@ -20,5 +20,3 @@ const Trash = (props: ITrashProps) => (
     />
   </svg>
 );
-
-export default Trash;

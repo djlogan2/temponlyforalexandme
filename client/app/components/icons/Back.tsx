@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 
-interface IBackProps {
+type BackProps = {
   width?: number;
   height?: number;
   className?: string;
-}
+};
 
-const Back: FC<IBackProps> = ({ width = 22, height = 22, className }) => (
+export const Back: FC<BackProps> = ({ width = 22, height = 22, className }) => (
   <svg
     className={className}
     width={width}
@@ -23,5 +23,3 @@ const Back: FC<IBackProps> = ({ width = 22, height = 22, className }) => (
     />
   </svg>
 );
-
-export default Back;

@@ -3,7 +3,7 @@ import React, { HTMLAttributes } from "react";
 
 interface ISettingsProps extends HTMLAttributes<SVGElement> {}
 
-const Settings = (props: ISettingsProps) => (
+export const Settings = (props: ISettingsProps) => (
   <svg
     width="17"
     height="16"
@@ -19,5 +19,3 @@ const Settings = (props: ISettingsProps) => (
     />
   </svg>
 );
-
-export default Settings;

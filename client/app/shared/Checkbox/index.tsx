@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import React, { FC, InputHTMLAttributes, useState } from "react";
-import Check from "../../components/icons/Check";
+import { Check } from "../../components/icons/Check";
 
-interface ICheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
+interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   disabled?: boolean;
   circled?: boolean;
@@ -10,7 +10,7 @@ interface ICheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   text?: string;
 }
 
-const Checkbox: FC<ICheckboxProps> = ({
+export const Checkbox: FC<CheckboxProps> = ({
   name,
   className,
   children,
@@ -55,5 +55,3 @@ const Checkbox: FC<ICheckboxProps> = ({
     </label>
   );
 };
-
-export default Checkbox;

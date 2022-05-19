@@ -6,7 +6,7 @@ interface IRegularButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "blue" | "dark";
 }
 
-const RegularButton: FC<IRegularButtonProps> = ({
+export const RegularButton: FC<IRegularButtonProps> = ({
   children,
   className,
   color = "blue",
@@ -20,5 +20,3 @@ const RegularButton: FC<IRegularButtonProps> = ({
     {children}
   </button>
 );
-
-export default RegularButton;

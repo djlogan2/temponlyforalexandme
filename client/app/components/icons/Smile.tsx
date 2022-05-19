@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface ISmileProps extends HTMLAttributes<SVGElement> {}
 
-const Smile = (props: ISmileProps) => (
+export const Smile = (props: ISmileProps) => (
   <svg
     width="10"
     height="10"
@@ -19,5 +19,3 @@ const Smile = (props: ISmileProps) => (
     />
   </svg>
 );
-
-export default Smile;

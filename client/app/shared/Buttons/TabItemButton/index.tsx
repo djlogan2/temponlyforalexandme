@@ -1,13 +1,13 @@
 import React, { ButtonHTMLAttributes, FC } from "react";
 import "./index.scss";
 import clsx from "clsx";
-import Heading5 from "../../Typographies/Heading5";
+import { Heading5 } from "../../Typographies/Heading5";
 
-interface ITabItemButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface TabItemButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
 }
 
-const TabItemButton: FC<ITabItemButtonProps> = ({
+export const TabItemButton: FC<TabItemButtonProps> = ({
   children,
   className,
   selected,
@@ -25,5 +25,3 @@ const TabItemButton: FC<ITabItemButtonProps> = ({
     <Heading5 className="tabItemButton__text">{children}</Heading5>
   </button>
 );
-
-export default TabItemButton;

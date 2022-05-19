@@ -1,6 +1,6 @@
 import React from "react";
 
-const Mail = () => (
+export const Mail = () => (
   <svg
     width="25"
     height="25"
@@ -14,5 +14,3 @@ const Mail = () => (
     />
   </svg>
 );
-
-export default Mail;

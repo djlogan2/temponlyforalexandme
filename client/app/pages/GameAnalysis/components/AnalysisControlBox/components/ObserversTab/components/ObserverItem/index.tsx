@@ -1,20 +1,20 @@
 import React, { FC } from "react";
-import Chat2 from "/client/app/components/icons/Chat2";
-import ChessTitle from "/client/app/components/icons/ChessTitle";
-import Avatar from "/client/app/shared/Avatar";
-import Flag, { TFlags } from "/client/app/shared/Flag";
-import Switch from "/client/app/shared/Switch";
+import { Chat2 } from "/client/app/components/icons/Chat2";
+import { ChessTitle } from "/client/app/components/icons/ChessTitle";
+import { Avatar } from "/client/app/shared/Avatar";
+import { Flag, Flags } from "/client/app/shared/Flag";
+import { Switch } from "/client/app/shared/Switch";
 
-interface IObserverItemProps {
+type ObserverItemProps = {
   picture?: string;
   username: string;
   chessTitle: string;
-  flag: TFlags;
+  flag: Flags;
   rating: number;
   className?: string;
-}
+};
 
-const ObserverItem: FC<IObserverItemProps> = ({
+export const ObserverItem: FC<ObserverItemProps> = ({
   picture,
   username,
   chessTitle,
@@ -48,5 +48,3 @@ const ObserverItem: FC<IObserverItemProps> = ({
     </td>
   </tr>
 );
-
-export default ObserverItem;

@@ -1,16 +1,16 @@
 import clsx from "clsx";
 import React from "react";
-import Card from "../../Card";
-import Subtitle from "../../Subtitle";
+import { Card } from "../../Card";
+import { Subtitle } from "../../Subtitle";
 import "./index.scss";
 import { useTranslate } from "/client/app/hooks";
-import Switch from "/client/app/shared/Switch";
+import { Switch } from "/client/app/shared/Switch";
 
 interface IRatedGameProps {
   className?: string;
 }
 
-const RatedGame = ({ className }: IRatedGameProps) => {
+export const RatedGame = ({ className }: IRatedGameProps) => {
   const { t } = useTranslate();
 
   return (
@@ -20,5 +20,3 @@ const RatedGame = ({ className }: IRatedGameProps) => {
     </Card>
   );
 };
-
-export default RatedGame;

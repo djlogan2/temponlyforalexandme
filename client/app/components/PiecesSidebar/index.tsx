@@ -2,8 +2,8 @@ import React from "react";
 
 import { Piece } from "chess.js";
 
-import Trash from "../icons/Trash";
-import Close from "../icons/Close";
+import { Trash } from "../icons/Trash";
+import { Close } from "../icons/Close";
 
 import { pieces } from "./constants";
 

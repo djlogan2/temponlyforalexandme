@@ -1,14 +1,14 @@
 import clsx from "clsx";
 import React, { FC, HTMLAttributes } from "react";
-import Card from "../../Card";
-import Subtitle from "../../Subtitle";
-import Switch from "/client/app/shared/Switch";
+import { Card } from "../../Card";
+import { Subtitle } from "../../Subtitle";
+import { Switch } from "/client/app/shared/Switch";
 import "./index.scss";
 import { useTranslate } from "/client/app/hooks";
 
-interface IShortcutProps extends HTMLAttributes<HTMLElement> {}
+interface ShortcutProps extends HTMLAttributes<HTMLElement> {}
 
-const Shortcut: FC<IShortcutProps> = ({ className }) => {
+export const Shortcut: FC<ShortcutProps> = ({ className }) => {
   const { t } = useTranslate();
 
   return (
@@ -18,5 +18,3 @@ const Shortcut: FC<IShortcutProps> = ({ className }) => {
     </Card>
   );
 };
-
-export default Shortcut;

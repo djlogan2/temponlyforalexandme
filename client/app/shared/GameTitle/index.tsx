@@ -1,17 +1,22 @@
 import React, { FC } from "react";
 import "./index.scss";
-import RapidIcon from "/client/app/shared/GameTitle/children/RapidIcon";
+import { RapidIcon } from "/client/app/shared/GameTitle/children/RapidIcon";
 import clsx from "clsx";
 import { useTranslate } from "../../hooks";
 
-interface IGameTitle {
+type GameTitleProps = {
   minutes: number;
   instance?: string;
   date?: string;
   className?: string;
-}
+};
 
-const GameTitle: FC<IGameTitle> = ({ minutes, instance, date, className }) => {
+export const GameTitle: FC<GameTitleProps> = ({
+  minutes,
+  instance,
+  date,
+  className,
+}) => {
   const { t } = useTranslate();
 
   return (
@@ -27,5 +32,3 @@ const GameTitle: FC<IGameTitle> = ({ minutes, instance, date, className }) => {
     </div>
   );
 };
-
-export default GameTitle;

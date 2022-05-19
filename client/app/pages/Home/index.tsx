@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { GameSetup } from "../../components";
 
-const Home = () => {
+export const Home = () => {
   const [showGameSetup, setShowGameSetup] = useState(false);
 
   return (
@@ -15,5 +15,3 @@ const Home = () => {
     </>
   );
 };
-
-export default Home;

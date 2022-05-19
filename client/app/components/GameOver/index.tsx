@@ -14,8 +14,8 @@ import {
   SmallParagraph,
   StandardButton,
 } from "../../shared";
-import Card from "../Card";
-import Close from "../icons/Close";
+import { Card } from "../Card";
+import { Close } from "../icons/Close";
 
 import "./index.scss";
 
@@ -33,7 +33,7 @@ const gameResults = {
   "*": "",
 };
 
-const GameOver = ({ result, onClose, onRematch, onAnalysis }: Props) => {
+export const GameOver = ({ result, onClose, onRematch, onAnalysis }: Props) => {
   const { width } = useWindowSize();
 
   return width ? (
@@ -88,5 +88,3 @@ const GameOver = ({ result, onClose, onRematch, onAnalysis }: Props) => {
     </Backdrop>
   ) : null;
 };
-
-export default GameOver;

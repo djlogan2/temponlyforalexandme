@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 import React, { FC } from "react";
 
-interface IDrawProps {
+type DrawProps = {
   width?: number;
   height?: number;
   className?: string;
-}
+};
 
-const Draw: FC<IDrawProps> = ({ width = 30, height = 30, className }) => (
+export const Draw: FC<DrawProps> = ({ width = 30, height = 30, className }) => (
   <svg
     className={className}
     width={width}
@@ -38,5 +38,3 @@ const Draw: FC<IDrawProps> = ({ width = 30, height = 30, className }) => (
     </defs>
   </svg>
 );
-
-export default Draw;

@@ -1,20 +1,20 @@
 import clsx from "clsx";
 import { noop } from "lodash";
 import React, { FCICC, useRef, useState } from "react";
-import Chevron from "../../components/icons/Chevron";
+import { Chevron } from "../../components/icons/Chevron";
 import { useClickOutside } from "../../hooks";
 import "./index.scss";
-import Input from "../Input";
+import { Input } from "../Input";
 
-interface ISelectProps {
+type SelectProps = {
   options: string[];
   disabled?: boolean;
   onSelect: (item: string) => void;
   className?: string;
   placeHolder: { token: string; args: string[] };
-}
+};
 
-const Select: FCICC<ISelectProps> = ({
+export const Select: FCICC<SelectProps> = ({
   placeHolder,
   options,
   disabled,
@@ -74,5 +74,3 @@ const Select: FCICC<ISelectProps> = ({
     </div>
   );
 };
-
-export default Select;

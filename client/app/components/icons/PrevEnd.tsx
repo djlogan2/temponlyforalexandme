@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface IPrevEndProps extends HTMLAttributes<SVGElement> {}
 
-const PrevEnd = (props: IPrevEndProps) => (
+export const PrevEnd = (props: IPrevEndProps) => (
   <svg
     width="17"
     height="18"
@@ -23,5 +23,3 @@ const PrevEnd = (props: IPrevEndProps) => (
     />
   </svg>
 );
-
-export default PrevEnd;

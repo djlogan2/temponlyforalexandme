@@ -1,16 +1,16 @@
 import React from "react";
-import ImportPgn from "./components/ImportPgn";
-import GameControls from "/client/app/components/GameControls";
-import LongArrow from "/client/app/components/icons/LongArrow";
-import Input from "/client/app/shared/Input";
+import { ImportPgn } from "./components/ImportPgn";
+import { GameControls } from "/client/app/components/GameControls";
+import { LongArrow } from "/client/app/components/icons/LongArrow";
+import { Input } from "/client/app/shared/Input";
+import { Accordeon } from "./components/Accordeon";
+import { Checkbox } from "/client/app/shared/Checkbox";
+import { Switch } from "/client/app/shared/Switch";
+import { ScrollBar } from "/client/app/shared/ScrollBar";
 import "./index.scss";
-import Accordeon from "./components/Accordeon";
-import Checkbox from "/client/app/shared/Checkbox";
-import Switch from "/client/app/shared/Switch";
-import ScrollBar from "/client/app/shared/ScrollBar";
 import { useTranslate } from "/client/app/hooks";
 
-const BoardSetup = () => {
+export const BoardSetup = () => {
   const { t } = useTranslate();
 
   return (
@@ -66,5 +66,3 @@ const BoardSetup = () => {
     </ScrollBar>
   );
 };
-
-export default BoardSetup;

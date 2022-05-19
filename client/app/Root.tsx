@@ -11,7 +11,7 @@ import "../../lib/client/ICCGlobal";
 import { ServicesProvider } from "./contexts/services";
 
 import { ProvidersContainer } from "./ProvidersContainer";
-import App from "./App";
+import { App } from "./App";
 
 //---
 globalThis.subscriptionservice = new SubscriptionService(null);
@@ -28,12 +28,10 @@ globalThis.icc = new ClientServer(userdao);
 const i18ndao = new Clienti18nReadOnlyDao(null, subscriptionservice);
 const i18nClient = new Clienti18n(null, i18ndao);
 
-const Root = () => (
+export const Root = () => (
   <ServicesProvider>
     <ProvidersContainer>
       <App />
     </ProvidersContainer>
   </ServicesProvider>
 );
-
-export default Root;

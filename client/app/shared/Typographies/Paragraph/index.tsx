@@ -4,14 +4,14 @@ import { noop } from "lodash";
 import React, { FC } from "react";
 import "./index.scss";
 
-interface ParagraphProps {
+type ParagraphProps = {
   className?: string;
   link?: string;
   onClick?: () => void;
   children: React.ReactNode;
-}
+};
 
-const Paragraph: FC<ParagraphProps> = ({
+export const Paragraph: FC<ParagraphProps> = ({
   children,
   link,
   className,
@@ -32,5 +32,3 @@ const Paragraph: FC<ParagraphProps> = ({
       {children}
     </p>
   );
-
-export default Paragraph;

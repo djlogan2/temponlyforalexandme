@@ -9,7 +9,7 @@ type FlatMovelistProps = {
   className?: string;
 };
 
-const FlatMovelist: FC<FlatMovelistProps> = ({ moves, className }) => (
+export const FlatMovelist: FC<FlatMovelistProps> = ({ moves, className }) => (
   <div className={clsx("flatMovelist__container", className)}>
     <ul className="flatMovelist">
       {new Array(Math.ceil(moves.length / 2)).fill(0).map((_, i) => {
@@ -32,5 +32,3 @@ const FlatMovelist: FC<FlatMovelistProps> = ({ moves, className }) => (
     </ul>
   </div>
 );
-
-export default FlatMovelist;

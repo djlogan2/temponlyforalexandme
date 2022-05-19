@@ -4,13 +4,13 @@ import clsx from "clsx";
 
 import { UserStatus } from "/client/app/types";
 import { useTranslate } from "/client/app/hooks";
-import Avatar from "/client/app/shared/Avatar";
-import Flag, { TFlags } from "/client/app/shared/Flag";
-import Heading6 from "/client/app/shared/Typographies/Heading6";
-import Paragraph from "/client/app/shared/Typographies/Paragraph";
+import { Avatar } from "/client/app/shared/Avatar";
+import { Flag, Flags } from "/client/app/shared/Flag";
+import { Heading6 } from "/client/app/shared/Typographies/Heading6";
+import { Paragraph } from "/client/app/shared/Typographies/Paragraph";
 
-import Bullet from "../icons/Bullet";
-import ChessTitle from "../icons/ChessTitle";
+import { Bullet } from "../icons/Bullet";
+import { ChessTitle } from "../icons/ChessTitle";
 
 import "./index.scss";
 
@@ -19,7 +19,7 @@ type OpenChallengeItemProps = {
   gameTime: number;
   userStatus?: UserStatus;
   icon?: JSX.Element;
-  flag?: TFlags;
+  flag?: Flags;
   chessTitle?: string;
   size?: "big" | "small";
   userPic?: string;
@@ -27,7 +27,7 @@ type OpenChallengeItemProps = {
   className?: string;
 };
 
-const OpenChallengeItem: FC<OpenChallengeItemProps> = ({
+export const OpenChallengeItem: FC<OpenChallengeItemProps> = ({
   chessTitle,
   icon,
   className,
@@ -80,5 +80,3 @@ const OpenChallengeItem: FC<OpenChallengeItemProps> = ({
     </div>
   );
 };
-
-export default OpenChallengeItem;

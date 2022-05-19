@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 
-interface ICloseProps {
+type CloseProps = {
   className?: string;
   onClick?: () => void;
-}
+};
 
-const Close: FC<ICloseProps> = ({ className, onClick }) => (
+export const Close: FC<CloseProps> = ({ className, onClick }) => (
   <svg
     onClick={onClick}
     className={className}
@@ -27,5 +27,3 @@ const Close: FC<ICloseProps> = ({ className, onClick }) => (
     />
   </svg>
 );
-
-export default Close;

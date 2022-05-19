@@ -6,7 +6,7 @@ interface ISmallButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "red" | "dark";
 }
 
-const SmallButton: FC<ISmallButtonProps> = ({
+export const SmallButton: FC<ISmallButtonProps> = ({
   children,
   className,
   color = "dark",
@@ -20,5 +20,3 @@ const SmallButton: FC<ISmallButtonProps> = ({
     {children}
   </button>
 );
-
-export default SmallButton;

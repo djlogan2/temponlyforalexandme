@@ -2,7 +2,7 @@ import clsx from "clsx";
 import "./index.scss";
 import React, { FC, InputHTMLAttributes, useEffect, useState } from "react";
 
-interface IRangeSliderProps extends InputHTMLAttributes<HTMLInputElement> {
+interface RangeSliderProps extends InputHTMLAttributes<HTMLInputElement> {
   value: number;
   min: number;
   max: number;
@@ -14,7 +14,7 @@ interface IRangeSliderProps extends InputHTMLAttributes<HTMLInputElement> {
   ) => void;
 }
 
-const RangeSlider: FC<IRangeSliderProps> = ({
+export const RangeSlider: FC<RangeSliderProps> = ({
   className,
   value,
   min = 0,
@@ -51,5 +51,3 @@ const RangeSlider: FC<IRangeSliderProps> = ({
     </div>
   );
 };
-
-export default RangeSlider;

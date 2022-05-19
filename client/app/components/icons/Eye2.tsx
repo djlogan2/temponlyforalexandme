@@ -1,6 +1,6 @@
 import React from "react";
 
-const Eye2 = () => (
+export const Eye2 = () => (
   <svg
     width="16"
     height="17"
@@ -15,5 +15,3 @@ const Eye2 = () => (
     />
   </svg>
 );
-
-export default Eye2;

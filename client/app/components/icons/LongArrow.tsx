@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface ILongArrowProps extends HTMLAttributes<SVGElement> {}
 
-const LongArrow = (props: ILongArrowProps) => (
+export const LongArrow = (props: ILongArrowProps) => (
   <svg
     width="20"
     height="16"
@@ -29,5 +29,3 @@ const LongArrow = (props: ILongArrowProps) => (
     />
   </svg>
 );
-
-export default LongArrow;

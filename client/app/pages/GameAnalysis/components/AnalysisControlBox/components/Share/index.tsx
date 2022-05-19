@@ -1,18 +1,18 @@
 import React from "react";
-import SocialMedia from "/client/app/components/SocialMedia";
-import "./index.scss";
-import SendToMail from "/client/app/components/SendToMail";
-import ShareLink from "/client/app/components/ShareLink";
-import SearchPeople from "/client/app/components/SearchPeople";
-import Arrow from "/client/app/components/icons/Arrow";
-import Heading4 from "/client/app/shared/Typographies/Heading4";
+import { SocialMedia } from "/client/app/components/SocialMedia";
+import { SendToMail } from "/client/app/components/SendToMail";
+import { ShareLink } from "/client/app/components/ShareLink";
+import { SearchPeople } from "/client/app/components/SearchPeople";
+import { Arrow } from "/client/app/components/icons/Arrow";
+import { Heading4 } from "/client/app/shared/Typographies/Heading4";
 import { useTranslate } from "/client/app/hooks";
+import "./index.scss";
 
-interface IShareProps {
+type ShareProps = {
   onBackHandler: () => void;
-}
+};
 
-const Share = ({ onBackHandler }: IShareProps) => {
+export const Share = ({ onBackHandler }: ShareProps) => {
   const { t } = useTranslate();
 
   return (
@@ -38,5 +38,3 @@ const Share = ({ onBackHandler }: IShareProps) => {
     </div>
   );
 };
-
-export default Share;

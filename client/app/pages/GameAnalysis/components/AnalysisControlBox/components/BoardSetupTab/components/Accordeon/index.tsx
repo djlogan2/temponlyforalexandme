@@ -2,16 +2,20 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import clsx from "clsx";
 import React, { FC, useState } from "react";
-import Chevron from "/client/app/components/icons/Chevron";
-import Paragraph from "/client/app/shared/Typographies/Paragraph";
+import { Chevron } from "/client/app/components/icons/Chevron";
+import { Paragraph } from "/client/app/shared/Typographies/Paragraph";
 
-interface IAccordeonProps {
+type AccordeonProps = {
   title: string;
   className?: string;
   children?: React.ReactNode;
-}
+};
 
-const Accordeon: FC<IAccordeonProps> = ({ children, title, className }) => {
+export const Accordeon: FC<AccordeonProps> = ({
+  children,
+  title,
+  className,
+}) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -34,5 +38,3 @@ const Accordeon: FC<IAccordeonProps> = ({ children, title, className }) => {
     </div>
   );
 };
-
-export default Accordeon;

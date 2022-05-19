@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 
-interface IAttentionProps {
+type AttentionProps = {
   color: string;
-}
+};
 
-const Attention: FC<IAttentionProps> = ({ color }) => (
+export const Attention: FC<AttentionProps> = ({ color }) => (
   <svg
     width="16"
     height="17"
@@ -20,5 +20,3 @@ const Attention: FC<IAttentionProps> = ({ color }) => (
     />
   </svg>
 );
-
-export default Attention;

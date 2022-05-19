@@ -1,8 +1,8 @@
 import React, { HTMLAttributes } from "react";
 
-interface IComputerProps extends HTMLAttributes<SVGElement> {}
+interface ComputerProps extends HTMLAttributes<SVGElement> {}
 
-const Computer = (props: IComputerProps) => (
+export const Computer = (props: ComputerProps) => (
   <svg
     width="24"
     height="24"
@@ -18,5 +18,3 @@ const Computer = (props: IComputerProps) => (
     />
   </svg>
 );
-
-export default Computer;

@@ -1,19 +1,19 @@
 import React, { FC, useRef, useState } from "react";
 import { useTranslate, useClickOutside } from "../../hooks";
-import TextButton from "../../shared/Buttons/TextButton";
-import Input from "../../shared/Input";
-import Card from "../Card";
-import LongArrow from "../icons/LongArrow";
-import Search from "../icons/Search";
-import Subtitle from "../Subtitle";
-import UserItem from "../UserItem";
+import { TextButton } from "../../shared/Buttons/TextButton";
+import { Input } from "../../shared/Input";
+import { Card } from "../Card";
+import { LongArrow } from "../icons/LongArrow";
+import { Search } from "../icons/Search";
+import { Subtitle } from "../Subtitle";
+import { UserItem } from "../UserItem";
 import "./index.scss";
 
-interface ISearchPeopleProps {
+type SearchPeopleProps = {
   subtitle?: string;
-}
+};
 
-const SearchPeople: FC<ISearchPeopleProps> = ({ subtitle }) => {
+export const SearchPeople: FC<SearchPeopleProps> = ({ subtitle }) => {
   const [isSearching, setIsSearching] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslate();
@@ -56,5 +56,3 @@ const SearchPeople: FC<ISearchPeopleProps> = ({ subtitle }) => {
     </div>
   );
 };
-
-export default SearchPeople;

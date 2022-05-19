@@ -10,7 +10,7 @@ interface ActionButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "danger" | "dark" | "secondary" | "primary";
 }
 
-const ActionButton: FC<ActionButtonProps> = ({
+export const ActionButton: FC<ActionButtonProps> = ({
   name,
   className,
   onButtonClick,
@@ -35,5 +35,3 @@ const ActionButton: FC<ActionButtonProps> = ({
     {children}
   </button>
 );
-
-export default ActionButton;

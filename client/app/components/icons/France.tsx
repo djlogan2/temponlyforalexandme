@@ -1,6 +1,6 @@
 import React from "react";
 
-const France = () => (
+export const France = () => (
   <svg
     width="17"
     height="17"
@@ -40,5 +40,3 @@ const France = () => (
     </defs>
   </svg>
 );
-
-export default France;

@@ -2,13 +2,17 @@ import clsx from "clsx";
 import React, { FC, useEffect } from "react";
 import "./index.scss";
 
-interface IBackdropProps {
+type BackdropProps = {
   pRelative?: boolean;
   className?: string;
   children: React.ReactNode;
-}
+};
 
-const Backdrop: FC<IBackdropProps> = ({ children, pRelative, className }) => {
+export const Backdrop: FC<BackdropProps> = ({
+  children,
+  pRelative,
+  className,
+}) => {
   useEffect(() => {
     document.body.classList.add("hide-scroll");
 
@@ -27,5 +31,3 @@ const Backdrop: FC<IBackdropProps> = ({ children, pRelative, className }) => {
     </div>
   );
 };
-
-export default Backdrop;

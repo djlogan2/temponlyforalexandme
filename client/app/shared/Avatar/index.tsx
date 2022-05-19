@@ -15,7 +15,7 @@ type AvatarProps = {
   children?: React.ReactNode;
 };
 
-const Avatar: FC<AvatarProps> = ({
+export const Avatar: FC<AvatarProps> = ({
   picture,
   className,
   alt,
@@ -37,5 +37,3 @@ const Avatar: FC<AvatarProps> = ({
     )}
   </div>
 );
-
-export default Avatar;

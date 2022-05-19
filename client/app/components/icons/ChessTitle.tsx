@@ -1,11 +1,11 @@
 import React from "react";
 
-interface IChessTitleProps {
+type ChessTitleProps = {
   text: string;
   className?: string;
-}
+};
 
-const ChessTitle = ({ text, className }: IChessTitleProps) => (
+export const ChessTitle = ({ text, className }: ChessTitleProps) => (
   <svg
     className={className}
     width="36"
@@ -43,5 +43,3 @@ const ChessTitle = ({ text, className }: IChessTitleProps) => (
     </defs>
   </svg>
 );
-
-export default ChessTitle;

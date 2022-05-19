@@ -4,14 +4,14 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import { debounce } from "lodash";
 
 import { useServices } from "./contexts/services";
-import GameGuard from "./guards/GameGuard";
-import Home from "./pages/Home";
+import { GameGuard } from "./guards/GameGuard";
+import { Home } from "./pages/Home";
 import { useTheme } from "./contexts/theme";
 import i18next from "./i18next";
 import { I18NDoc } from "./types";
 import { ComponentsView, GameAnalysis, GameMarkup } from "./pages";
 
-const App = () => {
+export const App = () => {
   const { challengeService, gameService } = useServices();
   const customTheme = useTheme();
   const history = useHistory();
@@ -79,5 +79,3 @@ const App = () => {
     </Switch>
   );
 };
-
-export default App;

@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import clsx from "clsx";
 
-interface ISpinner {
+type SpinnerProps = {
   className?: string;
-}
+};
 
-const Spinner: FC<ISpinner> = ({ className }) => (
+export const Spinner: FC<SpinnerProps> = ({ className }) => (
   <div className={clsx("Spinner", className)}>
     <div />
     <div />
@@ -13,5 +13,3 @@ const Spinner: FC<ISpinner> = ({ className }) => (
     <div />
   </div>
 );
-
-export default Spinner;

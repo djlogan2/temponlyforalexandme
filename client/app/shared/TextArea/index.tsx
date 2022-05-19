@@ -2,7 +2,7 @@ import clsx from "clsx";
 import "./index.scss";
 import React, { FCICC, TextareaHTMLAttributes } from "react";
 
-interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
   msgText?: { token: string; args: string[] };
   placeHolder?: { token: string; args: string[] };
@@ -10,7 +10,7 @@ interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
 }
 
-const TextArea: FCICC<ITextAreaProps> = ({
+export const TextArea: FCICC<TextAreaProps> = ({
   name,
   className,
   token,
@@ -41,5 +41,3 @@ const TextArea: FCICC<ITextAreaProps> = ({
     {!!msgText && <p className="textareaMsg">{msgText.token}</p>}
   </div>
 );
-
-export default TextArea;

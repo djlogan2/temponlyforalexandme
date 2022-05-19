@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface IUploadProps extends HTMLAttributes<SVGElement> {}
 
-const Upload = (props: IUploadProps) => (
+export const Upload = (props: IUploadProps) => (
   <svg
     width="24"
     height="24"
@@ -18,5 +18,3 @@ const Upload = (props: IUploadProps) => (
     />
   </svg>
 );
-
-export default Upload;

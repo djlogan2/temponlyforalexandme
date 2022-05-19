@@ -1,13 +1,13 @@
 import React, { ButtonHTMLAttributes, FC } from "react";
 import "./index.scss";
 import clsx from "clsx";
-import Paragraph from "../../Typographies/Paragraph";
+import { Paragraph } from "../../Typographies/Paragraph";
 
-interface ITextButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface TextButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isFullWidth?: boolean;
 }
 
-const TextButton: FC<ITextButtonProps> = ({
+export const TextButton: FC<TextButtonProps> = ({
   children,
   className,
   isFullWidth,
@@ -21,5 +21,3 @@ const TextButton: FC<ITextButtonProps> = ({
     <Paragraph className="textButton__text">{children}</Paragraph>
   </button>
 );
-
-export default TextButton;

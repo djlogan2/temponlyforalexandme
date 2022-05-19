@@ -1,20 +1,20 @@
 import React, { FC, useRef, useState } from "react";
 
-import Backdrop from "/client/app/shared/Backdrop";
-import ScrollBar from "/client/app/shared/ScrollBar";
+import { Backdrop } from "/client/app/shared/Backdrop";
+import { ScrollBar } from "/client/app/shared/ScrollBar";
 import { useServices } from "/client/app/contexts/services";
 import { useTranslate, useClickOutside } from "/client/app/hooks";
 
 import { gameSetupComponents, title } from "./constants";
 import { Components } from "./types";
-import Controls from "./Controls";
-import PlayOptions from "./PlayOptions";
+import { Controls } from "./Controls";
+import { PlayOptions } from "./PlayOptions";
 
 type GameSetupProps = {
   onCloseModal: () => void;
 };
 
-const GameSetup: FC<GameSetupProps> = ({ onCloseModal }) => {
+export const GameSetup: FC<GameSetupProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
   const { challengeService } = useServices();
 
@@ -82,5 +82,3 @@ const GameSetup: FC<GameSetupProps> = ({ onCloseModal }) => {
     </Backdrop>
   );
 };
-
-export default GameSetup;

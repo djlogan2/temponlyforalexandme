@@ -1,6 +1,6 @@
 import React from "react";
 
-const Piece = () => (
+export const Piece = () => (
   <svg
     width="26"
     height="27"
@@ -58,5 +58,3 @@ const Piece = () => (
     </defs>
   </svg>
 );
-
-export default Piece;

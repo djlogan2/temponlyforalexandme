@@ -3,7 +3,7 @@ import React, { HTMLAttributes } from "react";
 
 interface IChat2Props extends HTMLAttributes<SVGElement> {}
 
-const Chat2 = (props: IChat2Props) => (
+export const Chat2 = (props: IChat2Props) => (
   <svg
     width="24"
     height="24"
@@ -19,5 +19,3 @@ const Chat2 = (props: IChat2Props) => (
     />
   </svg>
 );
-
-export default Chat2;

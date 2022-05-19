@@ -2,15 +2,19 @@ import clsx from "clsx";
 import React, { FC, useEffect, useState } from "react";
 import "./index.scss";
 import { calculateTimeLeft } from "/client/app/data/utils";
-import Heading2 from "/client/app/shared/Typographies/Heading2";
+import { Heading2 } from "/client/app/shared/Typographies/Heading2";
 
-interface IDigitalClock {
+type DigitalClockProps = {
   time: number;
   isMyTurn: boolean;
   className?: string;
-}
+};
 
-const DigitalClock: FC<IDigitalClock> = ({ time, isMyTurn, className }) => {
+export const DigitalClock: FC<DigitalClockProps> = ({
+  time,
+  isMyTurn,
+  className,
+}) => {
   const [timeLeft, setTime] = useState(time);
 
   useEffect(() => {
@@ -37,5 +41,3 @@ const DigitalClock: FC<IDigitalClock> = ({ time, isMyTurn, className }) => {
     </Heading2>
   );
 };
-
-export default DigitalClock;

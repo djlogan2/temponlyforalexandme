@@ -1,19 +1,19 @@
 import clsx from "clsx";
 import React, { FC } from "react";
 import { useTranslate } from "../../hooks";
-import ActionButton from "../../shared/Buttons/ActionButton";
-import Card from "../Card";
-import Facebook from "../icons/Facebook";
-import Instagram from "../icons/Instagram";
-import Twitter from "../icons/Twitter";
-import Subtitle from "../Subtitle";
+import { ActionButton } from "../../shared/Buttons/ActionButton";
+import { Card } from "../Card";
+import { Facebook } from "../icons/Facebook";
+import { Instagram } from "../icons/Instagram";
+import { Twitter } from "../icons/Twitter";
+import { Subtitle } from "../Subtitle";
 import "./index.scss";
 
-interface ISocialMediaProps {
+type SocialMediaProps = {
   className?: string;
-}
+};
 
-const SocialMedia: FC<ISocialMediaProps> = ({ className }) => {
+export const SocialMedia: FC<SocialMediaProps> = ({ className }) => {
   const { t } = useTranslate();
 
   return (
@@ -39,5 +39,3 @@ const SocialMedia: FC<ISocialMediaProps> = ({ className }) => {
     </Card>
   );
 };
-
-export default SocialMedia;

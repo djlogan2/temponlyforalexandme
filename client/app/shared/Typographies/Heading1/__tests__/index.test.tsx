@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import React from "react";
-import Heading1 from "..";
+import { Heading1 } from "..";
 import { render } from "/client/app/test/test-utils";
 
 describe("<Heading1/>", () => {

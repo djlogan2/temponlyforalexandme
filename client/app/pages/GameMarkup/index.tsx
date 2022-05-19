@@ -14,9 +14,9 @@ import {
   PlayerInfo,
   GameOver,
 } from "/client/app/components";
-import Flip from "/client/app/components/icons/Flip";
+import { Flip } from "/client/app/components/icons/Flip";
 
-import ControlBox from "./components/ControlBox";
+import { ControlBox } from "./components/ControlBox";
 import "./index.scss";
 
 const GameMarkup = () => {

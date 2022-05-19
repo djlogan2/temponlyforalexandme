@@ -7,7 +7,7 @@ interface IPieceButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "dark" | "regular";
 }
 
-const PieceButton: FC<IPieceButtonProps> = ({
+export const PieceButton: FC<IPieceButtonProps> = ({
   children,
   className,
   size = "big",
@@ -27,5 +27,3 @@ const PieceButton: FC<IPieceButtonProps> = ({
     {children}
   </button>
 );
-
-export default PieceButton;

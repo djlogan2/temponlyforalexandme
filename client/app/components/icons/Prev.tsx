@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface IPrevProps extends HTMLAttributes<SVGElement> {}
 
-const Prev = (props: IPrevProps) => (
+export const Prev = (props: IPrevProps) => (
   <svg
     width="17"
     height="18"
@@ -18,5 +18,3 @@ const Prev = (props: IPrevProps) => (
     />
   </svg>
 );
-
-export default Prev;

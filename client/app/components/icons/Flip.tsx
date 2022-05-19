@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import React, { FC } from "react";
 
-interface IFlipProps {
+type FlipProps = {
   onClick: () => void;
   className?: string;
-}
+};
 
-const Flip: FC<IFlipProps> = ({ onClick, className }) => (
+export const Flip: FC<FlipProps> = ({ onClick, className }) => (
   <svg
     width="24"
     height="24"
@@ -36,5 +36,3 @@ const Flip: FC<IFlipProps> = ({ onClick, className }) => (
     />
   </svg>
 );
-
-export default Flip;

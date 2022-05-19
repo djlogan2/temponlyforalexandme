@@ -2,15 +2,17 @@ import clsx from "clsx";
 import React, { FC } from "react";
 import "./index.scss";
 
-interface Heading3Props {
+type Heading3Props = {
   className?: string;
   children: React.ReactNode;
-}
+};
 
-const Heading3: FC<Heading3Props> = ({ className, children, ...rest }) => (
+export const Heading3: FC<Heading3Props> = ({
+  className,
+  children,
+  ...rest
+}) => (
   <h3 className={clsx("heading3", className)} {...rest}>
     {children}
   </h3>
 );
-
-export default Heading3;

@@ -1,18 +1,18 @@
 import React, { FC } from "react";
 
 import { useTranslate } from "/client/app/hooks";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
+import { StandardButton } from "/client/app/shared/Buttons/StandardButton";
 
-import Close from "../../icons/Close";
-import OpenChallengeItem from "../../OpenChallengeItem";
-import SendToMail from "../../SendToMail";
-import ShareLink from "../../ShareLink";
-import SocialMedia from "../../SocialMedia";
+import { Close } from "../../icons/Close";
+import { OpenChallengeItem } from "../../OpenChallengeItem";
+import { SendToMail } from "../../SendToMail";
+import { ShareLink } from "../../ShareLink";
+import { SocialMedia } from "../../SocialMedia";
 import { Components, CommonGameSetup } from "../types";
 
 type ShareProps = CommonGameSetup;
 
-const Share: FC<ShareProps> = ({ navigate }) => {
+export const Share: FC<ShareProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
   return (
@@ -35,5 +35,3 @@ const Share: FC<ShareProps> = ({ navigate }) => {
     </div>
   );
 };
-
-export default Share;

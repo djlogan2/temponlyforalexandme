@@ -1,12 +1,12 @@
 import React, { FC, InputHTMLAttributes, useState } from "react";
 import "./index.scss";
 
-interface ISwitchProps extends InputHTMLAttributes<HTMLInputElement> {
+interface SwitchProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   text?: string;
 }
 
-const Switch: FC<ISwitchProps> = ({ name, onChange, text }) => {
+export const Switch: FC<SwitchProps> = ({ name, onChange, text }) => {
   const [isToggled, setIsToggled] = useState(false);
   const onToggleHandler = () => setIsToggled(!isToggled);
 
@@ -33,5 +33,3 @@ const Switch: FC<ISwitchProps> = ({ name, onChange, text }) => {
     </label>
   );
 };
-
-export default Switch;

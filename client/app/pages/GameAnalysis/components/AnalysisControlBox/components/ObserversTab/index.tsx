@@ -1,9 +1,9 @@
 import React from "react";
-import ObserverItem from "./components/ObserverItem";
+import { ObserverItem } from "./components/ObserverItem";
 import { useTranslate } from "/client/app/hooks";
-import ScrollBar from "/client/app/shared/ScrollBar";
+import { ScrollBar } from "/client/app/shared/ScrollBar";
 
-const ObserversTab = () => {
+export const ObserversTab = () => {
   const { t } = useTranslate();
 
   return (
@@ -38,5 +38,3 @@ const ObserversTab = () => {
     </div>
   );
 };
-
-export default ObserversTab;

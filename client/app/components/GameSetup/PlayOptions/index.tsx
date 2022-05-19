@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import TabButton from "/client/app/shared/Buttons/TabButton";
+import { TabButton } from "/client/app/shared/Buttons/TabButton";
 
 import { options } from "../constants";
 import { Components } from "../types";
@@ -11,7 +11,7 @@ type PlayOptionsProps = {
   gameOption: Components;
 };
 
-const PlayOptions: FC<PlayOptionsProps> = ({ onClick, gameOption }) => {
+export const PlayOptions: FC<PlayOptionsProps> = ({ onClick, gameOption }) => {
   const { t } = useTranslate();
 
   return (
@@ -29,5 +29,3 @@ const PlayOptions: FC<PlayOptionsProps> = ({ onClick, gameOption }) => {
     </div>
   );
 };
-
-export default PlayOptions;

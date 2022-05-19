@@ -1,10 +1,10 @@
 import React from "react";
-import InputElement from "../InputElement";
-import LongArrow from "/client/app/components/icons/LongArrow";
-import Smile from "/client/app/components/icons/Smile";
+import { InputElement } from "../InputElement";
+import { LongArrow } from "/client/app/components/icons/LongArrow";
+import { Smile } from "/client/app/components/icons/Smile";
 import { useTranslate } from "/client/app/hooks";
 
-const InputMessage = () => {
+export const InputMessage = () => {
   const { t } = useTranslate();
 
   return (
@@ -28,5 +28,3 @@ const InputMessage = () => {
     </div>
   );
 };
-
-export default InputMessage;

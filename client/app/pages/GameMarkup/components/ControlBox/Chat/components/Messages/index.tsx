@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import Message from "../Message";
-import ScrollBar from "/client/app/shared/ScrollBar";
+import { Message } from "../Message";
+import { ScrollBar } from "/client/app/shared/ScrollBar";
 
-interface IMessagesProps {
+type MessagesProps = {
   messages: { id: string; me?: boolean; text: string }[];
-}
+};
 
-const Messages: FC<IMessagesProps> = ({ messages }) => (
+export const Messages: FC<MessagesProps> = ({ messages }) => (
   <div className="chat__messages">
     <ScrollBar>
       <ul className="chat__list">
@@ -19,5 +19,3 @@ const Messages: FC<IMessagesProps> = ({ messages }) => (
     </ScrollBar>
   </div>
 );
-
-export default Messages;

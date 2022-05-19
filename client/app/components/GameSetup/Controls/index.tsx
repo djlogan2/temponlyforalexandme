@@ -1,17 +1,15 @@
 import React, { FC } from "react";
-import Arrow from "../../icons/Arrow";
-import Close from "../../icons/Close";
+import { Arrow } from "../../icons/Arrow";
+import { Close } from "../../icons/Close";
 
-interface IControlsProps {
+type ControlsProps = {
   onCloseModal: () => void;
   onReturnBack: () => void;
-}
+};
 
-const Controls: FC<IControlsProps> = ({ onCloseModal, onReturnBack }) => (
+export const Controls: FC<ControlsProps> = ({ onCloseModal, onReturnBack }) => (
   <div className="d-flex space-between">
     <Arrow className="pointer controls__icon" onClick={onReturnBack} />
     <Close className="pointer controls__icon" onClick={onCloseModal} />
   </div>
 );
-
-export default Controls;

@@ -1,18 +1,18 @@
 import clsx from "clsx";
 import { noop } from "lodash";
 import React, { FC, HTMLAttributes, useState } from "react";
-import LongArrow from "../../icons/LongArrow";
-import Piece from "../../icons/Piece";
-import PieceBRandom from "../../icons/PieceBRandom";
-import Card from "../../Card";
-import Subtitle from "../../Subtitle";
+import { LongArrow } from "../../icons/LongArrow";
+import { Piece } from "../../icons/Piece";
+import { PieceBRandom } from "../../icons/PieceBRandom";
+import { Card } from "../../Card";
+import { Subtitle } from "../../Subtitle";
 import "./index.scss";
-import PieceButton from "/client/app/shared/Buttons/PieceButton";
-import TextButton from "/client/app/shared/Buttons/TextButton";
+import { PieceButton } from "/client/app/shared/Buttons/PieceButton";
+import { TextButton } from "/client/app/shared/Buttons/TextButton";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import { useTranslate } from "/client/app/hooks";
 
-interface IColorPickProps extends HTMLAttributes<HTMLDivElement> {
+interface ColorPickProps extends HTMLAttributes<HTMLDivElement> {
   onColorPick: (
     field: string,
     value: any,
@@ -20,7 +20,10 @@ interface IColorPickProps extends HTMLAttributes<HTMLDivElement> {
   ) => void;
 }
 
-const ColorPick: FC<IColorPickProps> = ({ className, onColorPick = noop }) => {
+export const ColorPick: FC<ColorPickProps> = ({
+  className,
+  onColorPick = noop,
+}) => {
   const [color, setColor] = useState<PieceColor | "">("");
   const { t } = useTranslate();
 
@@ -66,5 +69,3 @@ const ColorPick: FC<IColorPickProps> = ({ className, onColorPick = noop }) => {
     </Card>
   );
 };
-
-export default ColorPick;

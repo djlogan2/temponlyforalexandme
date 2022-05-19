@@ -1,12 +1,12 @@
 import React from "react";
 
-interface ILagProps {
+type LagProps = {
   lagLevel: 1 | 2 | 3 | 4 | 5;
-}
+};
 
 const rects = [0, 3.5, 7, 10.5, 14];
 
-const Lag = ({ lagLevel }: ILagProps) => {
+export const Lag = ({ lagLevel }: LagProps) => {
   let color = "";
 
   if (lagLevel === 1) {
@@ -36,5 +36,3 @@ const Lag = ({ lagLevel }: ILagProps) => {
     </svg>
   );
 };
-
-export default Lag;

@@ -1,20 +1,20 @@
 import React, { FC } from "react";
 
 import { useTranslate } from "/client/app/hooks";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
+import { StandardButton } from "/client/app/shared/Buttons/StandardButton";
 
-import Card from "../../Card";
-import Subtitle from "../../Subtitle";
+import { Card } from "../../Card";
+import { Subtitle } from "../../Subtitle";
 import { Components, CommonGameSetup } from "../types";
 import { onPickTimeMock } from "../mocks";
-import ColorPick from "../ColorPick";
-import RatedGame from "../RatedGame";
-import Shortcut from "../Shortcut";
-import TimeOptions from "../TimeOptions";
+import { ColorPick } from "../ColorPick";
+import { RatedGame } from "../RatedGame";
+import { Shortcut } from "../Shortcut";
+import { TimeOptions } from "../TimeOptions";
 
 type CustomChallengeProps = CommonGameSetup;
 
-const CustomChallenge: FC<CustomChallengeProps> = ({ navigate }) => {
+export const CustomChallenge: FC<CustomChallengeProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
   return (
@@ -70,5 +70,3 @@ const CustomChallenge: FC<CustomChallengeProps> = ({ navigate }) => {
     </div>
   );
 };
-
-export default CustomChallenge;

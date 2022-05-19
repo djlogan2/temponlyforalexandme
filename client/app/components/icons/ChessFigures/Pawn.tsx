@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes } from "react";
 
 interface IPawnProps extends HTMLAttributes<SVGElement> {}
 
-const Pawn = (props: IPawnProps) => (
+export const Pawn = (props: IPawnProps) => (
   <svg
     width="32"
     height="34"
@@ -52,5 +52,3 @@ const Pawn = (props: IPawnProps) => (
     </defs>
   </svg>
 );
-
-export default Pawn;

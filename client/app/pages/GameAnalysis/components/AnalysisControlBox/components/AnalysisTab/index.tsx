@@ -1,12 +1,12 @@
 import React from "react";
 import "./index.scss";
-import GameControls from "/client/app/components/GameControls";
-import Settings from "/client/app/components/icons/Settings";
-import Moves from "/client/app/components/Moves";
+import { GameControls } from "/client/app/components/GameControls";
+import { Settings } from "/client/app/components/icons/Settings";
+import { Moves } from "/client/app/components/Moves";
 import { useTranslate } from "/client/app/hooks";
-import Switch from "/client/app/shared/Switch";
+import { Switch } from "/client/app/shared/Switch";
 
-const AnalysisTab = () => {
+export const AnalysisTab = () => {
   const { t } = useTranslate();
 
   return (
@@ -31,5 +31,3 @@ const AnalysisTab = () => {
     </div>
   );
 };
-
-export default AnalysisTab;

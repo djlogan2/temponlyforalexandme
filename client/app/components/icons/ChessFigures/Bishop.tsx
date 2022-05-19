@@ -3,7 +3,7 @@ import React, { FC, HTMLAttributes } from "react";
 // eslint-disable max-len
 
 interface IBishopProps extends HTMLAttributes<SVGElement> {}
-const Bishop = (props: IBishopProps) => (
+export const Bishop = (props: IBishopProps) => (
   <svg
     width="32"
     height="34"
@@ -48,5 +48,3 @@ const Bishop = (props: IBishopProps) => (
     </defs>
   </svg>
 );
-
-export default Bishop;

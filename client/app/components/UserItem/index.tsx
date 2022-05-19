@@ -5,18 +5,18 @@ import React, { FC } from "react";
 import clsx from "clsx";
 import { noop } from "lodash";
 
-import Avatar from "/client/app/shared/Avatar";
-import Flag, { TFlags } from "/client/app/shared/Flag";
+import { Avatar } from "/client/app/shared/Avatar";
+import { Flag, Flags } from "/client/app/shared/Flag";
 import { UserStatus } from "client/app/types";
 
-import ChessTitle from "../icons/ChessTitle";
+import { ChessTitle } from "../icons/ChessTitle";
 
 import "./index.scss";
 
 type UserItemProps = {
   text: string;
   chessTitle: string;
-  flag: TFlags;
+  flag: Flags;
   onClick?: () => void;
   status?: UserStatus;
   picture?: string;
@@ -24,7 +24,7 @@ type UserItemProps = {
   className?: string;
 };
 
-const UserItem: FC<UserItemProps> = ({
+export const UserItem: FC<UserItemProps> = ({
   text,
   picture,
   chessTitle,
@@ -50,5 +50,3 @@ const UserItem: FC<UserItemProps> = ({
     <Flag className="userItem__flag" flag={flag} />
   </div>
 );
-
-export default UserItem;

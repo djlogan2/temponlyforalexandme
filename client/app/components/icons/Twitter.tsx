@@ -1,6 +1,6 @@
 import React from "react";
 
-const Twitter = () => (
+export const Twitter = () => (
   <svg
     width="27"
     height="27"
@@ -15,5 +15,3 @@ const Twitter = () => (
     />
   </svg>
 );
-
-export default Twitter;

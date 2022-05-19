@@ -1,16 +1,16 @@
 import React, { ButtonHTMLAttributes, FC } from "react";
 import "./index.scss";
 import clsx from "clsx";
-import Heading5 from "../../Typographies/Heading5";
+import { Heading5 } from "../../Typographies/Heading5";
 
-interface ITabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface TabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: "primary" | "secondary";
   iconLeft?: JSX.Element;
   iconRight?: JSX.Element;
   isColorless?: boolean;
 }
 
-const TabButton: FC<ITabButtonProps> = ({
+export const TabButton: FC<TabButtonProps> = ({
   children,
   className,
   color,
@@ -34,5 +34,3 @@ const TabButton: FC<ITabButtonProps> = ({
     {IconRight}
   </button>
 );
-
-export default TabButton;

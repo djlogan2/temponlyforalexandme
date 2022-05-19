@@ -2,7 +2,7 @@ import React, { FC, HTMLAttributes } from "react";
 
 interface IMoreProps extends HTMLAttributes<SVGElement> {}
 
-const More: FC<IMoreProps> = ({ ...rest }) => (
+export const More: FC<IMoreProps> = ({ ...rest }) => (
   <svg
     width="25"
     height="24"
@@ -18,5 +18,3 @@ const More: FC<IMoreProps> = ({ ...rest }) => (
     />
   </svg>
 );
-
-export default More;

@@ -1,14 +1,14 @@
 import React, { FC, HTMLAttributes } from "react";
-import Draw from "/client/app/components/icons/Draw";
-import More from "/client/app/components/icons/More";
-import Resign from "/client/app/components/icons/Resign";
-import ActionButton from "/client/app/shared/Buttons/ActionButton";
+import { Draw } from "/client/app/components/icons/Draw";
+import { More } from "/client/app/components/icons/More";
+import { Resign } from "/client/app/components/icons/Resign";
+import { ActionButton } from "/client/app/shared/Buttons/ActionButton";
 
 interface IActionsProps extends HTMLAttributes<HTMLDivElement> {
   onResign: () => void;
 }
 
-const Actions: FC<IActionsProps> = ({ onResign, ...rest }) => (
+export const Actions: FC<IActionsProps> = ({ onResign, ...rest }) => (
   <div {...rest}>
     <ActionButton
       className="controlBox__action-btn"
@@ -32,5 +32,3 @@ const Actions: FC<IActionsProps> = ({ onResign, ...rest }) => (
     </ActionButton>
   </div>
 );
-
-export default Actions;

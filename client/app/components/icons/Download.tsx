@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from "react";
 
 interface IDownloadProps extends HTMLAttributes<SVGElement> {}
 
-const Download = (props: IDownloadProps) => (
+export const Download = (props: IDownloadProps) => (
   <svg
     width="24"
     height="24"
@@ -18,5 +18,3 @@ const Download = (props: IDownloadProps) => (
     />
   </svg>
 );
-
-export default Download;

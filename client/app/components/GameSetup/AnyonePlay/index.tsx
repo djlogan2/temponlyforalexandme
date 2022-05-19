@@ -1,16 +1,16 @@
 import React, { FC } from "react";
 
 import { useTranslate } from "/client/app/hooks";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
+import { StandardButton } from "/client/app/shared/Buttons/StandardButton";
 
 import { Components, CommonGameSetup } from "../types";
 import { onPickTimeMock } from "../mocks";
-import Challenges from "../Challenges";
-import TimeOptions from "../TimeOptions";
+import { Challenges } from "../Challenges";
+import { TimeOptions } from "../TimeOptions";
 
 type AnyonePlayProps = CommonGameSetup;
 
-const AnyonePlay: FC<AnyonePlayProps> = ({ navigate }) => {
+export const AnyonePlay: FC<AnyonePlayProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
   return (
@@ -29,5 +29,3 @@ const AnyonePlay: FC<AnyonePlayProps> = ({ navigate }) => {
     </div>
   );
 };
-
-export default AnyonePlay;

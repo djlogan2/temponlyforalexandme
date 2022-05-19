@@ -4,7 +4,7 @@ import React, { FC, HTMLAttributes } from "react";
 interface IQueenProps extends HTMLAttributes<SVGElement> {}
 // eslint-disable max-len
 
-const Queen = (props: IQueenProps) => (
+export const Queen = (props: IQueenProps) => (
   <svg
     width="34"
     height="34"
@@ -91,5 +91,3 @@ const Queen = (props: IQueenProps) => (
     />
   </svg>
 );
-
-export default Queen;

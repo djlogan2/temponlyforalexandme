@@ -1,17 +1,15 @@
 import React, { FC } from "react";
-import InputMessage from "./components/InputMessage";
-import Messages from "./components/Messages";
+import { InputMessage } from "./components/InputMessage";
+import { Messages } from "./components/Messages";
 import "./index.scss";
 
-interface IChatProps {
+interface ChatProps {
   messages: { id: string; me?: boolean; text: string }[];
 }
 
-const Chat: FC<IChatProps> = ({ messages }) => (
+export const Chat: FC<ChatProps> = ({ messages }) => (
   <div className="chat">
     <Messages messages={messages} />
     <InputMessage />
   </div>
 );
-
-export default Chat;

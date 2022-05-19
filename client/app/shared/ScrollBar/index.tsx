@@ -3,13 +3,13 @@ import React, { FC } from "react";
 import { ScrollbarProps, Scrollbars } from "react-custom-scrollbars";
 import "./index.scss";
 
-interface IScrollBarProps extends ScrollbarProps {
+interface ScrollBarProps extends ScrollbarProps {
   className?: string;
   thumbVerticalClassName?: string;
   trackVerticalClassName?: string;
 }
 
-const ScrollBar: FC<IScrollBarProps> = ({
+export const ScrollBar: FC<ScrollBarProps> = ({
   children,
   className,
   thumbVerticalClassName,
@@ -36,5 +36,3 @@ const ScrollBar: FC<IScrollBarProps> = ({
     {children}
   </Scrollbars>
 );
-
-export default ScrollBar;

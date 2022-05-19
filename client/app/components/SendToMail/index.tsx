@@ -1,17 +1,17 @@
 import clsx from "clsx";
 import React, { FC } from "react";
 import { useTranslate } from "../../hooks";
-import Input from "../../shared/Input";
-import Card from "../Card";
-import Mail from "../icons/Mail";
-import Subtitle from "../Subtitle";
+import { Input } from "../../shared/Input";
+import { Card } from "../Card";
+import { Mail } from "../icons/Mail";
+import { Subtitle } from "../Subtitle";
 import "./index.scss";
 
-interface ISendToMailProps {
+type SendToMailProps = {
   className?: string;
-}
+};
 
-const SendToMail: FC<ISendToMailProps> = ({ className }) => {
+export const SendToMail: FC<SendToMailProps> = ({ className }) => {
   const { t } = useTranslate();
 
   return (
@@ -28,5 +28,3 @@ const SendToMail: FC<ISendToMailProps> = ({ className }) => {
     </Card>
   );
 };
-
-export default SendToMail;

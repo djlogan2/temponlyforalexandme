@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
 import { useTranslate } from "/client/app/hooks";
-import TabItemButton from "/client/app/shared/Buttons/TabItemButton";
-import TextButton from "/client/app/shared/Buttons/TextButton";
+import { TabItemButton } from "/client/app/shared/Buttons/TabItemButton";
+import { TextButton } from "/client/app/shared/Buttons/TextButton";
 
-import Arrow from "../../icons/Arrow";
-import LongArrow from "../../icons/LongArrow";
-import Subtitle from "../../Subtitle";
+import { Arrow } from "../../icons/Arrow";
+import { LongArrow } from "../../icons/LongArrow";
+import { Subtitle } from "../../Subtitle";
 import { Challenge } from "../types";
 import { challengeTypes } from "../constants";
-import ChallengesList from "../ChallengesList";
+import { ChallengesList } from "../ChallengesList";
 
-const Challenges = () => {
+export const Challenges = () => {
   const [activeChallenge, setActiveChallenge] =
     useState<Challenge>("challenge");
   const { t } = useTranslate();
@@ -44,5 +44,3 @@ const Challenges = () => {
     </div>
   );
 };
-
-export default Challenges;
