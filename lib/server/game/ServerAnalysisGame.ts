@@ -1,4 +1,4 @@
-import { Move, Piece, Square } from "chess.js";
+import { Move } from "chess.js";
 import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
 import {
   GameStatus,

@@ -3,9 +3,8 @@ import { Move, Piece, Square } from "chess.js";
 import { Meteor } from "meteor/meteor";
 
 import Stoppable from "/lib/Stoppable";
-import User from "/lib/User";
 import CommonAnalysisGame from "/lib/game/CommonAnalysisGame";
-import { AnalysisGameRecord, GameStatus } from "/lib/records/GameRecord";
+import { GameStatus } from "/lib/records/GameRecord";
 import CommonSingleGameReadOnlyGameDao from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 
 import ClientLogger from "../ClientLogger";
@@ -33,8 +32,6 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
       tomove: this.me.tomove,
       fen: this.me.fen,
       variations: this.me.variations,
-      // clocks: this.me.clocks,
-      // myColor: this.me.opponentcolor,
     };
   }
 
