@@ -1,7 +1,7 @@
 // @ts-ignore
-import { Piece } from "chess.js";
+import { Piece, Square } from "chess.js";
 
-import { Pieces } from "/client/app/constants";
+import { Pieces, SQUARES } from "/client/app/constants";
 
 export const convertPieceToValue = (piece: Piece) =>
   `${piece.color}${piece.type.toUpperCase()}`;
@@ -27,4 +27,14 @@ export const convertValueToPiece = (value: any): Piece => {
       throw new Error(`Can't convert value to Piece: ${value}`);
     }
   }
+};
+
+export const convertValueToSquare = (value: any) => {
+  const square = value as Square;
+
+  if (!SQUARES.includes(square)) {
+    throw new Error(`Can't convert value to Square: ${value}`);
+  }
+
+  return square;
 };

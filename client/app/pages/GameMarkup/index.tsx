@@ -102,7 +102,7 @@ const GameMarkup = () => {
           showLegalMoves={false}
           smartMoves={false}
           smallSize={500}
-          onMoveHandler={makeMove}
+          onMove={makeMove}
         />
       </div>
       <Flip

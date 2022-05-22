@@ -15,6 +15,10 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
 
   private readonly user: ClientUser;
 
+  public get events() {
+    return this.readonlydao.events;
+  }
+
   constructor(
     parent: Stoppable | null,
     gameId: string,
@@ -44,20 +48,41 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     return true;
   }
 
-  protected internalPut(piece: Piece, square: Square, who: string): void {
-    this.global.chessObject.put(piece, square);
-    const fen = this.global.chessObject.fen();
-
+  public changePiecePosition(from: Square, to: Square, who: string): void {
     this.logger1.debug(
-      () => `internalPutPiece piece=${piece} square=${square} who=${who}`,
+      () => `changePiecePosition from=${from} to=${to} who=${who}`,
     );
 
-    if (this.isAuthorizedToMove(who)) {
-      Meteor.call("gamecommand", this.me._id, {
-        fen,
-        type: "setfen",
-      });
+    this.isAuthorizedToMove(who);
+
+    const piece = this.global.chessObject.get(from);
+
+    if (!piece) {
+      return;
     }
+
+    this.global.chessObject.remove(from);
+    this.global.chessObject.put(piece, to);
+
+    Meteor.call("gamecommand", this.me._id, {
+      fen: this.global.chessObject.fen(),
+      type: "setfen",
+    });
+  }
+
+  public put(piece: Piece, square: Square, who: string): void {
+    this.logger1.debug(
+      () => `internalPut piece=${piece} square=${square} who=${who}`,
+    );
+
+    this.isAuthorizedToMove(who);
+
+    this.global.chessObject.put(piece, square);
+
+    Meteor.call("gamecommand", this.me._id, {
+      fen: this.global.chessObject.fen(),
+      type: "setfen",
+    });
   }
 
   public setFen(fen: string, who: string): void {
@@ -65,12 +90,38 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
   }
 
   protected internalSetFen(fen: string, who: string): void {
-    if (this.isAuthorizedToMove(who)) {
-      Meteor.call("gamecommand", this.me._id, {
-        fen,
-        type: "setfen",
-      });
-    }
+    this.isAuthorizedToMove(who);
+
+    Meteor.call("gamecommand", this.me._id, {
+      fen,
+      type: "setfen",
+    });
+  }
+
+  public remove(square: Square, who: string): void {
+    this.logger1.debug(() => `remove square=${square}`);
+
+    this.isAuthorizedToMove(who);
+
+    this.global.chessObject.remove(square);
+
+    Meteor.call("gamecommand", this.me._id, {
+      fen: this.global.chessObject.fen(),
+      type: "setfen",
+    });
+  }
+
+  public clear(who: string): void {
+    this.logger1.debug(() => "clear");
+
+    this.isAuthorizedToMove(who);
+
+    this.global.chessObject.clear();
+
+    Meteor.call("gamecommand", this.me._id, {
+      fen: this.global.chessObject.fen(),
+      type: "setfen",
+    });
   }
 
   protected premoveTasks(): void {
@@ -81,28 +132,16 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     throw new Error("Method not implemented.");
   }
 
+  protected stopping(): void {}
+
+  protected isClosing(): void {}
+
   protected internalMakeMove(
     who: string,
     move: Move,
     _fen: string,
     _result: GameStatus,
   ): void {
-    this.logger1.debug(() => `internalMakeMove move=${util.inspect(move)} `);
-
-    if (this.isAuthorizedToMove(who)) {
-      Meteor.call("gamecommand", this.me._id, { move: move.san, type: "move" });
-    }
+    throw new Error("Method not implemented.");
   }
-
-  public put(piece: Piece, square: Square, who: string): void {
-    this.internalPut(piece, square, who);
-  }
-
-  public get events() {
-    return this.readonlydao.events;
-  }
-
-  protected stopping(): void {}
-
-  protected isClosing(): void {}
 }

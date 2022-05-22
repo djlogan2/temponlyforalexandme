@@ -2,8 +2,8 @@ export const sounds = {
   move: "--resource_moveSound",
 } as const;
 
-export const ESounds = {
+export const SoundVariants = {
   MOVE: "move",
 } as const;
 
-export type TSounds = keyof typeof sounds;
+export type Sound = keyof typeof sounds;

@@ -4,7 +4,11 @@ import React, { FC, useCallback, useMemo } from "react";
 import ChessBoard from "chessboard";
 import { Piece, Square } from "chess.js";
 
-import { convertPieceToValue, convertValueToPiece } from "./utils";
+import {
+  convertPieceToValue,
+  convertValueToPiece,
+  convertValueToSquare,
+} from "./utils";
 import {
   accessibilityPieces,
   boardSquares,
@@ -15,7 +19,7 @@ import {
 } from "./constants";
 import "chessboard/dist/index.css";
 
-type Props = {
+type EnhancedChessboardProps = {
   fen: string;
   flipped: boolean;
   className?: string;
@@ -25,13 +29,13 @@ type Props = {
   showLegalMoves: boolean;
   smartMoves: boolean;
   smallSize: number;
-  onMoveHandler: Function;
+  onMove: (from: Square, to: Square) => void;
   edit?: { add: Piece };
-  handleAdd?: (piece: Piece, square: Square) => void;
-  deletePiece?: (square: Square) => void;
+  onAdd?: (piece: Piece, square: Square) => void;
+  onDelete?: (square: Square) => void;
 };
 
-export const EnhancedChessboard: FC<Props> = ({
+export const EnhancedChessboard: FC<EnhancedChessboardProps> = ({
   fen,
   flipped,
   className,
@@ -41,26 +45,44 @@ export const EnhancedChessboard: FC<Props> = ({
   showLegalMoves,
   smartMoves,
   smallSize,
-  onMoveHandler,
   edit,
-  handleAdd,
-  deletePiece,
+  onMove,
+  onAdd,
+  onDelete,
 }) => {
-  const formattedEdit = useMemo(() => {
-    if (edit) {
-      return {
-        add: convertPieceToValue(edit.add),
-      };
-    }
+  const formattedOnEdit = useMemo(() => {
+    if (!edit) return;
+
+    return {
+      add: convertPieceToValue(edit.add),
+    };
   }, [edit]);
 
-  const formattedHandleAdd = useCallback(
+  const formattedOnMove = useCallback(
+    (moves: [Square, Square]) => onMove(moves[0], moves[1]),
+    [onMove],
+  );
+
+  const formattedOnAdd = useCallback(
     (piece: any, square: any) => {
-      if (handleAdd) {
-        handleAdd(convertValueToPiece(piece), square);
-      }
+      if (!onAdd) return;
+
+      const convertedPiece = convertValueToPiece(piece);
+      const convertedSquare = convertValueToSquare(square);
+
+      onAdd(convertedPiece, convertedSquare);
     },
-    [handleAdd],
+
+    [onAdd],
+  );
+
+  const formattedOnDelete = useCallback(
+    (square: any) => {
+      if (!onDelete) return;
+
+      onDelete(convertValueToSquare(square));
+    },
+    [onDelete],
   );
 
   return (
@@ -80,15 +102,15 @@ export const EnhancedChessboard: FC<Props> = ({
         arrows={arrows}
         onUpdateCircles={() => null}
         onUpdateArrows={() => null}
-        onMove={onMoveHandler}
         smartMoves={smartMoves}
         showLegalMoves={showLegalMoves}
         smallSize={smallSize}
         isHovering
         promotionPieces={promotionPieces}
-        edit={formattedEdit}
-        handleAdd={formattedHandleAdd}
-        deletePiece={deletePiece}
+        edit={formattedOnEdit}
+        onMove={formattedOnMove}
+        handleAdd={formattedOnAdd}
+        handleDelete={formattedOnDelete}
       />
     </div>
   );

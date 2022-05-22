@@ -9,7 +9,7 @@ import { GameStatus } from "lib/records/GameRecord";
 
 import { MoveItem } from "client/app/types";
 
-import { ESounds } from "../useSound/constants";
+import { SoundVariants } from "../useSound/constants";
 import { useSound } from "..";
 
 import { getLegalMoves } from "./constants";
@@ -52,7 +52,7 @@ export const useComputerGame = (
     setMovelist(variations.movelist.slice(1) as MoveItem[]);
 
     game.events.on("fen", (data) => {
-      playSound(ESounds.MOVE);
+      playSound(SoundVariants.MOVE);
       setFen(data);
 
       if (!fen) {

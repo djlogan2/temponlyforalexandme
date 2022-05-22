@@ -7,11 +7,17 @@ import { Close } from "../icons/Close";
 
 import { pieces } from "./constants";
 
-type Props = {
+type PiecesSidebarProps = {
   onDragStart: (piece: Piece) => void;
+  // onDragEnd: () => void;
+  // clear: () => void;
 };
 
-export const PiecesSidebar: React.FC<Props> = ({ onDragStart }) => {
+export const PiecesSidebar: React.FC<PiecesSidebarProps> = ({
+  onDragStart,
+  // onDragEnd,
+  // clear,
+}) => {
   const Pieces = pieces.map((piece) => {
     const key = `${piece.color}${piece.type.toUpperCase()}`;
 

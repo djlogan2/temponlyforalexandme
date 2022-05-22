@@ -1,79 +1,75 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import GameService from "/imports/client/service/GameService";
-import { GameEvents } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
-
-import { MoveItem } from "client/app/types";
 import { Piece, Square } from "chess.js";
 
-import { ESounds } from "../useSound/constants";
-import { useSound } from "..";
+import { GameEvents } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
 
-const emptyFunc = () => () => {};
-type MakeMove = () => (move: string[], promotion?: string) => void;
-type Put = () => (piece: Piece, square: Square) => void;
+import { useSound, SoundVariants } from "/client/app/hooks/useSound";
 
-export const useAnalysisGame = (
-  initGameId: string,
-  gameService: GameService,
-) => {
-  const [gameId, setGameId] = useState<string>(initGameId);
-  const [put, setPut] = useState<Put>(emptyFunc);
-  const [isGameOver, setIsGameOver] = useState(false);
+type MakeMove = (from: Square, to: Square) => void;
+type Put = (piece: Piece, square: Square) => void;
+type Remove = (square: Square) => void;
+type Clear = () => void;
+
+type HookValue = {
+  fen: string;
+  makeMove: MakeMove;
+  put: Put;
+  remove: Remove;
+  clear: Clear;
+};
+
+export const useAnalysisGame = (game: ClientAnalysisGame): HookValue => {
   const [fen, setFen] = useState<string>("");
-  const [movelist, setMovelist] = useState<MoveItem[]>([]);
-  const [makeMove, setMakeMove] = useState<MakeMove>(emptyFunc);
+
   const playSound = useSound();
+
+  const put = useCallback<Put>(
+    (piece, square) => game.put(piece, square, connection.user!.id),
+    [game],
+  );
+
+  const makeMove = useCallback<MakeMove>(
+    (from, to) => game.changePiecePosition(from, to, connection.user!.id),
+    [game],
+  );
+
+  const remove = useCallback<Remove>(
+    (square) => game.remove(square, connection.user!.id),
+    [game],
+  );
+
+  const clear = useCallback<Clear>(
+    () => game.clear(connection.user!.id),
+    [game],
+  );
 
   useEffect(() => {
     if (!connection.user) {
       throw new Error("No user");
     }
 
-    const game = gameService.getTyped(
-      gameId,
-      connection.user,
-    ) as ClientAnalysisGame;
-
     const { fen } = game.getDefaultProperties();
     setFen(fen);
 
     game.events.on("fen", (data) => {
-      playSound(ESounds.MOVE);
+      playSound(SoundVariants.MOVE);
       setFen(data);
     });
 
-    setMakeMove(
-      () => (move: string[], promotion?: string) =>
-        game.makeMove(connection.user!, move.join("") + (promotion || "")),
-    );
-
-    setPut(
-      () => (piece: Piece, square: Square) =>
-        game.put(piece, square, connection.user!.id),
-    );
-
     return () => {
-      const events: GameEvents[] = [
-        "fen",
-        "movelist",
-        "clocks",
-        "tomove",
-        "converted",
-      ];
+      const events: GameEvents[] = ["fen"];
 
       events.forEach((event) => game.events.off(event));
     };
-  }, [gameId]);
+  }, [game]);
 
   return {
     fen,
-    movelist,
-    isGameOver,
-    setGameId,
-    setIsGameOver,
     makeMove,
     put,
+    remove,
+    clear,
   };
 };
