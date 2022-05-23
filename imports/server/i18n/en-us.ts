@@ -182,7 +182,7 @@ export const translations: ITranslation[] = [
   {
     locale,
     token: "seconds",
-    text: "{{min}}m",
+    text: "Seconds",
   },
   {
     locale,

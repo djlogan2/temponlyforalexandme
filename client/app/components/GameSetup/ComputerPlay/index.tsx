@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import { useFormik } from "formik";
 
@@ -27,6 +27,9 @@ const RANDOM = "random";
 const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
   const { startComputerGame } = useGameSetup();
+
+  const [valid, setValid] = useState(true);
+  const [unlimited, setUnlimited] = useState(false);
 
   const formik = useFormik<{
     color: PieceColor | typeof RANDOM;
@@ -72,6 +75,8 @@ const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
         className="computerPlay__card"
         subtitle={t("setGameOptions")}
         onPickTime={handleTimeChange}
+        onValidChange={setValid}
+        onUnlimitedChange={setUnlimited}
       />
 
       <Card className="computerPlay__card computerPlay__rangeSlider">
@@ -107,7 +112,11 @@ const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
         />
       </Card>
 
-      <StandardButton type="submit" color="primary">
+      <StandardButton
+        type="submit"
+        color="primary"
+        disabled={!valid || unlimited}
+      >
         {t("play")}
       </StandardButton>
     </form>

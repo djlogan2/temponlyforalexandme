@@ -20,8 +20,11 @@ import TimeOptions from "../TimeOptions";
 type PlayWithFriendsProps = CommonGameSetup;
 
 const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
-  const [opponents, setOpponents] = useState<number>(0);
   const { t } = useTranslate();
+
+  const [opponents, setOpponents] = useState<number>(0);
+  const [valid, setValid] = useState(true);
+  const [unlimited, setUnlimited] = useState(false);
 
   return (
     <div className="playWithFriends">
@@ -68,7 +71,7 @@ const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
           ))}
         </ul>
         <TextButton className="playWithFriends__showMore">
-          {t("showMOre")} <LongArrow />
+          {t("showMore")} <LongArrow />
         </TextButton>
       </div>
 
@@ -76,10 +79,16 @@ const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
         onPickTime={onPickTimeMock}
         className="playWithFriends__timeOptions"
         subtitle={t("launchNewChallenge")}
+        onValidChange={setValid}
+        onUnlimitedChange={setUnlimited}
       />
       <Shortcut className="playWithFriends__card" />
 
-      <StandardButton className="playWithFriends__btn" color="primary">
+      <StandardButton
+        className="playWithFriends__btn"
+        color="primary"
+        disabled={!valid || unlimited}
+      >
         {t("launchChallenge")}
       </StandardButton>
       <StandardButton className="playWithFriends__btn">

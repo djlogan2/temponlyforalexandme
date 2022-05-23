@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import { useTranslate } from "/client/app/hooks";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
@@ -17,12 +17,17 @@ type CustomChallengeProps = CommonGameSetup;
 const CustomChallenge: FC<CustomChallengeProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
+  const [valid, setValid] = useState(true);
+  const [unlimited, setUnlimited] = useState(false);
+
   return (
     <div className="customChallenge">
       <TimeOptions
         onPickTime={onPickTimeMock}
         className="customChallenge__card"
         subtitle={t("launchNewChallenge")}
+        onValidChange={setValid}
+        onUnlimitedChange={setUnlimited}
       />
       <RatedGame className="customChallenge__card" />
       <Card className="customChallenge__card">
@@ -56,6 +61,7 @@ const CustomChallenge: FC<CustomChallengeProps> = ({ navigate }) => {
           color="primary"
           height="small"
           onClick={() => navigate(Components.CHALLENGE)}
+          disabled={!valid || unlimited}
         >
           {t("launchChallenge")}
         </StandardButton>
