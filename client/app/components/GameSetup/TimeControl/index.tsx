@@ -22,7 +22,6 @@ const inputs = [
     max: 90,
     placeholder: { key: "minutesWithAmount", params: { min: "00" } },
   },
-
   {
     name: "seconds",
     max: 60,
