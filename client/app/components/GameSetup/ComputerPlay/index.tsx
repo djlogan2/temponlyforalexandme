@@ -26,7 +26,7 @@ const RANDOM = "random";
 
 const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
-  const { startComputerGame } = useGameSetup();
+  const { startComputerGame, challengeButtons } = useGameSetup();
 
   const [valid, setValid] = useState(true);
   const [unlimited, setUnlimited] = useState(false);
@@ -39,7 +39,7 @@ const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
   }>({
     initialValues: {
       color: RANDOM,
-      time: 0,
+      time: challengeButtons[0].time,
       skill: 1,
     },
     onSubmit: (values) => {
