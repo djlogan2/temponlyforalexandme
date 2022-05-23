@@ -1,15 +1,17 @@
 import React, { FC } from "react";
-import { options } from "../constants";
-import { EComponents } from "../types";
-import { useTranslate } from "/client/app/hooks";
+
 import TabButton from "/client/app/shared/Buttons/TabButton";
 
-interface IPlayOptionsProps {
-  onClick: (tab: EComponents) => void;
-  gameOption: EComponents;
-}
+import { options } from "../constants";
+import { Components } from "../types";
+import { useTranslate } from "/client/app/hooks";
 
-const PlayOptions: FC<IPlayOptionsProps> = ({ onClick, gameOption }) => {
+type PlayOptionsProps = {
+  onClick: (tab: Components) => void;
+  gameOption: Components;
+};
+
+const PlayOptions: FC<PlayOptionsProps> = ({ onClick, gameOption }) => {
   const { t } = useTranslate();
 
   return (

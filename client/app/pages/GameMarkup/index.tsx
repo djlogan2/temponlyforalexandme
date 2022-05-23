@@ -1,9 +1,13 @@
-import clsx from "clsx";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { calcTime } from "../../data/utils";
-import ControlBox from "./components/ControlBox";
-import "./index.scss";
+
+import clsx from "clsx";
+import { useHistory, useParams } from "react-router-dom";
+
+import { useGameSetup } from "/client/app/contexts/gameSetup";
+import { calcTime } from "/client/app/data/utils";
+import { useServices } from "/client/app/contexts/services";
+import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
+import { DigitalClock, GameTitle } from "/client/app/shared";
 import {
   EnhancedChessboard,
   FlatMovelist,
@@ -11,11 +15,15 @@ import {
   GameOver,
 } from "/client/app/components";
 import Flip from "/client/app/components/icons/Flip";
-import { useComputerPlayGame, useWindowSize } from "/client/app/hooks";
-import { DigitalClock, GameTitle } from "/client/app/shared";
 
-const GameMarkup = ({ ...props }) => {
+import ControlBox from "./components/ControlBox";
+import "./index.scss";
+
+const GameMarkup = () => {
   const { id } = useParams<{ id: string }>();
+  const history = useHistory();
+  const { width } = useWindowSize();
+  const { gameService } = useServices();
   const {
     clocks,
     fen,
@@ -25,18 +33,22 @@ const GameMarkup = ({ ...props }) => {
     isGameOver,
     myColor,
     result,
+    setGameId,
     resign,
     makeMove,
     setIsGameOver,
-  } = useComputerPlayGame(id);
+  } = useComputerPlayGame(id, gameService);
+  const { rematchComputerGame } = useGameSetup();
 
   const [isFlipped, setIsFlipped] = useState(myColor === "b");
-
-  const { width } = useWindowSize();
 
   useEffect(() => {
     setIsFlipped(myColor === "b");
   }, [myColor]);
+
+  useEffect(() => {
+    setGameId(id);
+  }, [id]);
 
   return fen && clocks && moveToMake ? (
     <div className="gameContainer">
@@ -66,7 +78,17 @@ const GameMarkup = ({ ...props }) => {
       />
       <div className="gameContainer__board-container">
         {isGameOver && result && (
-          <GameOver onClose={() => setIsGameOver(false)} result={result} />
+          <GameOver
+            result={result}
+            onRematch={() => {
+              setIsGameOver(false);
+              rematchComputerGame();
+            }}
+            onClose={() => {
+              setIsGameOver(false);
+              history.push("/");
+            }}
+          />
         )}
         <EnhancedChessboard
           fen={fen}

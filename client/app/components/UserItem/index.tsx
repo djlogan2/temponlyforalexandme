@@ -1,26 +1,30 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+import React, { FC } from "react";
+
 import clsx from "clsx";
 import { noop } from "lodash";
-import React, { FC } from "react";
-import Avatar from "../../shared/Avatar";
-import Flag, { TFlags } from "../../shared/Flag";
-import { TUserStatus } from "../../types";
+
+import Avatar from "/client/app/shared/Avatar";
+import Flag, { TFlags } from "/client/app/shared/Flag";
+import { UserStatus } from "client/app/types";
+
 import ChessTitle from "../icons/ChessTitle";
+
 import "./index.scss";
 
-interface IUserItemProps {
+type UserItemProps = {
   text: string;
   chessTitle: string;
   flag: TFlags;
   onClick?: () => void;
-  status?: TUserStatus;
+  status?: UserStatus;
   picture?: string;
   size?: "md" | "sm";
   className?: string;
-}
+};
 
-const UserItem: FC<IUserItemProps> = ({
+const UserItem: FC<UserItemProps> = ({
   text,
   picture,
   chessTitle,

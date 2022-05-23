@@ -2,11 +2,12 @@ import React, { FC, useMemo, useState } from "react";
 
 import clsx from "clsx";
 
-import { TChallengeButton } from "/client/app/types";
-import { useGameSetup } from "/client/app/contexts/gameSetupContext";
+import { ChallengeButton } from "/client/app/types";
+import { useGameSetup } from "/client/app/contexts/gameSetup";
 import { useTranslate } from "/client/app/hooks";
 import TabButtonSquared from "/client/app/shared/Buttons/TabButtonSquared";
 import TextButton from "/client/app/shared/Buttons/TextButton";
+
 import Arrow from "../../icons/Arrow";
 import More from "../../icons/More";
 import Subtitle from "../../Subtitle";
@@ -16,7 +17,7 @@ const CUSTOM = "custom";
 
 interface ITimeOptionProps {
   subtitle: string;
-  onPickTime: (value: TChallengeButton | number) => Promise<void>;
+  onPickTime: (value: ChallengeButton | number) => Promise<void>;
   className?: string;
   onValidChange?: (value: boolean) => void;
   onUnlimitedChange?: (value: boolean) => void;
@@ -31,12 +32,12 @@ const TimeOption: FC<ITimeOptionProps> = ({
   const { t } = useTranslate();
   const { challengeButtons } = useGameSetup();
   const [customTime, setCustomTime] = useState(false);
-  const [challengeButton, setChallengeButton] = useState<TChallengeButton>(
+  const [challengeButton, setChallengeButton] = useState<ChallengeButton>(
     challengeButtons[0],
   );
   const [showMoreChallengeTimes, setShowMoreChallengeTimes] = useState(false);
 
-  const timeOptions: [...TChallengeButton[], typeof CUSTOM] = useMemo(
+  const timeOptions: [...ChallengeButton[], typeof CUSTOM] = useMemo(
     () => [...challengeButtons, CUSTOM],
     [challengeButtons],
   );

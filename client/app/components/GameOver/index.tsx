@@ -1,7 +1,11 @@
 import React from "react";
+
 import { useHistory } from "react-router";
-import { SCREEN_LARGE } from "../../constants/breakpoints";
-import { useWindowSize } from "../../hooks";
+
+import { GameStatus } from "/lib/records/GameRecord";
+import { SCREEN_LARGE } from "/client/app/constants/breakpoints";
+import { useWindowSize } from "/client/app/hooks";
+
 import {
   Backdrop,
   Heading1,
@@ -14,13 +18,14 @@ import {
 } from "../../shared";
 import Card from "../Card";
 import Close from "../icons/Close";
-import "./index.scss";
-import { GameStatus } from "/lib/records/GameRecord";
 
-interface Props {
-  onClose: () => void;
+import "./index.scss";
+
+type Props = {
   result: GameStatus;
-}
+  onClose: () => void;
+  onRematch: () => void;
+};
 
 const gameResults = {
   "0-1": "Black won!",
@@ -29,7 +34,7 @@ const gameResults = {
   "*": "",
 };
 
-const GameOver = ({ onClose, result }: Props) => {
+const GameOver = ({ result, onClose, onRematch }: Props) => {
   const { width } = useWindowSize();
   const history = useHistory();
 
@@ -75,7 +80,9 @@ const GameOver = ({ onClose, result }: Props) => {
         </div>
 
         <div className="gameOver__actions">
-          <StandardButton color="primary">Rematch</StandardButton>
+          <StandardButton onClick={onRematch} color="primary">
+            Rematch
+          </StandardButton>
           <StandardButton>New 1 min</StandardButton>
           <StandardButton onClick={() => history.push("/analysis")}>
             Analysis

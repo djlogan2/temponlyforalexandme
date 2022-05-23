@@ -2,28 +2,31 @@ import React, { FC, useState } from "react";
 
 import { useFormik } from "formik";
 
-import { gameservice } from "/client/app/Root";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import { useTranslate } from "/client/app/hooks";
-import { TChallengeButton } from "/client/app/types";
+import { useGameSetup } from "/client/app/contexts/gameSetup";
+import { ChallengeButton } from "/client/app/types";
 import { PieceColor } from "/lib/records/ChallengeRecord";
+import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import RangeSlider from "/client/app/shared/RangeSlider";
 import Input from "/client/app/shared/Input";
-import LongArrow from "../../icons/LongArrow";
-import Card from "../../Card";
-import RatedGame from "../RatedGame";
+import LongArrow from "/client/app/components/icons/LongArrow";
+import Card from "/client/app/components/Card";
+
 import Subtitle from "../../Subtitle";
+import { CommonGameSetup } from "../types";
+import RatedGame from "../RatedGame";
 import ColorPick from "../ColorPick";
 import TimeOptions from "../TimeOptions";
-import { ICommonGameSetup } from "../types";
+
 import "./index.scss";
 
-interface IComputerPlayProps extends ICommonGameSetup {}
+type ComputerPlayProps = CommonGameSetup;
 
 const RANDOM = "random";
 
-const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
+const ComputerPlay: FC<ComputerPlayProps> = ({ onCloseModal }) => {
   const { t } = useTranslate();
+  const { startComputerGame } = useGameSetup();
 
   const [valid, setValid] = useState(true);
   const [unlimited, setUnlimited] = useState(false);
@@ -40,7 +43,7 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
       skill: 1,
     },
     onSubmit: (values) => {
-      gameservice.startComputerGame({
+      startComputerGame({
         skill_level: Math.max(1, Math.round((values.skill - 1000) / 100)),
         color: values.color === RANDOM ? undefined : values.color,
         clocks: { minutes: values.time },
@@ -53,7 +56,7 @@ const ComputerPlay: FC<IComputerPlayProps> = ({ onCloseModal }) => {
   });
 
   const handleTimeChange = async (
-    value: TChallengeButton | number,
+    value: ChallengeButton | number,
   ): Promise<void> => {
     if (typeof value === "number") {
       await formik.setFieldValue("time", value);

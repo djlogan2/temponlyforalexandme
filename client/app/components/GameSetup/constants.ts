@@ -2,14 +2,14 @@ import AnyonePlay from "./AnyonePlay";
 import ComputerPlay from "./ComputerPlay";
 import Share from "./Share";
 import CustomChallenge from "./CustomChallenge";
-import { EComponents } from "./types";
+import { Components } from "./types";
 import PlayWithFriends from "./PlayWithFriends";
 import ChallengeLaunched from "./ChallengeLaunched";
 
 export const options = [
-  EComponents.ANYONE,
-  EComponents.FRIENDS,
-  EComponents.COMPUTER,
+  Components.ANYONE,
+  Components.FRIENDS,
+  Components.COMPUTER,
 ] as const;
 export const challengeTypes = ["challenge", "seekgraph"] as const;
 
