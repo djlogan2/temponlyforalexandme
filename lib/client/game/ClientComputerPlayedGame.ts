@@ -55,8 +55,12 @@ export class ClientComputerPlayedGame extends CommonComputerPlayedGame {
           move,
         )} opponentcolor=${this.me.opponentcolor}`,
     );
-    if (move.smith.color !== this.me.opponentcolor)
-      this.makeMoveAuth("", move.move);
+    // if (move.smith.color !== this.me.opponentcolor)
+      super.makeMoveAuth("", move.move);
+  }
+
+  protected makeMoveAuth(who: string, move: string) {
+    Meteor.call("gamecommand", this.me._id, { move: move, type: "move" });
   }
 
   protected startTimer(milliseconds: number, fn: () => void) {

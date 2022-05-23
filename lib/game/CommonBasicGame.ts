@@ -82,7 +82,9 @@ export default abstract class CommonBasicGame extends Stoppable {
   protected makeMoveAuth(who: string, move: string): void {
     this.logger.debug(() => `makeMoveAuth move=${move}`);
     const chessmove = this.global.chessObject.move(move, { sloppy: true });
-    if (chessmove === null) throw new Meteor.Error("ILLEGAL_MOVE");
+    if (chessmove === null) {
+      throw new Meteor.Error("ILLEGAL_MOVE");
+    }
     this.premoveTasks();
     let gameresult: GameStatus = "*";
     let result2;
