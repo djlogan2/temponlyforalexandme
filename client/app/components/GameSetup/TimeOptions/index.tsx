@@ -18,11 +18,15 @@ interface ITimeOptionProps {
   subtitle: string;
   onPickTime: (value: TChallengeButton | number) => Promise<void>;
   className?: string;
+  onValidChange?: (value: boolean) => void;
+  onUnlimitedChange?: (value: boolean) => void;
 }
 const TimeOption: FC<ITimeOptionProps> = ({
   className,
   subtitle,
   onPickTime,
+  onValidChange,
+  onUnlimitedChange,
 }) => {
   const { t } = useTranslate();
   const { challengeButtons } = useGameSetup();
@@ -45,6 +49,8 @@ const TimeOption: FC<ITimeOptionProps> = ({
         onPickTime(value);
         setCustomTime(true);
       }}
+      onValidChange={onValidChange}
+      onUnlimitedChange={onUnlimitedChange}
     />
   ) : (
     <>

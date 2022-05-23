@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import Card from "../../Card";
 import ColorPick from "../ColorPick";
 import RatedGame from "../RatedGame";
@@ -15,12 +15,17 @@ interface ICustomChallengeProps extends ICommonGameSetup {}
 const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
+  const [valid, setValid] = useState(true);
+  const [unlimited, setUnlimited] = useState(false);
+
   return (
     <div className="customChallenge">
       <TimeOptions
         onPickTime={onPickTimeMock}
         className="customChallenge__card"
         subtitle={t("launchNewChallenge")}
+        onValidChange={setValid}
+        onUnlimitedChange={setUnlimited}
       />
       <RatedGame className="customChallenge__card" />
       <Card className="customChallenge__card">
@@ -54,6 +59,7 @@ const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => {
           color="primary"
           height="small"
           onClick={() => navigate(EComponents.CHALLENGE)}
+          disabled={!valid || unlimited}
         >
           {t("launchChallenge")}
         </StandardButton>

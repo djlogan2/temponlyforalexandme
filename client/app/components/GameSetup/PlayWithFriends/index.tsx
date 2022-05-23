@@ -17,8 +17,11 @@ import Heading5 from "/client/app/shared/Typographies/Heading5";
 interface IPlayWithFriendsProps extends ICommonGameSetup {}
 
 const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
-  const [opponents, setOpponents] = useState<number>(0);
   const { t } = useTranslate();
+
+  const [opponents, setOpponents] = useState<number>(0);
+  const [valid, setValid] = useState(true);
+  const [unlimited, setUnlimited] = useState(false);
 
   return (
     <div className="playWithFriends">
@@ -65,7 +68,7 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
           ))}
         </ul>
         <TextButton className="playWithFriends__showMore">
-          {t("showMOre")} <LongArrow />
+          {t("showMore")} <LongArrow />
         </TextButton>
       </div>
 
@@ -73,10 +76,16 @@ const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
         onPickTime={onPickTimeMock}
         className="playWithFriends__timeOptions"
         subtitle={t("launchNewChallenge")}
+        onValidChange={setValid}
+        onUnlimitedChange={setUnlimited}
       />
       <Shortcut className="playWithFriends__card" />
 
-      <StandardButton className="playWithFriends__btn" color="primary">
+      <StandardButton
+        className="playWithFriends__btn"
+        color="primary"
+        disabled={!valid || unlimited}
+      >
         {t("launchChallenge")}
       </StandardButton>
       <StandardButton className="playWithFriends__btn">
