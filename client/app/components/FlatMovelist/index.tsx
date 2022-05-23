@@ -1,13 +1,13 @@
 import clsx from "clsx";
 import React, { FC } from "react";
 import { Pieces } from "../../constants";
-import { TMoveItem } from "../../types";
+import { MoveItem } from "../../types";
 import "./index.scss";
 
-interface FlatMovelistProps {
-  moves: TMoveItem[];
+type FlatMovelistProps = {
+  moves: MoveItem[];
   className?: string;
-}
+};
 
 const FlatMovelist: FC<FlatMovelistProps> = ({ moves, className }) => (
   <div className={clsx("flatMovelist__container", className)}>

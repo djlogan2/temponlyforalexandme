@@ -1,22 +1,25 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import clsx from "clsx";
 import React, { FC, useState } from "react";
-import LongArrow from "../../icons/LongArrow";
-import SearchPeople from "../../SearchPeople";
-import UserItem from "../../UserItem";
-import { onPickTimeMock } from "../mocks";
-import Shortcut from "../Shortcut";
-import TimeOptions from "../TimeOptions";
-import { ICommonGameSetup } from "../types";
+
+import clsx from "clsx";
+
 import { useTranslate } from "/client/app/hooks";
 import StandardButton from "/client/app/shared/Buttons/StandardButton";
 import TextButton from "/client/app/shared/Buttons/TextButton";
 import Heading5 from "/client/app/shared/Typographies/Heading5";
 
-interface IPlayWithFriendsProps extends ICommonGameSetup {}
+import LongArrow from "../../icons/LongArrow";
+import SearchPeople from "../../SearchPeople";
+import UserItem from "../../UserItem";
+import { onPickTimeMock } from "../mocks";
+import { CommonGameSetup } from "../types";
+import Shortcut from "../Shortcut";
+import TimeOptions from "../TimeOptions";
 
-const PlayWithFriends: FC<IPlayWithFriendsProps> = () => {
+type PlayWithFriendsProps = CommonGameSetup;
+
+const PlayWithFriends: FC<PlayWithFriendsProps> = () => {
   const [opponents, setOpponents] = useState<number>(0);
   const { t } = useTranslate();
 

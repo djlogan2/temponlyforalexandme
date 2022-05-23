@@ -1,18 +1,20 @@
 import React, { FC } from "react";
+
+import { useTranslate } from "/client/app/hooks";
+import StandardButton from "/client/app/shared/Buttons/StandardButton";
+
 import Card from "../../Card";
+import Subtitle from "../../Subtitle";
+import { Components, CommonGameSetup } from "../types";
+import { onPickTimeMock } from "../mocks";
 import ColorPick from "../ColorPick";
 import RatedGame from "../RatedGame";
 import Shortcut from "../Shortcut";
-import Subtitle from "../../Subtitle";
 import TimeOptions from "../TimeOptions";
-import { EComponents, ICommonGameSetup } from "../types";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
-import { useTranslate } from "/client/app/hooks";
-import { onPickTimeMock } from "../mocks";
 
-interface ICustomChallengeProps extends ICommonGameSetup {}
+type CustomChallengeProps = CommonGameSetup;
 
-const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => {
+const CustomChallenge: FC<CustomChallengeProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
   return (
@@ -53,14 +55,14 @@ const CustomChallenge: FC<ICustomChallengeProps> = ({ navigate }) => {
         <StandardButton
           color="primary"
           height="small"
-          onClick={() => navigate(EComponents.CHALLENGE)}
+          onClick={() => navigate(Components.CHALLENGE)}
         >
           {t("launchChallenge")}
         </StandardButton>
         <StandardButton
           color="regular"
           height="small"
-          onClick={() => navigate(EComponents.SHARE)}
+          onClick={() => navigate(Components.SHARE)}
         >
           {t("shareChallenge")}
         </StandardButton>

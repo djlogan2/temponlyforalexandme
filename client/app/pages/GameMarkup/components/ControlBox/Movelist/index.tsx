@@ -1,18 +1,21 @@
-import { noop } from "lodash";
 import React, { FC } from "react";
-import GameControls from "../../../../../components/GameControls";
-import Moves from "../../../../../components/Moves";
-import OpeningName from "./components/OpeningName";
-import "./index.scss";
+
+import { noop } from "lodash";
+
+import GameControls from "/client/app/components/GameControls";
+import Moves from "/client/app/components/Moves";
+import { MoveItem } from "/client/app/types";
 import { useTranslate } from "/client/app/hooks";
 import Heading6 from "/client/app/shared/Typographies/Heading6";
-import { TMoveItem } from "/client/app/types";
 
-interface IMovelistProps {
-  moves: TMoveItem[];
-}
+import OpeningName from "./components/OpeningName";
+import "./index.scss";
 
-const Movelist: FC<IMovelistProps> = ({ moves }) => {
+type MovelistProps = {
+  moves: MoveItem[];
+};
+
+const Movelist: FC<MovelistProps> = ({ moves }) => {
   const { t } = useTranslate();
 
   return (

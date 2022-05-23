@@ -1,6 +1,6 @@
 import { options, challengeTypes } from "./constants";
 
-export enum EComponents {
+export enum Components {
   ANYONE = "anyone",
   FRIENDS = "friends",
   COMPUTER = "computer",
@@ -9,10 +9,10 @@ export enum EComponents {
   CHALLENGE = "challenge",
 }
 
-export type TOptions = typeof options[number];
-export type TChallenge = typeof challengeTypes[number];
+export type Options = typeof options[number];
+export type Challenge = typeof challengeTypes[number];
 
-export interface ICommonGameSetup {
-  navigate: (tab: EComponents) => void;
+export type CommonGameSetup = {
+  navigate: (tab: Components) => void;
   onCloseModal: () => void;
-}
+};

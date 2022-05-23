@@ -1,5 +1,5 @@
-import { TChallengeButton } from "/client/app/types";
+import { ChallengeButton } from "/client/app/types";
 
 export const onPickTimeMock = (
-  value: number | TChallengeButton,
+  value: number | ChallengeButton,
 ): Promise<void> => Promise.resolve();

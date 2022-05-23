@@ -1,25 +1,30 @@
-import { noop } from "lodash";
 import { useEffect, useState } from "react";
-import { useSound } from "..";
-import { GameStatus } from "../../../../lib/records/GameRecord";
-import { gameservice } from "../../Root";
-import { TMoveItem } from "../../types";
-import { ESounds } from "../useSound/constants";
-import { getLegalMoves } from "./constants";
+
+import GameService from "/imports/client/service/GameService";
+import { GameEvents } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
 import { PieceColor } from "/lib/records/ChallengeRecord";
 import { GameConvertRecord } from "/lib/records/GameRecord";
+import { GameStatus } from "lib/records/GameRecord";
+
+import { MoveItem } from "client/app/types";
+
+import { ESounds } from "../useSound/constants";
+import { useSound } from "..";
+
+import { getLegalMoves } from "./constants";
 
 type TMakeMove = () => (move: string[], promotion?: string) => void;
 type TResign = () => () => void;
 
 const emptyFunc = () => () => {};
 
-const useComputerPlayGame = (gameId: string) => {
+const useComputerPlayGame = (initGameId: string, gameService: GameService) => {
+  const [gameId, setGameId] = useState<string>(initGameId);
   const [isGameOver, setIsGameOver] = useState(false);
   const [fen, setFen] = useState<string>();
   const [clocks, updateClocks] = useState<any>();
-  const [movelist, setMovelist] = useState<TMoveItem[]>([]);
+  const [movelist, setMovelist] = useState<MoveItem[]>([]);
   const [moveToMake, setMoveToMake] = useState<PieceColor | undefined>();
   const [legalMoves, updateLegalMoves] = useState<any>({});
   const [myColor, setMyColor] = useState<PieceColor>();
@@ -29,7 +34,7 @@ const useComputerPlayGame = (gameId: string) => {
   const playSound = useSound();
 
   useEffect(() => {
-    const game = gameservice.getTyped(
+    const game = gameService.getTyped(
       gameId,
       connection.user!,
     ) as ClientComputerPlayedGame;
@@ -41,7 +46,7 @@ const useComputerPlayGame = (gameId: string) => {
     setFen(fen);
     setMoveToMake(tomove);
     updateClocks(clocks);
-    setMovelist(variations.movelist.slice(1) as TMoveItem[]);
+    setMovelist(variations.movelist.slice(1) as MoveItem[]);
 
     game.events.on("fen", (data) => {
       playSound(ESounds.MOVE);
@@ -68,7 +73,7 @@ const useComputerPlayGame = (gameId: string) => {
     });
 
     game.events.on("converted", () => {
-      const { result } = gameservice.getGameEntity(
+      const { result } = gameService.getGameEntity(
         gameId,
       ) as unknown as GameConvertRecord;
 
@@ -84,9 +89,17 @@ const useComputerPlayGame = (gameId: string) => {
     setResign(() => () => game.playerResign());
 
     return () => {
-      gameservice.events.removeAllListeners();
+      const events: GameEvents[] = [
+        "fen",
+        "movelist",
+        "clocks",
+        "tomove",
+        "converted",
+      ];
+
+      events.forEach((event) => game.events.off(event));
     };
-  }, []);
+  }, [gameId]);
 
   return {
     fen,
@@ -97,6 +110,7 @@ const useComputerPlayGame = (gameId: string) => {
     isGameOver,
     myColor,
     result,
+    setGameId,
     setIsGameOver,
     makeMove,
     resign,

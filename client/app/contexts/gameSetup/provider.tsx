@@ -1,50 +1,60 @@
-import React, {
-  FC,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import { uniqBy } from "lodash";
 
+import { ComputerChallengeRecord } from "/lib/records/ChallengeRecord";
 import ChallengeService from "/imports/client/service/ChallengeService";
-import { TChallengeButton } from "../../types";
-import { GameSetupContext } from "./context";
+import GameService from "/imports/client/service/GameService";
+import { ChallengeButton } from "/client/app/types";
 
-interface IGameSetupContextProps {
+import { GameSetupContextProvider } from "./context";
+import { GameSetupContextValue } from "./types";
+
+type GameSetupContextProps = {
   challengeService: ChallengeService;
-  children: ReactNode;
-}
+  gameService: GameService;
+};
 
-const buildChallengeButton = (dbButton: any): TChallengeButton => ({
+const buildChallengeButton = (dbButton: any): ChallengeButton => ({
   id: dbButton._id,
   name: dbButton.name,
   time: dbButton.challenge.clocks.minutes,
   opponentTime: dbButton.challenge.opponentclocks?.minutes,
 });
 
-export const GameSetupProvider: FC<IGameSetupContextProps> = ({
+export const GameSetupProvider: FC<GameSetupContextProps> = ({
   challengeService,
+  gameService,
   children,
 }) => {
-  const [challengeButtons, setChallengeButtons] = useState<TChallengeButton[]>(
+  const [challengeButtons, setChallengeButtons] = useState<ChallengeButton[]>(
     [],
   );
-
-  const contextValue = useMemo(
-    () => ({
-      challengeButtons,
-    }),
-    [challengeButtons],
-  );
+  const [lastComputerChallengeSetup, setLastComputerChallengeSetup] =
+    useState<ComputerChallengeRecord | null>(null);
 
   const isButtonNameUnique = useCallback(
     (name: string): boolean =>
       !!challengeButtons.find((button) => button.name === name),
     [challengeButtons],
   );
+
+  const startComputerGame = useCallback(
+    (challengeSetup: ComputerChallengeRecord) => {
+      setLastComputerChallengeSetup(challengeSetup);
+
+      gameService.startComputerGame(challengeSetup);
+    },
+    [gameService, setLastComputerChallengeSetup],
+  );
+
+  const rematchComputerGame = useCallback(() => {
+    if (!lastComputerChallengeSetup) {
+      throw new Error("Unable to find last computer challenge setup");
+    }
+
+    gameService.startComputerGame(lastComputerChallengeSetup);
+  }, [gameService, lastComputerChallengeSetup]);
 
   useEffect(() => {
     challengeService.buttonEvents.on("ready", () => {
@@ -92,9 +102,18 @@ export const GameSetupProvider: FC<IGameSetupContextProps> = ({
     });
   }, []);
 
+  const contextValue: GameSetupContextValue = useMemo(
+    () => ({
+      challengeButtons,
+      startComputerGame,
+      rematchComputerGame,
+    }),
+    [challengeButtons, startComputerGame, rematchComputerGame],
+  );
+
   return (
-    <GameSetupContext.Provider value={contextValue}>
+    <GameSetupContextProvider value={contextValue}>
       {children}
-    </GameSetupContext.Provider>
+    </GameSetupContextProvider>
   );
 };

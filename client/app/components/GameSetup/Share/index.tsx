@@ -1,16 +1,18 @@
 import React, { FC } from "react";
+
+import { useTranslate } from "/client/app/hooks";
+import StandardButton from "/client/app/shared/Buttons/StandardButton";
+
 import Close from "../../icons/Close";
 import OpenChallengeItem from "../../OpenChallengeItem";
 import SendToMail from "../../SendToMail";
 import ShareLink from "../../ShareLink";
 import SocialMedia from "../../SocialMedia";
-import { EComponents, ICommonGameSetup } from "../types";
-import { useTranslate } from "/client/app/hooks";
-import StandardButton from "/client/app/shared/Buttons/StandardButton";
+import { Components, CommonGameSetup } from "../types";
 
-interface IShareProps extends ICommonGameSetup {}
+type ShareProps = CommonGameSetup;
 
-const Share: FC<IShareProps> = ({ navigate }) => {
+const Share: FC<ShareProps> = ({ navigate }) => {
   const { t } = useTranslate();
 
   return (
@@ -27,7 +29,7 @@ const Share: FC<IShareProps> = ({ navigate }) => {
       <ShareLink className="share__card" />
       <SendToMail className="share__card" />
       <SocialMedia className="share__card" />
-      <StandardButton onClick={() => navigate(EComponents.CUSTOM)}>
+      <StandardButton onClick={() => navigate(Components.CUSTOM)}>
         {t("cancel")}
       </StandardButton>
     </div>
