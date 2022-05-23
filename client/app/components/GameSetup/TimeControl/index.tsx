@@ -107,32 +107,28 @@ const TimeControl: FC<TimeControlProps> = ({
     }
   }, [unlimited, onUnlimitedChange]);
 
-  const Inputs = () =>
-    inputs.map(({ name, max, placeholder }) => (
-      <Input
-        key={name}
-        max={max}
-        min={0}
-        disabled={unlimited}
-        onKeyDown={(evt) =>
-          hasRestrictedInputChar(evt.key) ||
-          (formik.values[name] === 0 && evt.key === "0")
-        }
-        value={formik.values[name] === 0 ? "" : formik.values[name]}
-        label={t(name)}
-        name={name}
-        placeholder={t(placeholder.key, placeholder.params)}
-        type="number"
-        onChange={(e) =>
-          formik.setFieldValue(
-            name,
-            e.target.value === "" ? 0 : +e.target.value,
-          )
-        }
-        error={!!formik.errors[name] && !unlimited}
-        errorText={formik.errors[name]}
-      />
-    ));
+  const Inputs = inputs.map(({ name, max, placeholder }) => (
+    <Input
+      key={name}
+      max={max}
+      min={0}
+      disabled={unlimited}
+      onKeyDown={(evt) =>
+        hasRestrictedInputChar(evt.key) ||
+        (formik.values[name] === 0 && evt.key === "0")
+      }
+      value={formik.values[name] === 0 ? "" : formik.values[name]}
+      label={t(name)}
+      name={name}
+      placeholder={t(placeholder.key, placeholder.params)}
+      type="number"
+      onChange={(e) =>
+        formik.setFieldValue(name, e.target.value === "" ? 0 : +e.target.value)
+      }
+      error={!!formik.errors[name] && !unlimited}
+      errorText={formik.errors[name]}
+    />
+  ));
 
   return (
     <Card className={clsx("timeControl", className)}>
