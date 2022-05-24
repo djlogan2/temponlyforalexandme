@@ -113,8 +113,9 @@ const TimeControl: FC<TimeControlProps> = ({
       min={0}
       disabled={unlimited}
       onKeyDown={(evt) =>
-        hasRestrictedInputChar(evt.key) ||
-        (formik.values[name] === 0 && evt.key === "0")
+        (hasRestrictedInputChar(evt.key) ||
+          (formik.values[name] === 0 && evt.key === "0")) &&
+        evt.preventDefault()
       }
       value={formik.values[name] === 0 ? "" : formik.values[name]}
       label={t(name)}
