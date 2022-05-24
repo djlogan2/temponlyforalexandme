@@ -76,4 +76,4 @@ export const SQUARES = [
   "f1",
   "g1",
   "h1",
-];
+] as const;

@@ -1,4 +1,3 @@
-import * as util from "util";
 import { Move, Piece, Square } from "chess.js";
 import { Meteor } from "meteor/meteor";
 
@@ -32,6 +31,7 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
   }
 
   public getDefaultProperties() {
+    this.global.chessObject.fen();
     return {
       tomove: this.me.tomove,
       fen: this.me.fen,
@@ -48,47 +48,6 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     return true;
   }
 
-  public changePiecePosition(from: Square, to: Square, who: string): void {
-    this.logger1.debug(
-      () => `changePiecePosition from=${from} to=${to} who=${who}`,
-    );
-
-    this.isAuthorizedToMove(who);
-
-    const piece = this.global.chessObject.get(from);
-
-    if (!piece) {
-      return;
-    }
-
-    this.global.chessObject.remove(from);
-    this.global.chessObject.put(piece, to);
-
-    Meteor.call("gamecommand", this.me._id, {
-      fen: this.global.chessObject.fen(),
-      type: "setfen",
-    });
-  }
-
-  public put(piece: Piece, square: Square, who: string): void {
-    this.logger1.debug(
-      () => `internalPut piece=${piece} square=${square} who=${who}`,
-    );
-
-    this.isAuthorizedToMove(who);
-
-    this.global.chessObject.put(piece, square);
-
-    Meteor.call("gamecommand", this.me._id, {
-      fen: this.global.chessObject.fen(),
-      type: "setfen",
-    });
-  }
-
-  public setFen(fen: string, who: string): void {
-    this.internalSetFen(fen, who);
-  }
-
   protected internalSetFen(fen: string, who: string): void {
     this.isAuthorizedToMove(who);
 
@@ -98,6 +57,46 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     });
   }
 
+  public setFen(fen: string, who: string): void {
+    this.internalSetFen(fen, who);
+  }
+
+  protected internalPut(piece: Piece, square: Square, who: string): void {
+    this.logger1.debug(
+      () => `internalPut piece=${piece} square=${square} who=${who}`,
+    );
+
+    this.isAuthorizedToMove(who);
+
+    this.global.chessObject.remove(square);
+    this.global.chessObject.put(piece, square);
+
+    this.internalSetFen(this.global.chessObject.fen(), who);
+  }
+
+  public put(piece: Piece, square: Square, who: string): void {
+    this.internalPut(piece, square, who);
+  }
+
+  public changePiecePosition(from: Square, to: Square, who: string): void {
+    this.logger1.debug(
+      () => `changePiecePosition from=${from} to=${to} who=${who}`,
+    );
+
+    this.isAuthorizedToMove(who);
+
+    this.global.chessObject.load(this.me.fen);
+
+    const piece = this.global.chessObject.get(from);
+
+    if (!piece) {
+      return;
+    }
+
+    this.internalPut(piece, to, who);
+    this.internalSetFen(this.global.chessObject.fen(), who);
+  }
+
   public remove(square: Square, who: string): void {
     this.logger1.debug(() => `remove square=${square}`);
 
@@ -105,10 +104,7 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
 
     this.global.chessObject.remove(square);
 
-    Meteor.call("gamecommand", this.me._id, {
-      fen: this.global.chessObject.fen(),
-      type: "setfen",
-    });
+    this.internalSetFen(this.global.chessObject.fen(), who);
   }
 
   public clear(who: string): void {
@@ -118,10 +114,7 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
 
     this.global.chessObject.clear();
 
-    Meteor.call("gamecommand", this.me._id, {
-      fen: this.global.chessObject.fen(),
-      type: "setfen",
-    });
+    this.internalSetFen(this.global.chessObject.fen(), who);
   }
 
   protected premoveTasks(): void {

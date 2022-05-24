@@ -4,6 +4,8 @@ import React, { FC, useCallback, useMemo } from "react";
 import ChessBoard from "chessboard";
 import { Piece, Square } from "chess.js";
 
+import { SQUARES } from "/client/app/constants";
+
 import {
   convertPieceToValue,
   convertValueToPiece,
@@ -22,14 +24,14 @@ import "chessboard/dist/index.css";
 type EnhancedChessboardProps = {
   fen: string;
   flipped: boolean;
-  className?: string;
-  legalMoves?: string[];
   circles: [];
   arrows: [];
   showLegalMoves: boolean;
   smartMoves: boolean;
   smallSize: number;
-  onMove: (from: Square, to: Square) => void;
+  onMove: (from: Square, to: Square, promotion: any) => void;
+  className?: string;
+  legalMoves?: string[] | (() => void);
   edit?: { add: Piece };
   onAdd?: (piece: Piece, square: Square) => void;
   onDelete?: (square: Square) => void;
@@ -59,7 +61,8 @@ export const EnhancedChessboard: FC<EnhancedChessboardProps> = ({
   }, [edit]);
 
   const formattedOnMove = useCallback(
-    (moves: [Square, Square]) => onMove(moves[0], moves[1]),
+    (moves: [Square, Square], promotion: any) =>
+      onMove(moves[0], moves[1], promotion),
     [onMove],
   );
 

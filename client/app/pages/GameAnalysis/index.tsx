@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useParams } from "react-router-dom";
-import { Move, Piece, Square } from "chess.js";
+import { Piece } from "chess.js";
 
 import { useServices } from "/client/app/contexts/services";
 import { useAnalysisGame } from "/client/app/hooks";
 import { PiecesSidebar } from "/client/app/components/PiecesSidebar";
 import { EnhancedChessboard } from "/client/app/components";
+import { SQUARES } from "/client/app/constants";
 
 import { AnalysisControlBox } from "./components/AnalysisControlBox";
 import ClientAnalysisGame from "/lib/client/game/ClientAnalysisGame";
@@ -28,7 +29,7 @@ const GameAnalysis = () => {
         flipped={false}
         circles={[]}
         arrows={[]}
-        legalMoves={[]}
+        legalMoves={() => SQUARES}
         showLegalMoves={false}
         smartMoves={false}
         smallSize={500}
@@ -36,7 +37,11 @@ const GameAnalysis = () => {
         onAdd={put}
         edit={draggedPiece ? { add: draggedPiece } : undefined}
       />
-      <PiecesSidebar onDragStart={setDraggedPiece} />
+      <PiecesSidebar
+        onDragStart={setDraggedPiece}
+        onDragEnd={() => setDraggedPiece(null)}
+        clear={clear}
+      />
       <AnalysisControlBox className="gameAnalysis__controlBox" />
     </div>
   );

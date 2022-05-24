@@ -8,29 +8,30 @@ import { Close } from "../icons/Close";
 import { pieces } from "./constants";
 
 type PiecesSidebarProps = {
-  onDragStart: (piece: Piece) => void;
-  // onDragEnd: () => void;
-  // clear: () => void;
+  clear: () => void;
+  onDragStart?: (piece: Piece) => void;
+  onDragEnd?: () => void;
 };
 
 export const PiecesSidebar: React.FC<PiecesSidebarProps> = ({
+  clear,
   onDragStart,
-  // onDragEnd,
-  // clear,
+  onDragEnd,
 }) => {
-  const Pieces = pieces.map((piece) => {
-    const key = `${piece.color}${piece.type.toUpperCase()}`;
+  const Pieces = pieces.map((imgPiece) => {
+    const key = `${imgPiece.color}${imgPiece.type.toUpperCase()}`;
 
     return {
-      color: piece.color,
+      color: imgPiece.color,
       element: (
         <img
           key={key}
           alt={key}
-          src={piece.image}
+          src={imgPiece.image}
           width={50}
           height={50}
-          onDragStart={() => onDragStart(piece as Piece)}
+          onDragStart={() => onDragStart && onDragStart(imgPiece as Piece)}
+          onDragEnd={onDragEnd}
           draggable
         />
       ),
@@ -45,7 +46,7 @@ export const PiecesSidebar: React.FC<PiecesSidebarProps> = ({
   );
 
   const TrashButton = (
-    <button type="button" onClick={() => console.log("trash")}>
+    <button type="button" onClick={clear}>
       <Trash />
     </button>
   );
