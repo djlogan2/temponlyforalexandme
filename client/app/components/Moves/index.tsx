@@ -35,11 +35,11 @@ const Moves: FC<MovesProps> = ({ moves, className, ...rest }) => {
 
             return (
               <li key={i} className="moves__item">
-                <span>
+                <span className="moves__piece--white">
                   {i + 1}.{WhitePiece && <WhitePiece />}
                   {moves[step].smith.to}
                 </span>
-                <span>
+                <span className="moves__piece--black">
                   {BlackPiece && <BlackPiece />}
                   {moves[step + 1]?.smith.to}
                 </span>
