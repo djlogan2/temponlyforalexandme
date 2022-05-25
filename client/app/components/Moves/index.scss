@@ -24,5 +24,16 @@
     font-size: 1.2rem;
     line-height: 1.432rem;
     color: var(--colorDarkTwo);
+    stroke: var(--colorDarkTwo);
+  }
+  
+  &__piece {
+    &--black {
+      fill: var(--colorDarkOne);
+    }
+    
+    &--white {
+      fill: var(--colorWhiteOne);
+    }
   }
 }
