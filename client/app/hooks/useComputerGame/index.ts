@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { Square } from "chess.js";
+
 import GameService from "/imports/client/service/GameService";
 import { GameEvents } from "/imports/dao/CommonSingleGameReadOnlyGameDao";
 import { ClientComputerPlayedGame } from "/lib/client/game/ClientComputerPlayedGame";
@@ -14,7 +16,7 @@ import { useSound } from "..";
 
 import { getLegalMoves } from "./constants";
 
-type MakeMove = () => (move: string[], promotion?: string) => void;
+type MakeMove = () => (from: Square, to: Square, promotion?: string) => void;
 type Resign = () => () => void;
 
 const emptyFunc = () => () => {};
@@ -85,8 +87,8 @@ export const useComputerGame = (
     });
 
     setMakeMove(
-      () => (move: string[], promotion?: string) =>
-        game.makeMove(connection.user!, move.join("") + (promotion || "")),
+      () => (from: Square, to: Square, promotion?: string) =>
+        game.makeMove(connection.user!, from + to + (promotion || "")),
     );
 
     setResign(() => () => game.playerResign());

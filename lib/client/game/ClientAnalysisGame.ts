@@ -57,11 +57,7 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     });
   }
 
-  public setFen(fen: string, who: string): void {
-    this.internalSetFen(fen, who);
-  }
-
-  protected internalPut(piece: Piece, square: Square, who: string): void {
+  public put(piece: Piece, square: Square, who: string): void {
     this.logger1.debug(
       () => `internalPut piece=${piece} square=${square} who=${who}`,
     );
@@ -71,11 +67,17 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
     this.global.chessObject.remove(square);
     this.global.chessObject.put(piece, square);
 
-    this.internalSetFen(this.global.chessObject.fen(), who);
+    this.setFen(this.global.chessObject.fen(), who);
   }
 
-  public put(piece: Piece, square: Square, who: string): void {
-    this.internalPut(piece, square, who);
+  public remove(square: Square, who: string): void {
+    this.logger1.debug(() => `remove square=${square}`);
+
+    this.isAuthorizedToMove(who);
+
+    this.global.chessObject.remove(square);
+
+    this.setFen(this.global.chessObject.fen(), who);
   }
 
   public changePiecePosition(from: Square, to: Square, who: string): void {
@@ -93,18 +95,8 @@ export default class ClientAnalysisGame extends CommonAnalysisGame {
       return;
     }
 
-    this.internalPut(piece, to, who);
-    this.internalSetFen(this.global.chessObject.fen(), who);
-  }
-
-  public remove(square: Square, who: string): void {
-    this.logger1.debug(() => `remove square=${square}`);
-
-    this.isAuthorizedToMove(who);
-
-    this.global.chessObject.remove(square);
-
-    this.internalSetFen(this.global.chessObject.fen(), who);
+    this.remove(from, who);
+    this.put(piece, to, who);
   }
 
   public clear(who: string): void {
